@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addons>
-<addon id="pannalkodi" name="kodirepo" version="0.1" provider-name="pannal">
-    <extension point="xbmc.addon.repository" name="Pannal's Kodi Repo">
+<addon id="dontpanic" name="Don't Panic" version="0.1" provider-name="pannal">
+    <extension point="xbmc.addon.repository" name="Don't Panic Kodi Repo">
         <dir>
             <info compressed="false">https://raw.githubusercontent.com/pannal/kodirepo/master/zips/addons.xml</info>
             <checksum>https://raw.githubusercontent.com/pannal/kodirepo/master/zips/addons.xml.md5</checksum>
@@ -9,7 +9,7 @@
         </dir>
     </extension>
     <extension point="xbmc.addon.metadata">
-        <summary>kodirepo</summary>
+        <summary>dontpanic</summary>
         <description>Randomly reasonably stable hacked/improved/altered addons</description>
         <disclaimer></disclaimer>
         <platform>all</platform>
