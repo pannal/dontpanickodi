@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addons>
+<addon id="dontpanic" name="Don't Panic" version="0.2.0" provider-name="pannal">
+    <extension point="xbmc.addon.repository" name="Don't Panic Kodi Repo">
+        <dir maxversion="18.9.9">
+            <info compressed="false">https://raw.githubusercontent.com/pannal/dontpanickodi/master/leia/zips/addons.xml</info>
+            <checksum>https://raw.githubusercontent.com/pannal/dontpanickodi/master/leia/zips/addons.xml.md5</checksum>
+            <datadir zip="true">https://raw.githubusercontent.com/pannal/dontpanickodi/master/leia/zips/</datadir>
+        </dir>
+        <dir minversion="19.0.0">
+            <info compressed="false">https://raw.githubusercontent.com/pannal/dontpanickodi/master/matrix/zips/addons.xml</info>
+            <checksum>https://raw.githubusercontent.com/pannal/dontpanickodi/master/matrix/zips/addons.xml.md5</checksum>
+            <datadir zip="true">https://raw.githubusercontent.com/pannal/dontpanickodi/master/matrix/zips/</datadir>
+        </dir>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary>dontpanic</summary>
+        <description>Randomly reasonably stable hacked/improved/altered addons</description>
+        <disclaimer></disclaimer>
+        <platform>all</platform>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>
+
+<addon id="plugin.video.myspass_de" name="MySpass" version="4.1.1" provider-name="L0RE, realvito, pannal">
+	<requires>
+		<import addon="xbmc.python" version="2.25.0"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>video</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="de_DE">MySpass Mediathek</summary>
+		<summary lang="en_GB">MySpass media library</summary>
+		<description lang="de_DE">Egal ob aktuelle TV Shows wie die Faisal Kawusi Show, LUKE ! Die Woche und ich, PussyTerror TV oder Schlag den Star, ob Kult-TV-Serien wie Ladykracher, Pastewka oder Stromberg - MYSPASS hat es für Dich auf Lager !</description>
+		<description lang="en_GB">No matter if current TV shows like the Faisal Kawusi Show, LUKE ! Die Woche und ich, PussyTerror TV or Schlag den Star, whether cult TV series like Ladykracher, Pastewka or Stromberg - MYSPASS has it in stock for you !</description>
+		<disclaimer lang="de_DE">Die von diesem Addon dargestellten Inhalte werden von den Erstellern des Addons weder gehostet oder verbreitet, noch stehen die Ersteller in irgendeiner Beziehung zu den Anbietern des Inhalts.</disclaimer>
+		<disclaimer lang="en_GB">The author does not host or distribute any of the content displayed by this addon. The author does not have any affiliation with the content providers.</disclaimer>
+		<language></language>
+		<platform>all</platform>
+		<license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
+		<forum>https://www.kodinerds.net/index.php/Thread/55451-L0REs-Blog/</forum>
+		<website>https://www.myspass.de</website>
+		<email></email>
+		<source>https://repo.kodinerds.net/addons/krypton/zip/plugin.video.myspass_de</source>
+		<assets>
+			<icon>icon.png</icon>
+			<fanart>fanart.jpg</fanart>
+		</assets>
+		<news>[B][COLOR orangered]Version 4.1.1  (28.12.2020)[/COLOR][/B] by pannal[CR]
+- fixed: Playback bug with umlauts in episode titles
+- add: Support for directly playing video files without navigating the addon (integrate with plugin.video.prosiebensat1)
+- add: Setting for splitting multi-part videos to allow resume on Kodi 18
+
+[B][COLOR orangered]Version 4.1.0  (14.12.2020)[/COLOR][/B] by realvito[CR]
+- fixed: Bug in KODI-MATRIX-Android-Releases for command 'open to read and write' is not UNICODE
+		</news>
+	</extension>
+</addon>
+
+<addon id="plugin.video.prosiebensat1" name="ProSiebenSat.1" version="1.2.3" provider-name="Maven, pannal">
+	<requires>
+		<import addon="xbmc.python" version="2.26.0"/>
+		<import addon="script.module.requests" version="2.22.0" />
+		<import addon="script.module.inputstreamhelper" version="0.3.4"/>
+		<import addon="script.module.kodi-six" version="0.1.0"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>video</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="de">ProSiebenSat.1 Mediathek</summary>
+		<summary lang="en">ProSiebenSat.1 Mediathek</summary>
+		<description lang="de">Alle Sendungen der Free-TV-Sender von ProSiebenSat.1 in der senderübergreifenden Mediathek.[CR]Bei ProSiebenSat.1 genießen Sie den bequemen Zugang zu Ihrem Lieblingssender und zu vielem mehr.</description>
+		<description lang="en">All broadcasts of Free-TV-Stations from ProSiebenSat.1 in the trans-media library.[CR]ProSiebenSat.1 gives you easy access to your favorite station and much more.</description>
+		<disclaimer lang="de">Die von diesem Addon dargestellten Inhalte werden von den Erstellern des Addons weder gehostet oder verbreitet, noch stehen die Ersteller in irgendeiner Beziehung zu den Anbietern des Inhalts.</disclaimer>
+		<disclaimer lang="en">The author does not host or distribute any of the content displayed by this addon. The author does not have any affiliation with the content providers.</disclaimer>
+		<language></language>
+		<platform>all</platform>
+		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+		<forum>https://www.kodinerds.net/index.php/Thread/55451-L0REs-Blog/</forum>
+		<website></website>
+		<email></email>
+		<source>https://github.com/Maven85/plugin.video.prosiebensat1</source>
+		<assets>
+			<icon>resources/icon.png</icon>
+			<fanart>resources/fanart.png</fanart>
+		</assets>
+		<news>
+			- add support for cross linked MySpass videos
+			- add setting to split MySpass multi-part videos into single parts allowing resume on Kodi 18
+			- several fixes (Pro7 mainly)
+		</news>
+	</extension>
+</addon>
+</addons>
