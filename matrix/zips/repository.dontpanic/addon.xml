@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="repository.dontpanic" name="Don't Panic" version="0.2.0" provider-name="pannal">
+<addon id="repository.dontpanic" name="Don't Panic" version="0.2.1" provider-name="pannal">
     <extension point="xbmc.addon.repository" name="Don't Panic Kodi Repo">
-        <dir>
-            <info compressed="false">https://raw.githubusercontent.com/pannal/dontpanickodi/master/repo/zips/addons.xml</info>
-            <checksum>https://raw.githubusercontent.com/pannal/dontpanickodi/mastermaster/repo/zips/addons.xml.md5</checksum>
-            <datadir zip="true">https://raw.githubusercontent.com/pannal/dontpanickodi/master/repo/zips/</datadir>
-        </dir>
         <dir minversion="18.0" maxversion="18.9.9">
             <info compressed="false">https://raw.githubusercontent.com/pannal/dontpanickodi/master/leia/zips/addons.xml</info>
             <checksum>https://raw.githubusercontent.com/pannal/dontpanickodi/master/leia/zips/addons.xml.md5</checksum>
