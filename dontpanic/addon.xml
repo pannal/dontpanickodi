@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="dontpanic" name="Don't Panic" version="0.1" provider-name="pannal">
+<addon id="dontpanic" name="Don't Panic" version="0.2.0" provider-name="pannal">
     <extension point="xbmc.addon.repository" name="Don't Panic Kodi Repo">
         <dir>
             <info compressed="false">https://raw.githubusercontent.com/pannal/kodirepo/master/zips/addons.xml</info>
