@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="script.plex"
+<addon id="script.plexmod"
        name="Plex"
        version="0.1.7a3+10ce10a"
        provider-name="Plex">
@@ -35,7 +35,7 @@
         <source>https://github.com/plexinc/plex-for-kodi</source>
         <platform>all</platform>
         <news>
-Improvements: 10ce10a
+Plex Mod: pannal: Rev: 10ce10a
 
 Add Italian translations (thanks to iz8mbw)
 Use Kodi time format setting (Issue #90) (thanks to pannal)

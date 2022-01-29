@@ -37,7 +37,7 @@
         <source>https://github.com/plexinc/plex-for-kodi</source>
         <platform>all</platform>
         <news>
-Improvements: fe4fc6b
+Plex Mod: pannal: Rev: fe4fc6b
 
 Added Skip Intro (thanks to pannal)
 Use device name for friendly name
@@ -126,7 +126,7 @@ Fix possible error on playlists window
 	</extension>
 </addon>
 
-<addon id="repository.dontpanic" name="Don't Panic" version="0.2.1" provider-name="pannal">
+<addon id="repository.dontpanic" name="Don't Panic" version="0.2.2" provider-name="pannal">
     <extension point="xbmc.addon.repository" name="Don't Panic Kodi Repo">
         <dir minversion="18.0" maxversion="18.9.9">
             <info compressed="false">https://raw.githubusercontent.com/pannal/dontpanickodi/master/leia/zips/addons.xml</info>
