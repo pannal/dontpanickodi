@@ -1,58 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addons>
-<addon id="script.plexmod"
-       name="Plex"
-       version="0.3.4+pfe4fc6b"
-       provider-name="Plex">
-    <requires>
-        <import addon="xbmc.python" version="3.0.0"/>
-        <import addon="script.module.requests" version="2.22.0+matrix.1"/>
-        <import addon="script.module.six" version="1.14.0+matrix.1"/>
-        <import addon="script.module.kodi-six" version="0.1.3.1" />
-    </requires>
-    <extension point="xbmc.python.script" library="default.py">
-        <provides>video</provides>
-    </extension>
-    <extension point="xbmc.python.pluginsource" library="plugin.py">
-        <provides>executable</provides>
-    </extension>
-    <extension point="xbmc.service" library="service.py" />
-    <extension point="xbmc.addon.metadata">
-        <summary lang="en_GB">Plex for Kodi</summary>
-        <summary lang="de_DE">Plex für Kodi</summary>
-        <summary lang="hu_HU">Plex for Kodi</summary>
-        <summary lang="it_IT">Plex per Kodi</summary>
-        <summary lang="es_ES">Plex para Kodi</summary>
-        <summary lang="ru_RU">Plex for Kodi</summary>
-        <description lang="en_GB">Official Plex for Kodi add-on</description>
-        <description lang="de_DE">Offizielles Plex für Kodi Addon</description>
-        <description lang="hu_HU">Hivatalos Plex for Kodi add-on</description>
-        <description lang="it_IT">Addon ufficiale Plex per Kodi</description>
-        <description lang="es_ES">Addon oficial Plex para Kodi</description>
-        <description lang="fr_FR">Add-on Officiel Plex pour Kodi</description>
-        <description lang="ru_RU">Официальный аддон Plex for Kodi</description>
-        <license>GPL-2.0-only</license>
-        <forum>https://forums.plex.tv/tags/plex-for-kodi</forum>
-        <website>https://www.plex.tv</website>
-        <source>https://github.com/plexinc/plex-for-kodi</source>
-        <platform>all</platform>
-        <news>
-Plex Mod: pannal: Rev: fe4fc6b
-
-Added Skip Intro (thanks to pannal)
-Use device name for friendly name
-Fix some hubs not displaying
-Added title scrolling when focused on some items
-Show playback speed on OSD
-Fix possible error on playlists window
-        </news>
-        <assets>
-            <icon>icon.png</icon>
-            <fanart>fanart.jpg</fanart>
-        </assets>
-    </extension>
-</addon>
-
 <addon id="plugin.video.myspass_de" name="MySpass" version="4.1.1" provider-name="L0RE, realvito, pannal">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0"/>
@@ -144,6 +91,59 @@ Fix possible error on playlists window
         <description>Randomly reasonably stable hacked/improved/altered addons</description>
         <disclaimer></disclaimer>
         <platform>all</platform>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>
+
+<addon id="script.plexmod"
+       name="Plex"
+       version="0.3.4+pfe4fc6b"
+       provider-name="Plex">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+        <import addon="script.module.requests" version="2.22.0+matrix.1"/>
+        <import addon="script.module.six" version="1.14.0+matrix.1"/>
+        <import addon="script.module.kodi-six" version="0.1.3.1" />
+    </requires>
+    <extension point="xbmc.python.script" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.python.pluginsource" library="plugin.py">
+        <provides>executable</provides>
+    </extension>
+    <extension point="xbmc.service" library="service.py" />
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Plex for Kodi</summary>
+        <summary lang="de_DE">Plex für Kodi</summary>
+        <summary lang="hu_HU">Plex for Kodi</summary>
+        <summary lang="it_IT">Plex per Kodi</summary>
+        <summary lang="es_ES">Plex para Kodi</summary>
+        <summary lang="ru_RU">Plex for Kodi</summary>
+        <description lang="en_GB">Official Plex for Kodi add-on</description>
+        <description lang="de_DE">Offizielles Plex für Kodi Addon</description>
+        <description lang="hu_HU">Hivatalos Plex for Kodi add-on</description>
+        <description lang="it_IT">Addon ufficiale Plex per Kodi</description>
+        <description lang="es_ES">Addon oficial Plex para Kodi</description>
+        <description lang="fr_FR">Add-on Officiel Plex pour Kodi</description>
+        <description lang="ru_RU">Официальный аддон Plex for Kodi</description>
+        <license>GPL-2.0-only</license>
+        <forum>https://forums.plex.tv/tags/plex-for-kodi</forum>
+        <website>https://www.plex.tv</website>
+        <source>https://github.com/plexinc/plex-for-kodi</source>
+        <platform>all</platform>
+        <news>
+Plex Mod: pannal: Rev: fe4fc6b
+
+Added Skip Intro (thanks to pannal)
+Use device name for friendly name
+Fix some hubs not displaying
+Added title scrolling when focused on some items
+Show playback speed on OSD
+Fix possible error on playlists window
+        </news>
         <assets>
             <icon>icon.png</icon>
             <fanart>fanart.jpg</fanart>
