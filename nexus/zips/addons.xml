@@ -71,7 +71,7 @@ Initial PlexMod for Kodi release, based on my plex-for-kodi fork's develop branc
 Add support for Kodi Nexus (20) on LibreELEC and Android
 Add AV1 toggle and AV1 direct play support
 Rename addon to "script.plexmod"
-Add all non-plex-conform features of the develop branch as default features
+Add all non-plex-conform features of the develop branch as default features.
         </news>
         <assets>
             <icon>icon.png</icon>
