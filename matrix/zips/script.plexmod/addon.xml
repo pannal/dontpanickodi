@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="script.plexmod"
        name="Plex"
-       version="0.3.4+pfe4fc6b"
-       provider-name="Plex">
+       version="0.4.0"
+       provider-name="pannal">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.requests" version="2.22.0+matrix.1"/>
@@ -36,14 +36,9 @@
         <source>https://github.com/plexinc/plex-for-kodi</source>
         <platform>all</platform>
         <news>
-Plex Mod: pannal: Rev: fe4fc6b
-
-Added Skip Intro (thanks to pannal)
-Use device name for friendly name
-Fix some hubs not displaying
-Added title scrolling when focused on some items
-Show playback speed on OSD
-Fix possible error on playlists window
+Initial PlexMod for Kodi release, based on my plex-for-kodi fork's develop branch
+Rename addon to "script.plexmod"
+Add all non-plex-conform features of the develop branch as default features
         </news>
         <assets>
             <icon>icon.png</icon>

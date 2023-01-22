@@ -2,7 +2,7 @@ from __future__ import absolute_import
 from kodi_six import xbmc
 
 if xbmc.getInfoLabel('Window(10000).Property(script.plex.running)') == "1":
-    command = 'XBMC.NotifyAll({0},{1},{2})'.format('script.plex', 'RESTORE', None)
+    command = 'XBMC.NotifyAll({0},{1},{2})'.format('script.plexmod', 'RESTORE', None)
     xbmc.executebuiltin(command)
     raise SystemExit
 

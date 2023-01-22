@@ -1,3 +1,8 @@
+[- 0.4.0 -]
+Initial PlexMod for Kodi release, based on my plex-for-kodi fork's develop branch
+Rename addon to "script.plexmod"
+Add all non-plex-conform features of the develop branch as default features
+
 [- 0.1.7 -]
 
 Add Italian translations (thanks to iz8mbw)

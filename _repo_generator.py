@@ -11,7 +11,7 @@ import hashlib
 import zipfile
 from xml.etree import ElementTree
 
-KODI_VERSIONS = ["krypton", "leia", "matrix", "repo"]
+KODI_VERSIONS = ["krypton", "leia", "matrix", "nexus", "repo"]
 IGNORE = [
     ".git",
     ".github",
