@@ -201,7 +201,7 @@ class Settings(object):
                         "If enabled, when playback ends and there is a 'Next Up' item available, it will be automatically be played after a 15 second delay."
                     )
                 ),
-                ThemeMusicSetting('theme_music', T(32480, 'Theme music'), 11),
+                ThemeMusicSetting('theme_music', T(32480, 'Theme music'), 5),
             )
         ),
         'audio': (

@@ -260,14 +260,11 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
     def onFirstInit(self):
         self._onFirstInit()
 
-        # we've come from a home hub view, play the current item's show's theme song
-        if self.initialEpisode:
-            volume = self.initialEpisode.settings.getThemeMusicValue()
+        if self.show_ and self.show_.theme:
+            volume = self.show_.settings.getThemeMusicValue()
             if volume > 0:
-                theme = self.initialEpisode.show().theme
-                if theme:
-                    player.PLAYER.playBackgroundMusic(theme.asURL(True), volume,
-                                                      self.initialEpisode.show().ratingKey)
+                player.PLAYER.playBackgroundMusic(self.show_.theme.asURL(True), volume,
+                                                  self.show_.ratingKey)
 
     def onReInit(self):
         if not self.tasks:

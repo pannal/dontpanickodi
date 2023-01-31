@@ -52,11 +52,6 @@
                     <default>false</default>
                     <control type="toggle"/>
                 </setting>
-                <setting id="postplay_always" type="boolean" label="32500">
-                    <level>0</level>
-                    <default>false</default>
-                    <control type="toggle"/>
-                </setting>
                 <setting id="postplay_timeout" type="integer" label="32501">
                     <level>0</level>
                     <default>16</default>
@@ -80,12 +75,12 @@
                 </setting>
                 <setting id="dynamic_backgrounds" type="boolean" label="32468">
                     <level>0</level>
-                    <default>false</default>
+                    <default>true</default>
                     <control type="toggle"/>
                 </setting>
                 <setting id="background_art_blur_amount" type="integer" label="32469">
                     <level>0</level>
-                    <default>128</default>
+                    <default>0</default>
                     <constraints>
                         <minimum>0</minimum>
                         <step>1</step>
@@ -97,7 +92,7 @@
                 </setting>
                 <setting id="background_art_opacity_amount" type="integer" label="32470">
                     <level>0</level>
-                    <default>60</default>
+                    <default>40</default>
                     <constraints>
                         <minimum>0</minimum>
                         <step>1</step>
