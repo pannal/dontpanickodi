@@ -220,9 +220,6 @@ class Settings(object):
                 ),
                 BoolSetting('allow_hevc', T(32037, 'Allow HEVC (h265)'), False).description(
                     T(32103, 'Enable this if your hardware can handle HEVC/h265. Disable it to force transcoding.')
-                ),
-                BoolSetting('allow_av1', T(32601, 'Allow AV1'), False).description(
-                    T(32103, 'Enable this if your hardware can handle AV1. Disable it to force transcoding.')
                 )
             )
         ),
@@ -276,6 +273,18 @@ class Settings(object):
 
     def __getitem__(self, key):
         return self.SETTINGS[key]
+
+
+# enable AV1 setting if kodi nexus
+if util.KODI_VERSION_MAJOR >= 20:
+    videoSettings = list(Settings.SETTINGS["video"])
+    videoSettings[1] = tuple(list(videoSettings[1]) + [
+        BoolSetting('allow_av1', T(32601, 'Allow AV1'), False).description(
+            T(32103,
+              'Enable this if your hardware can handle AV1. Disable it to force transcoding.')
+        )
+    ])
+    Settings.SETTINGS["video"] = (videoSettings[0], videoSettings[1])
 
 
 class SettingsWindow(kodigui.BaseWindow, windowutils.UtilMixin):

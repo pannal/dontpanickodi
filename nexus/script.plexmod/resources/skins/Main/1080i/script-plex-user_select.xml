@@ -862,7 +862,7 @@
                     <align>left</align>
                     <aligny>center</aligny>
                     <textcolor>FFFFFFFF</textcolor>
-                    <label>[UPPERCASE]$ADDON[script.plexmod32437][/UPPERCASE]</label>
+                    <label>[UPPERCASE]$ADDON[script.plexmod 32437][/UPPERCASE]</label>
                 </control>
             </control>
 

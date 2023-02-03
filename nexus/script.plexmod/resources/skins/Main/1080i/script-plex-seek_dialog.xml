@@ -146,7 +146,7 @@
                     <align>center</align>
                     <aligny>center</aligny>
                     <textcolor>FFCC7B19</textcolor>
-                    <label>[UPPERCASE]$ADDON[script.plexmod32436][/UPPERCASE]</label>
+                    <label>[UPPERCASE]$ADDON[script.plexmod 32436][/UPPERCASE]</label>
                 </control>
             </control>
 

@@ -5,7 +5,7 @@ from __future__ import print_function
 import subprocess
 
 def parse(data=None):
-    data = data or subprocess.check_output('ipconfig /all',startupinfo=getStartupInfo())
+    data = data or subprocess.check_output('ipconfig /all',startupinfo=getStartupInfo(),encoding="latin-1")
     dlist = [d.rstrip() for d in data.split('\n')]
     mode = None
     sections = []

@@ -225,7 +225,7 @@ class PlexInterface(plexapp.AppInterface):
             return 360
 
     def getThemeMusicValue(self):
-        index = 10 - self.getPreference("theme_music", 11)
+        index = 10 - self.getPreference("theme_music", 5)
         if index > 0:
             return index * 10
         return 0

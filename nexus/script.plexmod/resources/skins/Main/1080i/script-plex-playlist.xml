@@ -702,7 +702,7 @@
                     <align>left</align>
                     <aligny>center</aligny>
                     <textcolor>FFFFFFFF</textcolor>
-                    <label>[UPPERCASE]$ADDON[script.plexmod32333][/UPPERCASE]</label>
+                    <label>[UPPERCASE]$ADDON[script.plexmod 32333][/UPPERCASE]</label>
                 </control>
                 <control type="group">
                     <width>40</width>

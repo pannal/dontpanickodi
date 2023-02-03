@@ -87,7 +87,7 @@
                     <posx>0</posx>
                     <posy>0</posy>
                     <width>590</width>
-                    <height>606</height>
+                    <height>666</height>
                     <onup>201</onup>
                     <ondown>noop</ondown>
                     <onright>100</onright>
@@ -187,7 +187,7 @@
                     <posx>604</posx>
                     <posy>0</posy>
                     <width>776</width>
-                    <height>606</height>
+                    <height>666</height>
                     <onup>201</onup>
                     <ondown>noop</ondown>
                     <onleft>75</onleft>

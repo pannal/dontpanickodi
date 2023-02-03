@@ -201,7 +201,7 @@ class Settings(object):
                         "If enabled, when playback ends and there is a 'Next Up' item available, it will be automatically be played after a 15 second delay."
                     )
                 ),
-                ThemeMusicSetting('theme_music', T(32480, 'Theme music'), 11),
+                ThemeMusicSetting('theme_music', T(32480, 'Theme music'), 5),
             )
         ),
         'audio': (
@@ -273,6 +273,18 @@ class Settings(object):
 
     def __getitem__(self, key):
         return self.SETTINGS[key]
+
+
+# enable AV1 setting if kodi nexus
+if util.KODI_VERSION_MAJOR >= 20:
+    videoSettings = list(Settings.SETTINGS["video"])
+    videoSettings[1] = tuple(list(videoSettings[1]) + [
+        BoolSetting('allow_av1', T(32601, 'Allow AV1'), False).description(
+            T(32103,
+              'Enable this if your hardware can handle AV1. Disable it to force transcoding.')
+        )
+    ])
+    Settings.SETTINGS["video"] = (videoSettings[0], videoSettings[1])
 
 
 class SettingsWindow(kodigui.BaseWindow, windowutils.UtilMixin):

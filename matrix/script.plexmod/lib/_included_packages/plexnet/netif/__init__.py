@@ -1,7 +1,9 @@
 from __future__ import absolute_import
 import socket
 import struct
+import os
 from six.moves import range
+
 
 class Interface:
     def __init__(self):
@@ -15,7 +17,21 @@ class Interface:
         if not self.ip or not self.mask: return None
         return calcBroadcast(self.ip,self.mask)
 
+
 def getInterfaces():
+    if os.name == "nt":
+        try:
+            ret = _getInterfacesWin()
+            if ret:
+                return ret
+        except:
+            raise
+
+        try:
+            return _getInterfacesWinPS()
+        except:
+            pass
+
     try:
         return _getInterfaces()
     except:
@@ -26,21 +42,17 @@ def getInterfaces():
     except:
         pass
 
-    try:
-        return _getInterfacesWin()
-    except:
-        pass
-
     i = Interface()
     i.name = 'FALLBACK'
     return [i]
+
 
 def _getInterfaces():
     vals = all_interfaces()
     interfaces = []
     for name,ip in vals:
         i = Interface()
-        i.name = name
+        i.name = name.decode()
         i.ip = ip
         try:
             mask = getSubnetMask(i.name)
@@ -49,6 +61,7 @@ def _getInterfaces():
             i.mask = ''
         interfaces.append(i)
     return interfaces
+
 
 def _getInterfacesBSD():
     #name flags family address netmask
@@ -62,6 +75,7 @@ def _getInterfacesBSD():
             i.mask = info.netmask
             interfaces.append(i)
     return interfaces
+
 
 def _getInterfacesWin():
     from . import ipconfig
@@ -77,6 +91,21 @@ def _getInterfacesWin():
         interfaces.append(i)
     return interfaces
 
+
+def _getInterfacesWinPS():
+    from . import winpsif
+    interfaces = []
+
+    for (name, ip, subnet) in winpsif.getInterfaces():
+        i = Interface()
+        i.name = name
+        i.ip = ip
+        i.mask = subnet
+        interfaces.append(i)
+
+    return interfaces
+
+
 def all_interfaces():
     import sys
     import array
@@ -88,7 +117,7 @@ def all_interfaces():
     max_possible = 8 # initial value
     while True:
         bytes = max_possible * struct_size
-        names = array.array('B', '\0' * bytes)
+        names = array.array('B', b'\0' * bytes)
         outbytes = struct.unpack('iL', fcntl.ioctl(
             s.fileno(),
             0x8912,  # SIOCGIFCONF
@@ -98,8 +127,8 @@ def all_interfaces():
             max_possible *= 2
         else:
             break
-    namestr = names.tostring()
-    return [(namestr[i:i+16].split('\0', 1)[0],
+    namestr = names.tobytes()
+    return [(namestr[i:i+16].split(b'\0', 1)[0],
              socket.inet_ntoa(namestr[i+20:i+24]))
             for i in range(0, outbytes, struct_size)]
 

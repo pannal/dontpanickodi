@@ -687,8 +687,9 @@ class BGMPlayerHandler(BasePlayerHandler):
 
 
 class BGMPlayerTask(backgroundthread.Task):
-    def setup(self, source, *args, **kwargs):
+    def setup(self, source, player, *args, **kwargs):
         self.source = source
+        self.player = player
         return self
 
     def cancel(self):
@@ -700,7 +701,7 @@ class BGMPlayerTask(backgroundthread.Task):
         if self.isCanceled():
             return
 
-        xbmc.executebuiltin("XBMC.PlayMedia(%s)" % self.source)
+        self.player.play(self.source, windowed=True)
 
 
 class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
@@ -827,7 +828,7 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
 
         self.handler.setVolume(volume)
 
-        self.BGMTask = BGMPlayerTask().setup(source, *args, **kwargs)
+        self.BGMTask = BGMPlayerTask().setup(source, self, *args, **kwargs)
         backgroundthread.BGThreader.addTask(self.BGMTask)
 
     def playVideo(self, video, resume=False, force_update=False, session_id=None, handler=None):
@@ -990,8 +991,8 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
         self.play(plist, startpos=startpos)
 
     def createTrackListItem(self, track, fanart=None, index=0):
-        data = base64.urlsafe_b64encode(track.serialize())
-        url = 'plugin://script.plex/play?{0}'.format(data)
+        data = base64.urlsafe_b64encode(track.serialize().encode("utf8")).decode("utf8")
+        url = 'plugin://script.plexmod/play?{0}'.format(data)
         li = xbmcgui.ListItem(track.title, path=url)
         li.setInfo('music', {
             'artist': six.text_type(track.originalTitle or track.grandparentTitle),

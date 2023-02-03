@@ -1,5 +1,25 @@
-[- 0.4.0 -]
+[- 0.4.3 -]
+Allow skip-intro for users on a plexpass enabled server (thanks @fvlaicu)
+Fix visual issues (due to botched addon rename)
+Make AV1 setting Kodi major version dependant; pave way for hybrid codebase for 19/20
+Implement new network discovery mech on windows (GDM) using powershell (experimental)
+Possibly fix GDM on windows (especially on non-english variants)
+Possibly fix GDM on Linux (non-BSD)
+
+
+[- 0.4.2 -]
+Fix skip intro button
+Fix duplicate addon setting
+Enable dynamic backgrounds by default set defaults for dynamic backgrounds: blur=0, opacity=40
+Fix kiosk mode (autorun plex on kodi startup)
+Fix music playback
+Fix theme music playback; set default theme music volume to 50%
+
+
+[- 0.4.1 -]
 Initial PlexMod for Kodi release, based on my plex-for-kodi fork's develop branch
+Add support for Kodi Nexus (20) on LibreELEC and Android
+Add AV1 toggle and AV1 direct play support
 Rename addon to "script.plexmod"
 Add all non-plex-conform features of the develop branch as default features
 
