@@ -1,3 +1,9 @@
+[- 0.4.4 -]
+community fixes (thanks @Buttzy10169 @fvlaicu)
+add auto-skip intro setting (default: off)
+add addon-setting to customize how long skip-intro button is shown (default: 10s)
+
+
 [- 0.4.3 -]
 Allow skip-intro for users on a plexpass enabled server (thanks @fvlaicu)
 Fix visual issues (due to botched addon rename)

@@ -244,6 +244,11 @@ class Settings(object):
                 BoolSetting('gdm_discovery', T(32042, 'Server Discovery (GDM)'), True),
                 BoolSetting('kiosk.mode', T(32043, 'Start Plex On Kodi Startup'), False),
                 BoolSetting('debug', T(32024, 'Debug Logging'), False),
+                BoolSetting(
+                    'auto_skip_intro', T(32522, 'Auto Skip Intro'), False
+                ).description(
+                    T(3523, 'Automatically skip intros if available.')
+                )
             )
         ),
         'manual': (
@@ -273,7 +278,6 @@ class Settings(object):
 
     def __getitem__(self, key):
         return self.SETTINGS[key]
-
 
 # enable AV1 setting if kodi nexus
 if util.KODI_VERSION_MAJOR >= 20:
