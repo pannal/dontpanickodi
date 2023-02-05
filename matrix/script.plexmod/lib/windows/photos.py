@@ -95,7 +95,7 @@ class PhotoWindow(kodigui.BaseWindow):
                     self.prev()
             elif action == xbmcgui.ACTION_MOVE_RIGHT:
                 if not self.osdVisible() or self.getFocusId() == self.PQUEUE_LIST_OVERLAY_BUTTON_ID:
-                    next(self)
+                    self.next()
             elif action == xbmcgui.ACTION_MOVE_UP:
                 if self.osdVisible():
                     if self.getFocusId() == self.OVERLAY_BUTTON_ID:
@@ -110,7 +110,7 @@ class PhotoWindow(kodigui.BaseWindow):
                         self.showOSD()
             elif action == xbmcgui.ACTION_STOP:
                 self.stop()
-            elif action in (xbmcgui.ACTION_PLAY, xbmcgui.ACTION_PAUSE):
+            elif action in (xbmcgui.ACTION_PLAYER_PLAY, xbmcgui.ACTION_PAUSE):
                 if self.isPlaying():
                     self.pause()
                 else:
@@ -118,7 +118,7 @@ class PhotoWindow(kodigui.BaseWindow):
             elif action == xbmcgui.ACTION_PREV_ITEM:
                 self.prev()
             elif action == xbmcgui.ACTION_NEXT_ITEM:
-                next(self)
+                self.next()
             elif action in (xbmcgui.ACTION_PREVIOUS_MENU, xbmcgui.ACTION_NAV_BACK):
                 if self.osdVisible():
                     self.hideOSD()
@@ -262,9 +262,9 @@ class PhotoWindow(kodigui.BaseWindow):
             waitedFor = 0
             self.setBoolProperty('is.updating', True)
             while waitedFor < 10:
-                if not self.showPhotoThread.is_alive() and not xbmc.abortRequested:
+                if not self.showPhotoThread.is_alive() and not util.MONITOR.abortRequested():
                     return self.showPhoto(**kwargs)
-                elif xbmc.abortRequested:
+                elif util.MONITOR.abortRequested():
                     self.setBoolProperty('is.updating', False)
                     return
 
@@ -282,7 +282,8 @@ class PhotoWindow(kodigui.BaseWindow):
         next = self.playQueue.getNext()
         loadItems = (photo, next, self.playQueue.getPrev())
         for item in loadItems:
-            item.softReload()
+            if item is not None:
+                item.softReload()
 
         self.playerObject = plexplayer.PlexPhotoPlayer(photo)
 
@@ -335,7 +336,7 @@ class PhotoWindow(kodigui.BaseWindow):
         if not url:
             return
 
-        basename = hashlib.sha1(url).hexdigest()
+        basename = hashlib.sha1(url.encode('utf-8')).hexdigest()
         tmpPath = os.path.join(self.tempFolder, basename)
         tmpBgPath = os.path.join(self.tempFolder, "%s_bg" % basename)
 
@@ -410,7 +411,7 @@ class PhotoWindow(kodigui.BaseWindow):
         while not util.MONITOR.waitForAbort(0.1) and self.slideshowRunning:
             if not self.slideshowNext or time.time() < self.slideshowNext:
                 continue
-            next(self)
+            self.next()
 
         util.DEBUG_LOG('Slideshow: STOPPED')
 
@@ -435,6 +436,8 @@ class PhotoWindow(kodigui.BaseWindow):
         if not self.playQueue.getNext():
             return
         self.showPhoto(trigger=lambda: self.playQueue.next())
+
+    __next__ = next
 
     def play(self):
         self.setProperty('playing', '1')

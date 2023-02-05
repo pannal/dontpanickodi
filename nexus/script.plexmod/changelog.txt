@@ -1,3 +1,9 @@
+[- 0.4.5-beta1.0 -]
+fix music and photo handlers (thanks @Buttzy10169)
+fix next/prev handlers in general
+fix previous release's issues
+
+
 [- 0.4.4 -]
 community fixes (thanks @Buttzy10169 @fvlaicu)
 add auto-skip intro setting (default: off)

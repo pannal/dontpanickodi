@@ -493,6 +493,8 @@ class PlayQueue(signalsmixin.SignalsMixin):
         self.selectedId = item.playQueueItemID.asInt()
         return item
 
+    __next__ = next
+
     def prev(self):
         if self.isRepeatOne:
             return self.current()

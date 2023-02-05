@@ -332,6 +332,8 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
             return
         self.setup()
 
+    __next__ = next
+
     @busy.dialog()
     def _next(self):
         if self.parentList:

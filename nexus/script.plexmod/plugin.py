@@ -41,7 +41,7 @@ def play(data):
     try:
         from plexnet import plexobjects
 
-        plexObject = plexobjects.PlexObject.deSerialize(base64.urlsafe_b64decode(data[1:]))
+        plexObject = plexobjects.PlexObject.deSerialize(base64.urlsafe_b64decode(data.encode('utf-8')))
 
         if plexObject.type == 'track':
             listitem = playTrack(plexObject)

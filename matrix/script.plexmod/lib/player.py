@@ -495,6 +495,8 @@ class SeekPlayerHandler(BasePlayerHandler):
         self.player.trigger('session.ended', session_id=self.sessionID)
         self.hideOSD(delete=True)
 
+    __next__ = next
+
 
 class AudioPlayerHandler(BasePlayerHandler):
     def __init__(self, player):
@@ -529,7 +531,7 @@ class AudioPlayerHandler(BasePlayerHandler):
         try:
             data = plexID.split(':', 1)[-1]
             from plexnet import plexobjects
-            track = plexobjects.PlexObject.deSerialize(base64.urlsafe_b64decode(data[1:].encode('utf-8')))
+            track = plexobjects.PlexObject.deSerialize(base64.urlsafe_b64decode(data.encode('utf-8')))
             track.softReload()
             self.media = track
             pobj = plexplayer.PlexAudioPlayer(track)
