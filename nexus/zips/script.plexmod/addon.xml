@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="script.plexmod"
        name="Plex"
-       version="0.4.5-beta1.0"
+       version="0.4.5-beta1.1"
        provider-name="pannal">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
@@ -28,6 +28,7 @@
             fix music and photo handlers (thanks @Buttzy10169)
             fix next/prev handlers in general
             fix previous release's issues
+            use different photos temp path resolution
         </news>
         <assets>
             <icon>icon.png</icon>

@@ -7,7 +7,7 @@ import shutil
 import hashlib
 import requests
 
-from kodi_six import xbmc
+from kodi_six import xbmc, xbmcvfs
 from kodi_six import xbmcgui
 
 from . import kodigui
@@ -68,8 +68,7 @@ class PhotoWindow(kodigui.BaseWindow):
         self.initialLoad = True
 
     def onFirstInit(self):
-        self.tempFolder = os.path.join(tempfile.gettempdir(), *self.tempSubFolder)
-        #self.tempFolder = os.path.join(xbmc.translatePath("special://temp/"), *self.tempSubFolder)
+        self.tempFolder = os.path.join(xbmcvfs.translatePath("special://temp/"), *self.tempSubFolder)
         if not os.path.exists(self.tempFolder):
             try:
                 os.makedirs(self.tempFolder)
