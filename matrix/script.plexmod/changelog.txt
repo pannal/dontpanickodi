@@ -1,8 +1,9 @@
-[- 0.4.5-beta1.1 -]
+[- 0.4.5-beta1.2 -]
 fix music and photo handlers (thanks @Buttzy10169)
 fix next/prev handlers in general
 fix previous release's issues
 use different photos temp path resolution
+enable HEVC by default
 
 
 [- 0.4.4 -]

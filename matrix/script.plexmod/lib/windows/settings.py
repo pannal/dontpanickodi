@@ -218,7 +218,7 @@ class Settings(object):
                 BoolSetting('allow_4k', T(32036, 'Allow 4K'), True).description(
                     T(32102, 'Enable this if your hardware can handle 4K playback. Disable it to force transcoding.')
                 ),
-                BoolSetting('allow_hevc', T(32037, 'Allow HEVC (h265)'), False).description(
+                BoolSetting('allow_hevc', T(32037, 'Allow HEVC (h265)'), True).description(
                     T(32103, 'Enable this if your hardware can handle HEVC/h265. Disable it to force transcoding.')
                 )
             )

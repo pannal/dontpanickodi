@@ -100,7 +100,7 @@
 
 <addon id="script.plexmod"
        name="Plex"
-       version="0.4.5-beta1.1"
+       version="0.4.5-beta1.2"
        provider-name="pannal">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
@@ -128,6 +128,7 @@
             fix next/prev handlers in general
             fix previous release's issues
             use different photos temp path resolution
+            enable HEVC by default
         </news>
         <assets>
             <icon>icon.png</icon>
