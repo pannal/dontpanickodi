@@ -2,6 +2,7 @@ from __future__ import absolute_import
 import re
 import time
 import threading
+import math
 
 from kodi_six import xbmc
 from kodi_six import xbmcgui
@@ -126,6 +127,7 @@ class SeekDialog(kodigui.BaseDialog):
         self._enableIntroSkip = plexapp.ACCOUNT.hasPlexPass()
         self.intro = self.handler.player.video.intro
         self._introSkipShownStarted = None
+        self._introAutoSkipped = False
         self.skipSteps = self.SKIP_STEPS
         self.useAutoSeek = util.advancedSettings.autoSeek
         self.useDynamicStepsForTimeline = util.advancedSettings.dynamicTimelineSeek
@@ -934,9 +936,10 @@ class SeekDialog(kodigui.BaseDialog):
     def shouldShowIntroSkip(self):
         if self.intro:
             if self._enableIntroSkip and \
-                    int(self.intro.startTimeOffset) <= self.offset <= int(self.intro.endTimeOffset):
-                if self.autoSkipIntro:
+                    int(self.intro.startTimeOffset) <= self.offset < math.ceil(float(self.intro.endTimeOffset)):
+                if self.autoSkipIntro and not self._introAutoSkipped:
                     return True
+
                 self.setProperty('show.introSkip', '1')
 
                 if self._introSkipShownStarted is None:
@@ -1086,19 +1089,21 @@ class SeekDialog(kodigui.BaseDialog):
             return
 
         intro = self.shouldShowIntroSkip()
-        if intro and self.autoSkipIntro:
-            self.doSeek(int(self.intro.endTimeOffset) + 1)
+        if intro and self.autoSkipIntro and not self._introAutoSkipped:
+            self._introAutoSkipped = True
+            self.resetAutoSeekTimer(None)
+            self.doSeek(math.ceil(float(self.intro.endTimeOffset)))
             return True
-        else:
-            if intro and not self.osdVisible() and self.lastFocusID != self.SKIP_INTRO_BUTTON_ID and \
-                    not self.getProperty('show.introSkip_OSDOnly'):
-                self.setFocusId(self.SKIP_INTRO_BUTTON_ID)
 
-            if offset or (self.autoSeekTimeout and time.time() >= self.autoSeekTimeout and
-                          self.offset != self.selectedOffset):
-                self.resetAutoSeekTimer(None)
-                self.doSeek()
-                return True
+        if intro and not self.osdVisible() and self.lastFocusID != self.SKIP_INTRO_BUTTON_ID and \
+                not self.getProperty('show.introSkip_OSDOnly'):
+            self.setFocusId(self.SKIP_INTRO_BUTTON_ID)
+
+        if offset or (self.autoSeekTimeout and time.time() >= self.autoSeekTimeout and
+                      self.offset != self.selectedOffset):
+            self.resetAutoSeekTimer(None)
+            self.doSeek()
+            return True
 
         self.updateCurrent(update_position_control=not self._seeking and not self._applyingSeek)
 

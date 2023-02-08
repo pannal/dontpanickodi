@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="script.plexmod"
        name="Plex"
-       version="0.4.5-beta1.2"
+       version="0.4.5-beta1.3"
        provider-name="pannal">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
@@ -25,11 +25,12 @@
         <source>https://github.com/pannal/plex-for-kodi</source>
         <platform>all</platform>
         <news>
-            fix music and photo handlers (thanks @Buttzy10169)
-            fix next/prev handlers in general
-            fix previous release's issues
-            use different photos temp path resolution
-            enable HEVC by default
+            properly refocus after stopping music via the mini player fix msgstr
+            reset autoseektimer prematurely before auto skipping intro
+            stream details: don't show unknown values
+            some music fixes; internals
+            auto intro skip: skip only once, show manual skipping otherwise, measures for preventing wrong jump
+            fix HEVC default
         </news>
         <assets>
             <icon>icon.png</icon>

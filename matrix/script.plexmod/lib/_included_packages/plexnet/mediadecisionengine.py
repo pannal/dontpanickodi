@@ -150,7 +150,7 @@ class MediaDecisionEngine(object):
                 numVideoStreams = numVideoStreams + 1
 
                 if stream.codec == "h264" or (
-                    stream.codec == "hevc" and item.settings.getPreference("allow_hevc", False)
+                    stream.codec == "hevc" and item.settings.getPreference("allow_hevc", True)
                 ) or (
                     stream.codec == "av1" and item.settings.getPreference("allow_av1", False)
                 ) or (
@@ -255,7 +255,7 @@ class MediaDecisionEngine(object):
                 util.LOG("MDE: (DP) Frame rate is not supported for resolution: {0}@{1}".format(height, videoFrameRate))
                 return False
 
-        if choice.videoStream.codec == "hevc" and not item.settings.getPreference("allow_hevc", False):
+        if choice.videoStream.codec == "hevc" and not item.settings.getPreference("allow_hevc", True):
             util.LOG("MDE: (DP) Codec is HEVC, which is disabled")
             return False
 

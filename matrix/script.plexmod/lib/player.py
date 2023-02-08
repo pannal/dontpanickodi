@@ -645,6 +645,9 @@ class AudioPlayerHandler(BasePlayerHandler):
         util.setGlobalProperty('track.ID', '')
 
     def tick(self):
+        if not self.player.isPlayingAudio() or util.MONITOR.abortRequested():
+            return
+
         self.stampCurrentTime()
         self.updateNowPlaying(force=True)
 
@@ -943,16 +946,16 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
 
     #     return url, li
 
-    def playAudio(self, track, fanart=None):
+    def playAudio(self, track, fanart=None, **kwargs):
         if self.bgmPlaying:
             self.stopAndWait()
 
         self.handler = AudioPlayerHandler(self)
         url, li = self.createTrackListItem(track, fanart)
         self.stopAndWait()
-        self.play(url, li)
+        self.play(url, li, **kwargs)
 
-    def playAlbum(self, album, startpos=-1, fanart=None):
+    def playAlbum(self, album, startpos=-1, fanart=None, **kwargs):
         if self.bgmPlaying:
             self.stopAndWait()
 
@@ -966,9 +969,9 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
             index += 1
         xbmc.executebuiltin('PlayerControl(RandomOff)')
         self.stopAndWait()
-        self.play(plist, startpos=startpos)
+        self.play(plist, startpos=startpos, **kwargs)
 
-    def playAudioPlaylist(self, playlist, startpos=-1, fanart=None):
+    def playAudioPlaylist(self, playlist, startpos=-1, fanart=None, **kwargs):
         if self.bgmPlaying:
             self.stopAndWait()
 
@@ -990,7 +993,7 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
             else:
                 xbmc.executebuiltin('PlayerControl(RandomOff)')
         self.stopAndWait()
-        self.play(plist, startpos=startpos)
+        self.play(plist, startpos=startpos, **kwargs)
 
     def createTrackListItem(self, track, fanart=None, index=0):
         data = base64.urlsafe_b64encode(track.serialize().encode("utf8")).decode("utf8")

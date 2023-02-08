@@ -1,3 +1,12 @@
+[- 0.4.5-beta1.3 -]
+properly refocus after stopping music via the mini player fix msgstr
+reset autoseektimer prematurely before auto skipping intro
+stream details: don't show unknown values
+some music fixes; internals
+auto intro skip: skip only once, show manual skipping otherwise, measures for preventing wrong jump
+fix HEVC default
+
+
 [- 0.4.5-beta1.2 -]
 fix music and photo handlers (thanks @Buttzy10169)
 fix next/prev handlers in general

@@ -246,6 +246,8 @@ class DPAttributesDiffer(DPAttribute):
 
         if formatted_val2 and formatted_val1 != formatted_val2:
             return self.formatTrue % {"val1": formatted_val1, "val2": formatted_val2}
+        if not formatted_val1:
+            return ""
         return (self.formatFalse % {"val1": formatted_val1, "val2": formatted_val2}) if self.formatFalse else formatted_val1
 
 
@@ -302,7 +304,7 @@ class ComputedPPIValue:
 
     @property
     def value(self):
-        return ", ".join([x for x in self.data if x is not None])
+        return ", ".join([x for x in self.data if x not in (None, "")])
 
     def __str__(self):
         return "%s: %s" % (self.label, self.value)

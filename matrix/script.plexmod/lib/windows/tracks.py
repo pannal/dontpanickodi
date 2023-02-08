@@ -64,9 +64,9 @@ class AlbumWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
         controlID = self.getFocusId()
         try:
             if action == xbmcgui.ACTION_LAST_PAGE and xbmc.getCondVisibility('ControlGroup(300).HasFocus(0)'):
-                next(self)
+                self.next()
             elif action == xbmcgui.ACTION_NEXT_ITEM:
-                next(self)
+                self.next()
             elif action == xbmcgui.ACTION_FIRST_PAGE and xbmc.getCondVisibility('ControlGroup(300).HasFocus(0)'):
                 self.prev()
             elif action == xbmcgui.ACTION_PREV_ITEM:
@@ -144,8 +144,6 @@ class AlbumWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
         if not self._next():
             return
         self.setup()
-
-    __next__ = next
 
     @busy.dialog()
     def _next(self):
@@ -284,7 +282,7 @@ class AlbumWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
             self.album.reload()
             item.setProperty('watched', item.dataSource.isWatched and '1' or '')
         else:
-            self.fillTracks(update=True)
+            self.fillTracks()
 
     def playButtonClicked(self, shuffle=False):
         pl = playlist.LocalPlaylist(self.album.all(), self.album.getServer())
@@ -313,7 +311,7 @@ class AlbumWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
         mli.setProperty('track.duration', util.simplifiedTimeDisplay(obj.duration.asInt()))
         return mli
 
-    @busy.dialog()
+    #@busy.dialog()
     def fillTracks(self):
         items = []
         idx = 0
