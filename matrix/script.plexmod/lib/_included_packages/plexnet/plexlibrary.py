@@ -336,8 +336,8 @@ class MovieSection(LibrarySection):
         'director', 'actor', 'country', 'studio', 'resolution'
     )
     ALLOWED_SORT = (
-        'addedAt', 'originallyAvailableAt', 'lastViewedAt', 'titleSort', 'rating',
-        'mediaHeight', 'duration'
+        'addedAt', 'originallyAvailableAt', 'lastViewedAt', 'titleSort', 'rating', 'audienceRating', 'userRating',
+        'contentRating', 'mediaHeight', 'duration'
     )
     TYPE = 'movie'
     ID = '1'
@@ -345,7 +345,8 @@ class MovieSection(LibrarySection):
 
 class ShowSection(LibrarySection):
     ALLOWED_FILTERS = ('unwatched', 'year', 'genre', 'contentRating', 'network', 'collection')
-    ALLOWED_SORT = ('addedAt', 'lastViewedAt', 'originallyAvailableAt', 'titleSort', 'rating', 'unwatched')
+    ALLOWED_SORT = ('addedAt', 'lastViewedAt', 'originallyAvailableAt', 'titleSort', 'rating', 'audienceRating',
+                    'userRating', 'contentRating', 'unwatched')
     TYPE = 'show'
     ID = '2'
 

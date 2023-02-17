@@ -115,27 +115,43 @@ TYPE_PLURAL = {
 
 SORT_KEYS = {
     'movie': {
-        'addedAt': {'title': T(32351, 'By Date Added'), 'display': T(32352, 'Date Added')},
-        'originallyAvailableAt': {'title': T(32353, 'By Release Date'), 'display': T(32354, 'Release Date')},
-        'lastViewedAt': {'title': T(32355, 'By Date Viewed'), 'display': T(32356, 'Date Viewed')},
-        'titleSort': {'title': T(32357, 'By Name'), 'display': T(32358, 'Name')},
-        'rating': {'title': T(32359, 'By Rating'), 'display': T(32360, 'Rating')},
-        'resolution': {'title': T(32361, 'By Resolution'), 'display': T(32362, 'Resolution')},
-        'duration': {'title': T(32363, 'By Duration'), 'display': T(32364, 'Duration')},
-        'unwatched': {'title': T(32367, 'By Unplayed'), 'display': T(32368, 'Unplayed')},
-        'viewCount': {'title': T(32371, 'By Play Count'), 'display': T(32372, 'Play Count')}
+        'addedAt': {'title': T(32351, 'By Date Added'), 'display': T(32352, 'Date Added'), 'defSortDesc': True},
+        'originallyAvailableAt': {'title': T(32353, 'By Release Date'), 'display': T(32354, 'Release Date'),
+                                  'defSortDesc': True},
+        'lastViewedAt': {'title': T(32355, 'By Date Viewed'), 'display': T(32356, 'Date Viewed'), 'defSortDesc': True},
+        'titleSort': {'title': T(32357, 'By Name'), 'display': T(32358, 'Name'), 'defSortDesc': False},
+        'rating': {'title': T(33107, 'By Critic Rating'), 'display': T(33108, ' Critic Rating'), 'defSortDesc': True},
+        'audienceRating': {'title': T(33101, 'By Audience Rating'), 'display': T(33102, 'Audience Rating'),
+                           'defSortDesc': True},
+        # called "Rating" in PlexWeb, using more obvious "This is this user's rating" here
+        'userRating': {'title': T(33103, 'By my Rating'), 'display': T(33104, 'My Rating'), 'defSortDesc': True},
+        'contentRating': {'title': T(33105, 'By Content Rating'), 'display': T(33106, 'Content Rating'),
+                          'defSortDesc': True},
+        'resolution': {'title': T(32361, 'By Resolution'), 'display': T(32362, 'Resolution'), 'defSortDesc': True},
+        'duration': {'title': T(32363, 'By Duration'), 'display': T(32364, 'Duration'), 'defSortDesc': True},
+        'unwatched': {'title': T(32367, 'By Unplayed'), 'display': T(32368, 'Unplayed'), 'defSortDesc': False},
+        'viewCount': {'title': T(32371, 'By Play Count'), 'display': T(32372, 'Play Count'), 'defSortDesc': True}
     },
     'show': {
-        'originallyAvailableAt': {'title': T(32365, 'By First Aired'), 'display': T(32366, 'First Aired')},
-        'unviewedLeafCount': {'title': T(32367, 'By Unplayed'), 'display': T(32368, 'Unplayed')},
-        'show.titleSort': {'title': T(32457, 'By Show'), 'display': T(32456, 'Show')},
+        'originallyAvailableAt': {'title': T(32365, 'By First Aired'), 'display': T(32366, 'First Aired'),
+                                  'defSortDesc': False},
+        'unviewedLeafCount': {'title': T(32367, 'By Unplayed'), 'display': T(32368, 'Unplayed'), 'defSortDesc': True},
+        'show.titleSort': {'title': T(32457, 'By Show'), 'display': T(32456, 'Show'), 'defSortDesc': False},
+        'rating': {'title': T(33107, 'By Critic Rating'), 'display': T(33108, ' Critic Rating'), 'defSortDesc': True},
+        'audienceRating': {'title': T(33101, 'By Audience Rating'), 'display': T(33102, 'Audience Rating'),
+                           'defSortDesc': True},
+        # called "Rating" in PlexWeb, using more obvious "This is this user's rating" here
+        'userRating': {'title': T(33103, 'By my Rating'), 'display': T(33104, 'My Rating'), 'defSortDesc': True},
+        'contentRating': {'title': T(33105, 'By Content Rating'), 'display': T(33106, 'Content Rating'),
+                          'defSortDesc': True},
     },
     'artist': {
-        'lastViewedAt': {'title': T(32369, 'By Date Played'), 'display': T(32370, 'Date Played')},
-        'artist.titleSort': {'title': T(32463, 'By Artist'), 'display': T(32462, 'Artist')},
+        'lastViewedAt': {'title': T(32369, 'By Date Played'), 'display': T(32370, 'Date Played'), 'defSortDesc': False},
+        'artist.titleSort': {'title': T(32463, 'By Artist'), 'display': T(32462, 'Artist'), 'defSortDesc': False},
     },
     'photo': {
-        'originallyAvailableAt': {'title': T(32373, 'By Date Taken'), 'display': T(32374, 'Date Taken')}
+        'originallyAvailableAt': {'title': T(32373, 'By Date Taken'), 'display': T(32374, 'Date Taken'),
+                                  'defSortDesc': True}
     },
     'photodirectory': {},
     'collection': {}
@@ -965,25 +981,32 @@ class LibraryWindow(kodigui.MultiWindow, windowutils.UtilMixin):
         ind = self.sortDesc and desc or asc
 
         options = []
+        defSortByOption = {}
 
         if self.section.TYPE == 'movie':
-            for stype in ('addedAt', 'originallyAvailableAt', 'lastViewedAt', 'titleSort', 'rating', 'resolution', 'duration'):
+            for stype in ('addedAt', 'originallyAvailableAt', 'lastViewedAt', 'titleSort', 'rating', 'audienceRating',
+                          'userRating', 'contentRating', 'resolution', 'duration'):
                 option = SORT_KEYS['movie'].get(stype).copy()
                 option['type'] = stype
                 option['indicator'] = self.sort == stype and ind or ''
+                defSortByOption[stype] = option.get('defSortDesc')
                 options.append(option)
         elif self.section.TYPE == 'show':
             if ITEM_TYPE == 'episode':
-                for stype in ('addedAt', 'originallyAvailableAt', 'lastViewedAt', 'show.titleSort', 'rating'):
+                for stype in ('addedAt', 'originallyAvailableAt', 'lastViewedAt', 'show.titleSort', 'rating',
+                              'audienceRating', 'userRating'):
                     option = SORT_KEYS['show'].get(stype, SORT_KEYS['movie'].get(stype)).copy()
                     option['type'] = stype
                     option['indicator'] = self.sort == stype and ind or ''
+                    defSortByOption[stype] = option.get('defSortDesc')
                     options.append(option)
             else:
-                for stype in ('addedAt', 'lastViewedAt', 'originallyAvailableAt', 'titleSort', 'rating', 'unviewedLeafCount'):
+                for stype in ('addedAt', 'lastViewedAt', 'originallyAvailableAt', 'titleSort', 'rating',
+                              'audienceRating', 'userRating', 'contentRating', 'unviewedLeafCount'):
                     option = SORT_KEYS['show'].get(stype, SORT_KEYS['movie'].get(stype)).copy()
                     option['type'] = stype
                     option['indicator'] = self.sort == stype and ind or ''
+                    defSortByOption[stype] = option.get('defSortDesc')
                     options.append(option)
         elif self.section.TYPE == 'artist':
             if ITEM_TYPE == 'album':
@@ -991,18 +1014,21 @@ class LibraryWindow(kodigui.MultiWindow, windowutils.UtilMixin):
                     option = SORT_KEYS['artist'].get(stype, SORT_KEYS['movie'].get(stype)).copy()
                     option['type'] = stype
                     option['indicator'] = self.sort == stype and ind or ''
+                    defSortByOption[stype] = option.get('defSortDesc')
                     options.append(option)
             else:
                 for stype in ('addedAt', 'lastViewedAt', 'viewCount', 'titleSort'):
                     option = SORT_KEYS['artist'].get(stype, SORT_KEYS['movie'].get(stype)).copy()
                     option['type'] = stype
                     option['indicator'] = self.sort == stype and ind or ''
+                    defSortByOption[stype] = option.get('defSortDesc')
                     options.append(option)
         elif self.section.TYPE == 'photo':
             for stype in ('addedAt', 'originallyAvailableAt', 'titleSort', 'rating'):
                 option = SORT_KEYS['photo'].get(stype, SORT_KEYS['movie'].get(stype)).copy()
                 option['type'] = stype
                 option['indicator'] = self.sort == stype and ind or ''
+                defSortByOption[stype] = option.get('defSortDesc')
                 options.append(option)
         else:
             return
@@ -1017,7 +1043,7 @@ class LibraryWindow(kodigui.MultiWindow, windowutils.UtilMixin):
         if choice == self.sort:
             self.sortDesc = not self.sortDesc
         else:
-            self.sortDesc = False
+            self.sortDesc = defSortByOption.get(choice, False)
             if choice == 'titleSort':
                 forceRefresh = True
 
@@ -1061,6 +1087,15 @@ class LibraryWindow(kodigui.MultiWindow, windowutils.UtilMixin):
         elif choice == 'rating':
             self.showPanelControl.sort(lambda i: i.dataSource.get('titleSort') or i.dataSource.title)
             self.showPanelControl.sort(lambda i: i.dataSource.get('rating').asFloat(), reverse=self.sortDesc)
+        elif choice == 'audienceRating':
+            self.showPanelControl.sort(lambda i: i.dataSource.get('titleSort') or i.dataSource.title)
+            self.showPanelControl.sort(lambda i: i.dataSource.get('audienceRating').asFloat(), reverse=self.sortDesc)
+        elif choice == 'userRating':
+            self.showPanelControl.sort(lambda i: i.dataSource.get('titleSort') or i.dataSource.title)
+            self.showPanelControl.sort(lambda i: i.dataSource.get('userRating').asFloat(), reverse=self.sortDesc)
+        elif choice == 'contentRating':
+             self.showPanelControl.sort(lambda i: i.dataSource.get('titleSort') or i.dataSource.title)
+             self.showPanelControl.sort(lambda i: i.dataSource.get('contentRating'), reverse=self.sortDesc)
         elif choice == 'resolution':
             self.showPanelControl.sort(lambda i: i.dataSource.maxHeight, reverse=self.sortDesc)
         elif choice == 'duration':

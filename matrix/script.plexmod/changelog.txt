@@ -1,3 +1,12 @@
+[- 0.4.6 -]
+add more sort options for ratings where applicable (rating, audienceRating, contentRating, userRating)
+add smart desc/asc default sort (need feedback)
+use PlexWeb sort field naming (except for PlexWeb Rating=My Rating which is clearer)
+note: TV shows "By Audience Rating" seems to be broken in Plex
+previous beta fixes
+small bugfixes
+
+
 [- 0.4.5-beta1.3 -]
 properly refocus after stopping music via the mini player fix msgstr
 reset autoseektimer prematurely before auto skipping intro
