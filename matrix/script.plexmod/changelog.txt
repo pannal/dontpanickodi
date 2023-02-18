@@ -1,3 +1,9 @@
+[- 0.4.7-beta1.0 -]
+implement multiple markers per video file
+add skip credits Plex-style (skip to post-credit scene if applicable or skip to end)
+add auto skip credits feature
+
+
 [- 0.4.6 -]
 add more sort options for ratings where applicable (rating, audienceRating, contentRating, userRating)
 add smart desc/asc default sort (need feedback)

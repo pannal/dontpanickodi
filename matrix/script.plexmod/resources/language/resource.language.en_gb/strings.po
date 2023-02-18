@@ -1039,6 +1039,10 @@ msgctxt "#32495"
 msgid "Skip intro"
 msgstr ""
 
+msgctxt "#32496"
+msgid "Skip credits"
+msgstr ""
+
 
 msgctxt "#32500"
 msgid "Always show post-play screen (even for short videos)"
@@ -1066,6 +1070,22 @@ msgstr ""
 
 msgctxt "#32524"
 msgid "Set how long the skip intro button shows for."
+msgstr ""
+
+msgctxt "#32525"
+msgid "Skip Credits Button Timeout"
+msgstr ""
+
+msgctxt "#32526"
+msgid "Automatically Skip Credits"
+msgstr ""
+
+msgctxt "#32527"
+msgid "Automatically skip credits if available."
+msgstr ""
+
+msgctxt "#32528"
+msgid "Set how long the skip credits button shows for."
 msgstr ""
 
 msgctxt "#32601"

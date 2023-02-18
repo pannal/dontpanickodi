@@ -68,7 +68,20 @@
                         <maximum>40</maximum>
                     </constraints>
                     <control type="slider" format="integer">
-                        <heading>32520</heading>
+                        <heading>32524</heading>
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting id="skip_credits_button_timeout" type="integer" label="32525" help="">
+                    <level>0</level>
+                    <default>10</default>
+                    <constraints>
+                        <minimum>1</minimum>
+                        <step>1</step>
+                        <maximum>40</maximum>
+                    </constraints>
+                    <control type="slider" format="integer">
+                        <heading>32528</heading>
                         <popup>false</popup>
                     </control>
                 </setting>

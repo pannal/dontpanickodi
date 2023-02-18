@@ -245,10 +245,15 @@ class Settings(object):
                 BoolSetting('kiosk.mode', T(32043, 'Start Plex On Kodi Startup'), False),
                 BoolSetting('debug', T(32024, 'Debug Logging'), False),
                 BoolSetting(
-                    'auto_skip_intro', T(32522, 'Auto Skip Intro'), False
+                    'auto_skip_intro', T(32522, 'Automatically Skip Intro'), False
                 ).description(
-                    T(3523, 'Automatically skip intros if available.')
-                )
+                    T(32523, 'Automatically skip intros if available.')
+                ),
+                BoolSetting(
+                    'auto_skip_credits', T(32526, 'Auto Skip Credits'), False
+                ).description(
+                    T(32527, 'Automatically skip credits if available.')
+                ),
             )
         ),
         'manual': (

@@ -289,6 +289,8 @@ class Movie(PlayableVideo):
             if data.find(media.Media.TYPE) is not None:
                 self.media = plexobjects.PlexMediaItemList(data, plexmedia.PlexMedia, media.Media.TYPE, initpath=self.initpath, server=self.server, media=self)
 
+        self.markers = plexobjects.PlexItemList(data, media.Marker, media.Marker.TYPE, server=self.server)
+
         self._videoStreams = None
         self._audioStreams = None
         self._subtitleStreams = None
@@ -436,7 +438,6 @@ class Episode(PlayableVideo, SectionOnDeckMixin):
     def init(self, data):
         self._show = None
         self._season = None
-        self._intro = None
 
     def _setData(self, data):
         PlayableVideo._setData(self, data)
@@ -514,18 +515,6 @@ class Episode(PlayableVideo, SectionOnDeckMixin):
     @property
     def roles(self):
         return self.show().roles
-
-    @property
-    def intro(self):
-        if self._intro is None:
-            self._intro = (list(filter(lambda x: x.type == "intro", self.markers)) or [False])[0]
-        return self._intro
-
-    @property
-    def intro(self):
-        if self._intro is None:
-            self._intro = (list((filter(lambda x: x.type == "intro", self.markers))) or [False])[0]
-        return self._intro
 
     def getRelated(self, offset=None, limit=None, _max=36):
         return self.show().getRelated(offset=offset, limit=limit, _max=_max)

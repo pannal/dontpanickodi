@@ -199,7 +199,7 @@
             <height>143</height>
             <align>right</align>
             <control type="button" id="791">
-                <visible>!String.IsEmpty(Window.Property(show.introSkip)) + [String.IsEmpty(Window.Property(show.introSkip_OSDOnly)) | [!String.IsEmpty(Window.Property(show.introSkip_OSDOnly)) + !String.IsEmpty(Window.Property(show.OSD))]]</visible>
+                <visible>!String.IsEmpty(Window.Property(show.markerSkip)) + [String.IsEmpty(Window.Property(show.markerSkip_OSDOnly)) | [!String.IsEmpty(Window.Property(show.markerSkip_OSDOnly)) + !String.IsEmpty(Window.Property(show.OSD))]]</visible>
                 <animation effect="zoom" start="100" end="110,120" time="100" center="auto" reversible="false">Focus</animation>
                 <animation effect="zoom" start="110,120" end="100" time="100" center="auto" reversible="false">UnFocus</animation>
                 <animation type="Conditional" condition="String.IsEmpty(Window.Property(show.OSD)) + !Window.IsVisible(seekbar)" reversible="false">
@@ -215,7 +215,8 @@
                 <textoffsetx>70</textoffsetx>
                 <textcolor>FF000000</textcolor>
                 <focusedcolor>FF000000</focusedcolor>
-                <label>$ADDON[script.plexmod 32495]</label>
+                <!--<label>$ADDON[script.plexmod 32495]</label>-->
+                <label>$INFO[Window.Property(skipMarkerName)]</label>
             </control>
         </control>
 

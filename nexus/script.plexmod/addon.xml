@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="script.plexmod"
        name="Plex"
-       version="0.4.6"
+       version="0.4.7-beta1.0"
        provider-name="pannal">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
@@ -25,12 +25,9 @@
         <source>https://github.com/pannal/plex-for-kodi</source>
         <platform>all</platform>
         <news>
-            add more sort options for ratings where applicable (rating, audienceRating, contentRating, userRating)
-            add smart desc/asc default sort (need feedback)
-            use PlexWeb sort field naming (except for PlexWeb Rating=My Rating which is clearer)
-            note: TV shows "By Audience Rating" seems to be broken in Plex
-            previous beta fixes
-            small bugfixes
+            implement multiple markers per video file
+            add skip credits Plex-style (skip to post-credit scene if applicable or skip to end)
+            add auto skip credits feature
         </news>
         <assets>
             <icon>icon.png</icon>
