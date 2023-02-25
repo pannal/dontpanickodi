@@ -29,6 +29,7 @@ class InfoWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
         self.is16x9 = kwargs.get('is_16x9')
         self.isPoster = not (self.isSquare or self.is16x9)
         self.thumbDim = self.isSquare and self.THUMB_DIM_SQUARE or self.THUMB_DIM_POSTER
+        self.video = kwargs.get('video')
 
     def onFirstInit(self):
         self.setProperty('is.poster', self.isPoster and '1' or '')

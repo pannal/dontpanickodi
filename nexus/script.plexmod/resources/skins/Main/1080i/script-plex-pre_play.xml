@@ -253,7 +253,7 @@
                         <textoffsetx>15</textoffsetx>
                         <texturefocus colordiffuse="40000000" border="8">script.plex/white-square-rounded-top-padded.png</texturefocus>
                         <texturenofocus colordiffuse="40000000" border="8">script.plex/white-square-rounded-top-padded.png</texturenofocus>
-                        <label>$INFO[Window.Property(video.res)]$INFO[Window.Property(audio.codec), &#8226; ]$INFO[Window.Property(audio.channels), &#8226; ]</label>
+                        <label>$INFO[Window.Property(video.res)]$INFO[Window.Property(video.codec), &#8226; ]$INFO[Window.Property(audio.codec), &#8226; ]$INFO[Window.Property(audio.channels), &#8226; ]</label>
                     </control>
                     <control type="button">
                         <visible>!String.IsEmpty(Window.Property(unavailable))</visible>

@@ -181,6 +181,9 @@ class Video(media.MediaItem):
 
         return codec
 
+    def videoCodecString(self):
+        return (self.media[0].videoCodec or '').upper()
+
     def audioChannelsString(self, translate_func=util.dummyTranslate):
         channels = self.media[0].audioChannels.asInt()
 

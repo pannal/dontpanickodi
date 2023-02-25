@@ -219,6 +219,15 @@ class MediaDecisionEngine(object):
         else:
             choice.sorts.audioChannels = 0
 
+        if item.settings.getPreference("audio_force_ac3", False):
+            allowed = ["ac3"]
+            if item.settings.getPreference("audio_ac3dts", False):
+                allowed.append("dca")
+
+            if choice.audioStream.codec not in allowed or choice.sorts.audioChannels > 6:
+                util.LOG("MDE: Server has decided this cannot direct play (AC3/DTS/5.1 max is forced)")
+                choice.isDirectPlayable = False
+
         choice.sorts.videoDS = not (choice.sorts.videoDS is None or choice.forceTranscode is True) and choice.sorts.videoDS or 0
         choice.sorts.resolution = choice.resolution
 

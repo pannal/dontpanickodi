@@ -86,6 +86,7 @@ class PlexInterface(plexapp.AppInterface):
         'friendlyName': util.rpc.Settings.GetSettingValue(setting='services.devicename').get('value') or 'Kodi',
         'supports1080p60': True,
         'vp9Support': True,
+        'audioChannels': '2.0',
         'transcodeVideoQualities': [
             "10", "20", "30", "30", "40", "60", "60", "75", "100", "60", "75", "90", "100", "100"
         ],
@@ -102,7 +103,7 @@ class PlexInterface(plexapp.AppInterface):
             maxVideoRes, maxVideoRes, maxVideoRes, maxVideoRes, maxVideoRes
         ],
         'transcodeVideoBitrates': [
-            "64", "96", "208", "320", "720", "1500", "2000", "3000", "4000", "8000", "10000", "12000", "20000", "200000"
+            "64", "96", "208", "320", "720", "1500", "2000", "3000", "4000", "8000", "10000", "12000", "20000", "400000"
         ],
         'deviceInfo': plexapp.DeviceInfo()
     }
@@ -151,6 +152,10 @@ class PlexInterface(plexapp.AppInterface):
         if glbl == 'transcodeVideoResolutions':
             maxres = self.getPreference('allow_4k', True) and plexapp.Res((3840, 2160)) or plexapp.Res((1920, 1080))
             self._globals['transcodeVideoResolutions'][-5:] = [maxres] * 5
+        elif glbl == 'audioChannels':
+            self._globals['audioChannels'] = \
+                util.CHANNELMAPPING[util.rpc.Settings.GetSettingValue(setting='audiooutput.channels').get('value')]
+
         return self._globals.get(glbl, default)
 
     def getCapabilities(self):

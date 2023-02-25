@@ -25,7 +25,7 @@ def playTrack(track):
     apobj = plexplayer.PlexAudioPlayer(track)
     url = apobj.build()['url']
     url = util.addURLParams(url, {
-        'X-Plex-Client-Profile-Name': 'Chrome',
+        'X-Plex-Client-Profile-Name': 'Generic',
         'X-Plex-Client-Identifier': plexapp.util.INTERFACE.getGlobal('clientIdentifier')
     })
     LOG('Playing URL: {0}'.format(url))

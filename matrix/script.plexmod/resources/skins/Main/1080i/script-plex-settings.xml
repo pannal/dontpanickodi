@@ -89,7 +89,6 @@
                     <width>590</width>
                     <height>666</height>
                     <onup>201</onup>
-                    <ondown>noop</ondown>
                     <onright>100</onright>
                     <scrolltime>200</scrolltime>
                     <orientation>vertical</orientation>
@@ -189,7 +188,6 @@
                     <width>776</width>
                     <height>666</height>
                     <onup>201</onup>
-                    <ondown>noop</ondown>
                     <onleft>75</onleft>
                     <onright>150</onright>
                     <scrolltime>200</scrolltime>
@@ -413,7 +411,6 @@
                     <width>845</width>
                     <height>566</height>
                     <onup>noop</onup>
-                    <ondown>noop</ondown>
                     <onleft>100</onleft>
                     <scrolltime>200</scrolltime>
                     <orientation>vertical</orientation>

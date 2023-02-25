@@ -206,7 +206,8 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
             thumb_fallback='script.plex/thumb_fallbacks/{0}.png'.format(self.video.type == 'episode' and 'show' or 'movie'),
             info=self.video.summary,
             background=self.getProperty('background'),
-            is_16x9=self.video.type == 'episode'
+            is_16x9=self.video.type == 'episode',
+            video=self.video
         )
 
     def optionsButtonClicked(self):
@@ -512,6 +513,7 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
 
         self.setProperty('video.res', self.video.resolutionString())
         self.setProperty('audio.codec', self.video.audioCodecString())
+        self.setProperty('video.codec', self.video.videoCodecString())
         self.setProperty('audio.channels', self.video.audioChannelsString(metadata.apiTranslate))
 
         self.setProperties(('rating.stars', 'rating', 'rating.image', 'rating2', 'rating2.image'), '')

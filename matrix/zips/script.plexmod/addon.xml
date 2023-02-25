@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="script.plexmod"
        name="Plex"
-       version="0.4.7-beta1.0"
+       version="0.5.0"
        provider-name="pannal">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
@@ -28,6 +28,21 @@
             implement multiple markers per video file
             add skip credits Plex-style (skip to post-credit scene if applicable or skip to end)
             add auto skip credits feature
+            actually respect DirectPlay=Off and DirectStream=Off
+            fix directstream/transcoding (DS never worked apart from h264)
+            fix transcoded audio always being MP3
+            deviate from Web-client-based profile to own dynamic profile
+            allow directplay/stream/transcode of virtually anything on Kodi
+            add settings to force directstream/transcoded audio to AC3 and/or DTS (for passthrough)
+            add setting to limit directstream/transcoded audio to original audio bitrate/channels
+            add setting to limit directstream/transcoded audio to Kodi audio channel setting
+            prevent PMS transcoding audio to higher channel count than original audio
+            show video codec in preplay screen
+            settings: round-robin when at the end of the left heading list
+            stream status dialog: show HW encoding state
+            replace progressive jpg files (thanks @shyzus)
+
+            note: massive thanks to @hbb for reporting the MP3 issue and sticking with me for the whole process of figuring out how to do audio stuff in a Plex client
         </news>
         <assets>
             <icon>icon.png</icon>

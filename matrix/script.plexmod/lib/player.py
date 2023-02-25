@@ -885,7 +885,7 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
             self.handler.mode = self.handler.MODE_ABSOLUTE
 
         url = util.addURLParams(url, {
-            'X-Plex-Client-Profile-Name': 'Chrome',
+            'X-Plex-Client-Profile-Name': 'Generic',
             'X-Plex-Client-Identifier': plexapp.util.INTERFACE.getGlobal('clientIdentifier')
         })
         li = xbmcgui.ListItem(self.video.title, path=url)

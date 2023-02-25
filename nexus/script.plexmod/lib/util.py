@@ -35,6 +35,15 @@ _splitver = xbmc.getInfoLabel('System.BuildVersion').split()[0].split(".")
 KODI_VERSION_MAJOR, KODI_VERSION_MINOR = int(_splitver[0].split("-")[0]), int(_splitver[1].split("-")[0])
 
 
+def getChannelMapping():
+    data = rpc.Settings.GetSettings(filter={"section": "system", "category": "audio"})["settings"]
+    return list(filter(lambda i: i["id"] == "audiooutput.channels", data))[0]["options"]
+
+
+# retrieve labels for mapping audio channel settings values
+CHANNELMAPPING = dict((t["value"], t["label"]) for t in getChannelMapping())
+
+
 class UtilityMonitor(xbmc.Monitor, signalsmixin.SignalsMixin):
     def __init__(self, *args, **kwargs):
         xbmc.Monitor.__init__(self, *args, **kwargs)

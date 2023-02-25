@@ -340,7 +340,7 @@ class VideoPPI(ComputedPPIValue):
         DPAttributesDiffer("videoBitrate", formatTrue=u"%(val1)s->%(val2)skbit", formatFalse=u"%(val1)skbit"),
         lambda i: [
             (i.details.session.videoStreamDecision + " HW")
-            if i.session.transcodeVideoDecision == "transcode" and i.details.session.transcodeHWEncoding
+            if i.details.session.transcodeVideoDecision == "transcode" and i.details.session.transcodeHWEncoding
             else i.details.session.videoStreamDecision
         ]
     ]

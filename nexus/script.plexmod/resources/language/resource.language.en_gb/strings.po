@@ -225,6 +225,37 @@ msgctxt "#32057"
 msgid "Current Server Version"
 msgstr ""
 
+msgctxt "#32058"
+msgid "Never exceed original audio codec"
+msgstr ""
+
+msgctxt "#32059"
+msgid "When transcoding audio, never exceed the original audio bitrate or channel count on the same codec."
+msgstr ""
+
+msgctxt "#32060"
+msgid "Use Kodi audio channels"
+msgstr ""
+
+msgctxt "#32061"
+msgid "When transcoding audio, target the audio channels set in Kodi. Not recommended for non-HDMI/SPDIF"
+msgstr ""
+
+msgctxt "#32062"
+msgid "Force transcoded audio to AC3"
+msgstr ""
+
+msgctxt "#32063"
+msgid "When transcoding multi-channel audio, always instruct PMS encode to AC3 (useful for Optical passthrough)"
+msgstr ""
+
+msgctxt "#32064"
+msgid "Treat DTS like AC3"
+msgstr ""
+
+msgctxt "#32065"
+msgid "When the above is enabled, treat DTS the same as AC3 (useful for Optical passthrough)"
+msgstr ""
 
 msgctxt "#32100"
 msgid "Skip user selection and pin entry on startup."

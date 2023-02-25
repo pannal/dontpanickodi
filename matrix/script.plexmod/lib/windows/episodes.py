@@ -913,6 +913,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
         mli.setProperty('unwatched', not video.isWatched and '1' or '')
         mli.setProperty('video.res', video.resolutionString())
         mli.setProperty('audio.codec', video.audioCodecString())
+        mli.setProperty('video.codec', video.videoCodecString())
         mli.setProperty('audio.channels', video.audioChannelsString(metadata.apiTranslate))
         mli.setBoolProperty('unavailable', not video.available())
 

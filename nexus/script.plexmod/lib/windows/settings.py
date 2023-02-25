@@ -204,10 +204,6 @@ class Settings(object):
                 ThemeMusicSetting('theme_music', T(32480, 'Theme music'), 5),
             )
         ),
-        'audio': (
-            T(32048, 'Audio'),
-            ()
-        ),
         'video': (
             T(32053, 'Video'), (
                 QualitySetting('local_quality', T(32020, 'Local Quality'), 13),
@@ -221,6 +217,29 @@ class Settings(object):
                 BoolSetting('allow_hevc', T(32037, 'Allow HEVC (h265)'), True).description(
                     T(32103, 'Enable this if your hardware can handle HEVC/h265. Disable it to force transcoding.')
                 )
+            )
+        ),
+        'audio': (
+            T(32048, 'Audio'), (
+                BoolSetting('audio_clamp_to_orig', T(32058, 'Never exceed original audio codec'), True).description(
+                    T(32059, 'When transcoding audio, never exceed the original audio bitrate or channel '
+                             'count on the same codec.')
+                ),
+                BoolSetting('audio_channels_kodi', T(32060, 'Use Kodi audio channels'),
+                            False).description(
+                    T(32061, 'When transcoding audio, target the audio channels set in Kodi. Not recommended '
+                             'for SPDIF (AC3/DTS 2.1).')
+                ),
+                BoolSetting('audio_force_ac3', T(32062, 'Force transcoded audio to AC3'),
+                            False).description(
+                    T(32063, 'When transcoding multi-channel audio, always instruct PMS '
+                             'encode to AC3 (useful for Optical passthrough)')
+                ),
+                BoolSetting('audio_ac3dts', T(32064, 'Treat DTS like AC3'),
+                            True).description(
+                    T(32065, 'When the above is enabled, treat DTS the same as AC3 '
+                             '(useful for Optical passthrough)')
+                ),
             )
         ),
         'subtitles': (
@@ -279,10 +298,11 @@ class Settings(object):
         ),
     }
 
-    SECTION_IDS = ('main', 'video', 'subtitles', 'advanced', 'manual', 'about')
+    SECTION_IDS = ('main', 'video', 'audio', 'subtitles', 'advanced', 'manual', 'about')
 
     def __getitem__(self, key):
         return self.SETTINGS[key]
+
 
 # enable AV1 setting if kodi nexus
 if util.KODI_VERSION_MAJOR >= 20:
