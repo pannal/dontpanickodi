@@ -9,6 +9,7 @@ import os
 import shutil
 import hashlib
 import zipfile
+import sys
 from xml.etree import ElementTree
 
 KODI_VERSIONS = ["krypton", "leia", "matrix", "nexus", "repo"]
@@ -30,16 +31,17 @@ class Generator:
     the checked-out repo.
     """
 
-    def __init__(self, release):
+    def __init__(self, release, onlyMD5=False):
         self.release_path = release
         self.zips_path = os.path.join(self.release_path, "zips")
 
         if not os.path.exists(self.zips_path):
             os.makedirs(self.zips_path)
 
-        self._remove_binaries()
+        if not onlyMD5:
+            self._remove_binaries()
 
-        self._generate_addons_file()
+            self._generate_addons_file()
         self._generate_md5_file()
 
     def _remove_binaries(self):
@@ -215,5 +217,6 @@ class Generator:
 
 
 if __name__ == "__main__":
+    onlyMD5 = len(sys.argv) > 1 and sys.argv[1] == "md5"
     for release in [r for r in KODI_VERSIONS if os.path.exists(r)]:
-        Generator(release)
+        Generator(release, onlyMD5=onlyMD5)
