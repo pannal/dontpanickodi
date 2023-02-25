@@ -23,6 +23,9 @@ IGNORE = [
     "venv",
 ]
 
+ADDON_RE = re.compile(r'(<addon id="(?!repository)(?P<id>.+?)".*?version="(?P<version>.+?)".*?</addon>)',
+                      re.DOTALL | re.MULTILINE)
+
 
 class Generator:
     """
@@ -141,6 +144,11 @@ class Generator:
 
             shutil.copy(addon_path, zips_path)
 
+    def _get_existing_versions(self):
+        addons_xml = os.path.join(self.zips_path, "addons.xml")
+        f = open(addons_xml).read()
+        return ADDON_RE.findall(f)
+
     def _generate_addons_file(self):
         """
         Generates a zip for each found addon, and updates the addons.xml file accordingly.
@@ -156,11 +164,15 @@ class Generator:
             and os.path.exists(os.path.join(self.release_path, i, "addon.xml"))
         ]
 
+        existing_addons = self._get_existing_versions()
+        versions_seen = {}
+
         for addon in folders:
             try:
                 _path = os.path.join(self.release_path, addon, "addon.xml")
                 xml_lines = open(_path, "r", encoding="utf-8").read().splitlines()
                 addon_xml = ""
+                version = None
 
                 # loop thru cleaning each line
                 ver_found = False
@@ -173,6 +185,9 @@ class Generator:
                     addon_xml += line.rstrip() + "\n"
                 addons_xml += addon_xml.rstrip() + "\n\n"
 
+                if version:
+                    versions_seen[addon] = version
+
                 # Create the zip files
                 self._create_zip(addon, version)
                 self._copy_meta_files(addon, os.path.join(self.zips_path, addon))
@@ -180,7 +195,16 @@ class Generator:
                 print("Excluding {0}: {1}".format(_path, e))
 
         # clean and add closing tag
-        addons_xml = addons_xml.strip() + "\n</addons>\n"
+        addons_xml = addons_xml.strip()
+
+        # add old addons
+        for addon_xml, addon_id, version in existing_addons:
+            if addon_id in versions_seen and version != versions_seen[addon_id] \
+                    and os.path.exists(os.path.join(self.zips_path, addon_id, "{0}-{1}.zip".format(addon_id, version))):
+                print("Adding known addon: {}:{}".format(addon_id, version))
+                addons_xml += "\n\n" + addon_xml.rstrip()
+
+        addons_xml += "\n</addons>\n"
         self._save_file(
             addons_xml.encode("utf-8"),
             file=os.path.join(self.zips_path, "addons.xml"),
