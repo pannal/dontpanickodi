@@ -61,4 +61,44 @@
         </assets>
     </extension>
 </addon>
+
+<addon id="script.plexmod"
+       name="Plex"
+       version="0.4.6"
+       provider-name="pannal">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+        <import addon="script.module.requests" version="2.27.1+matrix.1"/>
+        <import addon="script.module.six" version="1.15.0+matrix.1"/>
+        <import addon="script.module.kodi-six" version="0.1.3.1" />
+    </requires>
+    <extension point="xbmc.python.script" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.python.pluginsource" library="plugin.py">
+        <provides>executable</provides>
+    </extension>
+    <extension point="xbmc.service" library="service.py" />
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">PlexMod for Kodi</summary>
+        <description lang="en_GB">Unofficial Plex for Kodi add-on</description>
+        <license>GPL-2.0-only</license>
+        <forum>https://forums.plex.tv/t/plexmod-for-kodi-18-19-20</forum>
+        <website>https://www.plex.tv</website>
+        <source>https://github.com/pannal/plex-for-kodi</source>
+        <platform>all</platform>
+        <news>
+            add more sort options for ratings where applicable (rating, audienceRating, contentRating, userRating)
+            add smart desc/asc default sort (need feedback)
+            use PlexWeb sort field naming (except for PlexWeb Rating=My Rating which is clearer)
+            note: TV shows "By Audience Rating" seems to be broken in Plex
+            previous beta fixes
+            small bugfixes
+        </news>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>
 </addons>
