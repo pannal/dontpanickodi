@@ -636,7 +636,8 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
             thumb_fallback='script.plex/thumb_fallbacks/show.png',
             info=episode.summary,
             background=self.getProperty('background'),
-            is_16x9=True
+            is_16x9=True,
+            video=episode
         )
 
     def episodeListClicked(self, play_version=False, force_episode=None):

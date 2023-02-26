@@ -397,6 +397,7 @@ class ShowWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
     def infoButtonClicked(self):
         fallback = 'script.plex/thumb_fallbacks/{0}.png'.format(self.mediaItem.type == 'show' and 'show' or 'music')
         genres = u' / '.join([g.tag for g in util.removeDups(self.mediaItem.genres())][:6])
+
         w = info.InfoWindow.open(
             title=self.mediaItem.title,
             sub_title=genres,
@@ -404,7 +405,8 @@ class ShowWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
             thumb_fallback=fallback,
             info=self.mediaItem.summary,
             background=self.getProperty('background'),
-            is_square=bool(isinstance(self, ArtistWindow))
+            is_square=bool(isinstance(self, ArtistWindow)),
+            video=self.mediaItem
         )
         del w
         util.garbageCollect()

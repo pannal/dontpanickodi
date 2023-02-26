@@ -1,3 +1,8 @@
+[- 0.5.1 -]
+add media/part/stream info to info screen
+read and honor advancedsettings/memorysize
+
+
 [- 0.5.0 -]
 implement multiple markers per video file
 add skip credits Plex-style (skip to post-credit scene if applicable or skip to end)
@@ -16,7 +21,7 @@ settings: round-robin when at the end of the left heading list
 stream status dialog: show HW encoding state
 replace progressive jpg files (thanks @shyzus)
 
-note: massive thanks to @hbb for reporting the MP3 issue and sticking with me for the whole process of figuring out how to do audio stuff in a Plex client
+note: massive thanks to @hbbs for reporting the MP3 issue and sticking with me for the whole process of figuring out how to do audio stuff in a Plex client
 
 
 [- 0.4.6 -]

@@ -1,4 +1,6 @@
 from __future__ import absolute_import
+import os
+
 from kodi_six import xbmc
 from kodi_six import xbmcgui
 from . import kodigui

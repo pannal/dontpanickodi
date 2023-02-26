@@ -39,7 +39,6 @@ def getChannelMapping():
     data = rpc.Settings.GetSettings(filter={"section": "system", "category": "audio"})["settings"]
     return list(filter(lambda i: i["id"] == "audiooutput.channels", data))[0]["options"]
 
-
 # retrieve labels for mapping audio channel settings values
 CHANNELMAPPING = dict((t["value"], t["label"]) for t in getChannelMapping())
 
@@ -61,6 +60,25 @@ class UtilityMonitor(xbmc.Monitor, signalsmixin.SignalsMixin):
 
 
 MONITOR = UtilityMonitor()
+
+ADV_CACHE_RE = re.compile(r'<memorysize>(\d+)</memorysize>')
+
+
+def getAdvancedCacheMemorySize():
+    try:
+        f = xbmcvfs.File("special://profile/advancedsettings.xml")
+        data = f.read()
+        f.close()
+        memorysize = int(ADV_CACHE_RE.findall(data)[0])
+        xbmc.log('script.plex: Setting MemorySize to {} (based on advancedsettings.xml)'.format(memorysize),
+                 level=xbmc.LOGINFO)
+        return memorysize
+    except:
+        xbmc.log('script.plex: Setting MemorySize to default 20971520', level=xbmc.LOGINFO)
+        return 20971520
+
+
+CACHE_SIZE = getAdvancedCacheMemorySize()
 
 
 def T(ID, eng=''):

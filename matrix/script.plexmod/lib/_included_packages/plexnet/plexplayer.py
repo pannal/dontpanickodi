@@ -6,6 +6,8 @@ from . import http
 from . import plexrequest
 from . import mediadecisionengine
 from . import serverdecision
+from lib.util import CACHE_SIZE
+
 from six.moves import range
 
 DecisionFailure = serverdecision.DecisionFailure
@@ -261,7 +263,8 @@ class PlexPlayer(object):
                 decisionPath = http.addUrlParam(decisionPath, "subtitles=" + subType)
 
             # Global variables for all decisions
-            decisionPath = http.addUrlParam(decisionPath, "mediaBufferSize=20971") # Kodi default is 20971520 (20MB)
+            # Kodi default is 20971520 (20MB)
+            decisionPath = http.addUrlParam(decisionPath, "mediaBufferSize={}".format(str(CACHE_SIZE)[:-3]))
             decisionPath = http.addUrlParam(decisionPath, "hasMDE=1")
             decisionPath = http.addUrlParam(decisionPath, 'X-Plex-Client-Profile-Name=Generic')
 
