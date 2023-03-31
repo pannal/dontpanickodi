@@ -92,12 +92,20 @@ class Signal(object):
         Connect a callback ``slot`` to this signal.
         """
         if not isinstance(slot, BaseSlot):
-            try:
-                if inspect.getfullargspec(slot).varkw is None:
-                    raise exceptions.SlotMustAcceptKeywords(self, slot)
-            except TypeError:
-                if inspect.getfullargspec(slot.__call__).varkw is None:
-                    raise exceptions.SlotMustAcceptKeywords(self, slot)
+            if getattr(inspect, "getfullargspec", False):
+                try:
+                    if inspect.getfullargspec(slot).varkw is None:
+                        raise exceptions.SlotMustAcceptKeywords(self, slot)
+                except TypeError:
+                    if inspect.getfullargspec(slot.__call__).varkw is None:
+                        raise exceptions.SlotMustAcceptKeywords(self, slot)
+            else:
+                try:
+                    if inspect.getargspec(slot).keywords is None:
+                        raise exceptions.SlotMustAcceptKeywords(self, slot)
+                except TypeError:
+                    if inspect.getargspec(slot.__call__).keywords is None:
+                        raise exceptions.SlotMustAcceptKeywords(self, slot)
 
         with self._slots_lk:
             if not self.is_connected(slot):

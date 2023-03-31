@@ -68,7 +68,10 @@ class PhotoWindow(kodigui.BaseWindow):
         self.initialLoad = True
 
     def onFirstInit(self):
-        self.tempFolder = os.path.join(xbmcvfs.translatePath("special://temp/"), *self.tempSubFolder)
+        if util.KODI_VERSION_MAJOR > 18:
+            self.tempFolder = os.path.join(xbmcvfs.translatePath("special://temp/"), *self.tempSubFolder)
+        else:
+            self.tempFolder = os.path.join(xbmc.translatePath("special://temp/"), *self.tempSubFolder)
         if not os.path.exists(self.tempFolder):
             try:
                 os.makedirs(self.tempFolder)

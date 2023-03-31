@@ -8,6 +8,7 @@ from lib import util
 from lib.util import T
 
 import plexnet
+import sys
 
 
 class Setting(object):
@@ -137,17 +138,23 @@ class PlatformSetting(InfoSetting):
         self.label = T(32410, 'Platform Version')
 
     def valueLabel(self):
+        plat = None
         try:
-            from lib import distro
-            dist = distro.linux_distribution()
-            if dist and len(dist) > 1:
-                plat = u'{0} {1}'.format(dist[0], dist[1])
+            if sys.version_info[0] >= 3:
+                from lib import distro
+                dist = distro.linux_distribution()
+                if dist and len(dist) > 1:
+                    plat = u'{0} {1}'.format(dist[0], dist[1])
             else:
                 import platform
-                plat = platform.platform()
-                plat = u'{0} {1}'.format(plat[0], '.'.join(plat[1].split('.', 2)[:2]))
+                dist = platform. dist()
+                if dist and len(dist) > 1:
+                   plat = u'{0} {1}'.format(dist[0], dist[1])
+                else:
+                   plat = platform.platform()
+                   plat = u'{0} {1}'.format(plat[0], '.'.join(plat[1].split('.', 2)[:2]))
         except:
-            util.ERROR()
+           util.ERROR()
 
         plat = plat.strip()
 

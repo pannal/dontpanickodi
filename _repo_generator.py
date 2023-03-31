@@ -44,7 +44,7 @@ class Generator:
         if not onlyMD5:
             self._remove_binaries()
 
-            self._generate_addons_file()
+            self._generate_addons_file(release)
         self._generate_md5_file()
 
     def _remove_binaries(self):
@@ -145,11 +145,14 @@ class Generator:
             shutil.copy(addon_path, zips_path)
 
     def _get_existing_versions(self):
-        addons_xml = os.path.join(self.zips_path, "addons.xml")
-        f = open(addons_xml).read()
-        return ADDON_RE.findall(f)
+        try:
+            addons_xml = os.path.join(self.zips_path, "addons.xml")
+            f = open(addons_xml).read()
+            return ADDON_RE.findall(f)
+        except IOError:
+            return {}
 
-    def _generate_addons_file(self):
+    def _generate_addons_file(self, release_name):
         """
         Generates a zip for each found addon, and updates the addons.xml file accordingly.
         """
@@ -192,7 +195,7 @@ class Generator:
                 self._create_zip(addon, version)
                 self._copy_meta_files(addon, os.path.join(self.zips_path, addon))
             except Exception as e:
-                print("Excluding {0}: {1}".format(_path, e))
+                print("Excluding {0}/{1}: {2}".format(release_name, _path, e))
 
         # clean and add closing tag
         addons_xml = addons_xml.strip()
@@ -201,7 +204,7 @@ class Generator:
         for addon_xml, addon_id, version in existing_addons:
             if addon_id in versions_seen and version != versions_seen[addon_id] \
                     and os.path.exists(os.path.join(self.zips_path, addon_id, "{0}-{1}.zip".format(addon_id, version))):
-                print("Adding known addon: {}:{}".format(addon_id, version))
+                print("Adding known addon: {}/{}:{}".format(release_name, addon_id, version))
                 addons_xml += "\n\n" + addon_xml.rstrip()
 
         addons_xml += "\n</addons>\n"
@@ -210,7 +213,7 @@ class Generator:
             file=os.path.join(self.zips_path, "addons.xml"),
             decode=True,
         )
-        print("Successfully updated addons.xml")
+        print("Successfully updated {}/addons.xml".format(release_name))
 
     def _generate_md5_file(self):
         """

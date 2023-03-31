@@ -27,12 +27,15 @@ _SHUTDOWN = False
 
 ADDON = xbmcaddon.Addon()
 
-PROFILE = xbmcvfs.translatePath(ADDON.getAddonInfo('profile'))
-
 SETTINGS_LOCK = threading.Lock()
 
 _splitver = xbmc.getInfoLabel('System.BuildVersion').split()[0].split(".")
 KODI_VERSION_MAJOR, KODI_VERSION_MINOR = int(_splitver[0].split("-")[0]), int(_splitver[1].split("-")[0])
+
+if KODI_VERSION_MAJOR > 18:
+    PROFILE = xbmcvfs.translatePath(ADDON.getAddonInfo('profile'))
+else:
+    PROFILE = xbmc.translatePath(ADDON.getAddonInfo('profile'))
 
 
 def getChannelMapping():
@@ -217,7 +220,10 @@ def getGlobalProperty(key):
 
 def showNotification(message, time_ms=3000, icon_path=None, header=ADDON.getAddonInfo('name')):
     try:
-        icon_path = icon_path or xbmcvfs.translatePath(ADDON.getAddonInfo('icon'))
+        if KODI_VERSION_MAJOR > 18:
+            icon_path = icon_path or xbmcvfs.translatePath(ADDON.getAddonInfo('icon'))
+        else:
+            icon_path = icon_path or xbmc.translatePath(ADDON.getAddonInfo('icon'))
         xbmc.executebuiltin('Notification({0},{1},{2},{3})'.format(header, message, time_ms, icon_path))
     except RuntimeError:  # Happens when disabling the addon
         LOG(message)

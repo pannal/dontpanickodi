@@ -1,3 +1,6 @@
+[- 0.5.2-beta0.1 -]
+re-add support for leia (Kodi 18)
+
 [- 0.5.1 -]
 add media/part/stream info to info screen
 read and honor advancedsettings/memorysize

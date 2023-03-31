@@ -3,9 +3,14 @@
 from __future__ import absolute_import
 from __future__ import print_function
 import subprocess
+import sys
 
 def parse(data=None):
-    data = data or subprocess.check_output('ipconfig /all',startupinfo=getStartupInfo(),encoding="latin-1")
+    kwa = {}
+    if sys.version_info[0] >= 3:
+        kwa = {"encoding": "latin-1"}
+
+    data = data or subprocess.check_output('ipconfig /all',startupinfo=getStartupInfo(), **kwa)
     dlist = [d.rstrip() for d in data.split('\n')]
     mode = None
     sections = []
