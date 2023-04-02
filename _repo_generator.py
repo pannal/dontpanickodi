@@ -147,7 +147,7 @@ class Generator:
     def _get_existing_versions(self):
         try:
             addons_xml = os.path.join(self.zips_path, "addons.xml")
-            f = open(addons_xml).read()
+            f = open(addons_xml, encoding="utf-8").read()
             return ADDON_RE.findall(f)
         except IOError:
             return {}
