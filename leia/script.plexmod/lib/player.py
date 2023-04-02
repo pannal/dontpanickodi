@@ -334,6 +334,7 @@ class SeekPlayerHandler(BasePlayerHandler):
             self.updateNowPlaying()
 
             # show post play if possible, if an item has been watched (90% by Plex standards)
+            # fixme: add watched percentage setting
             if self.trueTime * 1000 / float(self.duration) >= 0.90 and self.next(on_end=True):
                 return
 

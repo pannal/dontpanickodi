@@ -392,7 +392,9 @@ class Collection(media.MediaItem):
         return '<{0}:{1}:{2}>'.format(self.__class__.__name__, self.key, title)
 
     def all(self, *args, **kwargs):
-        return plexobjects.listItems(self.server, self.key)
+        items = plexobjects.listItems(self.server, self.key)
+        items.totalSize = items.size
+        return items
 
     def isMusicOrDirectoryItem(self):
         return self.container.viewGroup in ('artist', 'album', 'track')
@@ -409,9 +411,9 @@ class Generic(plexobjects.PlexObject):
         title = self.title.replace(' ', '.')[0:20]
         return '<{0}:{1}:{2}>'.format(self.__class__.__name__, self.key, title)
 
-@plexobjects.registerLibType
-class Collection(Generic):
-    TYPE = 'collection'
+#@plexobjects.registerLibType
+#class Collection(Generic):
+#    TYPE = 'collection'
 
 @plexobjects.registerLibType
 class Playlist(playlist.BasePlaylist, signalsmixin.SignalsMixin):

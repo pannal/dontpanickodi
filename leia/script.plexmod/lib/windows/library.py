@@ -1248,6 +1248,7 @@ class LibraryWindow(kodigui.MultiWindow, windowutils.UtilMixin):
             sectionType = mli.dataSource.TYPE
 
         updateWatched = False
+
         if mli.dataSource.TYPE == 'collection':
             self.processCommand(opener.open(mli.dataSource))
             updateWatched = True
@@ -1257,7 +1258,7 @@ class LibraryWindow(kodigui.MultiWindow, windowutils.UtilMixin):
             else:
                 self.processCommand(opener.handleOpen(subitems.ShowWindow, media_item=mli.dataSource, parent_list=self.showPanelControl))
             updateWatched = True
-        elif self.section.TYPE == 'movie':
+        elif self.section.TYPE == 'movie' or mli.dataSource.TYPE == 'movie':
             datasource = mli.dataSource
             if datasource.isDirectory():
                 cls = self.section.__class__
@@ -1340,7 +1341,7 @@ class LibraryWindow(kodigui.MultiWindow, windowutils.UtilMixin):
             self.setProperty('background', util.backgroundFromArt(item.art, width=self.width, height=self.height))
         else:
             # we want the first item of the first chunk
-            if position is not 0:
+            if position != 0:
                 return
 
             self.setProperty('background', util.backgroundFromArt(items[0].art,
@@ -1393,18 +1394,29 @@ class LibraryWindow(kodigui.MultiWindow, windowutils.UtilMixin):
         idx = 0
         fallback = 'script.plex/thumb_fallbacks/{0}.png'.format(TYPE_KEYS.get(self.section.type, TYPE_KEYS['movie'])['fallback'])
 
-        if self.sort != 'titleSort' or ITEM_TYPE == 'folder' or self.subDir:
+        if self.sort != 'titleSort' or ITEM_TYPE == 'folder' or self.subDir or self.section.TYPE == "collection":
             if ITEM_TYPE == 'folder':
                 sectionAll = self.section.folder(0, 0, self.subDir)
             else:
                 sectionAll = self.section.all(0, 0, filter_=self.getFilterOpts(), sort=self.getSortOpts(), unwatched=self.filterUnwatched, type_=type_)
+
             totalSize = sectionAll.totalSize.asInt()
-            if not self.chunkMode:
-                for x in range(totalSize):
-                    mli = kodigui.ManagedListItem('')
-                    mli.setProperty('thumb.fallback', fallback)
-                    mli.setProperty('index', str(x))
-                    items.append(mli)
+
+            if not totalSize:
+                self.showPanelControl.reset()
+                self.keyListControl.reset()
+
+                if self.filter or self.filterUnwatched:
+                    self.setBoolProperty('no.content.filtered', True)
+                else:
+                    self.setBoolProperty('no.content', True)
+            else:
+                if not self.chunkMode:
+                    for x in range(totalSize):
+                        mli = kodigui.ManagedListItem('')
+                        mli.setProperty('thumb.fallback', fallback)
+                        mli.setProperty('index', str(x))
+                        items.append(mli)
         else:
             jumpList = self.section.jumpList(filter_=self.getFilterOpts(), sort=self.getSortOpts(), unwatched=self.filterUnwatched, type_=type_)
 
@@ -1702,6 +1714,8 @@ class LibraryWindow(kodigui.MultiWindow, windowutils.UtilMixin):
 
                         if self.chunkMode:
                             mli.setProperty('key', self.chunkMode.getKey(pos))
+                        else:
+                            mli.setProperty('key', obj.key)
 
                         if showUnwatched:
                             if not obj.isDirectory():
