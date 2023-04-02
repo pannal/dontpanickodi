@@ -939,7 +939,7 @@ class LibraryWindow(kodigui.MultiWindow, windowutils.UtilMixin):
         options = []
 
         if self.section.TYPE == 'show':
-            for t in ('show', 'episode'):
+            for t in ('show', 'episode', 'collection'):
                 options.append({'type': t, 'display': TYPE_PLURAL.get(t, t)})
         elif self.section.TYPE == 'movie':
             for t in ('movie', 'collection', 'folder'):
