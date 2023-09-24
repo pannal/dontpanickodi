@@ -834,6 +834,10 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver):
                 if task.section == section:
                     backgroundthread.BGThreader.moveToFront(task)
                     break
+
+            if section.type != "home":
+                self.showBusy(False)
+                self.setBoolProperty('no.content', True)
             return
 
         if time.time() - hubs.lastUpdated > HUBS_REFRESH_INTERVAL:

@@ -179,6 +179,8 @@ class PlaylistWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
                         pq = plexnet.playqueue.createPlayQueueForItem(self.playlist, options=args)
                         opener.open(pq)
                 else:
+                    if not mli:
+                        mli = self.playlistListControl.getListItem(0)
                     self.openItem(mli.dataSource)
 
         finally:

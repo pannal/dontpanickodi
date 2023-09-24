@@ -516,6 +516,7 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
         self.setProperty('video.res', self.video.resolutionString())
         self.setProperty('audio.codec', self.video.audioCodecString())
         self.setProperty('video.codec', self.video.videoCodecString())
+        self.setProperty('video.rendering', self.video.videoCodecRendering())
         self.setProperty('audio.channels', self.video.audioChannelsString(metadata.apiTranslate))
 
         self.setProperties(('rating.stars', 'rating', 'rating.image', 'rating2', 'rating2.image'), '')

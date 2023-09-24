@@ -139,7 +139,10 @@ class AdvancedSettings(object):
         ("skip_intro_button_timeout", 10),
         ("skip_credits_button_timeout", 10),
         ("playlist_visit_media", True),
-        ("intro_skip_early", False)
+        ("intro_skip_early", False),
+        ("show_media_ends_info", False),
+        ("background_colour", None),
+        ("oldprofile", False)
     )
 
     def __init__(self):
@@ -151,6 +154,8 @@ class AdvancedSettings(object):
 
 
 advancedSettings = AdvancedSettings()
+
+hasCustomBGColour = not advancedSettings.dynamicBackgrounds and advancedSettings.backgroundColour != "-"
 
 
 def getAdvancedSettings():
@@ -426,7 +431,15 @@ def getKodiSkipSteps():
         return
 
 
+def getKodiSlideshowInterval():
+    try:
+        return rpc.Settings.GetSettingValue(setting="slideshow.staytime")["value"]
+    except:
+        return 3
+
+
 kodiSkipSteps = getKodiSkipSteps()
+slideshowInterval = getKodiSlideshowInterval()
 
 
 CRON = None
@@ -563,7 +576,11 @@ def getTimeFormat():
     :return: tuple of strftime-compatible format, boolean padHour
     """
     origFmt = xbmc.getRegion('time')
-    fmt = origFmt.replace("%H%H", "%H").replace("%I%I", "%I")
+
+    # Kodi Omega on Android seems to have borked this separately (not happening on Windows at least)
+    # Format returned can be "%H:mm:ss", which is incompatible with strftime; fix.
+    fmt = origFmt.replace("hh", "%M").replace("mm", "%M").replace("ss", "%S").replace("%H%H", "%H")\
+        .replace("%I%I", "%I")
 
     # Checking for %H%H or %I%I only would be the obvious way here to determine whether the hour should be padded,
     # but the formats returned for regional settings with padding only have %H in them. This seems like a Kodi bug.

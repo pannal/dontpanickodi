@@ -5,7 +5,7 @@
         <posx>0</posx>
         <posy>0</posy>
     </coordinates>
-    <backgroundcolor>0xff000000</backgroundcolor>
+    <backgroundcolor>$INFO[Window.Property(background_colour)]</backgroundcolor>
     <controls>
         <control type="image">
             <posx>0</posx>

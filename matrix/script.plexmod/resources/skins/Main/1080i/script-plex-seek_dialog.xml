@@ -114,6 +114,7 @@
                     <label>$INFO[Player.PlaySpeed]x</label>
                 </control>
                 <control type="label">
+                    <visible>!String.IsEmpty(Window.Property(media.show_ends))</visible>
                     <posx>1860</posx>
                     <posy>0</posy>
                     <width>800</width>
@@ -125,6 +126,7 @@
                     <label>$INFO[Window.Property(time.left)]</label>
                 </control>
                 <control type="label">
+                    <visible>!String.IsEmpty(Window.Property(media.show_ends))</visible>
                     <posx>1860</posx>
                     <posy>40</posy>
                     <width>800</width>

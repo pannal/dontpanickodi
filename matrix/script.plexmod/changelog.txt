@@ -1,5 +1,26 @@
+[- 0.5.3 -]
+- Inhibit screensaver when in photo slideshow (Kodi 19 and above)
+- Add addon setting to use old profile from P4K instead of the optimized one (might fix 3D issues with DP; not sure why?); default: off
+- Show video stream render type in preplay/epidoses screen (SDR/HDR/DV/HLG)
+- Adjust default background image blur/opacity from 0/40 to 4/30
+- Add addon setting to set solid background colour instead of pictures (Kodi 19 and above)
+- Add addon setting to hide when current media will end (default: shown, as before)
+- Split filename in info screen to avoid overflow
+- Don't show "no content" on home; amended PR #43
+- Bad temporary fix for photo playqueues containing videos
+- Photos: Use Kodi slideshow interval; fixes #41
+- Add Simplified Chinese Translation (thanks @Liqianyu)
+- Fix AV1 setting description
+- Fix single-season pagination (anime)
+- Update german translation (thanks @jamal2362)
+- Fix issue when displaying a library that has no hubs to display (thanks @bowlingbeeg)
+- Fixed an issue with video playlists and the general play button not working (thanks @bowlingbeeg)
+- Fixed a couple of places that require integer division (thanks @bowlingbeeg)
+
+
 [- 0.5.2-beta0.1 -]
 re-add support for leia (Kodi 18)
+
 
 [- 0.5.1 -]
 add media/part/stream info to info screen

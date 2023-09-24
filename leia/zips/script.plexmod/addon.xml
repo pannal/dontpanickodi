@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="script.plexmod"
        name="Plex"
-       version="0.5.2-beta1.1"
+       version="0.5.3"
        provider-name="pannal">
     <requires>
         <import addon="xbmc.python" version="2.26.0"/>
@@ -20,14 +20,28 @@
         <summary lang="en_GB">PlexMod for Kodi</summary>
         <description lang="en_GB">Unofficial Plex for Kodi add-on</description>
         <license>GPL-2.0-only</license>
-        <forum>https://forums.plex.tv/t/plexmod-for-kodi-18-19-20</forum>
+        <forum>https://forums.plex.tv/t/plexmod-for-kodi-18-19-20-21/481208</forum>
         <website>https://www.plex.tv</website>
         <source>https://github.com/pannal/plex-for-kodi</source>
         <platform>all</platform>
         <news>
-            re-add support for leia (Kodi 18)
-            fix collection view (might have broken watched handling; please check)
-            add collection view for shows
+            - Inhibit screensaver when in photo slideshow (Kodi 19 and above)
+            - Add addon setting to use old profile from P4K instead of the optimized one (might fix 3D issues with DP; not sure why?); default: off
+            - Show video stream render type in preplay/epidoses screen (SDR/HDR/DV/HLG)
+            - Adjust default background image blur/opacity from 0/40 to 4/30
+            - Add addon setting to set solid background colour instead of pictures (Kodi 19 and above)
+            - Add addon setting to hide when current media will end (default: shown, as before)
+            - Split filename in info screen to avoid overflow
+            - Don't show "no content" on home; amended PR #43
+            - Bad temporary fix for photo playqueues containing videos
+            - Photos: Use Kodi slideshow interval; fixes #41
+            - Add Simplified Chinese Translation (thanks @Liqianyu)
+            - Fix AV1 setting description
+            - Fix single-season pagination (anime)
+            - Update german translation (thanks @jamal2362)
+            - Fix issue when displaying a library that has no hubs to display (thanks @bowlingbeeg)
+            - Fixed an issue with video playlists and the general play button not working (thanks @bowlingbeeg)
+            - Fixed a couple of places that require integer division (thanks @bowlingbeeg)
         </news>
         <assets>
             <icon>icon.png</icon>

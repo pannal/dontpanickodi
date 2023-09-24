@@ -184,6 +184,32 @@ class Video(media.MediaItem):
     def videoCodecString(self):
         return (self.media[0].videoCodec or '').upper()
 
+    def videoCodecRendering(self):
+        render = "sdr"
+        stream = None
+
+        for media in self.media:
+            for part in media.parts:
+                for s in part.streams:
+                    if s.streamType.asInt() == plexstream.PlexStream.TYPE_VIDEO:
+                        stream = s
+                        break
+
+        if not stream:
+            return ''
+
+        if stream.colorTrc == "smpte2084":
+            if stream.DOVIProfile == "8" and stream.DOVIBLCompatID == "1":
+                render = "dv/hdr10"
+            elif stream.DOVIProfile:
+                render = "dv"
+            else:
+                render = "hdr"
+        elif stream.colorTrc == "arib-std-b67":
+            render = "hlg"
+
+        return render.upper()
+
     def audioChannelsString(self, translate_func=util.dummyTranslate):
         channels = self.media[0].audioChannels.asInt()
 
@@ -498,12 +524,13 @@ class Episode(PlayableVideo, SectionOnDeckMixin):
         return self._getStreamURL(**params)
 
     def season(self):
-        if not self._season and not self.get('skipParent').asBool():
-            items = plexobjects.listItems(self.server, self.parentKey)
+        skipParent = self.get('skipParent').asBool()
+        key = self.parentKey if not skipParent else self.grandparentKey
+        if not self._season:
+            items = plexobjects.listItems(self.server, key)
 
             if items:
                 self._season = items[0]
-
         return self._season
 
     def show(self):

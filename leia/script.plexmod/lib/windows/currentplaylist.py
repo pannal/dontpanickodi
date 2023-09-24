@@ -245,7 +245,7 @@ class CurrentPlaylistWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
         self.seekbarControl = self.getControl(self.SEEK_IMAGE_ID)
         self.selectionIndicator = self.getControl(self.SELECTION_INDICATOR)
         self.selectionBox = self.getControl(self.SELECTION_BOX)
-        self.selectionBoxHalf = self.SELECTION_BOX_WIDTH / 2
+        self.selectionBoxHalf = self.SELECTION_BOX_WIDTH // 2
         self.selectionBoxMax = self.SEEK_IMAGE_WIDTH
         player.PLAYER.on('playback.started', self.onPlayBackStarted)
 

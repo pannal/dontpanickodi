@@ -7,6 +7,14 @@ from plexnet.video import Episode, Movie, Clip
 import os
 
 
+def split2len(s, n):
+    def _f(s, n):
+        while s:
+            yield s[:n]
+            s = s[n:]
+    return list(_f(s, n))
+
+
 class InfoWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
     xmlFile = 'script-plex-info.xml'
     path = util.ADDON.getAddonInfo('path')
@@ -46,7 +54,16 @@ class InfoWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
         addMedia = ["\n\n\n\nMedia\n"]
         for media_ in self.video.media():
             for part in media_.parts:
-                addMedia.append("{}\n".format(os.path.basename(part.file)))
+                addMedia.append("File: ")
+                splitFnAt = 74
+                fnLen = len(os.path.basename(part.file))
+                appended = False
+                for s in split2len(os.path.basename(part.file), splitFnAt):
+                    if fnLen > splitFnAt and not appended:
+                        addMedia.append("{} ...\n".format(s))
+                        appended = True
+                        continue
+                    addMedia.append("{}\n".format(s))
 
                 subs = []
                 for stream in part.streams:

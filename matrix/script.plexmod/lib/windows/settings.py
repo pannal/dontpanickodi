@@ -316,7 +316,7 @@ if util.KODI_VERSION_MAJOR >= 20:
     videoSettings = list(Settings.SETTINGS["video"])
     videoSettings[1] = tuple(list(videoSettings[1]) + [
         BoolSetting('allow_av1', T(32601, 'Allow AV1'), False).description(
-            T(32103,
+            T(32602,
               'Enable this if your hardware can handle AV1. Disable it to force transcoding.')
         )
     ])

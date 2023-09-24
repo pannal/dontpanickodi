@@ -41,7 +41,7 @@ class PhotoWindow(kodigui.BaseWindow):
     PQUEUE_LIST_ID = 500
     PQUEUE_LIST_OVERLAY_BUTTON_ID = 501
 
-    SLIDESHOW_INTERVAL = 3
+    SLIDESHOW_INTERVAL = util.slideshowInterval
 
     PHOTO_STACK_SIZE = 10
     tempSubFolder = ("p4k", "photos")
@@ -252,6 +252,14 @@ class PhotoWindow(kodigui.BaseWindow):
                 self.updateProperties()
 
             photo = self.playQueue.current()
+
+            # fixme: video should work.
+            # bad temporary fix for videos in photo playqueues
+            if photo.type != "photo":
+                self.next()
+                util.DEBUG_LOG("SKIPPING PHOTO: %s" % photo)
+                return
+
             self.updatePqueueListSelection(photo)
 
         self.showPhotoTimeout = time.time() + 0.2
@@ -293,6 +301,9 @@ class PhotoWindow(kodigui.BaseWindow):
         try:
             for item in loadItems:
                 if not item:
+                    continue
+
+                if item.type != "photo":
                     continue
 
                 meta = self.playerObject.build(item=item)
@@ -409,11 +420,18 @@ class PhotoWindow(kodigui.BaseWindow):
         util.DEBUG_LOG('Slideshow: STARTED')
         self.slideshowRunning = True
 
+        # inhibit screensaver in matrix and above
+        if util.KODI_VERSION_MAJOR > 18:
+            xbmc.executebuiltin('InhibitScreensaver(true)')
+
         self.resetSlideshowTimeout()
         while not util.MONITOR.waitForAbort(0.1) and self.slideshowRunning:
             if not self.slideshowNext or time.time() < self.slideshowNext:
                 continue
             self.next()
+
+        if util.KODI_VERSION_MAJOR > 18:
+            xbmc.executebuiltin('InhibitScreensaver(false)')
 
         util.DEBUG_LOG('Slideshow: STOPPED')
 

@@ -5,10 +5,11 @@
         <posx>0</posx>
         <posy>0</posy>
     </coordinates>
-    <backgroundcolor>0xff111111</backgroundcolor>
+    <backgroundcolor>$INFO[Window.Property(background_colour)]</backgroundcolor>
     <controls>
         <control type="group">
             <control type="image">
+                <visible>!String.IsEmpty(Window.Property(use_solid_background))</visible>
                 <posx>0</posx>
                 <posy>0</posy>
                 <width>1920</width>
@@ -16,6 +17,7 @@
                 <texture>script.plex/home/background-fallback.png</texture>
             </control>
             <control type="image">
+                <visible>!String.IsEmpty(Window.Property(use_solid_background))</visible>
                 <posx>0</posx>
                 <posy>0</posy>
                 <width>1920</width>

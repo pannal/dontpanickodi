@@ -277,7 +277,6 @@ msgctxt "#32104"
 msgid "When to connect to servers with no secure connections.[CR][CR]* [B]Never[/B]: Never connect to a server insecurely[CR]* [B]On Same Network[/B]: Allow if on the same network[CR]* [B]Always[/B]: Allow same network and remote connections"
 msgstr ""
 
-
 msgctxt "#32201"
 msgid "Trailer"
 msgstr ""
@@ -1119,6 +1118,10 @@ msgctxt "#32528"
 msgid "Set how long the skip credits button shows for."
 msgstr ""
 
+msgctxt "#32540"
+msgid "Show when the current video will end in player"
+msgstr ""
+
 msgctxt "#32601"
 msgid "Allow AV1"
 msgstr ""
@@ -1157,4 +1160,20 @@ msgstr ""
 
 msgctxt "#33108"
 msgid "Critic Rating"
+msgstr ""
+
+msgctxt "#33200"
+msgid "Background Color"
+msgstr ""
+
+msgctxt "#33201"
+msgid "Specify solid Background Color instead of using media images"
+msgstr ""
+
+msgctxt "#33400"
+msgid "Use old compatibility profile"
+msgstr ""
+
+msgctxt "#33401"
+msgid "Uses the Chrome client profile instead of the custom one. Might fix rare issues with 3D playback."
 msgstr ""

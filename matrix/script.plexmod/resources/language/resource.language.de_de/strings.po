@@ -24,55 +24,55 @@ msgstr "Original"
 
 msgctxt "#32002"
 msgid "20 Mbps 1080p"
-msgstr "20 Mbps 1080p"
+msgstr "20 Mbit/s 1080p"
 
 msgctxt "#32003"
 msgid "12 Mbps 1080p"
-msgstr "12 Mbps 1080p"
+msgstr "12 Mbit/s 1080p"
 
 msgctxt "#32004"
 msgid "10 Mbps 1080p"
-msgstr "10 Mbps 1080p"
+msgstr "10 Mbit/s 1080p"
 
 msgctxt "#32005"
 msgid "8 Mbps 1080p"
-msgstr "8 Mbps 1080p"
+msgstr "8 Mbit/s 1080p"
 
 msgctxt "#32006"
 msgid "4 Mbps 720p"
-msgstr "4 Mbps 720p"
+msgstr "4 Mbit/s 720p"
 
 msgctxt "#32007"
 msgid "3 Mbps 720p"
-msgstr "3 Mbps 720p"
+msgstr "3 Mbit/s 720p"
 
 msgctxt "#32008"
 msgid "2 Mbps 720p"
-msgstr "2 Mbps 720p"
+msgstr "2 Mbit/s 720p"
 
 msgctxt "#32009"
 msgid "1.5 Mbps 480p"
-msgstr "1.5 Mbps 480p"
+msgstr "1.5 Mbit/s 480p"
 
 msgctxt "#32010"
 msgid "720 kbps"
-msgstr "720 kbps"
+msgstr "720 kbit/s"
 
 msgctxt "#32011"
 msgid "320 kbps"
-msgstr "320 kbps"
+msgstr "320 kbit/s"
 
 msgctxt "#32012"
 msgid "208 kbps"
-msgstr "208 kbps"
+msgstr "208 kbit/s"
 
 msgctxt "#32013"
 msgid "96 kbps"
-msgstr "96 kbps"
+msgstr "96 kbit/s"
 
 msgctxt "#32014"
 msgid "64 kbps"
-msgstr "64 kbps"
+msgstr "64 kbit/s"
 
 msgctxt "#32020"
 msgid "Local Quality"
@@ -84,7 +84,7 @@ msgstr "Qualität für entfernte Geräte"
 
 msgctxt "#32022"
 msgid "Online Quality"
-msgstr "Online Quality"
+msgstr "Online Qualität"
 
 msgctxt "#32023"
 msgid "Transcode Format"
@@ -144,7 +144,7 @@ msgstr "4K erlauben"
 
 msgctxt "#32037"
 msgid "Allow HEVC (h265)"
-msgstr "HEVC erlauben (h265)"
+msgstr "HEVC erlauben (H265)"
 
 msgctxt "#32038"
 msgid "Automatically Sign In"
@@ -226,6 +226,38 @@ msgctxt "#32057"
 msgid "Current Server Version"
 msgstr "Aktuelle Server Version"
 
+msgctxt "#32058"
+msgid "Never exceed original audio codec"
+msgstr "Niemals den ursprünglichen Audio-Codec überschreiten"
+
+msgctxt "#32059"
+msgid "When transcoding audio, never exceed the original audio bitrate or channel count on the same codec."
+msgstr "Bei der Transkodierung von Audio niemals die ursprüngliche Audio-Bitrate oder die Anzahl der Kanäle mit demselben Codec überschreiten."
+
+msgctxt "#32060"
+msgid "Use Kodi audio channels"
+msgstr "Kodi-Audiokanäle verwenden"
+
+msgctxt "#32061"
+msgid "When transcoding audio, target the audio channels set in Kodi. Not recommended for non-HDMI/SPDIF"
+msgstr "Beim Transkodieren von Audio werden die in Kodi eingestellten Audiokanäle verwendet. Nicht empfohlen für nicht-HDMI/SPDIF"
+
+msgctxt "#32062"
+msgid "Force transcoded audio to AC3"
+msgstr "Erzwingen der Transcodierung von Audio in AC3"
+
+msgctxt "#32063"
+msgid "When transcoding multi-channel audio, always instruct PMS encode to AC3 (useful for Optical passthrough)"
+msgstr "Bei der Transkodierung von Mehrkanalton sollte die PMS-Kodierung immer in AC3 erfolgen (nützlich für Optical Passthrough)"
+
+msgctxt "#32064"
+msgid "Treat DTS like AC3"
+msgstr "DTS wie AC3 behandeln"
+
+msgctxt "#32065"
+msgid "When the above is enabled, treat DTS the same as AC3 (useful for Optical passthrough)"
+msgstr "Wenn die obige Option aktiviert ist, wird DTS wie AC3 behandelt (nützlich für Optical Passthrough)"
+
 msgctxt "#32100"
 msgid "Skip user selection and pin entry on startup."
 msgstr "Benutzerauswahl und Pin-Eingabe beim Start überspringen."
@@ -240,7 +272,7 @@ msgstr "Aktiviert 4K Wiedergabe per Hardware. Deaktivierung erzwingt Transcodier
 
 msgctxt "#32103"
 msgid "Enable this if your hardware can handle HEVC/h265. Disable it to force transcoding."
-msgstr "Aktiviert HEVC/h265 Wiedergabe per Hardware. Deaktivierung erzwingt Transcodierung."
+msgstr "Aktiviert HEVC/H265 Wiedergabe per Hardware. Deaktivierung erzwingt Transcodierung."
 
 msgctxt "#32104"
 msgid "When to connect to servers with no secure connections.[CR][CR]* [B]Never[/B]: Never connect to a server insecurely[CR]* [B]On Same Network[/B]: Allow if on the same network[CR]* [B]Always[/B]: Allow same network and remote connections"
@@ -844,7 +876,7 @@ msgstr "Pausiert"
 
 msgctxt "#32437"
 msgid "Welcome"
-msgstr "Wilkommen"
+msgstr "Willkommen"
 
 msgctxt "#32438"
 msgid "Previous"
@@ -1005,3 +1037,123 @@ msgstr "Stream Info anzeigen"
 msgctxt "#32485"
 msgid "Go back instantly with the previous menu action in scrolled views"
 msgstr "Mit der Previous-Menu-Aktion In gescrollten Ansichten sofort zurückgehen"
+
+msgctxt "#32487"
+msgid "Seek Delay"
+msgstr "Vorspulverzögerung"
+
+msgctxt "#32488"
+msgid "Screensaver"
+msgstr "Bildschirmschoner"
+
+msgctxt "#32489"
+msgid "Quiz Mode"
+msgstr "Quiz-Modus"
+
+msgctxt "#32490"
+msgid "Collections"
+msgstr "Sammlungen"
+
+msgctxt "#32491"
+msgid "Folders"
+msgstr "Ordner"
+
+msgctxt "#32492"
+msgid "Kodi Subtitle Settings"
+msgstr "Kodi Untertitel-Einstellungen"
+
+msgctxt "#32493"
+msgid "Prefer normal over forced subtitles if available (PMS selects forced by default)"
+msgstr "Bevorzuge normale gegenüber erzwungenen Untertiteln, falls verfügbar (PMS wählt standardmäßig erzwungene aus)"
+
+msgctxt "#32495"
+msgid "Skip intro"
+msgstr "Intro überspringen"
+
+msgctxt "#32496"
+msgid "Skip credits"
+msgstr "Credits überspringen"
+
+msgctxt "#32500"
+msgid "Always show post-play screen (even for short videos)"
+msgstr "Immer den Nachwiedergabe-Bildschirm anzeigen (auch bei kurzen Videos)"
+
+msgctxt "#32501"
+msgid "Time-to-wait between videos on post-play"
+msgstr "Wartezeit zwischen Videos bei Nachwiedergabe"
+
+msgctxt "#32505"
+msgid "Visit media in video playlist instead of playing it"
+msgstr "Medien in der Video-Wiedergabeliste anzeigen, anstatt sie abzuspielen"
+
+msgctxt "#32521"
+msgid "Skip Intro Button Timeout"
+msgstr "Zeitlimit für die Schaltfläche Intro überspringen"
+
+msgctxt "#32522"
+msgid "Automatically Skip Intro"
+msgstr "Intro automatisch überspringen"
+
+msgctxt "#32523"
+msgid "Automatically skip intros if available."
+msgstr "Automatisches Überspringen von Intros, falls vorhanden."
+
+msgctxt "#32524"
+msgid "Set how long the skip intro button shows for."
+msgstr "Festlegen, wie lange die Schaltfläche zum Überspringen des Intros angezeigt werden soll."
+
+msgctxt "#32525"
+msgid "Skip Credits Button Timeout"
+msgstr "Zeitlimit für die Schaltfläche Credits überspringen"
+
+msgctxt "#32526"
+msgid "Automatically Skip Credits"
+msgstr "Automatisches Überspringen von Credits"
+
+msgctxt "#32527"
+msgid "Automatically skip credits if available."
+msgstr "Automatisches Überspringen von Credits, falls vorhanden."
+
+msgctxt "#32528"
+msgid "Set how long the skip credits button shows for."
+msgstr "Festlegen, wie lange die Schaltfläche zum Überspringen des Credits angezeigt werden soll."
+
+msgctxt "#32601"
+msgid "Allow AV1"
+msgstr "AV1 zulassen"
+
+msgctxt "#32602"
+msgid "Enable this if your hardware can handle AV1. Disable it to force transcoding."
+msgstr "Diese Option aktivieren, wenn die Hardware AV1 verarbeiten kann. Deaktivieren, um die Transkodierung zu erzwingen."
+
+msgctxt "#33101"
+msgid "By Audience Rating"
+msgstr "Nach Zuschauerwertung"
+
+msgctxt "#33102"
+msgid "Audience Rating"
+msgstr "Zuschauerwertung"
+
+msgctxt "#33103"
+msgid "By my Rating"
+msgstr "Nach meiner Bewertung"
+
+msgctxt "#33104"
+msgid "My Rating"
+msgstr "Meine Bewertung"
+
+msgctxt "#33105"
+msgid "By Content Rating"
+msgstr "Nach Inhaltsbewertung"
+
+msgctxt "#33106"
+msgid "Content Rating"
+msgstr "Inhaltsbewertung"
+
+msgctxt "#33107"
+msgid "By Critic Rating"
+msgstr "Nach kritischer Bewertung"
+
+msgctxt "#33108"
+msgid "Critic Rating"
+msgstr "Kritikerwertung"
