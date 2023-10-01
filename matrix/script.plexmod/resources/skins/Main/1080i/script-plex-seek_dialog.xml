@@ -135,7 +135,7 @@
                     <align>right</align>
                     <aligny>center</aligny>
                     <textcolor>A0FFFFFF</textcolor>
-                    <label>$INFO[Window.Property(time.end)]</label>
+                    <label>$INFO[Window.Property(time.ends_label)] $INFO[Window.Property(time.end)]</label>
                 </control>
                 <control type="label">
                     <visible>Player.Paused + String.IsEmpty(Window.Property(show.OSD))</visible>

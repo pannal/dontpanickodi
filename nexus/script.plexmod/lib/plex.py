@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 import sys
 import platform
+import traceback
 import uuid
 import json
 import threading
@@ -65,7 +66,7 @@ def defaultUserAgent():
         p_system = 'Unknown'
         p_release = 'Unknown'
 
-    return " ".join(['%s/%s' % ('Plex-for-Kodi', util.ADDON.getAddonInfo('version')),
+    return " ".join(['%s/%s' % ('PM4K', util.ADDON.getAddonInfo('version')),
                      '%s/%s' % ('Kodi', xbmc.getInfoLabel('System.BuildVersion').replace(' ', '-')),
                      '%s/%s' % (_implementation, _implementation_version),
                      '%s/%s' % (p_system, p_release)])
@@ -79,7 +80,7 @@ class PlexInterface(plexapp.AppInterface):
         'appVersionStr': util.ADDON.getAddonInfo('version'),
         'clientIdentifier': CLIENT_ID,
         'platformVersion': xbmc.getInfoLabel('System.BuildVersion'),
-        'product': 'Plex for Kodi',
+        'product': 'PM4K',
         'provides': 'player',
         'device': util.getPlatform() or plexapp.PLATFORM,
         'model': 'Unknown',
@@ -153,8 +154,12 @@ class PlexInterface(plexapp.AppInterface):
             maxres = self.getPreference('allow_4k', True) and plexapp.Res((3840, 2160)) or plexapp.Res((1920, 1080))
             self._globals['transcodeVideoResolutions'][-5:] = [maxres] * 5
         elif glbl == 'audioChannels':
-            self._globals['audioChannels'] = \
-                util.CHANNELMAPPING[util.rpc.Settings.GetSettingValue(setting='audiooutput.channels').get('value')]
+            try:
+                self._globals['audioChannels'] = \
+                    util.CHANNELMAPPING[util.rpc.Settings.GetSettingValue(setting='audiooutput.channels').get('value')]
+            except:
+                util.DEBUG_LOG("Limiting audio channel definition to 2.0 due to error: %s" % traceback.format_exc())
+                self._globals['audioChannels'] = "2.0"
 
         return self._globals.get(glbl, default)
 

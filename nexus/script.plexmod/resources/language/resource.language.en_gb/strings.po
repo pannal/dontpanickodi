@@ -1122,6 +1122,18 @@ msgctxt "#32540"
 msgid "Show when the current video will end in player"
 msgstr ""
 
+msgctxt "#32541"
+msgid "Shows time left and at which time the media will end."
+msgstr ""
+
+msgctxt "#32542"
+msgid "Show \"Ends at\" label for the end-time as well"
+msgstr ""
+
+msgctxt "#32543"
+msgid "Ends at"
+msgstr ""
+
 msgctxt "#32601"
 msgid "Allow AV1"
 msgstr ""

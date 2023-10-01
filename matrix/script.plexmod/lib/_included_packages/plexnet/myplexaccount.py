@@ -64,7 +64,8 @@ class MyPlexAccount(object):
             'isManaged': self.isManaged,
             'isAdmin': self.isAdmin,
             'isSecure': self.isSecure,
-            'adminHasPlexPass': self.adminHasPlexPass
+            'adminHasPlexPass': self.adminHasPlexPass,
+            'thumb': self.thumb
         }
 
         util.INTERFACE.setRegistry("MyPlexAccount", json.dumps(obj), "myplex")
@@ -97,6 +98,7 @@ class MyPlexAccount(object):
                 self.isSecure = obj.get('isSecure') or self.isSecure
                 self.isProtected = bool(obj.get('pin'))
                 self.adminHasPlexPass = obj.get('adminHasPlexPass') or self.adminHasPlexPass
+                self.thumb = obj.get('thumb')
 
         if self.authToken:
             request = myplexrequest.MyPlexRequest("/users/account")

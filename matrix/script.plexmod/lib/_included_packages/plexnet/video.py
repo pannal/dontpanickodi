@@ -88,6 +88,19 @@ class Video(media.MediaItem):
 
     def selectStream(self, stream, _async=True):
         self.mediaChoice.part.setSelectedStream(stream.streamType.asInt(), stream.id, _async)
+        # Update any affected streams
+        if stream.streamType.asInt() == plexstream.PlexStream.TYPE_AUDIO:
+            for audioStream in self.audioStreams:
+                if audioStream.id == stream.id:
+                    audioStream.setSelected(True)
+                elif audioStream.isSelected():
+                    audioStream.setSelected(False)
+        elif stream.streamType.asInt() == plexstream.PlexStream.TYPE_SUBTITLE:
+            for subtitleStream in self.subtitleStreams:
+                if subtitleStream.id == stream.id:
+                    subtitleStream.setSelected(True)
+                elif subtitleStream.isSelected():
+                    subtitleStream.setSelected(False)
 
     def isVideoItem(self):
         return True

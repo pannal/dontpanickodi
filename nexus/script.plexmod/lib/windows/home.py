@@ -242,32 +242,31 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver):
         # HOME
         'home.continue': {'index': 0, 'with_progress': True, 'with_art': True, 'do_updates': True, 'text2lines': True},
         'home.ondeck': {'index': 1, 'with_progress': True, 'do_updates': True, 'text2lines': True},
-        'home.television.recent': {'index': 2, 'text2lines': True, 'text2lines': True},
-        'home.movies.recent': {'index': 4, 'text2lines': True},
+        'home.television.recent': {'index': 2, 'with_progress': True, 'text2lines': True},
+        'home.movies.recent': {'index': 4, 'with_progress': True, 'text2lines': True},
         'home.music.recent': {'index': 5, 'text2lines': True},
-        'home.videos.recent': {'index': 6, 'ar16x9': True},
-        'home.playlists': {'index': 9},
+        'home.videos.recent': {'index': 6, 'with_progress': True, 'ar16x9': True},
+        #'home.playlists': {'index': 9}, # No other Plex home screen shows playlists so removing it from here
         'home.photos.recent': {'index': 10, 'text2lines': True},
         # SHOW
         'tv.ondeck': {'index': 1, 'with_progress': True, 'do_updates': True, 'text2lines': True},
-        'tv.recentlyaired': {'index': 2, 'text2lines': True},
-        'tv.recentlyadded': {'index': 3, 'text2lines': True},
+        'tv.recentlyaired': {'index': 2, 'with_progress': True, 'text2lines': True},
+        'tv.recentlyadded': {'index': 3, 'with_progress': True, 'text2lines': True},
         'tv.inprogress': {'index': 4, 'with_progress': True, 'do_updates': True, 'text2lines': True},
-        'tv.startwatching': {'index': 7},
-        'tv.rediscover': {'index': 8},
-        'tv.morefromnetwork': {'index': 13},
-        'tv.toprated': {'index': 14},
-        'tv.moreingenre': {'index': 15},
-        'tv.recentlyviewed': {'index': 16, 'text2lines': True},
+        'tv.startwatching': {'index': 7, 'with_progress': True},
+        'tv.rediscover': {'index': 8, 'with_progress': True},
+        'tv.morefromnetwork': {'index': 13, 'with_progress': True},
+        'tv.toprated': {'index': 14, 'with_progress': True},
+        'tv.moreingenre': {'index': 15, 'with_progress': True},
+        'tv.recentlyviewed': {'index': 16, 'with_progress': True, 'text2lines': True},
         # MOVIE
         'movie.inprogress': {'index': 0, 'with_progress': True, 'with_art': True, 'do_updates': True, 'text2lines': True},
-        'movie.recentlyreleased': {'index': 1, 'text2lines': True},
-        'movie.recentlyadded': {'index': 2, 'text2lines': True},
-        'movie.genre': {'index': 3, 'text2lines': True},
-        'movie.director': {'index': 7, 'text2lines': True},
-        'movie.actor': {'index': 8, 'text2lines': True},
+        'movie.recentlyreleased': {'index': 1, 'with_progress': True, 'text2lines': True},
+        'movie.recentlyadded': {'index': 2, 'with_progress': True, 'text2lines': True},
+        'movie.genre': {'index': 3, 'with_progress': True, 'text2lines': True},
+        'movie.by.actor.or.director': {'index': 7, 'with_progress': True, 'text2lines': True},
         'movie.topunwatched': {'index': 13, 'text2lines': True},
-        'movie.recentlyviewed': {'index': 14, 'text2lines': True},
+        'movie.recentlyviewed': {'index': 14, 'with_progress': True, 'text2lines': True},
         # ARTIST
         'music.recent.played': {'index': 5, 'do_updates': True},
         'music.recent.added': {'index': 9, 'text2lines': True},
@@ -286,12 +285,12 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver):
         'photo.random.decade': {'index': 10, 'text2lines': True},
         'photo.random.dayormonth': {'index': 11, 'text2lines': True},
         # VIDEO
-        'video.recent': {'index': 0, 'ar16x9': True},
-        'video.random.year': {'index': 6, 'ar16x9': True},
-        'video.random.decade': {'index': 17, 'ar16x9': True},
-        'video.inprogress': {'index': 18, 'with_progress': True, 'ar16x9': True, 'do_updates': True},
+        'video.recent': {'index': 0, 'with_progress': True, 'ar16x9': True},
+        'video.random.year': {'index': 6, 'with_progress': True, 'ar16x9': True},
+        'video.random.decade': {'index': 17, 'with_progress': True, 'ar16x9': True},
+        'video.inprogress': {'index': 18, 'with_progress': True, 'ar16x9': True},
         'video.unwatched.random': {'index': 19, 'ar16x9': True},
-        'video.recentlyviewed': {'index': 23, 'ar16x9': True},
+        'video.recentlyviewed': {'index': 23, 'with_progress': True, 'ar16x9': True},
         # PLAYLISTS
         'playlists.audio': {'index': 5, 'text2lines': True, 'title': T(32048, 'Audio')},
         'playlists.video': {'index': 6, 'text2lines': True, 'ar16x9': True, 'title': T(32053, 'Video')},
@@ -576,7 +575,11 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver):
         self.processCommand(search.dialog(self))
 
     def updateOnDeckHubs(self, **kwargs):
-        tasks = [UpdateHubTask().setup(hub, self.updateHubCallback) for hub in self.updateHubs.values()]
+        sections = set()
+        for mli in self.sectionList:
+            if mli.dataSource is not None and mli.dataSource != self.lastSection:
+                sections.add(mli.dataSource)
+        tasks = [SectionHubsTask().setup(s, self.sectionHubsCallback) for s in [self.lastSection] + list(sections)]
         self.tasks += tasks
         backgroundthread.BGThreader.addTasks(tasks)
 

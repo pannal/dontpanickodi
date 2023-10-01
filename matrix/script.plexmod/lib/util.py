@@ -42,8 +42,12 @@ def getChannelMapping():
     data = rpc.Settings.GetSettings(filter={"section": "system", "category": "audio"})["settings"]
     return list(filter(lambda i: i["id"] == "audiooutput.channels", data))[0]["options"]
 
+
 # retrieve labels for mapping audio channel settings values
-CHANNELMAPPING = dict((t["value"], t["label"]) for t in getChannelMapping())
+try:
+    CHANNELMAPPING = dict((t["value"], t["label"]) for t in getChannelMapping())
+except:
+    CHANNELMAPPING = None
 
 
 class UtilityMonitor(xbmc.Monitor, signalsmixin.SignalsMixin):
@@ -140,7 +144,8 @@ class AdvancedSettings(object):
         ("skip_credits_button_timeout", 10),
         ("playlist_visit_media", True),
         ("intro_skip_early", False),
-        ("show_media_ends_info", False),
+        ("show_media_ends_info", True),
+        ("show_media_ends_label", True),
         ("background_colour", None),
         ("oldprofile", False)
     )

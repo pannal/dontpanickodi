@@ -20,16 +20,17 @@ BASE_HEADERS = ''
 
 
 def resetBaseHeaders():
+    from lib.util import ADDON
     return {
         'X-Plex-Platform': X_PLEX_PLATFORM,
         'X-Plex-Platform-Version': X_PLEX_PLATFORM_VERSION,
         'X-Plex-Provides': X_PLEX_PROVIDES,
-        'X-Plex-Product': X_PLEX_PRODUCT,
-        'X-Plex-Version': X_PLEX_VERSION,
+        'X-Plex-Product': "PM4K",
+        'X-Plex-Version': ADDON.getAddonInfo('version'),
         'X-Plex-Device': X_PLEX_DEVICE,
         'X-Plex-Client-Identifier': X_PLEX_IDENTIFIER,
         'Accept-Encoding': 'gzip,deflate',
-        'User-Agent': USER_AGENT
+        'User-Agent': '{0}/{1}'.format("PM4K", ADDON.getAddonInfo('version'))
     }
 
 

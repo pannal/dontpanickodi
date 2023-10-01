@@ -1247,17 +1247,17 @@ class LibraryWindow(kodigui.MultiWindow, windowutils.UtilMixin):
         if sectionType == 'collection':
             sectionType = mli.dataSource.TYPE
 
-        updateWatched = False
+        updateUnwatchedAndProgress = False
 
         if mli.dataSource.TYPE == 'collection':
             self.processCommand(opener.open(mli.dataSource))
-            updateWatched = True
+            updateUnwatchedAndProgress = True
         elif sectionType == 'show':
             if ITEM_TYPE == 'episode':
                 self.openItem(mli.dataSource)
             else:
                 self.processCommand(opener.handleOpen(subitems.ShowWindow, media_item=mli.dataSource, parent_list=self.showPanelControl))
-            updateWatched = True
+            updateUnwatchedAndProgress = True
         elif self.section.TYPE == 'movie' or mli.dataSource.TYPE == 'movie':
             datasource = mli.dataSource
             if datasource.isDirectory():
@@ -1275,7 +1275,7 @@ class LibraryWindow(kodigui.MultiWindow, windowutils.UtilMixin):
                 self.librarySettings.setItemType(self.librarySettings.getItemType())
             else:
                 self.processCommand(opener.handleOpen(preplay.PrePlayWindow, video=datasource, parent_list=self.showPanelControl))
-                updateWatched = True
+                updateUnwatchedAndProgress = True
         elif self.section.TYPE == 'artist':
             if ITEM_TYPE == 'album':
                 self.openItem(mli.dataSource)
@@ -1291,8 +1291,8 @@ class LibraryWindow(kodigui.MultiWindow, windowutils.UtilMixin):
             self.showPanelControl.removeItem(mli.pos())
             return
 
-        if updateWatched:
-            self.updateUnwatched(mli)
+        if updateUnwatchedAndProgress:
+            self.updateUnwatchedAndProgress(mli)
 
     def showPhoto(self, photo):
         if isinstance(photo, plexnet.photo.Photo) or photo.TYPE == 'clip':
@@ -1300,7 +1300,7 @@ class LibraryWindow(kodigui.MultiWindow, windowutils.UtilMixin):
         else:
             self.processCommand(opener.sectionClicked(photo))
 
-    def updateUnwatched(self, mli):
+    def updateUnwatchedAndProgress(self, mli):
         mli.dataSource.reload()
         if mli.dataSource.isWatched:
             mli.setProperty('unwatched', '')
@@ -1310,6 +1310,7 @@ class LibraryWindow(kodigui.MultiWindow, windowutils.UtilMixin):
                 mli.setProperty('unwatched.count', str(mli.dataSource.unViewedLeafCount))
             else:
                 mli.setProperty('unwatched', '1')
+        mli.setProperty('progress', util.getProgressImage(mli.dataSource))
 
     def setTitle(self):
         if self.section.TYPE == 'artist':
@@ -1726,6 +1727,8 @@ class LibraryWindow(kodigui.MultiWindow, windowutils.UtilMixin):
                                     mli.setProperty('unwatched.count', str(obj.unViewedLeafCount))
                                 else:
                                     mli.setProperty('unwatched', '1')
+
+                        mli.setProperty('progress', util.getProgressImage(obj))
                     else:
                         mli.clear()
                         if obj is False:

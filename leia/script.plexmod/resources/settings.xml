@@ -90,10 +90,18 @@
                         <popup>false</popup>
                     </control>
                 </setting>
-                <setting id="show_media_ends_info" type="boolean" label="32540" help="">
+                <setting id="show_media_ends_info" type="boolean" label="32540" help="32541">
                     <level>0</level>
                     <default>true</default>
                     <control type="toggle"/>
+                </setting>
+                <setting id="show_media_ends_label" type="boolean" label="32542" help="">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                    <dependencies>
+                        <dependency type="enable" setting="show_media_ends_info">true</dependency>
+                    </dependencies>
                 </setting>
             </group>
         </category>

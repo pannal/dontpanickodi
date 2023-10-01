@@ -1055,7 +1055,7 @@ msgstr "允许AV1"
 
 msgctxt "#32602"
 msgid "Enable this if your hardware can handle AV1. Disable it to force transcoding."
-msgstr "如果你的硬件可以处理AV1,请启用此功能.禁用它可以强制进行转码.
+msgstr "如果你的硬件可以处理AV1,请启用此功能.禁用它可以强制进行转码."
 
 msgctxt "#32521"
 msgid "Skip Intro Button Timeout"

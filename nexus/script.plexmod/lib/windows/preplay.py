@@ -1,5 +1,4 @@
 from __future__ import absolute_import
-import os
 
 from kodi_six import xbmc
 from kodi_six import xbmcgui
@@ -19,12 +18,13 @@ from . import pagination
 
 from plexnet import plexplayer, media
 
-from lib import colors
 from lib import util
 from lib import metadata
 
 from lib.util import T
-from lib.windows.home import MOVE_SET
+
+import time
+import re
 
 VIDEO_RELOAD_KW = dict(includeExtras=1, includeExtrasCount=10, includeChapters=1)
 
@@ -429,17 +429,22 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
 
         resume = False
         if self.video.viewOffset.asInt():
-            button = optionsdialog.show(
-                T(32314, 'In Progress'),
-                T(32315, 'Resume playback?'),
-                T(32316, 'Resume'),
-                T(32317, 'Play From Beginning')
+            choice = dropdown.showDropdown(
+                options=[
+                    {'key': 'resume', 'display': T(32429, 'Resume from {0}').format(util.timeDisplay(self.video.viewOffset.asInt()).lstrip('0').lstrip(':'))},
+                    {'key': 'play', 'display': T(32317, 'Play from beginning')}
+                ],
+                pos=(660, 441),
+                close_direction='none',
+                set_dropdown_prop=False,
+                header=T(32314, 'In Progress')
             )
 
-            if button is None:
+            if not choice:
                 return
 
-            resume = (button == 0)
+            if choice['key'] == 'resume':
+                resume = True
 
         self.processCommand(videoplayer.play(video=self.video, resume=resume))
         return True
@@ -484,6 +489,7 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
         self.setProperty('title', self.video.title)
         self.setProperty('duration', util.durationToText(self.video.duration.asInt()))
         self.setProperty('summary', self.video.summary.strip().replace('\t', ' '))
+        self.setProperty('unwatched', not self.video.isWatched and '1' or '')
 
         directors = u' / '.join([d.tag for d in self.video.directors()][:5])
         directorsLabel = len(self.video.directors) > 1 and T(32401, u'DIRECTORS').upper() or T(32383, u'DIRECTOR').upper()
@@ -547,11 +553,16 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
 
         self.setProperty('unavailable', not self.video.media()[0].isAccessible() and '1' or '')
 
+        remainingTime = None
         if self.video.viewOffset.asInt():
             width = self.video.viewOffset.asInt() and (1 + int((self.video.viewOffset.asInt() / self.video.duration.asFloat()) * self.width)) or 1
             self.progressImageControl.setWidth(width)
+            remainingTime = time.strftime("%Hh %Mm left", time.gmtime((self.video.duration.asInt() - self.video.viewOffset.asInt()) / 1000))
+            remainingTime = re.sub(r'0(\d[hm])', r'\1', remainingTime).replace('0h ', '').replace(' 0m', '')
         else:
             self.progressImageControl.setWidth(1)
+
+        self.setProperty('remainingTime', remainingTime)
 
     def setAudioAndSubtitleInfo(self):
         sas = self.video.selectedAudioStream()

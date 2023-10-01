@@ -1,3 +1,18 @@
+[- 0.5.4 -]
+- Store user thumbnail in cache (improves home "load" time)
+- Change client identifier from Plex-for-Kodi to PM4K;
+  possibly fix "PlexNet" entries in Authorized Devices; might also break stuff, please report back
+- fix closing quote in chinese translation
+- Add missing German translations
+- Add "Ends at" to player ends-at time by default; add option to disable this label
+- Add fallback for missing audiooutput.channels setting (seems to affect libreelec only); relates to #48
+- Change resume dialog to show resume time (thanks @bowlingbeeg)
+- Add unwatched status to pre-play screen and add progress bars to more hubs (thanks @bowlingbeeg)
+- Fix missing parameters on Plex API queries (thanks @bowlingbeeg)
+- Add time left to pre-play screen (thanks @bowlingbeeg)
+- Fix audio/subtitle selection not updating correctly in pre-play screen (thanks @bowlingbeeg)
+
+
 [- 0.5.3 -]
 - Inhibit screensaver when in photo slideshow (Kodi 19 and above)
 - Add addon setting to use old profile from P4K instead of the optimized one (might fix 3D issues with DP; not sure why?); default: off

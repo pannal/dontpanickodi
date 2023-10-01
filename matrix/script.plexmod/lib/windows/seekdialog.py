@@ -166,6 +166,7 @@ class SeekDialog(kodigui.BaseDialog):
         self.skipIntroButtonTimeout = util.advancedSettings.skipIntroButtonTimeout
         self.skipCreditsButtonTimeout = util.advancedSettings.skipCreditsButtonTimeout
         self.showItemEndsInfo = util.advancedSettings.showMediaEndsInfo
+        self.showItemEndsLabel = util.advancedSettings.showMediaEndsLabel
 
         self.player.video.server.on("np:timelineResponse", self.timelineResponseCallback)
 
@@ -896,6 +897,7 @@ class SeekDialog(kodigui.BaseDialog):
         self.setProperty('is.show', (self.player.video.type == 'episode') and '1' or '')
         self.setProperty('time.left', util.timeDisplay(self.duration))
         self.setProperty('media.show_ends', self.showItemEndsInfo and '1' or '')
+        self.setProperty('time.ends_label', self.showItemEndsLabel and util.T(32543, 'Ends at') or '')
 
         pq = self.handler.playlist
         if pq:

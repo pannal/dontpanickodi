@@ -179,6 +179,17 @@ class PlexServer(plexresource.PlexResource, signalsmixin.SignalsMixin):
 
     def query(self, path, method=None, **kwargs):
         method = method or self.session.get
+
+        params = kwargs.pop("params", None)
+        if params:
+            path += util.joinArgs(params, '?' not in path)
+
+        offset = kwargs.pop("offset", None)
+        limit = kwargs.pop("limit", None)
+        if kwargs:
+            path += util.joinArgs(kwargs, '?' not in path)
+            kwargs.clear()
+
         url = self.buildUrl(path, includeToken=True)
 
         # If URL is empty, try refresh resources and return empty set for now
@@ -188,8 +199,6 @@ class PlexServer(plexresource.PlexResource, signalsmixin.SignalsMixin):
             return None
 
         # add offset/limit
-        offset = kwargs.pop("offset", None)
-        limit = kwargs.pop("limit", None)
         if offset is not None:
             url = http.addUrlParam(url, "X-Plex-Container-Start=%s" % offset)
         if limit is not None:
