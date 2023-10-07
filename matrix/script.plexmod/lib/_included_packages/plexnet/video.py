@@ -402,6 +402,14 @@ class Show(Video, RelatedMixin, SectionOnDeckMixin):
     def isWatched(self):
         return self.viewedLeafCount == self.leafCount
 
+    @property
+    def autoSkipIntro(self):
+        return util.INTERFACE.autoSkipIntroManager(self)
+
+    @autoSkipIntro.setter
+    def autoSkipIntro(self, value):
+        util.INTERFACE.autoSkipIntroManager(self, value)
+
     def seasons(self):
         path = self.key
         return plexobjects.listItems(self.server, path, Season.TYPE)
@@ -533,6 +541,14 @@ class Episode(PlayableVideo, SectionOnDeckMixin):
     @property
     def isWatched(self):
         return self.get('viewCount').asInt() > 0 or self.get('viewOffset').asInt() > 0
+
+    @property
+    def autoSkipIntro(self):
+        return self.show().autoSkipIntro
+
+    @autoSkipIntro.setter
+    def autoSkipIntro(self, value):
+        self.show().autoSkipIntro(value)
 
     def getStreamURL(self, **params):
         return self._getStreamURL(**params)

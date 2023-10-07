@@ -72,6 +72,91 @@ def defaultUserAgent():
                      '%s/%s' % (_implementation, _implementation_version),
                      '%s/%s' % (p_system, p_release)])
 
+
+class AutoSkipIntroManager(object):
+    """
+    Manages the auto-skip-intro setting for individual shows; falls back to the global default if no specifics set
+    """
+
+    _data = None
+    _currentServerUUID = None
+    _currentUserID = None
+    default = False
+
+    def __init__(self):
+        self.reset()
+        plexapp.util.APP.on('change:auto_skip_intro', lambda **kwargs: self.setDefault(**kwargs))
+        plexapp.util.APP.on('change:selectedServer', lambda **kwargs: self.setServerUUID(**kwargs))
+        plexapp.util.APP.on("change:user", lambda **kwargs: self.setUserID(**kwargs))
+        plexapp.util.APP.on('init', lambda **kwargs: self.setUserID(**kwargs))
+
+    def __call__(self, obj, value=None):
+        # shouldn't happen
+        if not self._currentServerUUID or not self._currentUserID:
+            util.DEBUG_LOG("APP.AutoSkipIntroManager, something's wrong: ServerUUID: %s, UserID: %s" % (
+                self._currentServerUUID, self._currentUserID))
+            return
+
+        csid = self._currentServerUUID
+        cuid = self._currentUserID
+
+        # set
+        if value is not None:
+            if csid not in self._data:
+                self._data[csid] = {}
+
+            if cuid not in self._data[csid]:
+                self._data[csid][cuid] = {}
+
+            self._data[csid][cuid][obj.ratingKey] = value
+            self.save()
+            return value
+
+        if not obj.ratingKey:
+            return self.default
+
+        # get
+        return self._data.get(csid, {}).get(cuid, {}).get(obj.ratingKey, self.default)
+
+    def reset(self):
+        self._data = self.load()
+        self.setDefault()
+        if plexapp.SERVERMANAGER and plexapp.SERVERMANAGER.selectedServer:
+            self.setServerUUID()
+
+        if plexapp.ACCOUNT:
+            self.setUserID()
+
+    def setDefault(self, value=None):
+        if value is None:
+            self.default = util.getSetting('auto_skip_intro', False)
+        else:
+            self.default = value
+
+    def setServerUUID(self, server=None):
+        self._currentServerUUID = (server if server is not None else plexapp.SERVERMANAGER.selectedServer).uuid
+        util.DEBUG_LOG("SERVER CHANGED: %s" % self._currentServerUUID)
+
+    def setUserID(self, account=None, reallyChanged=False):
+        self._currentUserID = (account if account is not None and reallyChanged else plexapp.ACCOUNT).ID
+        util.DEBUG_LOG("USER CHANGED: %s" % self._currentUserID)
+
+    def load(self):
+        jstring = plexapp.util.INTERFACE.getRegistry("AutoSkipSettings")
+        if not jstring:
+            return {}
+
+        try:
+            obj = json.loads(jstring)
+        except:
+            obj = None
+        return obj
+
+    def save(self):
+        plexapp.util.INTERFACE.setRegistry("AutoSkipSettings", json.dumps(self._data))
+        return self._data
+
+
 class PlexInterface(plexapp.AppInterface):
     _regs = {
         None: {},
@@ -109,6 +194,8 @@ class PlexInterface(plexapp.AppInterface):
         ],
         'deviceInfo': plexapp.DeviceInfo()
     }
+
+    autoSkipIntroManager = None
 
     def getPreference(self, pref, default=None):
         if pref == 'manual_connections':
@@ -248,6 +335,7 @@ class PlexInterface(plexapp.AppInterface):
 
 plexapp.util.setInterface(PlexInterface())
 plexapp.setUserAgent(defaultUserAgent())
+plexapp.util.INTERFACE.autoSkipIntroManager = AutoSkipIntroManager()
 
 
 class CallbackEvent(plexapp.util.CompatEvent):

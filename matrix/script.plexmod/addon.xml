@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="script.plexmod"
        name="Plex"
-       version="0.5.5"
+       version="0.5.5-rev2"
        provider-name="pannal">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
@@ -25,20 +25,11 @@
         <source>https://github.com/pannal/plex-for-kodi</source>
         <platform>all</platform>
         <news>
-            - Add main setting to show the intro skip button early; enables recap skipping; works with auto-intro-skip!
-            - Move some boolean settings from Main>Advanced to Main
-            - Add main setting to use alternative home hubs refresh method introduced by @bowlingbeeg; default on
-            - Add main setting to specify item-played-threshold in main settings, please sync with your Plex Server; possibly fixes edge cases (postplay/next-overskip issues)
-            - Fix postplay timer-circle display on later (Nexus++?) Kodi versions
-            - Rework time formatting and hour padding detection for "Ends at" display completely
-            - Change watched status to also look at resume offset (thanks @bowlingbeeg)
-            - Fix crash when background threads are still running on library exit (thanks @bowlingbeeg)
-            - Fix playlist issues (thanks @bowlingbeeg)
-            - Change look of letter jump list (thanks @bowlingbeeg)
-            - Fix sorting/filtering issues (thanks @bowlingbeeg)
-            - Add second view type for episodes and albums (thanks @bowlingbeeg)
-            - Support showing collections inline (thanks @bowlingbeeg)
-            - Add support for smaller poster size view (thanks @bowlingbeeg)
+            - Fix auto intro skip not working after skipping to next episode
+            - Skip postplay when skipping to next video from player
+            - Limit early-show-intro-skip to intros occurring in the first 2 minutes;
+              add advanced setting to customize this value
+            - Add option to show and episodes-windows (they toggle their show) to override the global auto-skip-intro setting for a show
         </news>
         <assets>
             <icon>icon.png</icon>

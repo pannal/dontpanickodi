@@ -1213,3 +1213,19 @@ msgstr ""
 msgctxt "#33506"
 msgid "Show the intro skip button from the start of a video with an intro marker. The auto-skipping setting applies."
 msgstr ""
+
+msgctxt "#33507"
+msgid "Enable Auto skip intro"
+msgstr ""
+
+msgctxt "#33508"
+msgid "Disable Auto skip intro"
+msgstr ""
+
+msgctxt "#33509"
+msgid "Early intro skip threshold (default: < 120s/2m)"
+msgstr ""
+
+msgctxt "#33510"
+msgid "When showing the intro skip button early, only do so if the intro occurs within the first X seconds."
+msgstr ""

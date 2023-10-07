@@ -146,7 +146,8 @@ class AdvancedSettings(object):
         ("show_media_ends_info", True),
         ("show_media_ends_label", True),
         ("background_colour", None),
-        ("oldprofile", False)
+        ("oldprofile", False),
+        ("skip_intro_button_show_early_threshold", 120)
     )
 
     def __init__(self):

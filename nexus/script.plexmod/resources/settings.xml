@@ -64,7 +64,7 @@
                         <heading>32501</heading>
                     </control>
                 </setting>
-                <setting id="skip_intro_button_timeout" type="integer" label="32521" help="">
+                <setting id="skip_intro_button_timeout" type="integer" label="32521" help="32524">
                     <level>0</level>
                     <default>10</default>
                     <constraints>
@@ -77,7 +77,7 @@
                         <popup>false</popup>
                     </control>
                 </setting>
-                <setting id="skip_credits_button_timeout" type="integer" label="32525" help="">
+                <setting id="skip_credits_button_timeout" type="integer" label="32525" help="32528">
                     <level>0</level>
                     <default>10</default>
                     <constraints>
@@ -87,6 +87,19 @@
                     </constraints>
                     <control type="slider" format="integer">
                         <heading>32528</heading>
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting id="skip_intro_button_show_early_threshold" type="integer" label="33509" help="33510">
+                    <level>0</level>
+                    <default>120</default>
+                    <constraints>
+                        <minimum>10</minimum>
+                        <step>10</step>
+                        <maximum>1800</maximum>
+                    </constraints>
+                    <control type="slider" format="integer">
+                        <heading>33510</heading>
                         <popup>false</popup>
                     </control>
                 </setting>

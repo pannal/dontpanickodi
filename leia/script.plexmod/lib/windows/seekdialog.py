@@ -161,7 +161,7 @@ class SeekDialog(kodigui.BaseDialog):
         self.useAutoSeek = util.advancedSettings.autoSeek
         self.useDynamicStepsForTimeline = util.advancedSettings.dynamicTimelineSeek
 
-        self.autoSkipIntro = util.getSetting('auto_skip_intro', False)
+        self.autoSkipIntro = self.player.video.type == 'episode' and self.player.video.autoSkipIntro
         self.autoSkipCredits = util.getSetting('auto_skip_credits', False)
         self.skipIntroButtonTimeout = util.advancedSettings.skipIntroButtonTimeout
         self.skipCreditsButtonTimeout = util.advancedSettings.skipCreditsButtonTimeout
@@ -267,6 +267,12 @@ class SeekDialog(kodigui.BaseDialog):
 
     def onReInit(self):
         self.lastTimelineResponse = None
+        self._introSkipShownStarted = None
+        self._introAutoSkipped = False
+        self._creditsSkipShownStarted = None
+        self._creditsAutoSkipped = False
+        self._markers = None
+
         self.resetTimeout()
         self.resetSeeking()
         self.updateProperties()
@@ -1016,6 +1022,8 @@ class SeekDialog(kodigui.BaseDialog):
         Show intro/credits skip button at current time
         """
 
+        util.DEBUG_LOG("MARKERS: %s, %s" % (self.markers, self.showIntroSkipEarly))
+
         if not self.markers:
             return
 
@@ -1023,8 +1031,10 @@ class SeekDialog(kodigui.BaseDialog):
             marker = markerDef["marker"]
             if marker:
                 startTimeOffset = int(marker.startTimeOffset)
-                # show intro skip early?
-                if self.showIntroSkipEarly and markerDef["marker_type"] == "intro":
+
+                # show intro skip early? (only if intro is during the first X minutes)
+                if self.showIntroSkipEarly and markerDef["marker_type"] == "intro" and \
+                        startTimeOffset <= util.advancedSettings.skipIntroButtonShowEarlyThreshold * 1000:
                     startTimeOffset = 0
 
                 if startTimeOffset <= self.offset < math.ceil(float(marker.endTimeOffset)) \

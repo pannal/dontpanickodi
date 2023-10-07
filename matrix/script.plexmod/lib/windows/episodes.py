@@ -10,6 +10,7 @@ from lib import metadata
 from lib import player
 
 from plexnet import plexapp, playlist, plexplayer
+from plexnet.util import INTERFACE
 
 from . import busy
 from . import videoplayer
@@ -693,6 +694,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
 
     def optionsButtonClicked(self, from_item=False):
         options = []
+        oldSkipIntroValue = None
 
         mli = self.episodeListControl.getSelectedItem()
 
@@ -717,6 +719,13 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
                 options.append({'key': 'mark_season_unwatched', 'display': T(32320, 'Mark Season Unplayed')})
             else:
                 options.append({'key': 'mark_season_watched', 'display': T(32321, 'Mark Season Played')})
+
+        if self.show_:
+            oldSkipIntroValue = INTERFACE.autoSkipIntroManager(self.show_)
+            if oldSkipIntroValue:
+                options.append({'key': 'auto_skip_intro', 'display': T(33508, 'Disable Auto skip intro')})
+            else:
+                options.append({'key': 'auto_skip_intro', 'display': T(33507, 'Enable Auto skip intro')})
 
         if mli.dataSource.server.allowsMediaDeletion:
             options.append({'key': 'delete', 'display': T(32322, 'Delete')})
@@ -775,6 +784,11 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
             self.goHome(self.show_.getLibrarySectionId())
         elif choice['key'] == 'delete':
             self.delete()
+        elif choice['key'] == 'auto_skip_intro':
+            util.DEBUG_LOG(
+                "Changing auto-skip setting for {} from {} to {}".format(self.show_.ratingKey, oldSkipIntroValue,
+                                                                         not oldSkipIntroValue))
+            INTERFACE.autoSkipIntroManager(self.show_, not oldSkipIntroValue)
 
     def delete(self):
         button = optionsdialog.show(

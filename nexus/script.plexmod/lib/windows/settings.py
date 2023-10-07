@@ -28,7 +28,7 @@ class Setting(object):
         old = self.get()
         if old != val:
             util.DEBUG_LOG('Setting: {0} - changed from [{1}] to [{2}]'.format(self.ID, old, val))
-            plexnet.util.APP.trigger('change:{0}'.format(self.ID))
+            plexnet.util.APP.trigger('change:{0}'.format(self.ID), value=val)
         return util.setSetting(self.ID, val)
 
     def valueLabel(self):

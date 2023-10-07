@@ -1,3 +1,11 @@
+[- 0.5.5-rev2 -]
+- Fix auto intro skip not working after skipping to next episode
+- Skip postplay when skipping to next video from player
+- Limit early-show-intro-skip to intros occurring in the first 2 minutes;
+- add advanced setting to customize this value
+- Add option to show and episodes-windows (they toggle their show) to override the global auto-skip-intro setting for a show
+
+
 [- 0.5.5 -]
 - Add main setting to show the intro skip button early; enables recap skipping; works with auto-intro-skip!
 - Move some boolean settings from Main>Advanced to Main

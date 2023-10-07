@@ -11,6 +11,7 @@ from lib import metadata
 from lib import player
 
 from plexnet import playlist
+from plexnet.util import INTERFACE
 
 from . import busy
 from . import episodes
@@ -428,6 +429,7 @@ class ShowWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
 
     def optionsButtonClicked(self):
         options = []
+        oldSkipIntroValue = None
         if xbmc.getCondVisibility('Player.HasAudio + MusicPlayer.HasNext'):
             options.append({'key': 'play_next', 'display': 'Play Next'})
 
@@ -436,6 +438,13 @@ class ShowWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
                 options.append({'key': 'mark_unwatched', 'display': T(32318, 'Mark Unplayed')})
             else:
                 options.append({'key': 'mark_watched', 'display': T(32319, 'Mark Played')})
+
+            if self.mediaItem.type == "show":
+                oldSkipIntroValue = INTERFACE.autoSkipIntroManager(self.mediaItem)
+                if oldSkipIntroValue:
+                    options.append({'key': 'auto_skip_intro', 'display': T(33508, 'Disable Auto skip intro')})
+                else:
+                    options.append({'key': 'auto_skip_intro', 'display': T(33507, 'Enable Auto skip intro')})
 
         # if xbmc.getCondVisibility('Player.HasAudio') and self.section.TYPE == 'artist':
         #     options.append({'key': 'add_to_queue', 'display': 'Add To Queue'})
@@ -465,6 +474,11 @@ class ShowWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
             util.MONITOR.watchStatusChanged()
         elif choice['key'] == 'to_section':
             self.goHome(self.mediaItem.getLibrarySectionId())
+        elif choice['key'] == 'auto_skip_intro':
+            util.DEBUG_LOG(
+                "Changing auto-skip setting for {} from {} to {}".format(self.mediaItem.ratingKey, oldSkipIntroValue,
+                                                                         not oldSkipIntroValue))
+            INTERFACE.autoSkipIntroManager(self.mediaItem, not oldSkipIntroValue)
 
     def roleClicked(self):
         mli = self.rolesListControl.getSelectedItem()
