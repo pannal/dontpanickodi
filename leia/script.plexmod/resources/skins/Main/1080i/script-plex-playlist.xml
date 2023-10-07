@@ -271,7 +271,8 @@
                                 <label>[B]$INFO[ListItem.Property(track.duration)][/B]</label>
                             </control>
                             <control type="group">
-                                <visible>!String.IsEmpty(ListItem.Property(progress))</visible>
+                                <!-- Don't show the progress bar in the playlist because we don't start from the resume point so why show it -->
+                                <visible>False <!-- !String.IsEmpty(ListItem.Property(progress)) --></visible>
                                 <posx>63</posx>
                                 <posy>85</posy>
                                 <control type="image">

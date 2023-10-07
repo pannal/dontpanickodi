@@ -180,7 +180,11 @@ class PlaylistWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
                         opener.open(pq)
                 else:
                     if not mli:
-                        mli = self.playlistListControl.getListItem(0)
+                        firstItem = 0
+                        if shuffle:
+                            import random
+                            firstItem = random.randint(0, self.playlistListControl.size()-1)
+                        mli = self.playlistListControl.getListItem(firstItem)
                     self.openItem(mli.dataSource)
 
         finally:
@@ -201,6 +205,10 @@ class PlaylistWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
                     self.updateListItem(idx, self.playlist[idx])
                 else:
                     break
+            # Update the progress for videos
+            elif mli.dataSource.type in ('episode', 'movie', 'clip'):
+                mli.dataSource.reload()
+                self.updateListItem(idx, mli.dataSource)
         else:
             util.DEBUG_LOG('Playlist list is full - nothing to do')
             return

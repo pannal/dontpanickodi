@@ -387,8 +387,8 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
             millis = (self.passoutProtection - time.time()) * 1000
             util.DEBUG_LOG('Post play auto-play: Passout protection in {0}'.format(util.durationToShortText(millis)))
 
-        util.DEBUG_LOG('Starting post-play timer')
         self.timeout = time.time() + abs(util.advancedSettings.postplayTimeout)
+        util.DEBUG_LOG('Starting post-play timer until: %i' % self.timeout)
         threading.Thread(target=self.countdown).start()
 
     def cancelTimer(self):

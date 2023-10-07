@@ -167,6 +167,7 @@ class SeekDialog(kodigui.BaseDialog):
         self.skipCreditsButtonTimeout = util.advancedSettings.skipCreditsButtonTimeout
         self.showItemEndsInfo = util.advancedSettings.showMediaEndsInfo
         self.showItemEndsLabel = util.advancedSettings.showMediaEndsLabel
+        self.showIntroSkipEarly = util.getSetting('show_intro_skip_early', False)
 
         self.player.video.server.on("np:timelineResponse", self.timelineResponseCallback)
 
@@ -229,6 +230,7 @@ class SeekDialog(kodigui.BaseDialog):
                 if marker.type in MARKERS:
                     m = MARKERS[marker.type].copy()
                     m["marker"] = marker
+                    m["marker_type"] = marker.type
                     markers.append(m)
 
             self._markers = markers
@@ -1020,7 +1022,12 @@ class SeekDialog(kodigui.BaseDialog):
         for markerDef in self.markers:
             marker = markerDef["marker"]
             if marker:
-                if int(marker.startTimeOffset) <= self.offset < math.ceil(float(marker.endTimeOffset)) \
+                startTimeOffset = int(marker.startTimeOffset)
+                # show intro skip early?
+                if self.showIntroSkipEarly and markerDef["marker_type"] == "intro":
+                    startTimeOffset = 0
+
+                if startTimeOffset <= self.offset < math.ceil(float(marker.endTimeOffset)) \
                         - FINAL_MARKER_NEGOFF:
                     # we've had a marker already; reset autoSkip state
                     if self._currentMarker and self._currentMarker != markerDef:

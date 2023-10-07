@@ -390,6 +390,7 @@
                 <usecontrolcoords>true</usecontrolcoords>
                 <control type="button" id="301">
                     <hitrect x="20" y="20" w="86" h="60" />
+                    <visible>!String.IsEqual(Window(10000).Property(script.plex.item.type),collection) | String.IsEqual(Window.Property(media),collection)</visible>
                     <animation effect="zoom" start="100" end="143" time="100" center="63,50" reversible="false">Focus</animation>
                     <animation effect="zoom" start="143" end="100" time="100" center="63,50" reversible="false">UnFocus</animation>
                     <posx>0</posx>
@@ -403,6 +404,7 @@
                 </control>
                 <control type="button" id="302">
                     <hitrect x="20" y="20" w="86" h="60" />
+                    <visible>!String.IsEqual(Window(10000).Property(script.plex.item.type),collection) | String.IsEqual(Window.Property(media),collection)</visible>
                     <animation effect="zoom" start="100" end="143" time="100" center="63,50" reversible="false">Focus</animation>
                     <animation effect="zoom" start="143" end="100" time="100" center="63,50" reversible="false">UnFocus</animation>
                     <posx>0</posx>
@@ -572,27 +574,17 @@
                                 <textcolor>99FFFFFF</textcolor>
                                 <label>$INFO[ListItem.Label]</label>
                             </control>
-                            <control type="group">
+                            <control type="label">
                                 <visible>String.IsEqual(Window(10000).Property(script.plex.key), ListItem.Property(key))</visible>
-                                <control type="image">
-                                    <posx>0</posx>
-                                    <posy>0</posy>
-                                    <width>34</width>
-                                    <height>34</height>
-                                    <colordiffuse>99FFFFFF</colordiffuse>
-                                    <texture border="12">script.plex/white-square-rounded.png</texture>
-                                </control>
-                                <control type="label">
-                                    <posx>0</posx>
-                                    <posy>0</posy>
-                                    <width>34</width>
-                                    <height>32</height>
-                                    <font>font10</font>
-                                    <align>center</align>
-                                    <aligny>center</aligny>
-                                    <textcolor>FF000000</textcolor>
-                                    <label>$INFO[ListItem.Label]</label>
-                                </control>
+                                <posx>0</posx>
+                                <posy>0</posy>
+                                <width>34</width>
+                                <height>32</height>
+                                <font>font10</font>
+                                <align>center</align>
+                                <aligny>center</aligny>
+                                <textcolor>FFE5A00D</textcolor>
+                                <label>$INFO[ListItem.Label]</label>
                             </control>
                         </control>
                     </control>
@@ -618,27 +610,17 @@
                                 <textcolor>99FFFFFF</textcolor>
                                 <label>$INFO[ListItem.Label]</label>
                             </control>
-                            <control type="group">
+                            <control type="label">
                                 <visible>String.IsEqual(Window(10000).Property(script.plex.key), ListItem.Property(key))</visible>
-                                <control type="image">
-                                    <posx>0</posx>
-                                    <posy>0</posy>
-                                    <width>34</width>
-                                    <height>34</height>
-                                    <colordiffuse>99FFFFFF</colordiffuse>
-                                    <texture border="12">script.plex/white-square-rounded.png</texture>
-                                </control>
-                                <control type="label">
-                                    <posx>0</posx>
-                                    <posy>0</posy>
-                                    <width>34</width>
-                                    <height>32</height>
-                                    <font>font10</font>
-                                    <align>center</align>
-                                    <aligny>center</aligny>
-                                    <textcolor>FF000000</textcolor>
-                                    <label>$INFO[ListItem.Label]</label>
-                                </control>
+                                <posx>0</posx>
+                                <posy>0</posy>
+                                <width>34</width>
+                                <height>32</height>
+                                <font>font10</font>
+                                <align>center</align>
+                                <aligny>center</aligny>
+                                <textcolor>FFE5A00D</textcolor>
+                                <label>$INFO[ListItem.Label]</label>
                             </control>
                         </control>
 

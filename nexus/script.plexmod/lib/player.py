@@ -168,6 +168,7 @@ class SeekPlayerHandler(BasePlayerHandler):
         self.title = title
         self.title2 = title2
         self.chapters = chapters or []
+        self.playedThreshold = plexapp.util.INTERFACE.getPlayedThresholdValue()
         self.getDialog(setup=True)
         self.dialog.setup(self.duration, int(self.baseOffset * 1000), self.bifURL, self.title, self.title2, chapters=self.chapters)
 
@@ -219,7 +220,7 @@ class SeekPlayerHandler(BasePlayerHandler):
         if not self.playlist:
             return False
 
-        self.player.playVideoPlaylist(self.playlist, handler=self)
+        self.player.playVideoPlaylist(self.playlist, handler=self, resume=self.player.resume)
 
         return True
 
@@ -228,7 +229,7 @@ class SeekPlayerHandler(BasePlayerHandler):
             return False
 
         self.seeking = self.SEEK_PLAYLIST
-        self.player.playVideoPlaylist(self.playlist, handler=self)
+        self.player.playVideoPlaylist(self.playlist, handler=self, resume=self.player.resume)
 
         return True
 
@@ -237,7 +238,7 @@ class SeekPlayerHandler(BasePlayerHandler):
             return False
 
         self.seeking = self.SEEK_PLAYLIST
-        self.player.playVideoPlaylist(self.playlist, handler=self)
+        self.player.playVideoPlaylist(self.playlist, handler=self, resume=self.player.resume)
 
         return True
 
@@ -334,8 +335,9 @@ class SeekPlayerHandler(BasePlayerHandler):
             self.updateNowPlaying()
 
             # show post play if possible, if an item has been watched (90% by Plex standards)
-            # fixme: add watched percentage setting
-            if self.trueTime * 1000 / float(self.duration) >= 0.90 and self.next(on_end=True):
+            playedFac = self.trueTime * 1000 / float(self.duration)
+            util.DEBUG_LOG("Player - played-threshold: {}/{}".format(playedFac, self.playedThreshold))
+            if playedFac >= self.playedThreshold and self.next(on_end=True):
                 return
 
         if self.seeking not in (self.SEEK_IN_PROGRESS, self.SEEK_PLAYLIST):
@@ -737,6 +739,7 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
         self.thread = None
         if xbmc.getCondVisibility('Player.HasMedia'):
             self.started = True
+        self.resume = False
         self.open()
 
         return self
@@ -843,6 +846,7 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
 
         self.handler = handler or SeekPlayerHandler(self, session_id)
         self.video = video
+        self.resume = resume
         self.open()
         self._playVideo(resume and video.viewOffset.asInt() or 0, force_update=force_update)
 
@@ -909,7 +913,7 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
 
         self.play(url, li)
 
-    def playVideoPlaylist(self, playlist, resume=True, handler=None, session_id=None):
+    def playVideoPlaylist(self, playlist, resume=False, handler=None, session_id=None):
         if self.bgmPlaying:
             self.stopAndWait()
 
@@ -923,6 +927,7 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
             self.handler.playQueue = playlist
         self.video = playlist.current()
         self.video.softReload()
+        self.resume = resume
         self.open()
         self._playVideo(resume and self.video.viewOffset.asInt() or 0, seeking=handler and handler.SEEK_PLAYLIST or 0, force_update=True)
 

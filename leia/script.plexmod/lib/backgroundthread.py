@@ -22,6 +22,10 @@ class Tasks(list):
         while self:
             self.pop().cancel()
 
+    def kill(self):
+        self.cancel()
+        BGThreader.kill()
+
 
 class Task:
     def __init__(self, priority=None):
@@ -60,8 +64,8 @@ class Task:
 
 class MutablePriorityQueue(six.moves.queue.PriorityQueue):
     def _get(self, heappop=heapq.heappop):
-            self.queue.sort()
-            return heappop(self.queue)
+        self.queue.sort()
+        return heappop(self.queue)
 
     def lowest(self):
         """Return the lowest priority item in the queue (not reliable!)."""
@@ -134,9 +138,15 @@ class BackgroundWorker:
     def working(self):
         return self._thread and self._thread.is_alive()
 
+    def kill(self):
+        if self._thread and self._thread.is_alive():
+            util.DEBUG_LOG('BGThreader: thread ({0}): Waiting...'.format(self.name))
+            self._thread.join()
+            util.DEBUG_LOG('BGThreader: thread ({0}): Done'.format(self.name))
+
 
 class BackgroundThreader:
-    def __init__(self, name=None, worker_count=8):
+    def __init__(self, name=None, worker_count=3):
         self.name = name
         self._queue = MutablePriorityQueue()
         self._abort = False
@@ -211,6 +221,10 @@ class BackgroundThreader:
 
         qitem._priority = lowest - 1
 
+    def kill(self):
+        for w in self.workers:
+            w.kill()
+
 
 class ThreaderManager:
     def __init__(self):
@@ -233,6 +247,9 @@ class ThreaderManager:
         self.threader.shutdown()
         for a in self.abandoned:
             a.shutdown()
+
+    def kill(self):
+        self.threader.kill()
 
 
 BGThreader = ThreaderManager()

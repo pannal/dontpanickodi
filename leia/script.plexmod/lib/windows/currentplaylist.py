@@ -42,6 +42,7 @@ class CurrentPlaylistWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
     SKIP_NEXT_BUTTON_ID = 409
     PLAYLIST_BUTTON_ID = 410
     OPTIONS_BUTTON_ID = 411
+    STOP_BUTTON_ID = 407
 
     SEEK_IMAGE_WIDTH = 819
     SELECTION_BOX_WIDTH = 101
@@ -57,6 +58,7 @@ class CurrentPlaylistWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
         self.selectedOffset = 0
         self.setDuration()
         self.exitCommand = None
+        self.musicPlayerWinID = kwargs.get('winID')
 
     def doClose(self, **kwargs):
         player.PLAYER.off('playback.started', self.onPlayBackStarted)
@@ -105,6 +107,8 @@ class CurrentPlaylistWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
             self.skipNextButtonClicked()
         elif controlID == self.OPTIONS_BUTTON_ID:
             self.optionsButtonClicked()
+        elif controlID == self.STOP_BUTTON_ID:
+            self.stopButtonClicked()
 
     def onFocus(self, controlID):
         if controlID == self.SEEK_BUTTON_ID:
@@ -119,6 +123,7 @@ class CurrentPlaylistWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
             self.updateSelectedProgress()
 
     def onPlayBackStarted(self, **kwargs):
+        xbmc.sleep(2000)
         self.setDuration()
 
     def repeatButtonClicked(self):
@@ -136,7 +141,7 @@ class CurrentPlaylistWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
             xbmc.executebuiltin('PlayerControl(Repeat)')
 
     def skipPrevButtonClicked(self):
-        if not xbmc.getCondVisibility('MusicPlayer.HasPrevious') and player.PLAYER.handler.playQueue and player.PLAYER.handler.playQueue:
+        if not xbmc.getCondVisibility('MusicPlayer.HasPrevious') and player.PLAYER.handler.playQueue and player.PLAYER.handler.playQueue.isRemote:
             util.DEBUG_LOG('MusicPlayer: No previous in Kodi playlist - refreshing remote PQ')
             if not player.PLAYER.handler.playQueue.refresh(force=True, wait=True):
                 return
@@ -172,6 +177,11 @@ class CurrentPlaylistWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
             self.processCommand(opener.open(track.grandparentRatingKey))
         elif choice['key'] == 'to_section':
             self.goHome(track.getLibrarySectionId())
+
+    def stopButtonClicked(self):
+        xbmc.executebuiltin(f'Action(Back, {self.musicPlayerWinID})')
+        xbmc.sleep(500)
+        self.doClose()
 
     def selectPlayingItem(self):
         for mli in self.playlistListControl:
@@ -264,6 +274,9 @@ class CurrentPlaylistWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
             #     self.seekForward(60000)
             # elif action == xbmcgui.ACTION_MOVE_DOWN:
             #     self.seekBack(60000)
+        elif action == xbmcgui.ACTION_STOP:
+            self.stopButtonClicked()
+            return True
 
     def setDuration(self):
         try:

@@ -92,6 +92,10 @@ class ThemeMusicSetting(ListSetting):
     ] + [T(32482) % {"percentage": 10+i} for i in range(0, 100, 10)]
 
 
+class PlayedThresholdSetting(ListSetting):
+    options = ['{} %'.format(perc) for perc in range(70, 100, 5)]
+
+
 class BoolSetting(BasicSetting):
     type = 'BOOL'
 
@@ -205,10 +209,43 @@ class Settings(object):
                 ).description(
                     T(
                         32101,
-                        "If enabled, when playback ends and there is a 'Next Up' item available, it will be automatically be played after a 15 second delay."
+                        "If enabled, when playback ends and there is a 'Next Up' item available, it will be automatical"
+                        "ly be played after a 15 second delay."
                     )
                 ),
+                BoolSetting(
+                    'speedy_home_hubs', T(33503, 'Use alternative home refresh'), True
+                ).description(
+                    T(
+                        33504,
+                        "Use an alternative method to speed up watched state updates in the home hub after playing an i"
+                        "tem."
+                    )
+                ),
+                BoolSetting(
+                    'auto_skip_intro', T(32522, 'Automatically Skip Intro'), False
+                ).description(
+                    T(32523, 'Automatically skip intros if available.')
+                ),
+                BoolSetting(
+                    'auto_skip_credits', T(32526, 'Auto Skip Credits'), False
+                ).description(
+                    T(32527, 'Automatically skip credits if available.')
+                ),
+                BoolSetting(
+                    'show_intro_skip_early', T(33505, 'Show intro skip button early'), False
+                ).description(
+                    T(33506, 'Show the intro skip button from the start of a video with an intro marker. The auto-skipp'
+                             'ing setting applies.')
+                ),
                 ThemeMusicSetting('theme_music', T(32480, 'Theme music'), 5),
+                PlayedThresholdSetting('played_threshold', T(33501, 'Video played threshold'), 1).description(
+                    T(
+                        33502,
+                        "Set this to the same value as your Plex server (Settings>Library>Video played threshold) to av"
+                        "oid certain pitfalls, Default: 90 %"
+                    )
+                )
             )
         ),
         'video': (
@@ -270,16 +307,6 @@ class Settings(object):
                 BoolSetting('gdm_discovery', T(32042, 'Server Discovery (GDM)'), True),
                 BoolSetting('kiosk.mode', T(32043, 'Start Plex On Kodi Startup'), False),
                 BoolSetting('debug', T(32024, 'Debug Logging'), False),
-                BoolSetting(
-                    'auto_skip_intro', T(32522, 'Automatically Skip Intro'), False
-                ).description(
-                    T(32523, 'Automatically skip intros if available.')
-                ),
-                BoolSetting(
-                    'auto_skip_credits', T(32526, 'Auto Skip Credits'), False
-                ).description(
-                    T(32527, 'Automatically skip credits if available.')
-                ),
             )
         ),
         'manual': (

@@ -575,11 +575,15 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver):
         self.processCommand(search.dialog(self))
 
     def updateOnDeckHubs(self, **kwargs):
-        sections = set()
-        for mli in self.sectionList:
-            if mli.dataSource is not None and mli.dataSource != self.lastSection:
-                sections.add(mli.dataSource)
-        tasks = [SectionHubsTask().setup(s, self.sectionHubsCallback) for s in [self.lastSection] + list(sections)]
+        if util.getSetting("speedy_home_hubs", True):
+            util.DEBUG_LOG("Using alternative home hub refresh")
+            sections = set()
+            for mli in self.sectionList:
+                if mli.dataSource is not None and mli.dataSource != self.lastSection:
+                    sections.add(mli.dataSource)
+            tasks = [SectionHubsTask().setup(s, self.sectionHubsCallback) for s in [self.lastSection] + list(sections)]
+        else:
+            tasks = [UpdateHubTask().setup(hub, self.updateHubCallback) for hub in self.updateHubs.values()]
         self.tasks += tasks
         backgroundthread.BGThreader.addTasks(tasks)
 

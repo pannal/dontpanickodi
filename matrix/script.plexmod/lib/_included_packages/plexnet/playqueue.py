@@ -119,7 +119,7 @@ class PlayQueueFactory(object):
     def canCreateRemotePlayQueue(self):
         if self.item.getServer().isSecondary():
             reason = "Server is secondary"
-        elif not (self.item.isLibraryItem() or self.item.isGracenoteCollection() or self.item.isLibraryPQ):
+        elif not (self.item.isLibraryItem() or self.item.isGracenoteCollection() or self.item.isLibraryPQ or self.item.isCollection):
             reason = "Item is not a library item or gracenote collection"
         else:
             return True

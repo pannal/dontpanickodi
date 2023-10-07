@@ -137,7 +137,6 @@ class AdvancedSettings(object):
         ("background_art_blur_amount", 0),
         ("background_art_opacity_amount", 40),
         ("screensaver_quiz", False),
-        ("intro_skip_early", False),
         ("postplay_always", False),
         ("postplay_timeout", 16),
         ("skip_intro_button_timeout", 10),
@@ -561,17 +560,25 @@ class Cron(threading.Thread):
             self._receivers.pop(self._receivers.index(receiver))
 
 
-
 def getTimeFormat():
     """
+    Generic:
+    Use locale.timeformat setting to get and make use of the format.
+
+    Possible values:
+    HH:mm:ss -> %H:%M:%S
+    regional -> legacy
+    H:mm:ss  -> %-H:%M:%S
+
+    Legacy: Not necessarily true for Omega?; regional spices things up (depending on Kodi version?)
     Get global time format.
-    Kodi's time format handling is broken right now, as they return incompatible formats for strftime.
-    %H%H is being returned for manually set zero-padded values, in case of a regional zero-padded hour component,
+    Kodi's time format handling is weird, as they return incompatible formats for strftime.
+    %H%H can be returned for manually set zero-padded values, in case of a regional zero-padded hour component,
     only %H is returned.
 
     For now, sail around that by testing the current time for padded hour values.
 
-    Tests of the values returned by xbmc.getRegion("time"):
+    Tests of the values returned by xbmc.getRegion("time") as of Kodi Nexus (I believe):
     %I:%M:%S %p = h:mm:ss, non-zero-padded, 12h PM
     %I:%M:%S = 12h, h:mm:ss, non-zero-padded, regional
     %I%I:%M:%S = 12h, zero padded, hh:mm:ss
@@ -580,19 +587,48 @@ def getTimeFormat():
 
     :return: tuple of strftime-compatible format, boolean padHour
     """
-    origFmt = xbmc.getRegion('time')
 
-    # Kodi Omega on Android seems to have borked this separately (not happening on Windows at least)
-    # Format returned can be "%H:mm:ss", which is incompatible with strftime; fix.
-    fmt = origFmt.replace("hh", "%M").replace("mm", "%M").replace("ss", "%S").replace("%H%H", "%H")\
-        .replace("%I%I", "%I")
+    fmt = None
+    nonPadHF = "%-H" if sys.platform != "win32" else "%#H"
+    nonPadIF = "%-I" if sys.platform != "win32" else "%#I"
 
-    # Checking for %H%H or %I%I only would be the obvious way here to determine whether the hour should be padded,
-    # but the formats returned for regional settings with padding only have %H in them. This seems like a Kodi bug.
-    # Use a fallback.
-    currentTime = xbmc.getInfoLabel('System.Time')
-    padHour = "%H%H" in origFmt or "%I%I" in origFmt or (currentTime[0] == "0" and currentTime[1] != ":")
-    return fmt, padHour
+    try:
+        fmt = rpc.Settings.GetSettingValue(setting="locale.timeformat")["value"]
+    except:
+        DEBUG_LOG("Couldn't get locale.timeformat setting, falling back to legacy detection")
+
+    if fmt and fmt != "regional":
+        # HH = padded 24h
+        # hh = padded 12h
+        # H = unpadded 24h
+        # h = unpadded 12h
+
+        # handle non-padded hour first
+        if fmt.startswith("H:") or fmt.startswith("h:"):
+            adjustedFmt = fmt.replace("H", nonPadHF).replace("h", nonPadIF)
+        else:
+            adjustedFmt = fmt.replace("HH", "%H").replace("hh", "%I")
+
+        padHour = adjustedFmt.startswith("%H") or adjustedFmt.startswith("%I")
+
+    else:
+        DEBUG_LOG("Regional time format detected, falling back to legacy detection of hour-padding")
+        # regional is weirdly always unpadded (unless the broken %H%H/%I%I notation is used
+        origFmt = xbmc.getRegion('time')
+
+        adjustedFmt = origFmt.replace("%H%H", "%H").replace("%I%I", "%I")
+
+        # Checking for %H%H or %I%I only would be the obvious way here to determine whether the hour should be padded,
+        # but the formats returned for regional settings with padding might only have %H in them.
+        # Use a fallback (unreliable).
+        currentTime = xbmc.getInfoLabel('System.Time')
+        padHour = "%H%H" in origFmt or "%I%I" in origFmt or (currentTime[0] == "0" and currentTime[1] != ":")
+
+    # Kodi Omega on Android seems to have borked the regional format returned separately
+    # (not happening on Windows at least). Format returned can be "%H:mm:ss", which is incompatible with strftime; fix.
+    adjustedFmt = adjustedFmt.replace("mm", "%M").replace("ss", "%S").replace("xx", "%p")
+
+    return adjustedFmt, padHour
 
 
 timeFormat, padHour = getTimeFormat()

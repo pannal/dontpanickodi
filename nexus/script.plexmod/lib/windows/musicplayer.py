@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 from kodi_six import xbmc
+from kodi_six import xbmcgui
 from . import kodigui
 from . import currentplaylist
 from . import opener
@@ -35,6 +36,7 @@ class MusicPlayerWindow(currentplaylist.CurrentPlaylistWindow):
     REPEAT_BUTTON_ID = 401
     SKIP_PREV_BUTTON_ID = 404
     SKIP_NEXT_BUTTON_ID = 409
+    STOP_BUTTON_ID = 407
 
     SEEK_IMAGE_WIDTH = 1920
 
@@ -54,7 +56,6 @@ class MusicPlayerWindow(currentplaylist.CurrentPlaylistWindow):
             self.setDuration()
 
     def onFirstInit(self):
-        player.PLAYER.on('session.ended', self.doClose)
         if self.playlist and self.playlist.isRemote:
             self.playlist.on('change', self.updateProperties)
         self.setupSeekbar()
@@ -65,11 +66,20 @@ class MusicPlayerWindow(currentplaylist.CurrentPlaylistWindow):
         self.setFocusId(406)
 
     def doClose(self, **kwargs):
-        player.PLAYER.off('session.ended', self.doClose)
         player.PLAYER.off('playback.started', self.onPlayBackStarted)
         if self.playlist and self.playlist.isRemote:
             self.playlist.off('change', self.updateProperties)
         kodigui.ControlledWindow.doClose(self)
+
+    def onAction(self, action):
+        try:
+            if action == xbmcgui.ACTION_STOP:
+                self.stopButtonClicked()
+                return
+        except:
+            util.ERROR()
+
+        super().onAction(action)
 
     def onClick(self, controlID):
         if controlID == self.PLAYLIST_BUTTON_ID:
@@ -86,6 +96,8 @@ class MusicPlayerWindow(currentplaylist.CurrentPlaylistWindow):
             self.skipNextButtonClicked()
         elif controlID == self.OPTIONS_BUTTON_ID:
             self.optionsButtonClicked((1240, 1060))
+        elif controlID == self.STOP_BUTTON_ID:
+            self.stopButtonClicked()
 
     def repeatButtonClicked(self):
         if self.playlist and self.playlist.isRemote:
@@ -118,7 +130,10 @@ class MusicPlayerWindow(currentplaylist.CurrentPlaylistWindow):
         xbmc.executebuiltin('PlayerControl(Next)')
 
     def showPlaylist(self):
-        self.processCommand(opener.handleOpen(currentplaylist.CurrentPlaylistWindow))
+        self.processCommand(opener.handleOpen(currentplaylist.CurrentPlaylistWindow, winID=xbmcgui.getCurrentWindowId()))
+
+    def stopButtonClicked(self):
+        self.doClose()
 
     def updateProperties(self, **kwargs):
         if self.playlist:

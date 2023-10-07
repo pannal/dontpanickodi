@@ -1189,3 +1189,27 @@ msgstr ""
 msgctxt "#33401"
 msgid "Uses the Chrome client profile instead of the custom one. Might fix rare issues with 3D playback."
 msgstr ""
+
+msgctxt "#33501"
+msgid "Video played threshold"
+msgstr ""
+
+msgctxt "#33502"
+msgid "Set this to the same value as your Plex server (Settings>Library>Video played threshold) to avoid certain pitfalls, Default: 90 %"
+msgstr ""
+
+msgctxt "#33503"
+msgid "Use alternative home refresh"
+msgstr ""
+
+msgctxt "#33504"
+msgid "Use an alternative method to speed up watched state updates in the home hub after playing an item."
+msgstr ""
+
+msgctxt "#33505"
+msgid "Show intro skip button early"
+msgstr ""
+
+msgctxt "#33506"
+msgid "Show the intro skip button from the start of a video with an intro marker. The auto-skipping setting applies."
+msgstr ""

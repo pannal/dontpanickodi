@@ -12,6 +12,7 @@ import six
 from kodi_six import xbmc
 
 from plexnet import plexapp, myplex, util as plexnet_util
+from . windows.settings import PlayedThresholdSetting
 from . import util
 from six.moves import range
 
@@ -239,6 +240,10 @@ class PlexInterface(plexapp.AppInterface):
         if index > 0:
             return index * 10
         return 0
+
+    def getPlayedThresholdValue(self):
+        values = list(reversed(PlayedThresholdSetting.options))
+        return int(values[self.getPreference("played_threshold", 1)].replace(" %", "")) / 100.0
 
 
 plexapp.util.setInterface(PlexInterface())

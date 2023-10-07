@@ -1487,3 +1487,26 @@ msgctxt "#32466"
 msgid "Automatically seek to the selected timeline position after a second"
 msgstr "Nach Verzögerung automatisch zur aktuell gewählten Position springen"
 
+msgctxt "#33501"
+msgid "Video played threshold"
+msgstr "Video-abgespielt-Grenzwert"
+
+msgctxt "#33502"
+msgid "Set this to the same value as your Plex server (Settings>Library>Video played threshold) to avoid certain pitfalls, Default: 90 %"
+msgstr "Auf dem selben wert wie im Plex server setzen (Einstellungen>Mediathek>Video played threshold) um bestimmte Fehler zu umgehen, Standardwert: 90 %"
+
+msgctxt "#33503"
+msgid "Use alternative home refresh"
+msgstr "Alternative Aktualisierung der Hubs"
+
+msgctxt "#33504"
+msgid "Use an alternative method to speed up watched state updates in the home hub after playing an item."
+msgstr "Eine alternative Methode zum Aktualisieren der Home-Hubs verwenden, nachdem ein Item abgespielt wurde."
+
+msgctxt "#33505"
+msgid "Show intro skip button early"
+msgstr "Intro überspringen früher anzeigen"
+
+msgctxt "#33506"
+msgid "Show the intro skip button from the start of a video with an intro marker. The auto-skipping setting applies."
+msgstr "Zeige den Intro-Überspringen-Knopf von Anfang an. Die Automatische-Intro-Überspringen-Einstellung wird angewandt."

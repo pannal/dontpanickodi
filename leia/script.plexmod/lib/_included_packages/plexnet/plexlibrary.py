@@ -154,7 +154,7 @@ class LibrarySection(plexobjects.PlexObject):
 
     def items(self, path, start, size, filter_, sort, unwatched, type_, tag_fallback):
 
-        args = {"includeCollections" : "0"}
+        args = {"includeCollections" : "1"}
 
         if size is not None:
             args['X-Plex-Container-Start'] = start
@@ -183,7 +183,7 @@ class LibrarySection(plexobjects.PlexObject):
         else:
             path = '/library/sections/{0}/firstCharacter'.format(self.key)
 
-        args = {}
+        args = {"includeCollections" : "1"}
 
         if filter_:
             args[filter_[0]] = filter_[1]
@@ -401,6 +401,9 @@ class Collection(media.MediaItem):
 
     def isVideoOrDirectoryItem(self):
         return self.container.viewGroup in ('movie', 'show', 'episode')
+
+    def isCollection(self):
+        return True
 
 
 @plexobjects.registerLibType

@@ -208,7 +208,7 @@
                                             <aspectratio>scale</aspectratio>
                                         </control>
                                         <control type="group">
-                                            <visible>!String.IsEmpty(Window.Property(countdown)) + Integer.IsGreater(Window.Property(countdown),-1)</visible>
+                                            <visible>!String.IsEmpty(Window.Property(countdown)) + Integer.IsGreaterOrEqual(Window.Property(countdown), 0)</visible>
                                             <posx>192.5</posx>
                                             <posy>75.5</posy>
                                             <control type="image">
