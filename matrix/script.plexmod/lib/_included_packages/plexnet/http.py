@@ -22,7 +22,7 @@ codes = requests.codes
 status_codes = requests.status_codes._codes
 
 
-DEFAULT_TIMEOUT = asyncadapter.AsyncTimeout(10).setConnectTimeout(10)
+DEFAULT_TIMEOUT = asyncadapter.AsyncTimeout(util.TIMEOUT).setConnectTimeout(util.TIMEOUT)
 
 
 def GET(*args, **kwargs):
@@ -231,10 +231,10 @@ class HttpRequest(object):
     def addHeader(self, name, value):
         self.session.headers[name] = value
 
-    def createRequestContext(self, requestType, callback_=None):
+    def createRequestContext(self, requestType, callback_=None, timeout=None):
         context = RequestContext()
         context.requestType = requestType
-        context.timeout = DEFAULT_TIMEOUT
+        context.timeout = timeout or DEFAULT_TIMEOUT
 
         if callback_:
             context.callback = callback.Callable(self.onResponse)

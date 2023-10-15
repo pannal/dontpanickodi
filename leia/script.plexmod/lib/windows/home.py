@@ -148,6 +148,9 @@ class ServerListItem(kodigui.ManagedListItem):
         self.dataSource.on('started:reachability', self.onUpdate)
         return self
 
+    def setRefreshing(self):
+        self.safeSetProperty('status', 'refreshing.gif')
+
     def safeSetProperty(self, key, value):
         # For if we catch the item in the middle of being removed
         try:
@@ -1159,6 +1162,9 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver):
         elif items:
             items[0].setProperty('only', '1')
 
+        forceRefreshMLI = kodigui.ManagedListItem('Refresh Servers', properties={"is_refresh": '1'})
+        items.append(forceRefreshMLI)
+
         self.serverList.replaceItems(items)
 
         self.getControl(800).setHeight((min(len(items), 9) * 100) + 80)
@@ -1174,6 +1180,15 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver):
     def selectServer(self):
         mli = self.serverList.getSelectedItem()
         if not mli:
+            return
+
+        if mli.getProperty('is_refresh'):
+            util.DEBUG_LOG("Force-Refreshing available servers")
+            for mli in self.serverList:
+                if isinstance(mli, ServerListItem):
+                    mli.setRefreshing()
+            plexapp.refreshResources(True)
+            self.setFocusId(self.SERVER_BUTTON_ID)
             return
 
         server = mli.dataSource

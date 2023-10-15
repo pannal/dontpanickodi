@@ -60,7 +60,7 @@ class InfoWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
                 appended = False
                 for s in split2len(os.path.basename(part.file), splitFnAt):
                     if fnLen > splitFnAt and not appended:
-                        addMedia.append("{} ...\n".format(s))
+                        addMedia.append("{}\n".format(s))
                         appended = True
                         continue
                     addMedia.append("{}\n".format(s))
@@ -88,7 +88,19 @@ class InfoWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
 
                 if subs:
                     addMedia.append("Subtitles: {}\n\n".format(", ".join(subs)))
+
             addMedia.append("\n\n")
+
+        chapters = []
+        for index, chapter in enumerate(self.video.chapters):
+            chapters.append(chapter.tag or "Chapter #{}".format(str(index+1)))
+
+        if chapters:
+            addMedia.append("Chapters: {}".format(", ".join(chapters))+"\n")
+
+        if self.video.markers:
+            addMedia.append("Markers: {}".format(", ".join(name for off, name in sorted(
+                (int(marker.startTimeOffset), marker.type) for marker in self.video.markers))))
 
         return "".join(summary + addMedia)
 

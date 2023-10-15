@@ -1095,7 +1095,7 @@ msgid "Automatically Skip Intro"
 msgstr ""
 
 msgctxt "#32523"
-msgid "Automatically skip intros if available."
+msgid "Automatically skip intros if available. Doesn't override enabled binge mode."
 msgstr ""
 
 msgctxt "#32524"
@@ -1111,7 +1111,7 @@ msgid "Automatically Skip Credits"
 msgstr ""
 
 msgctxt "#32527"
-msgid "Automatically skip credits if available."
+msgid "Automatically skip credits if available. Doesn't override enabled binge mode."
 msgstr ""
 
 msgctxt "#32528"
@@ -1211,15 +1211,15 @@ msgid "Show intro skip button early"
 msgstr ""
 
 msgctxt "#33506"
-msgid "Show the intro skip button from the start of a video with an intro marker. The auto-skipping setting applies."
+msgid "Show the intro skip button from the start of a video with an intro marker. The auto-skipping setting applies. Doesn\'t override enabled binge mode."
 msgstr ""
 
 msgctxt "#33507"
-msgid "Enable Auto skip intro"
+msgid "Enable binge mode"
 msgstr ""
 
 msgctxt "#33508"
-msgid "Disable Auto skip intro"
+msgid "Disable binge mode"
 msgstr ""
 
 msgctxt "#33509"
@@ -1228,4 +1228,132 @@ msgstr ""
 
 msgctxt "#33510"
 msgid "When showing the intro skip button early, only do so if the intro occurs within the first X seconds."
+msgstr ""
+
+msgctxt "#33600"
+msgid "System"
+msgstr ""
+
+msgctxt "#33601"
+msgid "Show video chapters"
+msgstr ""
+
+msgctxt "#33602"
+msgid "If available, show video chapters from the video-file instead of the timeline-big-seek-steps."
+msgstr ""
+
+msgctxt "#33603"
+msgid "Use virtual chapters"
+msgstr ""
+
+msgctxt "#33604"
+msgid "When the above is enabled and no video chapters are available, simulate them by using the markers identified by the Plex Server (Intro, Credits)."
+msgstr ""
+
+msgctxt "#33605"
+msgid "Video Chapters"
+msgstr ""
+
+msgctxt "#33606"
+msgid "Virtual Chapters"
+msgstr ""
+
+msgctxt "#33607"
+msgid "Chapter {}"
+msgstr ""
+
+msgctxt "#33608"
+msgid "Intro"
+msgstr ""
+
+msgctxt "#33609"
+msgid "Credits"
+msgstr ""
+
+msgctxt "#33610"
+msgid "Main"
+msgstr ""
+
+msgctxt "#33611"
+msgid "Chapters"
+msgstr ""
+
+msgctxt "#33612"
+msgid "Markers"
+msgstr ""
+
+msgctxt "#33613"
+msgid "Kodi Buffer Size (MB)"
+msgstr ""
+
+msgctxt "#33614"
+msgid "Set the Kodi Cache/Buffer size. Free: {} MB, Recommended max: {} MB, Default: 20 MB. Needs Kodi restart. WARNING: This will overwrite advancedsettings.xml!\n\nTo customize other cache/network-related values, copy \"script.plexmod/pm4k_cache_template.xml\" to profile folder and edit it to your liking. (See About section for the file paths)"
+msgstr ""
+
+msgctxt "#33615"
+msgid "{time} left"
+msgstr ""
+
+msgctxt "#33616"
+msgid "Addon Path"
+msgstr ""
+
+msgctxt "#33617"
+msgid "Userdata/Profile Path"
+msgstr ""
+
+msgctxt "#33618"
+msgid "TV binge-viewing mode"
+msgstr ""
+
+msgctxt "#33619"
+msgid "Automatically skips episode intros, credits and tries to skip episode recaps. Doesn\'t skip the intro of the first episode of a season.\n\nCan be disabled/enabled per TV show."
+msgstr ""
+
+msgctxt "#33620"
+msgid "Plex requests timeout (seconds)"
+msgstr ""
+
+msgctxt "#33621"
+msgid "Set the (async and connection) timeout value of the Python requests library in seconds. Default: 5"
+msgstr ""
+
+msgctxt "#33622"
+msgid "LAN reachability timeout (ms)"
+msgstr ""
+
+msgctxt "#33623"
+msgid "When checking for LAN reachability, use this timeout. Default: 10ms"
+msgstr ""
+
+msgctxt "#33624"
+msgid "Network"
+msgstr ""
+
+msgctxt "#33625"
+msgid "Smart LAN/local server discovery"
+msgstr ""
+
+msgctxt "#33626"
+msgid "Checks whether servers returned from Plex.tv are actually local/in your LAN. For specific setups (e.g. Docker) Plex.tv might not properly detect a local server.\n\nNOTE: Only works on Kodi 19 or above."
+msgstr ""
+
+msgctxt "#33627"
+msgid "Prefer LAN/local servers over security"
+msgstr ""
+
+msgctxt "#33628"
+msgid "Prioritizes local connections over secure ones. Needs the proper setting in \"Allow Insecure Connections\" and the Plex Server's \"Secure connections\" at \"Preferred\". Can be used to enforce manual servers."
+msgstr ""
+
+msgctxt "#33629"
+msgid "Auto-skip intro/credits offset"
+msgstr ""
+
+msgctxt "#33630"
+msgid "Intro/credits markers might be a little early in Plex. When auto skipping add (or subtract) this many seconds from the marker. This avoids cutting off content, while possibly skipping the marker a little late."
+msgstr ""
+
+msgctxt "#32631"
+msgid "Player (user-specific)"
 msgstr ""

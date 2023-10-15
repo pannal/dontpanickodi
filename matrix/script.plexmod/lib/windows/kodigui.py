@@ -660,6 +660,9 @@ class ManagedControlList(object):
     def getManagedItemPosition(self, mli):
         return self.items.index(mli)
 
+    def isLastItem(self, mli=None):
+        return self.getManagedItemPosition(mli or self.getSelectedItem()) + 1 == len(self)
+
     def getListItemFromManagedItem(self, mli):
         pos = self.items.index(mli)
         return self.control.getListItem(pos)

@@ -64,9 +64,14 @@ MARKERS = OrderedDict([
 ])
 
 FINAL_MARKER_NEGOFF = 1000
+MARKER_OFF = 500
 
 
 class SeekDialog(kodigui.BaseDialog):
+    """
+    fixme: This is a convoluted mess.
+    """
+
     xmlFile = 'script-plex-seek_dialog.xml'
     path = util.ADDON.getAddonInfo('path')
     theme = 'Main'
@@ -78,6 +83,9 @@ class SeekDialog(kodigui.BaseDialog):
     SEEK_IMAGE_ID = 200
     POSITION_IMAGE_ID = 201
     SELECTION_INDICATOR = 202
+    SELECTION_INDICATOR_GROUP = 203
+    SELECTION_INDICATOR_IMAGE = 204
+    SELECTION_INDICATOR_TEXT = 205
     BIF_IMAGE_ID = 300
     SEEK_IMAGE_WIDTH = 1920
 
@@ -134,6 +142,8 @@ class SeekDialog(kodigui.BaseDialog):
         self.lastFocusID = None
         self.previousFocusID = None
         self.playlistDialogVisible = False
+        self.forceNextTimeAsChapter = False
+        self.showChapters = False
         self._seeking = False
         self._applyingSeek = False
         self._seekingWithoutOSD = False
@@ -146,12 +156,15 @@ class SeekDialog(kodigui.BaseDialog):
         self._atSkipStep = -1
         self._lastSkipDirection = None
         self._forcedLastSkipAmount = None
+        self._navigatedViaMarkerOrChapter = False
+        self._lastAction = None
         self.lastTimelineResponse = None
         self._ignoreInput = False
 
         # optimize
         self._enableMarkerSkip = plexapp.ACCOUNT.hasPlexPass()
         self._markers = None
+        self.chapters = None
         self._introSkipShownStarted = None
         self._introAutoSkipped = False
         self._creditsSkipShownStarted = None
@@ -161,13 +174,15 @@ class SeekDialog(kodigui.BaseDialog):
         self.useAutoSeek = util.advancedSettings.autoSeek
         self.useDynamicStepsForTimeline = util.advancedSettings.dynamicTimelineSeek
 
-        self.autoSkipIntro = self.player.video.type == 'episode' and self.player.video.autoSkipIntro
-        self.autoSkipCredits = util.getSetting('auto_skip_credits', False)
+        self.bingeMode = False
+        self.autoSkipIntro = False
+        self.autoSkipCredits = False
+        self.showIntroSkipEarly = False
+
         self.skipIntroButtonTimeout = util.advancedSettings.skipIntroButtonTimeout
         self.skipCreditsButtonTimeout = util.advancedSettings.skipCreditsButtonTimeout
         self.showItemEndsInfo = util.advancedSettings.showMediaEndsInfo
         self.showItemEndsLabel = util.advancedSettings.showMediaEndsLabel
-        self.showIntroSkipEarly = util.getSetting('show_intro_skip_early', False)
 
         self.player.video.server.on("np:timelineResponse", self.timelineResponseCallback)
 
@@ -207,9 +222,28 @@ class SeekDialog(kodigui.BaseDialog):
         self._applyingSeek = False
         self.bigSeekChanged = False
         self.selectedOffset = None
+        self.forceNextTimeAsChapter = False
+        self._navigatedViaMarkerOrChapter = False
+        self.setProperty('show.chapters', '')
         self.setProperty('button.seek', '')
         self.resetAutoSeekTimer(None)
         self.resetSkipSteps()
+
+    def applyMarkerProps(self):
+        self.bingeMode = self.player.video.type == 'episode' and self.player.video.bingeMode
+
+        # don't auto skip intro when on binge mode on the first episode of a season
+        firstEp = self.player.video.index == '1'
+
+        self.autoSkipIntro = (self.bingeMode and not firstEp) or util.getUserSetting('auto_skip_intro', False)
+        self.autoSkipCredits = self.bingeMode or util.getUserSetting('auto_skip_credits', False)
+        self.showIntroSkipEarly = self.bingeMode or util.getUserSetting('show_intro_skip_early', False)
+
+        self._introSkipShownStarted = None
+        self._introAutoSkipped = False
+        self._creditsSkipShownStarted = None
+        self._creditsAutoSkipped = False
+        self._markers = None
 
     def trueOffset(self):
         if self.handler.mode == self.handler.MODE_ABSOLUTE:
@@ -219,7 +253,6 @@ class SeekDialog(kodigui.BaseDialog):
 
     @property
     def markers(self):
-        #self.handler.player.video.credits
         if not self._enableMarkerSkip:
             return None
 
@@ -256,25 +289,26 @@ class SeekDialog(kodigui.BaseDialog):
         self.positionControl = self.getControl(self.POSITION_IMAGE_ID)
         self.bifImageControl = self.getControl(self.BIF_IMAGE_ID)
         self.selectionIndicator = self.getControl(self.SELECTION_INDICATOR)
+        self.selectionIndicatorImage = self.getControl(self.SELECTION_INDICATOR_IMAGE)
+        self.selectionIndicatorText = self.getControl(self.SELECTION_INDICATOR_TEXT)
+        self.selectionIndicatorGroup = self.getControl(self.SELECTION_INDICATOR_GROUP)
         self.selectionBox = self.getControl(203)
         self.bigSeekControl = kodigui.ManagedControlList(self, self.BIG_SEEK_LIST_ID, 12)
         self.bigSeekGroupControl = self.getControl(self.BIG_SEEK_GROUP_ID)
         self.initialized = True
         self.setBoolProperty('subtitle.downloads', util.getSetting('subtitle_downloads', False))
+        self.applyMarkerProps()
         self.updateProperties()
         self.videoSettingsHaveChanged()
         self.update()
 
     def onReInit(self):
         self.lastTimelineResponse = None
-        self._introSkipShownStarted = None
-        self._introAutoSkipped = False
-        self._creditsSkipShownStarted = None
-        self._creditsAutoSkipped = False
-        self._markers = None
+        self._lastAction = None
 
         self.resetTimeout()
         self.resetSeeking()
+        self.applyMarkerProps()
         self.updateProperties()
         self.videoSettingsHaveChanged()
         self.updateProgress()
@@ -288,6 +322,9 @@ class SeekDialog(kodigui.BaseDialog):
             self.resetTimeout()
 
             controlID = self.getFocusId()
+
+            lastAction = self._lastAction
+            self._lastAction = currentAction = (action.getId(), controlID)
 
             if not self._ignoreInput:
                 if action.getId() in KEY_MOVE_SET:
@@ -342,6 +379,10 @@ class SeekDialog(kodigui.BaseDialog):
                                     xbmcgui.ACTION_STEP_BACK):
                         # allow no-OSD-seeking with intro skip button shown
                         passThroughMain = True
+                    elif action == xbmcgui.ACTION_MOVE_UP and self.osdVisible() and self.showChapters:
+                        self.setProperty('show.chapters', '1')
+                        self.setFocusId(self.BIG_SEEK_LIST_ID)
+                        return
 
                 if controlID == self.MAIN_BUTTON_ID:
                     # we're seeking from the timeline with the OSD open - do an actual timeline seek
@@ -358,8 +399,22 @@ class SeekDialog(kodigui.BaseDialog):
                             return self.skipBack()
                         return self.seekByOffset(-10000, auto_seek=self.useAutoSeek)
 
+                    elif action == xbmcgui.ACTION_MOVE_UP:
+                        if self.getProperty('show.markerSkip'):
+                            # pressed up on player controls, then up on MAIN BUTTON; focus marker button
+                            if currentAction == lastAction:
+                                self.setFocusId(self.SKIP_MARKER_BUTTON_ID)
+                                return
+                        elif self.showChapters:
+                            self.setProperty('show.chapters', '1')
+
                     elif action == xbmcgui.ACTION_MOVE_DOWN:
+                        if self.previousFocusID == self.BIG_SEEK_LIST_ID and self.getProperty('show.markerSkip'):
+                            self.setFocusId(self.SKIP_MARKER_BUTTON_ID)
+                            self.setProperty('show.chapters', '')
+
                         self.updateBigSeek()
+
                     # elif action == xbmcgui.ACTION_MOVE_UP:
                     #     self.seekForward(60000)
                     # elif action == xbmcgui.ACTION_MOVE_DOWN:
@@ -399,7 +454,7 @@ class SeekDialog(kodigui.BaseDialog):
                         self.setBigSeekShift()
                         self.updateProgress()
                         self.showOSD()
-                        self.setFocusId(self.BIG_SEEK_LIST_ID)
+
                     elif action.getButtonCode() == 61519:
                         if self.getProperty('show.PPI'):
                             self.hidePPIDialog()
@@ -411,9 +466,11 @@ class SeekDialog(kodigui.BaseDialog):
                         return self.updateBigSeek(changed=True)
                     elif action in (xbmcgui.ACTION_MOVE_LEFT, xbmcgui.ACTION_BIG_STEP_BACK):
                         return self.updateBigSeek(changed=True)
-                    elif action == xbmcgui.ACTION_MOVE_UP and self.getProperty('show.markerSkip'):
-                        self.setFocusId(self.SKIP_MARKER_BUTTON_ID)
-                        return
+
+                    elif action == xbmcgui.ACTION_MOVE_DOWN:
+                        if self.getProperty('show.markerSkip'):
+                            self.setProperty('show.chapters', '')
+                            self.setFocusId(self.SKIP_MARKER_BUTTON_ID)
 
                 if action.getButtonCode() == 61516:
                     builtin.Action('CycleSubtitle')
@@ -485,13 +542,19 @@ class SeekDialog(kodigui.BaseDialog):
         self.previousFocusID = self.lastFocusID
         self.lastFocusID = controlID
         if controlID == self.MAIN_BUTTON_ID:
-            self.selectedOffset = self.trueOffset()
+            # when seeking via ENTER/CLICK on chapters, coming directly from bigSeekSelected, don't assume we've
+            # already seeked.  bigSeekSelected sets self.selectedOffset
+            if not self.showChapters:
+                self.selectedOffset = self.trueOffset()
+
             if lastFocusID == self.BIG_SEEK_LIST_ID and self.bigSeekChanged:
-                xbmc.sleep(100)
                 self.updateBigSeek(changed=True)
                 self.updateProgress(set_to_current=False)
-                if self.useAutoSeek:
-                    self.delayedSeek()
+
+                # immediately seek bigSeek after click
+                self._performSeek()
+                self._osdHideFast = True
+                self.tick()
 
             else:
                 self.setBigSeekShift()
@@ -500,6 +563,7 @@ class SeekDialog(kodigui.BaseDialog):
         elif controlID == self.BIG_SEEK_LIST_ID:
             self.setBigSeekShift()
             self.updateBigSeek(changed=False)
+
         elif xbmc.getCondVisibility('ControlGroup(400).HasFocus(0)'):
             self.selectedOffset = self.trueOffset()
             self.updateProgress()
@@ -677,7 +741,7 @@ class SeekDialog(kodigui.BaseDialog):
 
     def skipChapter(self, forward=True, without_osd=False):
         lastSelectedOffset = self.selectedOffset
-        util.DEBUG_LOG('chapter skipping from {0} with formawrd {1}'.format(lastSelectedOffset, forward))
+        util.DEBUG_LOG('chapter skipping from {0} with forward {1}'.format(lastSelectedOffset, forward))
         if forward:
             nextChapters = [c for c in self.chapters if c.startTime() > lastSelectedOffset]
             util.DEBUG_LOG('Found {0} chapters among {1}'.format(len(nextChapters), len(self.chapters)))
@@ -693,6 +757,10 @@ class SeekDialog(kodigui.BaseDialog):
             if len(lastChapters) == 0:
                 return False
             chapter = lastChapters[-1]
+
+        if chapter.tag:
+            util.DEBUG_LOG('Skipping to chapter: {}'.format(chapter.tag))
+            self.forceNextTimeAsChapter = chapter.tag
 
         util.DEBUG_LOG('New start time is {0}'.format(chapter.startTime()))
         self.skipByOffset(chapter.startTime() - lastSelectedOffset, without_osd=without_osd)
@@ -736,7 +804,7 @@ class SeekDialog(kodigui.BaseDialog):
     def _delayedSeek(self):
         try:
             while not util.MONITOR.waitForAbort(0.1):
-                if time.time() > self._delayedSeekTimeout or not self._delayedSeekTimeout:
+                if not self._delayedSeekTimeout or time.time() > self._delayedSeekTimeout:
                     break
 
             if not util.MONITOR.abortRequested() and self._delayedSeekTimeout is not None:
@@ -875,20 +943,40 @@ class SeekDialog(kodigui.BaseDialog):
 
         self.bigSeekOffset = self.selectedOffset - closest.dataSource
         pxOffset = int(self.bigSeekOffset / float(self.duration) * 1920)
-        self.bigSeekGroupControl.setPosition(-8 + pxOffset, 917)
+
+        if not self.showChapters:
+            self.bigSeekGroupControl.setPosition(-8 + pxOffset, 917)
         self.bigSeekControl.selectItem(closest.pos())
+
         self._seeking = True
         # xbmc.sleep(100)
 
     def updateBigSeek(self, changed=False):
-        if changed:
+        if changed and not self.showChapters:
             self.bigSeekChanged = True
             self.selectedOffset = self.bigSeekControl.getSelectedItem().dataSource + self.bigSeekOffset
             self.updateProgress(set_to_current=False)
+        elif self.showChapters:
+            # when hovering chapters, show its corresponding time on the timeline, but don't act like we're seeking
+            self.updateProgress(set_to_current=False, offset=self.bigSeekControl.getSelectedItem().dataSource,
+                                onlyTimeIndicator=True)
         self.resetSkipSteps()
 
     def bigSeekSelected(self):
+        # this gets called when a click action happened on the bigSeek, defer the actual action to onFocus
+        # by setFocusId(MAIN)
+
         self.bigSeekChanged = True
+        if self.showChapters:
+            self.resetAutoSeekTimer(None)
+            self._navigatedViaMarkerOrChapter = True
+
+            sel = self.bigSeekControl.getSelectedItem()
+            if self.bigSeekControl.isLastItem(sel):
+                self.selectedOffset = sel.dataSource - FINAL_MARKER_NEGOFF
+            else:
+                self.selectedOffset = sel.dataSource + MARKER_OFF
+
         self.setFocusId(self.MAIN_BUTTON_ID)
 
     def updateProperties(self, **kwargs):
@@ -917,17 +1005,74 @@ class SeekDialog(kodigui.BaseDialog):
             self.setProperty('pq.repeat.one', pq.isRepeatOne and '1' or '')
             self.setProperty('pq.shuffled', pq.isShuffled and '1' or '')
         else:
-            self.setProperties(('pq.isRemote', 'pq.hasnext', 'pq.hasprev', 'pq.repeat', 'pq.shuffled', 'has.playlist'), '')
+            self.setProperties(('pq.isRemote', 'pq.hasnext', 'pq.hasprev', 'pq.repeat', 'pq.shuffled', 'has.playlist'),
+                               '')
 
         self.updateCurrent()
 
-        div = int(self.duration / 12)
         items = []
-        for x in range(12):
-            offset = div * x
-            items.append(kodigui.ManagedListItem(data_source=offset))
+
+        # replace bigSeek with chapters or markers if possible
+        if self.showChapters:
+            if self.chapters:
+                self.setProperty('chapters.label', T(33605, 'Video Chapters').upper())
+                for index, chapter in enumerate(self.chapters):
+                    thumb = chapter.thumb and chapter.thumb.asTranscodedImageURL(
+                        *PlaylistDialog.LI_AR16X9_THUMB_DIM) or None
+                    mli = kodigui.ManagedListItem(data_source=chapter.startTime(),
+                                                  thumbnailImage=thumb,
+                                                  label=chapter.tag or T(33607, 'Chapter {}').format(index+1))
+                    items.append(mli)
+            # fake chapters by using markers
+            elif util.getSetting('virtual_chapters', True) and self.markers:
+                self.setProperty('chapters.label', T(33606, 'Virtual Chapters').upper())
+                creditsCounter = 0
+                preparedMarkers = []
+                for markerDef in self.markers:
+                    marker = markerDef["marker"]
+                    if marker:
+                        if markerDef["marker_type"] == "intro":
+                            preparedMarkers.append((int(marker.startTimeOffset), T(33608, "Intro")))
+                            preparedMarkers.append((int(marker.endTimeOffset), T(33610, "Main")))
+
+                        elif markerDef["marker_type"] == "credits":
+                            creditsCounter += 1
+                            preparedMarkers.append((int(marker.startTimeOffset), T(33609, "Credits") + "{}"))
+
+                # add staggered virtual markers
+                preparedMarkers.append((int(self.duration * 0.25), "25 %"))
+                preparedMarkers.append((int(self.duration * 0.50), "50 %"))
+                preparedMarkers.append((int(self.duration * 0.75), "75 %"))
+
+                credCnt = 1
+                for offset, label in sorted(preparedMarkers):
+                    mli = kodigui.ManagedListItem(data_source=offset,
+                                                  label=label.format(
+                                                      " #{}".format(credCnt) if creditsCounter > 1 else ""
+                                                      ))
+                    items.append(mli)
+
+                    if creditsCounter > 1:
+                        credCnt += 1
+
+        else:
+            div = int(self.duration / 12)
+            for x in range(12):
+                offset = div * x
+                items.append(kodigui.ManagedListItem(data_source=offset))
+
+            # we might've been reinizialized by the handler and have had markers/chapters before. reset height and
+            # positioning of the bigSeekControl
+            self.bigSeekControl.control.setHeight(16)
+            self.bigSeekControl.control.setPosition(self.bigSeekControl.getX(), 0)
+
         self.bigSeekControl.reset()
         self.bigSeekControl.addItems(items)
+
+        if self.showChapters:
+            # adjust height and positioning of bigSeekControl to accomodate chapters
+            self.bigSeekControl.control.setHeight(160)
+            self.bigSeekControl.control.setPosition(self.bigSeekControl.getX(), -126)
 
     def updateCurrent(self, update_position_control=True):
         ratio = self.trueOffset() / float(self.duration)
@@ -1022,8 +1167,6 @@ class SeekDialog(kodigui.BaseDialog):
         Show intro/credits skip button at current time
         """
 
-        util.DEBUG_LOG("MARKERS: %s, %s" % (self.markers, self.showIntroSkipEarly))
-
         if not self.markers:
             return
 
@@ -1037,8 +1180,7 @@ class SeekDialog(kodigui.BaseDialog):
                         startTimeOffset <= util.advancedSettings.skipIntroButtonShowEarlyThreshold * 1000:
                     startTimeOffset = 0
 
-                if startTimeOffset <= self.offset < math.ceil(float(marker.endTimeOffset)) \
-                        - FINAL_MARKER_NEGOFF:
+                if startTimeOffset <= self.offset < int(marker.endTimeOffset) - FINAL_MARKER_NEGOFF:
                     # we've had a marker already; reset autoSkip state
                     if self._currentMarker and self._currentMarker != markerDef:
                         setattr(self, markerDef["markerAutoSkipped"], False)
@@ -1063,14 +1205,18 @@ class SeekDialog(kodigui.BaseDialog):
     def setup(self, duration, offset=0, bif_url=None, title='', title2='', chapters=None):
         self.title = title
         self.title2 = title2
+        self.chapters = chapters or []
+        self._markers = None
+        self.showChapters = util.getUserSetting('show_chapters', True) and (
+                    bool(chapters) or (util.getUserSetting('virtual_chapters', True) and bool(self.markers)))
         self.setProperty('video.title', title)
         self.setProperty('is.show', (self.player.video.type == 'episode') and '1' or '')
         self.setProperty('has.playlist', self.handler.playlist and '1' or '')
         self.setProperty('shuffled', (self.handler.playlist and self.handler.playlist.isShuffled) and '1' or '')
+        self.setProperty('has.chapters', self.showChapters and '1' or '')
         self.baseOffset = offset
         self.offset = 0
         self._duration = duration
-        self.chapters = chapters or []
         self.bifURL = bif_url
         self.hasBif = bool(self.bifURL)
         if self.hasBif:
@@ -1097,7 +1243,7 @@ class SeekDialog(kodigui.BaseDialog):
         except RuntimeError:  # Not playing
             return 1
 
-    def updateProgress(self, set_to_current=True, offset=None):
+    def updateProgress(self, set_to_current=True, offset=None, onlyTimeIndicator=False):
         """
         Updates the progress bars (seek and position) and the currently-selected-time-label for the current position or
         seek state on the timeline.
@@ -1125,7 +1271,20 @@ class SeekDialog(kodigui.BaseDialog):
             self.selectionBox.setPosition(-100 + (1920 - w), 0)
         else:
             self.selectionBox.setPosition(-50, 0)
-        self.setProperty('time.selection', util.simplifiedTimeDisplay(offset))
+
+        if self.forceNextTimeAsChapter:
+            self.setProperty('time.selection', self.forceNextTimeAsChapter)
+
+            # fixme: might be superfluous
+            self.selectionIndicatorImage.setWidth(self.selectionIndicatorText.getWidth())
+            self.forceNextTimeAsChapter = False
+        else:
+            self.setProperty('time.selection', util.simplifiedTimeDisplay(offset))
+            self.selectionIndicatorImage.setWidth(101)
+
+        if onlyTimeIndicator:
+            return
+
         if self.hasBif:
             self.setProperty('bif.image', self.handler.player.playerObject.getBifUrl(offset))
             self.bifImageControl.setPosition(bifx, 752)
@@ -1197,13 +1356,19 @@ class SeekDialog(kodigui.BaseDialog):
             return
 
         markerDef = self.shouldShowMarkerSkip()
+        startTimeOff = None
         if markerDef:
             self.setProperty('skipMarkerName', markerDef["name"])
             self._currentMarker = markerDef
+            startTimeOff = int(markerDef["marker"].startTimeOffset)
 
         # auto skip marker
+        # delay marker autoskip ny autoSkipOffset to avoid cutting off content at the expense of being slightly too late
         if markerDef and getattr(self, markerDef["markerAutoSkip"]) \
-                and not getattr(self, markerDef["markerAutoSkipped"]):
+                and not getattr(self, markerDef["markerAutoSkipped"])\
+                and not self._navigatedViaMarkerOrChapter \
+                and (startTimeOff == 0 or (startTimeOff + util.advancedSettings.autoSkipOffset * 1000) <= self.offset):
+
             setattr(self, markerDef["markerAutoSkipped"], True)
             self.resetAutoSeekTimer(None)
             markerOff = 0
@@ -1213,14 +1378,14 @@ class SeekDialog(kodigui.BaseDialog):
                 markerOff = FINAL_MARKER_NEGOFF
 
             util.DEBUG_LOG('MarkerAutoSkip: Skipping marker {}'.format(markerDef["marker"]))
-            self.doSeek(math.ceil(float(markerDef["marker"].endTimeOffset)) - markerOff)
+            self.doSeek(int(markerDef["marker"].endTimeOffset) + 1000 - markerOff)
             if not final:
                 self.setProperty('show.markerSkip', '')
                 self.setProperty('show.markerSkip_OSDOnly', '')
             return True
 
         if markerDef and not self.osdVisible() and self.lastFocusID != self.SKIP_MARKER_BUTTON_ID and \
-                not self.getProperty('show.markerSkip_OSDOnly'):
+                not self.getProperty('show.markerSkip_OSDOnly') and self.getProperty('show.markerSkip'):
             self.setFocusId(self.SKIP_MARKER_BUTTON_ID)
 
         if offset or (self.autoSeekTimeout and time.time() >= self.autoSeekTimeout and

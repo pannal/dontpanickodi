@@ -148,6 +148,7 @@ class SeekPlayerHandler(BasePlayerHandler):
         self.bifURL = ''
         self.title = ''
         self.title2 = ''
+        self.chapters = None
         self.reset()
 
     def reset(self):
@@ -170,7 +171,8 @@ class SeekPlayerHandler(BasePlayerHandler):
         self.chapters = chapters or []
         self.playedThreshold = plexapp.util.INTERFACE.getPlayedThresholdValue()
         self.getDialog(setup=True)
-        self.dialog.setup(self.duration, int(self.baseOffset * 1000), self.bifURL, self.title, self.title2, chapters=self.chapters)
+        self.dialog.setup(self.duration, int(self.baseOffset * 1000), self.bifURL, self.title, self.title2,
+                          chapters=self.chapters)
 
     def getDialog(self, setup=False):
         if not self.dialog:
@@ -190,6 +192,9 @@ class SeekPlayerHandler(BasePlayerHandler):
 
     def shouldShowPostPlay(self):
         if self.playlist and self.playlist.TYPE == 'playlist':
+            return False
+
+        if self.player.video.bingeMode:
             return False
 
         if (not util.advancedSettings.postplayAlways and self.player.video.duration.asInt() <= FIVE_MINUTES_MILLIS)\
@@ -335,7 +340,7 @@ class SeekPlayerHandler(BasePlayerHandler):
             self.updateNowPlaying()
 
             # show post play if possible, if an item has been watched (90% by Plex standards)
-            if self.seeking != self.SEEK_PLAYLIST:
+            if self.seeking != self.SEEK_PLAYLIST and self.duration:
                 playedFac = self.trueTime * 1000 / float(self.duration)
                 util.DEBUG_LOG("Player - played-threshold: {}/{}".format(playedFac, self.playedThreshold))
                 if playedFac >= self.playedThreshold and self.next(on_end=True):
@@ -874,14 +879,15 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
         # Kodi 19 will try to look for subtitles in the directory containing the file. '/' and `/file.mkv` both point
         # to the file, and Kodi will happily try to read the whole file without recognizing it isn't a directory.
         # To get around that, we omit the filename here since it is unnecessary.
-        url = meta.streamUrls[0].replace("file.mkv", "")
+        url = meta.streamUrls[0].replace("file.mkv", "").replace("file.mp4", "")
 
         bifURL = self.playerObject.getBifUrl()
         util.DEBUG_LOG('Playing URL(+{1}ms): {0}{2}'.format(plexnetUtil.cleanToken(url), offset, bifURL and ' - indexed' or ''))
 
         self.stopAndWait()  # Stop before setting up the handler to prevent player events from causing havoc
 
-        self.handler.setup(self.video.duration.asInt(), offset, bifURL, title=self.video.grandparentTitle, title2=self.video.title, seeking=seeking, chapters=self.video.chapters)
+        self.handler.setup(self.video.duration.asInt(), offset, bifURL, title=self.video.grandparentTitle,
+                           title2=self.video.title, seeking=seeking, chapters=self.video.chapters)
 
         if meta.isTranscoded:
             self.handler.mode = self.handler.MODE_RELATIVE
@@ -927,7 +933,7 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
         if playlist.isRemote:
             self.handler.playQueue = playlist
         self.video = playlist.current()
-        self.video.softReload()
+        self.video.softReload(includeChapters=1)
         self.resume = resume
         self.open()
         self._playVideo(resume and self.video.viewOffset.asInt() or 0, seeking=handler and handler.SEEK_PLAYLIST or 0, force_update=True)

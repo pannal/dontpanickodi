@@ -373,7 +373,7 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
         self.passoutProtection = time.time() + PASSOUT_PROTECTION_DURATION_SECONDS
 
     def startTimer(self):
-        if not util.getSetting('post_play_auto', True):
+        if not util.getUserSetting('post_play_auto', True):
             util.DEBUG_LOG('Post play auto-play disabled')
             return
 

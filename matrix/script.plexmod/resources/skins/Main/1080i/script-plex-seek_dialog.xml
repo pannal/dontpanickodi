@@ -194,34 +194,6 @@
             <onclick condition="String.IsEmpty(Window.Property(button.seek))">SetProperty(show.OSD,1)</onclick>
         </control>
 
-        <control type="group" id="790">
-            <posx>0</posx>
-            <posy>797</posy>
-            <width>1670</width>
-            <height>143</height>
-            <align>right</align>
-            <control type="button" id="791">
-                <visible>!String.IsEmpty(Window.Property(show.markerSkip)) + [String.IsEmpty(Window.Property(show.markerSkip_OSDOnly)) | [!String.IsEmpty(Window.Property(show.markerSkip_OSDOnly)) + !String.IsEmpty(Window.Property(show.OSD))]]</visible>
-                <animation effect="zoom" start="100" end="110,120" time="100" center="auto" reversible="false">Focus</animation>
-                <animation effect="zoom" start="110,120" end="100" time="100" center="auto" reversible="false">UnFocus</animation>
-                <animation type="Conditional" condition="String.IsEmpty(Window.Property(show.OSD)) + !Window.IsVisible(seekbar)" reversible="false">
-                    <effect type="slide" end="0,100" time="100" delay="100"></effect>
-                </animation>
-                <right>30</right>
-                <top>0</top>
-                <width min="200">auto</width>
-                <align>center</align>
-                <height>143</height>
-                <texturefocus colordiffuse="FFE5A00D" border="50">script.plex/buttons/blank-focus.png</texturefocus>
-                <texturenofocus colordiffuse="99FFFFFF" border="50">script.plex/buttons/blank.png</texturenofocus>
-                <textoffsetx>70</textoffsetx>
-                <textcolor>FF000000</textcolor>
-                <focusedcolor>FF000000</focusedcolor>
-                <!--<label>$ADDON[script.plexmod 32495]</label>-->
-                <label>$INFO[Window.Property(skipMarkerName)]</label>
-            </control>
-        </control>
-
         <control type="group" id="803">
             <bottom>0</bottom>
             <height>350</height>
@@ -756,8 +728,13 @@
             </control>
 
             <control type="group" id="500">
-                <animation effect="slide" time="100" start="0,0" end="0,20" reversible="true" condition="Control.HasFocus(501)">Conditional</animation>
-                <visible allowhiddenfocus="true">String.IsEmpty(Window.Property(mouse.mode)) + String.IsEmpty(Window.Property(hide.bigseek)) + [Control.HasFocus(501) | Control.HasFocus(100)]</visible>
+                <animation effect="slide" time="100" start="0,0" end="0,20" reversible="true" condition="Control.HasFocus(501) + String.IsEmpty(Window.Property(has.chapters))">Conditional</animation>
+
+                <!-- CHAPTERS -->
+                <animation effect="slide" time="100" start="0,0" end="0,-60" reversible="true" condition="Control.HasFocus(501) + !String.IsEmpty(Window.Property(has.chapters)) + !String.IsEmpty(Window.Property(show.chapters))">Conditional</animation>
+                <!-- /CHAPTERS -->
+
+                <visible>String.IsEmpty(Window.Property(mouse.mode)) + String.IsEmpty(Window.Property(hide.bigseek)) + [Control.HasFocus(501) | Control.HasFocus(100)] + [!String.IsEmpty(Window.Property(show.chapters)) | String.IsEmpty(Window.Property(has.chapters))]</visible>
                 <posx>-8</posx>
                 <posy>917</posy>
                 <control type="image">
@@ -767,7 +744,43 @@
                     <height>6</height>
                     <texture>script.plex/white-square.png</texture>
                     <colordiffuse>A0000000</colordiffuse>
+                    <visible>String.IsEmpty(Window.Property(has.chapters))</visible>
                 </control>
+                <!-- CHAPTERS -->
+                <control type="image">
+                    <posx>0</posx>
+                    <posy>-175</posy>
+                    <width>1928</width>
+                    <height>200</height>
+                    <texture>script.plex/white-square.png</texture>
+                    <colordiffuse>A0000000</colordiffuse>
+                    <visible>!String.IsEmpty(Window.Property(has.chapters))</visible>
+                </control>
+                <control type="label">
+                    <posx>40</posx>
+                    <posy>-162</posy>
+                    <width>auto</width>
+                    <height>20</height>
+                    <font>font10</font>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <textcolor>CC606060</textcolor>
+                    <label>$INFO[Window.Property(chapters.label)]</label>
+                    <visible>!String.IsEmpty(Window.Property(has.chapters)) + !Control.HasFocus(501)</visible>
+                </control>
+                <control type="label">
+                    <posx>40</posx>
+                    <posy>-162</posy>
+                    <width>auto</width>
+                    <height>20</height>
+                    <font>font10</font>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <label>$INFO[Window.Property(chapters.label)]</label>
+                    <visible>!String.IsEmpty(Window.Property(has.chapters)) + Control.HasFocus(501)</visible>
+                </control>
+                <!-- /CHAPTERS -->
                 <control type="list" id="501">
                     <hitrect x="-20" y="-20" w="10" h="10" />
                     <posx>0</posx>
@@ -780,7 +793,7 @@
                     <orientation>horizontal</orientation>
                     <preloaditems>4</preloaditems>
                     <!-- ITEM LAYOUT ########################################## -->
-                    <itemlayout width="160">
+                    <itemlayout width="160" condition="String.IsEmpty(Window.Property(has.chapters))">
                         <control type="image">
                             <posx>0</posx>
                             <posy>0</posy>
@@ -792,7 +805,7 @@
                     </itemlayout>
 
                     <!-- FOCUSED LAYOUT ####################################### -->
-                    <focusedlayout width="160">
+                    <focusedlayout width="160" condition="String.IsEmpty(Window.Property(has.chapters))">
                         <control type="image">
                             <visible>!Control.HasFocus(501)</visible>
                             <posx>0</posx>
@@ -812,6 +825,146 @@
                             <colordiffuse>FFE5A00D</colordiffuse>
                         </control>
                     </focusedlayout>
+
+                    <!-- ITEM LAYOUT CHAPTERS ########################################## -->
+                    <itemlayout width="218" condition="!String.IsEmpty(Window.Property(has.chapters))">
+                        <control type="group">
+                            <control type="image">
+                                <posx>40</posx>
+                                <posy>0</posy>
+                                <width>178</width>
+                                <height>100</height>
+                                <texture>script.plex/thumb_fallbacks/movie16x9.png</texture>
+                                <aspectratio>scale</aspectratio>
+                                <colordiffuse>CC606060</colordiffuse>
+                                <visible>!Control.HasFocus(501)</visible>
+                            </control>
+                            <control type="image">
+                                <posx>40</posx>
+                                <posy>0</posy>
+                                <width>178</width>
+                                <height>100</height>
+                                <texture>$INFO[ListItem.Thumb]</texture>
+                                <aspectratio>scale</aspectratio>
+                                <colordiffuse>DDAAAAAA</colordiffuse>
+                                <visible>!Control.HasFocus(501)</visible>
+                            </control>
+                            <control type="image">
+                                <posx>40</posx>
+                                <posy>0</posy>
+                                <width>178</width>
+                                <height>100</height>
+                                <texture>script.plex/thumb_fallbacks/movie16x9.png</texture>
+                                <aspectratio>scale</aspectratio>
+                                <colordiffuse>FFAAAAAA</colordiffuse>
+                                <visible>Control.HasFocus(501)</visible>
+                            </control>
+                            <control type="image">
+                                <posx>40</posx>
+                                <posy>0</posy>
+                                <width>178</width>
+                                <height>100</height>
+                                <texture>$INFO[ListItem.Thumb]</texture>
+                                <aspectratio>scale</aspectratio>
+                                <colordiffuse>FFAAAAAA</colordiffuse>
+                                <visible>Control.HasFocus(501)</visible>
+                            </control>
+                            <control type="label">
+                                <posx>40</posx>
+                                <posy>120</posy>
+                                <width>auto</width>
+                                <height>10</height>
+                                <font>font10</font>
+                                <align>center</align>
+                                <aligny>center</aligny>
+                                <textcolor>CC606060</textcolor>
+                                <label>$INFO[ListItem.Label]</label>
+                                <visible>!Control.HasFocus(501)</visible>
+                            </control>
+                            <control type="label">
+                                <posx>40</posx>
+                                <posy>120</posy>
+                                <width>auto</width>
+                                <height>10</height>
+                                <font>font10</font>
+                                <align>center</align>
+                                <aligny>center</aligny>
+                                <textcolor>FFAAAAAA</textcolor>
+                                <label>$INFO[ListItem.Label]</label>
+                                <visible>Control.HasFocus(501)</visible>
+                            </control>
+                        </control>
+                    </itemlayout>
+
+                    <!-- FOCUSED LAYOUT CHAPTERS ####################################### -->
+                    <focusedlayout width="218" condition="!String.IsEmpty(Window.Property(has.chapters))">
+                        <control type="group">
+                            <control type="image">
+                                <posx>40</posx>
+                                <posy>0</posy>
+                                <width>178</width>
+                                <height>100</height>
+                                <texture>script.plex/thumb_fallbacks/movie16x9.png</texture>
+                                <aspectratio>scale</aspectratio>
+                                <colordiffuse>CC909090</colordiffuse>
+                                <visible>!Control.HasFocus(501)</visible>
+                            </control>
+                            <control type="image">
+                                <posx>40</posx>
+                                <posy>0</posy>
+                                <width>178</width>
+                                <height>100</height>
+                                <texture>$INFO[ListItem.Thumb]</texture>
+                                <aspectratio>scale</aspectratio>
+                                <colordiffuse>FFAAAAAA</colordiffuse>
+                                <visible>!Control.HasFocus(501)</visible>
+                            </control>
+                            <control type="image">
+                                <posx>40</posx>
+                                <posy>0</posy>
+                                <width>178</width>
+                                <height>100</height>
+                                <texture>script.plex/thumb_fallbacks/movie16x9.png</texture>
+                                <aspectratio>scale</aspectratio>
+<!--                                <colordiffuse>FF606060</colordiffuse>-->
+                                <visible>Control.HasFocus(501)</visible>
+                            </control>
+                            <control type="image">
+                                <posx>40</posx>
+                                <posy>0</posy>
+                                <width>178</width>
+                                <height>100</height>
+                                <texture>$INFO[ListItem.Thumb]</texture>
+                                <aspectratio>scale</aspectratio>
+<!--                                <colordiffuse>FFFFFFFF</colordiffuse>-->
+                                <visible>Control.HasFocus(501)</visible>
+                            </control>
+                            <control type="label">
+                                <posx>40</posx>
+                                <posy>120</posy>
+                                <width>auto</width>
+                                <height>10</height>
+                                <font>font10</font>
+                                <align>center</align>
+                                <aligny>center</aligny>
+                                <textcolor>FFAAAAAA</textcolor>
+                                <label>$INFO[ListItem.Label]</label>
+                                <visible>!Control.HasFocus(501)</visible>
+                            </control>
+                            <control type="label">
+                                <posx>40</posx>
+                                <posy>120</posy>
+                                <width>auto</width>
+                                <height>10</height>
+                                <font>font10</font>
+                                <align>center</align>
+                                <aligny>center</aligny>
+<!--                                <textcolor>FFFFFFFF</textcolor>-->
+                                <label>[B]$INFO[ListItem.Label][/B]</label>
+                                <visible>Control.HasFocus(501)</visible>
+                            </control>
+                        </control>
+                    </focusedlayout>
                 </control>
             </control>
         </control>
@@ -822,7 +975,7 @@
             <control type="group" id="203">
                 <posx>-50</posx>
                 <posy>0</posy>
-                <control type="image">
+                <control type="image" id="204">
                     <animation effect="fade" time="100" delay="100" end="100">Visible</animation>
                     <posx>0</posx>
                     <posy>0</posy>
@@ -831,7 +984,7 @@
                     <texture>script.plex/indicators/player-selection-time_box.png</texture>
                     <colordiffuse>D0000000</colordiffuse>
                 </control>
-                <control type="label">
+                <control type="label" id="205">
                     <posx>0</posx>
                     <posy>0</posy>
                     <width>101</width>
@@ -851,6 +1004,35 @@
                 <height>7</height>
                 <texture>script.plex/indicators/player-selection-time_arrow.png</texture>
                 <colordiffuse>D0000000</colordiffuse>
+            </control>
+        </control>
+
+        <!-- SKIP MARKER BUTTON -->
+        <control type="group" id="790">
+            <posx>0</posx>
+            <posy>797</posy>
+            <width>1670</width>
+            <height>143</height>
+            <align>right</align>
+            <control type="button" id="791">
+                <visible>!String.IsEmpty(Window.Property(show.markerSkip)) + [String.IsEmpty(Window.Property(show.markerSkip_OSDOnly)) | [!String.IsEmpty(Window.Property(show.markerSkip_OSDOnly)) + !String.IsEmpty(Window.Property(show.OSD))]]</visible>
+                <animation effect="zoom" start="100" end="110,120" time="100" center="auto" reversible="false">Focus</animation>
+                <animation effect="zoom" start="110,120" end="100" time="100" center="auto" reversible="false">UnFocus</animation>
+                <animation type="Conditional" condition="String.IsEmpty(Window.Property(show.OSD)) + !Window.IsVisible(seekbar)" reversible="false">
+                    <effect type="slide" end="0,100" time="100" delay="100"></effect>
+                </animation>
+                <right>30</right>
+                <top>0</top>
+                <width min="200">auto</width>
+                <align>center</align>
+                <height>143</height>
+                <texturefocus colordiffuse="FFE5A00D" border="50">script.plex/buttons/blank-focus.png</texturefocus>
+                <texturenofocus colordiffuse="99FFFFFF" border="50">script.plex/buttons/blank.png</texturenofocus>
+                <textoffsetx>70</textoffsetx>
+                <textcolor>FF000000</textcolor>
+                <focusedcolor>FF000000</focusedcolor>
+                <!--<label>$ADDON[script.plexmod 32495]</label>-->
+                <label>$INFO[Window.Property(skipMarkerName)]</label>
             </control>
         </control>
     </controls>

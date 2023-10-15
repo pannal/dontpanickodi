@@ -429,7 +429,7 @@ class ShowWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
 
     def optionsButtonClicked(self):
         options = []
-        oldSkipIntroValue = None
+        oldBingeModeValue = None
         if xbmc.getCondVisibility('Player.HasAudio + MusicPlayer.HasNext'):
             options.append({'key': 'play_next', 'display': 'Play Next'})
 
@@ -440,11 +440,13 @@ class ShowWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
                 options.append({'key': 'mark_watched', 'display': T(32319, 'Mark Played')})
 
             if self.mediaItem.type == "show":
-                oldSkipIntroValue = INTERFACE.autoSkipIntroManager(self.mediaItem)
-                if oldSkipIntroValue:
-                    options.append({'key': 'auto_skip_intro', 'display': T(33508, 'Disable Auto skip intro')})
+                if options:
+                    options.append(dropdown.SEPARATOR)
+                oldBingeModeValue = INTERFACE.bingeModeManager(self.mediaItem)
+                if oldBingeModeValue:
+                    options.append({'key': 'binge_mode', 'display': T(33508, 'Disable binge mode')})
                 else:
-                    options.append({'key': 'auto_skip_intro', 'display': T(33507, 'Enable Auto skip intro')})
+                    options.append({'key': 'binge_mode', 'display': T(33507, 'Enable binge mode')})
 
         # if xbmc.getCondVisibility('Player.HasAudio') and self.section.TYPE == 'artist':
         #     options.append({'key': 'add_to_queue', 'display': 'Add To Queue'})
@@ -474,11 +476,11 @@ class ShowWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
             util.MONITOR.watchStatusChanged()
         elif choice['key'] == 'to_section':
             self.goHome(self.mediaItem.getLibrarySectionId())
-        elif choice['key'] == 'auto_skip_intro':
+        elif choice['key'] == 'binge_mode':
             util.DEBUG_LOG(
-                "Changing auto-skip setting for {} from {} to {}".format(self.mediaItem.ratingKey, oldSkipIntroValue,
-                                                                         not oldSkipIntroValue))
-            INTERFACE.autoSkipIntroManager(self.mediaItem, not oldSkipIntroValue)
+                "Changing binge mode setting for {} from {} to {}".format(self.mediaItem.ratingKey, oldBingeModeValue,
+                                                                          not oldBingeModeValue))
+            INTERFACE.bingeModeManager(self.mediaItem, not oldBingeModeValue)
 
     def roleClicked(self):
         mli = self.rolesListControl.getSelectedItem()

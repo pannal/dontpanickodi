@@ -18,6 +18,30 @@
                     <default>false</default>
                     <control type="toggle"/>
                 </setting>
+                <setting id="requests_timeout" type="number" label="33620" help="33621">
+                    <level>0</level>
+                    <default>5</default>
+                    <constraints>
+                        <minimum>0.1</minimum>
+                        <step>0.1</step>
+                        <maximum>20</maximum>
+                    </constraints>
+                    <control type="slider" format="number">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting id="local_reach_timeout" type="number" label="33622" help="33623">
+                    <level>0</level>
+                    <default>10</default>
+                    <constraints>
+                        <minimum>1</minimum>
+                        <step>1</step>
+                        <maximum>1000</maximum>
+                    </constraints>
+                    <control type="slider" format="number">
+                        <popup>false</popup>
+                    </control>
+                </setting>
             </group>
         </category>
         <category id="player" label="32464">
@@ -62,6 +86,19 @@
                     <default>16</default>
                     <control type="edit" format="integer">
                         <heading>32501</heading>
+                    </control>
+                </setting>
+                <setting id="auto_skip_offset" type="integer" label="33629" help="33630">
+                    <level>0</level>
+                    <default>2</default>
+                    <constraints>
+                        <minimum>-10</minimum>
+                        <step>1</step>
+                        <maximum>10</maximum>
+                    </constraints>
+                    <control type="slider" format="integer">
+                        <heading>33630</heading>
+                        <popup>false</popup>
                     </control>
                 </setting>
                 <setting id="skip_intro_button_timeout" type="integer" label="32521" help="32524">

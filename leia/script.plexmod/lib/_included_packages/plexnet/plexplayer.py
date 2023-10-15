@@ -425,7 +425,8 @@ class PlexPlayer(object):
                  .format(clampToOrig, useKodiAudio, forceAC3, dtsIsAC3))
 
         # limit audio channels to original stream's audio channel amount
-        numChannels = self.choice.audioStream.channels.asInt(8) if self.choice.audioStream.channels else 8
+        numChannels = self.choice.audioStream.channels.asInt(8) if hasAudioChoice and \
+            self.choice.audioStream.channels else 8
 
         # limit OPUS to 334kbit
         if numChannels == 8:
@@ -441,7 +442,7 @@ class PlexPlayer(object):
         # limit max audio channels to audio stream or kodi (whichever is lower)
         maxAudioChannels = numChannels if not useKodiAudio else min(numChannels, self.audioChannels)
 
-        if forceAC3:
+        if forceAC3 and hasAudioChoice:
             # limit max audio channels to the above or 6 for AC3 (whichever is lower)
             if self.choice.audioStream.codec != "dca":
                 maxAudioChannels = min(6, maxAudioChannels)

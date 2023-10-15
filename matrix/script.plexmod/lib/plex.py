@@ -73,7 +73,7 @@ def defaultUserAgent():
                      '%s/%s' % (p_system, p_release)])
 
 
-class AutoSkipIntroManager(object):
+class BingeModeManager(object):
     """
     Manages the auto-skip-intro setting for individual shows; falls back to the global default if no specifics set
     """
@@ -85,7 +85,7 @@ class AutoSkipIntroManager(object):
 
     def __init__(self):
         self.reset()
-        plexapp.util.APP.on('change:auto_skip_intro', lambda **kwargs: self.setDefault(**kwargs))
+        plexapp.util.APP.on('change:binge_mode', lambda **kwargs: self.setDefault(**kwargs))
         plexapp.util.APP.on('change:selectedServer', lambda **kwargs: self.setServerUUID(**kwargs))
         plexapp.util.APP.on("change:user", lambda **kwargs: self.setUserID(**kwargs))
         plexapp.util.APP.on('init', lambda **kwargs: self.setUserID(**kwargs))
@@ -93,7 +93,7 @@ class AutoSkipIntroManager(object):
     def __call__(self, obj, value=None):
         # shouldn't happen
         if not self._currentServerUUID or not self._currentUserID:
-            util.DEBUG_LOG("APP.AutoSkipIntroManager, something's wrong: ServerUUID: %s, UserID: %s" % (
+            util.DEBUG_LOG("APP.BingeModeManager, something's wrong: ServerUUID: %s, UserID: %s" % (
                 self._currentServerUUID, self._currentUserID))
             return
 
@@ -120,29 +120,34 @@ class AutoSkipIntroManager(object):
 
     def reset(self):
         self._data = self.load()
-        self.setDefault()
         if plexapp.SERVERMANAGER and plexapp.SERVERMANAGER.selectedServer:
             self.setServerUUID()
 
         if plexapp.ACCOUNT:
             self.setUserID()
+        self.setDefault()
 
-    def setDefault(self, value=None):
-        if value is None:
-            self.default = util.getSetting('auto_skip_intro', False)
+    def setDefault(self, key=None, value=None):
+        if value is None and self._currentUserID:
+            self.default = util.getSetting('binge_mode.{}'.format(self._currentUserID), False)
         else:
             self.default = value
 
     def setServerUUID(self, server=None):
+        if not server and not plexapp.SERVERMANAGER.selectedServer:
+            return
         self._currentServerUUID = (server if server is not None else plexapp.SERVERMANAGER.selectedServer).uuid
-        util.DEBUG_LOG("SERVER CHANGED: %s" % self._currentServerUUID)
 
     def setUserID(self, account=None, reallyChanged=False):
+        if not account and not plexapp.ACCOUNT:
+            return
         self._currentUserID = (account if account is not None and reallyChanged else plexapp.ACCOUNT).ID
-        util.DEBUG_LOG("USER CHANGED: %s" % self._currentUserID)
 
     def load(self):
-        jstring = plexapp.util.INTERFACE.getRegistry("AutoSkipSettings")
+        jstring = plexapp.util.INTERFACE.getRegistry("BingeModeSettings")
+        if not jstring:
+            # fallback
+            jstring = plexapp.util.INTERFACE.getRegistry("AutoSkipSettings")
         if not jstring:
             return {}
 
@@ -153,7 +158,7 @@ class AutoSkipIntroManager(object):
         return obj
 
     def save(self):
-        plexapp.util.INTERFACE.setRegistry("AutoSkipSettings", json.dumps(self._data))
+        plexapp.util.INTERFACE.setRegistry("BingeModeSettings", json.dumps(self._data))
         return self._data
 
 
@@ -195,7 +200,7 @@ class PlexInterface(plexapp.AppInterface):
         'deviceInfo': plexapp.DeviceInfo()
     }
 
-    autoSkipIntroManager = None
+    bingeModeManager = None
 
     def getPreference(self, pref, default=None):
         if pref == 'manual_connections':
@@ -333,9 +338,26 @@ class PlexInterface(plexapp.AppInterface):
         return int(values[self.getPreference("played_threshold", 1)].replace(" %", "")) / 100.0
 
 
+def onSmartDiscoverLocalChange(value=None, **kwargs):
+    plexnet_util.CHECK_LOCAL = value
+
+
+def onPreferLANChange(value=None, **kwargs):
+    plexnet_util.LOCAL_OVER_SECURE = value
+
+
 plexapp.util.setInterface(PlexInterface())
 plexapp.setUserAgent(defaultUserAgent())
-plexapp.util.INTERFACE.autoSkipIntroManager = AutoSkipIntroManager()
+plexapp.util.INTERFACE.bingeModeManager = BingeModeManager()
+plexapp.util.APP.on('change:smart_discover_local', onSmartDiscoverLocalChange)
+plexapp.util.APP.on('change:prefer_local', onPreferLANChange)
+
+plexapp.util.CHECK_LOCAL = util.getSetting('smart_discover_local', True)
+plexapp.util.LOCAL_OVER_SECURE = util.getSetting('prefer_local', False)
+
+# set requests timeout
+plexapp.util.TIMEOUT = float(util.advancedSettings.requestsTimeout)
+plexapp.util.LAN_REACHABILITY_TIMEOUT = util.advancedSettings.localReachTimeout / 1000.0
 
 
 class CallbackEvent(plexapp.util.CompatEvent):

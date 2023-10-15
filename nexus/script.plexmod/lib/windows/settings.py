@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 from kodi_six import xbmc
 from kodi_six import xbmcgui
+from kodi_six import xbmcvfs
 from . import kodigui
 from . import windowutils
 
@@ -17,6 +18,7 @@ class Setting(object):
     label = None
     desc = None
     default = None
+    userAware = False
 
     def translate(self, val):
         return str(val)
@@ -100,6 +102,27 @@ class BoolSetting(BasicSetting):
     type = 'BOOL'
 
 
+class BoolUserSetting(BoolSetting):
+    """
+    A user-aware BoolSetting
+    """
+    userAware = True
+
+    @property
+    def userAwareID(self):
+        return '{}.{}'.format(self.ID, plexnet.plexapp.ACCOUNT.ID)
+
+    def get(self):
+        return util.getSetting(self.userAwareID, self.default)
+
+    def set(self, val):
+        old = self.get()
+        if old != val:
+            util.DEBUG_LOG('Setting: {0} - changed from [{1}] to [{2}]'.format(self.userAwareID, old, val))
+            plexnet.util.APP.trigger('change:{0}'.format(self.ID), key=self.userAwareID, value=val)
+        return util.setSetting(self.userAwareID, val)
+
+
 class OptionsSetting(BasicSetting):
     type = 'OPTIONS'
 
@@ -122,6 +145,19 @@ class OptionsSetting(BasicSetting):
                 return i
 
         return 0
+
+
+class BufferSetting(OptionsSetting):
+    def get(self):
+        return util.kcm.memorySize
+
+    def set(self, val):
+        old = self.get()
+        if old != val:
+            util.DEBUG_LOG('Setting: {0} - changed from [{1}] to [{2}]'.format(self.ID, old, val))
+            plexnet.util.APP.trigger('change:{0}'.format(self.ID), value=val)
+
+        util.kcm.write(val)
 
 
 class InfoSetting(BasicSetting):
@@ -205,15 +241,6 @@ class Settings(object):
                     T(32100, 'Skip user selection and pin entry on startup.')
                 ),
                 BoolSetting(
-                    'post_play_auto', T(32039, 'Post Play Auto Play'), True
-                ).description(
-                    T(
-                        32101,
-                        "If enabled, when playback ends and there is a 'Next Up' item available, it will be automatical"
-                        "ly be played after a 15 second delay."
-                    )
-                ),
-                BoolSetting(
                     'speedy_home_hubs', T(33503, 'Use alternative home refresh'), True
                 ).description(
                     T(
@@ -221,22 +248,6 @@ class Settings(object):
                         "Use an alternative method to speed up watched state updates in the home hub after playing an i"
                         "tem."
                     )
-                ),
-                BoolSetting(
-                    'auto_skip_intro', T(32522, 'Automatically Skip Intro'), False
-                ).description(
-                    T(32523, 'Automatically skip intros if available.')
-                ),
-                BoolSetting(
-                    'auto_skip_credits', T(32526, 'Auto Skip Credits'), False
-                ).description(
-                    T(32527, 'Automatically skip credits if available.')
-                ),
-                BoolSetting(
-                    'show_intro_skip_early', T(33505, 'Show intro skip button early'), False
-                ).description(
-                    T(33506, 'Show the intro skip button from the start of a video with an intro marker. The auto-skipp'
-                             'ing setting applies.')
                 ),
                 ThemeMusicSetting('theme_music', T(32480, 'Theme music'), 5),
                 PlayedThresholdSetting('played_threshold', T(33501, 'Video played threshold'), 1).description(
@@ -286,6 +297,53 @@ class Settings(object):
                 ),
             )
         ),
+        'player': (
+            T(32631, 'Player (user-specific)'), (
+                BoolUserSetting(
+                    'post_play_auto', T(32039, 'Post Play Auto Play'), True
+                ).description(
+                    T(
+                        32101,
+                        "If enabled, when playback ends and there is a 'Next Up' item available, it will be automatical"
+                        "ly be played after a 15 second delay."
+                    )
+                ),
+                BoolUserSetting(
+                    'binge_mode', T(33618, 'TV binge-viewing mode'), False
+                ).description(
+                    T(33619, 'Automatically skips episode intros, credits and tries to skip episode recaps. Doesn\'t '
+                             'skip the intro of the first episode of a season.\n\nCan be disabled/enabled per TV show.')
+                ),
+                BoolUserSetting(
+                    'auto_skip_intro', T(32522, 'Automatically Skip Intro'), False
+                ).description(
+                    T(32523, 'Automatically skip intros if available. Doesn\'t override enabled binge mode.')
+                ),
+                BoolUserSetting(
+                    'auto_skip_credits', T(32526, 'Auto Skip Credits'), False
+                ).description(
+                    T(32527, 'Automatically skip credits if available. Doesn\'t override enabled binge mode.')
+                ),
+                BoolUserSetting(
+                    'show_intro_skip_early', T(33505, 'Show intro skip button early'), False
+                ).description(
+                    T(33506, 'Show the intro skip button from the start of a video with an intro marker. The auto-skipp'
+                             'ing setting applies. Doesn\'t override enabled binge mode.')
+                ),
+                BoolUserSetting(
+                    'show_chapters', T(33601, 'Show video chapters'), True
+                ).description(
+                    T(33602, 'If available, show video chapters from the video-file instead of the '
+                             'timeline-big-seek-steps.')
+                ),
+                BoolUserSetting(
+                    'virtual_chapters', T(33603, 'Use virtual chapters'), True
+                ).description(
+                    T(33604, 'When the above is enabled and no video chapters are available, simulate them by using the'
+                             ' markers identified by the Plex Server (Intro, Credits).')
+                ),
+            )
+        ),
         'subtitles': (
             T(32396, 'Subtitles'), (
                 OptionsSetting(
@@ -297,20 +355,48 @@ class Settings(object):
                 BoolSetting('subtitle_downloads', T(32040, 'Enable Subtitle Downloading'), False)
             )
         ),
-        'advanced': (
-            T(32049, 'Advanced'), (
-                OptionsSetting(
-                    'allow_insecure', T(32032), 'never', (('never', T(32033)), ('same_network', T(32034)), ('always', T(32035)))
-                ).description(
-                    T(32104, 'When to connect to servers with no secure connections...')
-                ),
-                BoolSetting('gdm_discovery', T(32042, 'Server Discovery (GDM)'), True),
+        'system': (
+            T(33600, 'System'), (
+
                 BoolSetting('kiosk.mode', T(32043, 'Start Plex On Kodi Startup'), False),
+                BufferSetting('cache_size',
+                               T(33613, 'Kodi Buffer Size (MB)'),
+                               20,
+                               [(mem, '{} MB'.format(mem)) for mem in util.kcm.viableOptions])
+                .description(T(33614, 'Set the Kodi Cache/Buffer size. Free: {} MB, '
+                                      'Recommended max: {} MB, Default: 20 MB. '
+                                      'Needs Kodi restart. WARNING: This will overwrite advancedsettings.xml!\n\n'
+                                      'To customize other cache/network-related values, '
+                                      'copy "script.plexmod/pm4k_cache_template.xml" to profile folder and edit it to '
+                                      'your liking. (See About section for the file paths)'
+                               ).format(util.kcm.free, util.kcm.recMax)
+                ),
                 BoolSetting('debug', T(32024, 'Debug Logging'), False),
             )
         ),
-        'manual': (
-            T(32050, 'Manual Servers'), (
+        'network': (
+            T(33624, 'Network'), (
+                OptionsSetting(
+                    'allow_insecure', T(32032), 'never',
+                    (('never', T(32033)), ('same_network', T(32034)), ('always', T(32035)))
+                ).description(
+                    T(32104, 'When to connect to servers with no secure connections...')
+                ),
+                BoolSetting('smart_discover_local', T(33625, 'Smart LAN/local server discovery'), True)
+                .description(
+                    T(33626, "Checks whether servers returned from Plex.tv are actually local/in your LAN. "
+                             "For specific setups (e.g. Docker) Plex.tv might not properly detect a local "
+                             "server.\n\nNOTE: Only works on Kodi 19 or above."
+                      )
+                ),
+                BoolSetting('prefer_local', T(33627, 'Prefer LAN/local servers over security'), False)
+                .description(
+                    T(33628, "Prioritizes local connections over secure ones. Needs the proper setting in \"Allow "
+                             "Insecure Connections\" and the Plex Server's \"Secure connections\" at \"Preferred\". "
+                             "Can be used to enforce manual servers."
+                      )
+                ),
+                BoolSetting('gdm_discovery', T(32042, 'Server Discovery (GDM)'), True),
                 IPSetting('manual_ip_0', T(32044, 'Connection 1 IP'), ''),
                 IntegerSetting('manual_port_0', T(32045, 'Connection 1 Port'), 32400),
                 IPSetting('manual_ip_1', T(32046, 'Connection 2 IP'), ''),
@@ -326,13 +412,17 @@ class Settings(object):
                 InfoSetting('addon_version', T(32054, 'Addon Version'), util.ADDON.getAddonInfo('version')),
                 InfoSetting('kodi_version', T(32055, 'Kodi Version'), xbmc.getInfoLabel('System.BuildVersion')),
                 PlatformSetting(),
-                InfoSetting('screen_res', T(32056, 'Screen Resolution'), xbmc.getInfoLabel('System.ScreenResolution').split('-')[0].strip()),
-                ServerVersionSetting('server_version', T(32057, 'Current Server Version'), None)
+                InfoSetting('screen_res', T(32056, 'Screen Resolution'),
+                            xbmc.getInfoLabel('System.ScreenResolution').split('-')[0].strip()),
+                ServerVersionSetting('server_version', T(32057, 'Current Server Version'), None),
+                InfoSetting('addon_path', T(33616, 'Addon Path'), util.ADDON.getAddonInfo("path")),
+                InfoSetting('userdata_path', T(33617, 'Userdata/Profile Path'),
+                            xbmcvfs.translatePath("special://profile")),
             )
         ),
     }
 
-    SECTION_IDS = ('main', 'video', 'audio', 'subtitles', 'advanced', 'manual', 'about')
+    SECTION_IDS = ('main', 'video', 'audio', 'player', 'subtitles', 'network', 'system', 'about')
 
     def __getitem__(self, key):
         return self.SETTINGS[key]
@@ -442,6 +532,11 @@ class SettingsWindow(kodigui.BaseWindow, windowutils.UtilMixin):
             if setting.type == 'BOOL':
                 item.setProperty('checkbox', '1')
                 item.setProperty('checkbox.checked', setting.get() and '1' or '')
+            elif setting.type == 'BUTTON':
+                item.setProperty('button', '1')
+
+            if setting.userAware:
+                item.setProperty('useraware', '1')
 
             items.append(item)
 
@@ -463,6 +558,8 @@ class SettingsWindow(kodigui.BaseWindow, windowutils.UtilMixin):
             self.editIP(mli, setting)
         elif setting.type == 'INTEGER' and not from_right:
             self.editInteger(mli, setting)
+        elif setting.type == 'BUTTON':
+            self.buttonDialog(mli, setting)
 
     def changeSetting(self):
         optionItem = self.optionsList.getSelectedItem()

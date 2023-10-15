@@ -102,7 +102,8 @@ class MyPlexAccount(object):
 
         if self.authToken:
             request = myplexrequest.MyPlexRequest("/users/account")
-            context = request.createRequestContext("account", callback.Callable(self.onAccountResponse))
+            context = request.createRequestContext("account", callback.Callable(self.onAccountResponse),
+                                                   timeout=util.LONG_TIMEOUT)
             util.APP.startRequest(request, context)
         else:
             util.APP.clearInitializer("myplex")
@@ -229,7 +230,8 @@ class MyPlexAccount(object):
         self.switchUser = switchUser
 
         request = myplexrequest.MyPlexRequest("/users/sign_in.xml")
-        context = request.createRequestContext("sign_in", callback.Callable(self.onAccountResponse))
+        context = request.createRequestContext("sign_in", callback.Callable(self.onAccountResponse),
+                                               timeout=util.LONG_TIMEOUT)
         if self.isOffline:
             context.timeout = self.isOffline and asyncadapter.AsyncTimeout(1).setConnectTimeout(1)
         util.APP.startRequest(request, context, {})
@@ -258,7 +260,7 @@ class MyPlexAccount(object):
             return
 
         req = myplexrequest.MyPlexRequest("/api/home/users")
-        xml = req.getToStringWithTimeout()
+        xml = req.getToStringWithTimeout(seconds=util.LONG_TIMEOUT)
         data = ElementTree.fromstring(xml)
         if data.attrib.get('size') and data.find('User') is not None:
             self.homeUsers = []
@@ -292,7 +294,7 @@ class MyPlexAccount(object):
             # build path and post to myplex to swith the user
             path = '/api/home/users/{0}/switch'.format(userId)
             req = myplexrequest.MyPlexRequest(path)
-            xml = req.postToStringWithTimeout({'pin': pin})
+            xml = req.postToStringWithTimeout({'pin': pin}, seconds=util.LONG_TIMEOUT)
             data = ElementTree.fromstring(xml)
 
             if data.attrib.get('authenticationToken'):

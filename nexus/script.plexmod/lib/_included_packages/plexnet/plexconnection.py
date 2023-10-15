@@ -1,9 +1,26 @@
 from __future__ import absolute_import
 import random
+import socket
 
 from . import http
 from . import callback
 from . import util
+
+HAS_ICMPLIB = False
+try:
+    from icmplib import ping, resolve, ICMPLibError
+except:
+    util.WARN_LOG("icmplib not found, can't check local connectivity")
+else:
+    HAS_ICMPLIB = True
+    from urllib.parse import urlparse
+    from ipaddress import IPv4Address, IPv4Network, IPv6Address, IPv6Network
+
+    # local networks
+    LOCAL_NETWORKS = {
+        4: [IPv4Network('10.0.0.0/8'), IPv4Network('192.168.0.0/16'), IPv4Network('127.0.0.0/8')],
+        6: [IPv6Network('fd00::/8')]
+    }
 
 
 class ConnectionSource(int):
@@ -60,6 +77,10 @@ class PlexConnection(object):
         self.lastTestedAt = 0
         self.hasPendingRequest = False
 
+        # check whether hostname is on LAN
+        if HAS_ICMPLIB and util.CHECK_LOCAL:
+            self.checkLocal()
+
         self.getScore(True)
 
     def __eq__(self, other):
@@ -73,16 +94,48 @@ class PlexConnection(object):
         return not self.__eq__(other)
 
     def __str__(self):
-        return "Connection: {0} local: {1} token: {2} sources: {3} state: {4}".format(
+        return "Connection: {0} local: {1} token: {2} sources: {3} state: {4} score: {5}".format(
             self.address,
             self.isLocal,
             util.hideToken(self.token),
             repr(self.sources),
-            self.state
+            self.state,
+            self.getScore()
         )
 
     def __repr__(self):
         return self.__str__()
+
+    def ipInLocalNet(self, ip):
+        key = ":" in ip and 6 or 4
+        addr = key == 4 and IPv4Address(ip) or IPv6Address(ip)
+        for network in LOCAL_NETWORKS[key]:
+            if addr in network:
+                return network
+        return False
+
+    def checkLocal(self):
+        hostname = urlparse(self.address).hostname
+        try:
+            ips = resolve(hostname)
+        except (socket.gaierror, ICMPLibError):
+            return False
+
+        for ip in ips:
+            network = self.ipInLocalNet(ip)
+            if not network:
+                continue
+
+            try:
+                host = ping(ip, count=1, interval=1, timeout=util.LAN_REACHABILITY_TIMEOUT, privileged=False)
+            except:
+                continue
+
+            if host.is_alive:
+                self.isLocal = True
+                util.LOG("Found IP {0} in local network ({1}).".format(ip, network))
+
+        return False
 
     def merge(self, other):
         # plex.tv trumps all, otherwise assume newer is better
@@ -107,11 +160,13 @@ class PlexConnection(object):
         # after secure tests have completed and failed). Insecure connections will be
         # tested if the policy "always" allows them, or if set to "same_network" and
         # the current connection is local and server has (publicAddressMatches=1).
+        insecurePolicy = util.INTERFACE.getPreference("allow_insecure")
+        insecureAllowed = insecurePolicy == "always" or (insecurePolicy == "same_network" and
+                                                         server.sameNetwork and self.isLocal)
 
-        allowConnectionTest = not self.isFallback
+        allowConnectionTest = not self.isFallback or (util.LOCAL_OVER_SECURE and insecureAllowed)
         if not allowConnectionTest:
-            insecurePolicy = util.INTERFACE.getPreference("allow_insecure")
-            if insecurePolicy == "always" or (insecurePolicy == "same_network" and server.sameNetwork and self.isLocal):
+            if insecureAllowed:
                 allowConnectionTest = allowFallback
                 server.hasFallback = not allowConnectionTest
                 util.LOG(
@@ -127,7 +182,7 @@ class PlexConnection(object):
                 return True
 
         if allowConnectionTest:
-            if not self.isSecure and (
+            if not self.isSecure and not util.LOCAL_OVER_SECURE and (
                 not allowFallback and
                 server.hasSecureConnections() or
                 server.activeConnection and
@@ -140,6 +195,7 @@ class PlexConnection(object):
             context.server = server
             util.addPlexHeaders(self.request, server.getToken())
             self.hasPendingRequest = util.APP.startRequest(self.request, context)
+            util.DEBUG_LOG("Testing insecure connection test for: {0}".format(server))
             return True
 
         return False
@@ -208,6 +264,6 @@ class PlexConnection(object):
             if self.isSecure:
                 self.score += self.SCORE_SECURE
             if self.isLocal:
-                self.score += self.SCORE_LOCAL
+                self.score += self.SCORE_LOCAL + (not self.isSecure and util.LOCAL_OVER_SECURE and 2 or 0)
 
         return self.score

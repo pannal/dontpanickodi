@@ -105,7 +105,7 @@
 
 <addon id="script.plexmod"
        name="Plex"
-       version="0.5.5-rev2"
+       version="0.6.0-rc1"
        provider-name="pannal">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
@@ -129,11 +129,36 @@
         <source>https://github.com/pannal/plex-for-kodi</source>
         <platform>all</platform>
         <news>
-            - Fix auto intro skip not working after skipping to next episode
-            - Skip postplay when skipping to next video from player
-            - Limit early-show-intro-skip to intros occurring in the first 2 minutes;
-              add advanced setting to customize this value
-            - Add option to show and episodes-windows (they toggle their show) to override the global auto-skip-intro setting for a show
+- Add Kodi Buffer/Cache settings to new System tab
+- Add pm4k_cache_template.xml to allow further customization (copy to profile folder)
+- Add addon path and Kodi profile path to Settings/About
+- Add advanced/addon setting to set (Plex) HTTP request timeouts; change default from 10 to 5 (on display/crash issues, increase timeout)
+- Add explicit LAN check for servers (docker-based ones won't show as local by default); only works on Kodi 19 and above; add icmplib and license
+- Add setting to specify LAN check connection timeout (default 10ms)
+- If desired, prefer an insecure local server over a secure one after switching users, as well
+- Add warning when preferring local server connections over secure ones
+- Add long timeout for essential plex.tv requests
+- Add force server list refresh button to server list (allows reloading the available servers after changing PMS network settings)
+- Add setting to verify local/LAN connections even if plex.tv doesn't think they're local
+- Add setting to prefer local connections over secure ones, enabling enforced manual servers
+- Add advanced/addon setting to add an offset to intro/credits autoskip, as the Plex markers might be a little early (default +2 seconds)
+
+- Show video chapters if available in playback instead of bigSeek (also add a setting)
+- Show virtual chapters in playback (from Plex markers, intro, credits etc.) if no chapters exist for a video file
+- Reload items properly with chapters upon preplay-reinit
+- Reorder settings, advanced is now system, add network settings
+- Show chapters and/or markers in info view of a video item
+
+- Implement TV binge mode (auto skip intros if not first EP of season; auto skip credits; skip postplay)
+- Implement per-user settings
+- Make Binge-mode overridable per show
+- Make Binge-mode, all auto-skip and whether to display chapters or markers a per-user setting
+
+- Fix focusing the wrong episode after opening the info screen
+- Fix reloading episodes list after watching multiple episodes
+- Strip out MP4 file name in stream URL to prevent subtitles trying to be downloaded, fixing long wait time (thanks @microadam)
+- Fix failure on video with no audio stream
+- Optimize remaining time calculations for preplay screen
         </news>
         <assets>
             <icon>icon.png</icon>
@@ -327,6 +352,45 @@
 		<disclaimer lang="zh_CN">Plextuary 是 Kodi 的默认皮肤，删除它可能导致故障。</disclaimer>
 		<disclaimer lang="zh_TW">Plextuary 是 Kodi 預設的佈景主題，移除它可能會造成問題</disclaimer>
 	</extension>
+</addon>
+
+<addon id="script.plexmod"
+       name="Plex"
+       version="0.5.5-rev2"
+       provider-name="pannal">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+        <import addon="script.module.requests" version="2.27.1+matrix.1"/>
+        <import addon="script.module.six" version="1.15.0+matrix.1"/>
+        <import addon="script.module.kodi-six" version="0.1.3.1" />
+    </requires>
+    <extension point="xbmc.python.script" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.python.pluginsource" library="plugin.py">
+        <provides>executable</provides>
+    </extension>
+    <extension point="xbmc.service" library="service.py" />
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">PlexMod for Kodi</summary>
+        <description lang="en_GB">Unofficial Plex for Kodi add-on</description>
+        <license>GPL-2.0-only</license>
+        <forum>https://forums.plex.tv/t/plexmod-for-kodi-18-19-20-21/481208</forum>
+        <website>https://www.plex.tv</website>
+        <source>https://github.com/pannal/plex-for-kodi</source>
+        <platform>all</platform>
+        <news>
+            - Fix auto intro skip not working after skipping to next episode
+            - Skip postplay when skipping to next video from player
+            - Limit early-show-intro-skip to intros occurring in the first 2 minutes;
+              add advanced setting to customize this value
+            - Add option to show and episodes-windows (they toggle their show) to override the global auto-skip-intro setting for a show
+        </news>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+        </assets>
+    </extension>
 </addon>
 
 <addon id="script.plexmod"

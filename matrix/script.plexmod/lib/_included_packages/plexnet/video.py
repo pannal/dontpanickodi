@@ -31,6 +31,7 @@ class PlexVideoItemList(plexobjects.PlexItemList):
 class Video(media.MediaItem):
     TYPE = None
     manually_selected_sub_stream = False
+    bingeMode = False
 
     def __init__(self, *args, **kwargs):
         self._settings = None
@@ -235,6 +236,21 @@ class Video(media.MediaItem):
         else:
             return ""
 
+    @property
+    def remainingTime(self):
+        if not self.viewOffset.asInt():
+            return
+        return (self.duration.asInt() - self.viewOffset.asInt()) // 1000
+
+    @property
+    def remainingTimeString(self):
+        if not self.remainingTime:
+            return ''
+        seconds = self.remainingTime
+        hours = seconds // 3600
+        minutes = (seconds - hours * 3600) // 60
+        return (hours and "{}h ".format(hours) or '') + (minutes and "{}m".format(minutes) or "0m")
+
     def available(self):
         return self.media()[0].isAccessible()
 
@@ -288,7 +304,7 @@ class PlayableVideo(Video, RelatedMixin):
         Video._setData(self, data)
         if self.isFullObject():
             self.extras = PlexVideoItemList(data.find('Extras'), initpath=self.initpath, server=self.server, container=self)
-            self.chapters = plexobjects.PlexItemList(data, media.Chapter, media.Chapter.TYPE)
+            self.chapters = plexobjects.PlexItemList(data, media.Chapter, media.Chapter.TYPE, server=self.server)
 
     def reload(self, *args, **kwargs):
         if not kwargs.get('_soft'):
@@ -403,12 +419,12 @@ class Show(Video, RelatedMixin, SectionOnDeckMixin):
         return self.viewedLeafCount == self.leafCount
 
     @property
-    def autoSkipIntro(self):
-        return util.INTERFACE.autoSkipIntroManager(self)
+    def bingeMode(self):
+        return util.INTERFACE.bingeModeManager(self)
 
-    @autoSkipIntro.setter
-    def autoSkipIntro(self, value):
-        util.INTERFACE.autoSkipIntroManager(self, value)
+    @bingeMode.setter
+    def bingeMode(self, value):
+        util.INTERFACE.bingeModeManager(self, value)
 
     def seasons(self):
         path = self.key
@@ -543,12 +559,12 @@ class Episode(PlayableVideo, SectionOnDeckMixin):
         return self.get('viewCount').asInt() > 0 or self.get('viewOffset').asInt() > 0
 
     @property
-    def autoSkipIntro(self):
-        return self.show().autoSkipIntro
+    def bingeMode(self):
+        return self.show().bingeMode
 
-    @autoSkipIntro.setter
-    def autoSkipIntro(self, value):
-        self.show().autoSkipIntro(value)
+    @bingeMode.setter
+    def bingeMode(self, value):
+        self.show().bingeMode(value)
 
     def getStreamURL(self, **params):
         return self._getStreamURL(**params)

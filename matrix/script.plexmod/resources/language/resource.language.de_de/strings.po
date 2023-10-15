@@ -1360,7 +1360,7 @@ msgstr "Intro automatisch überspringen"
 #: 
 msgctxt "#32523"
 msgid "Automatically skip intros if available."
-msgstr "Automatisches Überspringen von Intros, falls vorhanden."
+msgstr "Automatisches Überspringen von Intros, falls vorhanden. Überschreibt aktivierten Binge-Modus nicht."
 
 #: 
 msgctxt "#32524"
@@ -1380,7 +1380,7 @@ msgstr "Automatisches Überspringen von Credits"
 #: 
 msgctxt "#32527"
 msgid "Automatically skip credits if available."
-msgstr "Automatisches Überspringen von Credits, falls vorhanden."
+msgstr "Automatisches Überspringen von Credits, falls vorhanden. Überschreibt aktivierten Binge-Modus nicht."
 
 #: 
 msgctxt "#32528"
@@ -1509,15 +1509,15 @@ msgstr "Intro überspringen früher anzeigen"
 
 msgctxt "#33506"
 msgid "Show the intro skip button from the start of a video with an intro marker. The auto-skipping setting applies."
-msgstr "Zeige den Intro-Überspringen-Knopf von Anfang an. Die Automatische-Intro-Überspringen-Einstellung wird angewandt."
+msgstr "Zeige den Intro-Überspringen-Knopf von Anfang an. Die Automatische-Intro-Überspringen-Einstellung wird angewandt. Überschreibt aktivierten Binge-Modus nicht."
 
 msgctxt "#33507"
-msgid "Enable Auto skip intro"
-msgstr "Aktiv. auto-skip Intro"
+msgid "Enable binge mode"
+msgstr "Binge mode aktivieren"
 
 msgctxt "#33508"
-msgid "Disable Auto skip intro"
-msgstr "Deaktiv. auto-skip Intro"
+msgid "Disable binge mode"
+msgstr "Binge mode deaktiv."
 
 msgctxt "#33509"
 msgid "Early intro skip threshold (default: < 120s/2m)"
@@ -1526,3 +1526,132 @@ msgstr "Frühes Intro-Überspringen Grenzwert (default: < 120s/2m)"
 msgctxt "#33510"
 msgid "When showing the intro skip button early, only do so if the intro starts within the first X seconds."
 msgstr "Wenn der Into-Überspringen-Knopf früher angezeigt werden soll, nur anzeigen, wenn das Intro innerhalb der ersten X Sekunden startet."
+
+
+msgctxt "#33600"
+msgid "System"
+msgstr ""
+
+msgctxt "#33601"
+msgid "Show video chapters"
+msgstr "Video-Kapitel anzeigen"
+
+msgctxt "#33602"
+msgid "If available, show video chapters from the video-file instead of the timeline-big-seek-steps."
+msgstr "Wenn verfügbar, Video-Kapitel aus der Video-Datei anstatt der Zeitleiste-Big-Seek-Schritte anzeigen."
+
+msgctxt "#33603"
+msgid "Use virtual chapters"
+msgstr "Virtuelle Kapitel verwenden"
+
+msgctxt "#33604"
+msgid "When the above is enabled and no video chapters are available, simulate them by using the markers identified by the Plex Server (Intro, Credits)."
+msgstr "Wenn die obrige aktiviert ist und keine Video-Kapitel verfügbar sind, virtuelle Kapitel aus den Plex Server Markern (Intro, Abspann) erzeugen."
+
+msgctxt "#33605"
+msgid "Video Chapters"
+msgstr "Video-Kapitel"
+
+msgctxt "#33606"
+msgid "Virtual Chapters"
+msgstr "Virtuelle Kapitel"
+
+msgctxt "#33607"
+msgid "Chapter {}"
+msgstr "Kapitel {}"
+
+msgctxt "#33608"
+msgid "Intro"
+msgstr "Intro"
+
+msgctxt "#33609"
+msgid "Credits"
+msgstr "Abspann"
+
+msgctxt "#33610"
+msgid "Main"
+msgstr "Haupt"
+
+msgctxt "#33611"
+msgid "Chapters"
+msgstr ""
+
+msgctxt "#33612"
+msgid "Markers"
+msgstr ""
+
+msgctxt "#33613"
+msgid "Kodi Buffer Size (MB)"
+msgstr "Kodi Puffergröße (MB)"
+
+msgctxt "#33614"
+msgid "Set the Kodi Cache/Buffer size. Free: {} MB, Recommended max: {} MB, Default: 20 MB. Needs Kodi restart. WARNING: This will overwrite advancedsettings.xml!\n\nTo customize other cache/network-related values, copy \"script.plexmod/pm4k_cache_template.xml\" to profile folder and edit it to your liking. (See About section for the file paths)"
+msgstr "Setzt die Kodi Cache/Puffer Größe. Frei: {} MB, empfohlenes Max.: {} MB, Default: 20 MB. Benötigt Kodi Neustart. ACHTUNG: Überschreibt advancedsettings.xml!\n\nUm weitere Cache-/Netzwerkbezogene Werte zu ändern, kopiere \"script.plexmod/pm4k_cache_template.xml\" in den Profilordner und editiere sie. (Für die Dateipfade schaue in die Über-Sektion)"
+
+msgctxt "#33615"
+msgid "{time} left"
+msgstr "{time} übrig"
+
+msgctxt "#33616"
+msgid "Addon Path"
+msgstr "Addon-Pfad"
+
+msgctxt "#33617"
+msgid "Userdata/Profile Path"
+msgstr "Benutzerdaten-/Profilpfad"
+
+msgctxt "#33618"
+msgid "TV binge-viewing mode"
+msgstr "TV Binge-Viewing-Modus"
+
+msgctxt "#33619"
+msgid "Automatically skips episode intros, credits and tries to skip episode recaps. Doesn\'t skip the intro of the first episode of a season.\n\nCan be disabled/enabled per TV show."
+msgstr "Überspringt automatisch Intros und Abspänne von Episoden und versucht Recaps zu vermeiden. Überspringt das Intro der ersten Episode einer Staffel nicht."
+
+msgctxt "#33620"
+msgid "Plex requests timeout (seconds)"
+msgstr "Plex HTTP Zeitlimit (Sekunden)"
+
+msgctxt "#33621"
+msgid "Set the (async and connection) timeout value of the Python requests library in seconds. Default: 5 seconds"
+msgstr "Setzt das Zeitlimit für die Python Requests Bibliothek bei asynchronen Verbindungen und Verbindungsanfragen. Default: 5 Sekunden"
+
+msgctxt "#33622"
+msgid "LAN reachability timeout (ms)"
+msgstr "LAN-Erreichbarkeits-Zeitlimit (ms)"
+
+msgctxt "#33623"
+msgid "When checking for Server-in-LAN reachability, use this timeout. Default: 10ms"
+msgstr "Wenn die lokale Serververbindung im LAN überprüft wird, benutze dieses Zeitlimit. Default: 10ms"
+
+msgctxt "#33624"
+msgid "Network"
+msgstr "Netzwerk"
+
+msgctxt "#33625"
+msgid "Smart LAN/local server discovery"
+msgstr "Smartes LAN/lokale Server-Auffinden"
+
+msgctxt "#33626"
+msgid "Checks whether servers returned from Plex.tv are actually local/in your LAN. For specific setups (e.g. Docker) Plex.tv might not properly detect a local server.\n\nNOTE: Only works on Kodi 19 or above."
+msgstr "Überprüft, ob von Plex.tv zurückgegebene Server tatsächlich lokal/in Deinem LAN sind. Für bestimmte Setups (z. B. Docker) könnte Plex.tv einen lokalen Servern nicht als solchen entdecken.\n\nACHTUNG: Funktioniert nur unter Kodi 19 oder neuer."
+
+msgctxt "#33627"
+msgid "Prefer LAN/local servers over security"
+msgstr "LAN/lokale Server bevorzugen"
+
+msgctxt "#33628"
+msgid "Prioritizes local connections over secure ones. Needs the proper setting in \"Allow Insecure Connections\" and the Plex Server's \"Secure connections\" at \"Preferred\". Can be used to enforce manual servers."
+msgstr "Priorisiert lokale Verbindungen über sichere. Benötigt die korrekte Einstellung in \"Unsichere Verbindung erlauben\" und die Plex Server Einstellung \"Sichere Verbindungen\" auf \"Bevorzugt\". Kann verwendet werden um manuelle Server zu forcieren."
+
+msgctxt "#33629"
+msgid "Auto-skip intro/credits offset"
+msgstr "Auto-Überspringen-Versatz"
+
+msgctxt "#33630"
+msgid "Intro/credits markers might be a little early in Plex. When auto skipping add (or subtract) this many seconds from the marker. This avoids cutting off content, while possibly skipping the marker a little late."
+msgstr "Intro-/Abspann-Markierungen können ein wenig früh erscheinen in Plex. Wenn diese automatisch übersprungen werden sollen, addiere (oder subtrahiere) diese Menge an Sekunden. Das verhindert das verfrühte Abschneiden von Inhalten, kann aber zu etwas verspätetem Springen führen."
+
+msgctxt "#32631"
+msgid "Player (user-specific)"
+msgstr "Wiedergabe (benutzerspezifisch)"

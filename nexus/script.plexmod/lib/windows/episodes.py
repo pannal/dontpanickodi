@@ -3,7 +3,6 @@ from kodi_six import xbmc
 from kodi_six import xbmcgui
 from . import kodigui
 
-from lib import colors
 from lib import util
 from lib import backgroundthread
 from lib import metadata
@@ -25,19 +24,16 @@ from . import preplayutils
 from . import pagination
 
 from lib.util import T
-from six.moves import range
 
-import time
-import re
 
 VIDEO_RELOAD_KW = dict(includeExtras=1, includeExtrasCount=10, includeChapters=1)
 
 
-
 class EpisodeReloadTask(backgroundthread.Task):
-    def setup(self, episode, callback):
+    def setup(self, episode, callback, with_progress=False):
         self.episode = episode
         self.callback = callback
+        self.withProgress = with_progress
         return self
 
     def run(self):
@@ -52,7 +48,7 @@ class EpisodeReloadTask(backgroundthread.Task):
             self.episode.reload(checkFiles=1, includeChapters=1)
             if self.isCanceled():
                 return
-            self.callback(self.episode)
+            self.callback(self.episode, with_progress=self.withProgress)
         except:
             util.ERROR()
 
@@ -145,20 +141,16 @@ class EpisodesPaginator(pagination.MCLPaginator):
                 left = max(tmpEpIdx - leftBoundary, 0)
                 offset += left
                 epsLeft = self.leafCount - offset
-                #util.DEBUG_LOG("%s, %s, %s, %s, %s, %s" % (tmpEpIdx, leftBoundary, left, offset, self.leafCount, epsLeft))
                 # avoid short pages on the right end
                 if epsLeft <= self.initialPageSize + self.orphans:
                     amount = epsLeft
-                    #util.DEBUG_LOG("PADDING RIGHT")
 
                 # avoid short pages on the left end
                 if offset < self.orphans and amount + offset < self.initialPageSize + self.orphans:
                     amount += offset
                     left = 0
                     offset = 0
-                    #util.DEBUG_LOG("PADDING LEFT")
 
-                #util.DEBUG_LOG("AMOUNT: %s OFFSET: %s" % (amount, offset))
                 episodes = episodes[left:left + amount]
 
         self.offset = offset
@@ -215,6 +207,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
     def __init__(self, *args, **kwargs):
         kodigui.ControlledWindow.__init__(self, *args, **kwargs)
         windowutils.UtilMixin.__init__(self)
+        self.episode = None
         self.reset(kwargs.get('episode'), kwargs.get('season'), kwargs.get('show'))
         self.initialEpisode = kwargs.get('episode')
         self.parentList = kwargs.get('parentList')
@@ -225,6 +218,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
         self.relatedPaginator = None
         self.tasks = backgroundthread.Tasks()
         self.initialized = False
+        self._reloadVideos = []
 
     def reset(self, episode, season=None, show=None):
         self.episode = episode
@@ -232,7 +226,8 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
         self.show_ = show or (self.episode or self.season).show().reload(includeExtras=1, includeExtrasCount=10)
         self.parentList = None
         self.seasons = None
-        self.initialized = False
+        self._reloadVideos = []
+        #self.initialized = False
 
     def doClose(self):
         self.episodesPaginator = None
@@ -280,7 +275,15 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
         if not mli:
             return
 
-        self.fillEpisodes()
+        reloadItems = [mli]
+        for v in self._reloadVideos:
+            for mli in self.episodeListControl:
+                if mli.dataSource == v:
+                    reloadItems.append(mli)
+
+        self.reloadItems(items=reloadItems, with_progress=True)
+        self.episodesPaginator.setEpisode(self._reloadVideos[-1])
+        self._reloadVideos = []
         self.fillRelated()
 
     def postSetup(self, from_select_episode=False):
@@ -389,6 +392,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
 
         util.DEBUG_LOG('Updating selected episode: {0}'.format(video))
         self.episode = video
+        self._reloadVideos.append(video)
 
         return True
 
@@ -694,7 +698,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
 
     def optionsButtonClicked(self, from_item=False):
         options = []
-        oldSkipIntroValue = None
+        oldBingeModeValue = None
 
         mli = self.episodeListControl.getSelectedItem()
 
@@ -721,11 +725,14 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
                 options.append({'key': 'mark_season_watched', 'display': T(32321, 'Mark Season Played')})
 
         if self.show_:
-            oldSkipIntroValue = INTERFACE.autoSkipIntroManager(self.show_)
-            if oldSkipIntroValue:
-                options.append({'key': 'auto_skip_intro', 'display': T(33508, 'Disable Auto skip intro')})
+            if options:
+                options.append(dropdown.SEPARATOR)
+            oldBingeModeValue = INTERFACE.bingeModeManager(self.show_)
+            if oldBingeModeValue:
+                options.append({'key': 'binge_mode', 'display': T(33508, 'Disable binge mode')})
             else:
-                options.append({'key': 'auto_skip_intro', 'display': T(33507, 'Enable Auto skip intro')})
+                options.append({'key': 'binge_mode', 'display': T(33507, 'Enable binge mode')})
+            options.append(dropdown.SEPARATOR)
 
         if mli.dataSource.server.allowsMediaDeletion:
             options.append({'key': 'delete', 'display': T(32322, 'Delete')})
@@ -784,11 +791,11 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
             self.goHome(self.show_.getLibrarySectionId())
         elif choice['key'] == 'delete':
             self.delete()
-        elif choice['key'] == 'auto_skip_intro':
+        elif choice['key'] == 'binge_mode':
             util.DEBUG_LOG(
-                "Changing auto-skip setting for {} from {} to {}".format(self.show_.ratingKey, oldSkipIntroValue,
-                                                                         not oldSkipIntroValue))
-            INTERFACE.autoSkipIntroManager(self.show_, not oldSkipIntroValue)
+                "Changing binge mode setting for {} from {} to {}".format(self.show_.ratingKey, oldBingeModeValue,
+                                                                          not oldBingeModeValue))
+            INTERFACE.bingeModeManager(self.show_, not oldBingeModeValue)
 
     def delete(self):
         button = optionsdialog.show(
@@ -962,16 +969,14 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
 
     def setProgress(self, mli):
         video = mli.dataSource
-        remainingTime = None
         if video.viewOffset.asInt():
             width = video.viewOffset.asInt() and (1 + int((video.viewOffset.asInt() / video.duration.asFloat()) * self.width)) or 1
             self.progressImageControl.setWidth(width)
-            remainingTime = time.strftime("%Hh %Mm left", time.gmtime((video.duration.asInt() - video.viewOffset.asInt()) / 1000))
-            remainingTime = re.sub(r'0(\d[hm])', r'\1', remainingTime).replace('0h ', '').replace(' 0m', '')
         else:
             self.progressImageControl.setWidth(1)
 
-        mli.setProperty('remainingTime', remainingTime)
+        if video.viewOffset.asInt():
+            mli.setProperty('remainingTime', T(33615, "{time} left").format(time=video.remainingTimeString))
 
     def createListItem(self, episode):
         if episode.index:
@@ -995,24 +1000,26 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
         items = self.episodesPaginator.paginate()
         self.reloadItems(items)
 
-    def reloadItems(self, items):
+    def reloadItems(self, items, with_progress=False):
         tasks = []
         for mli in items:
             if not mli.dataSource:
                 continue
 
-            task = EpisodeReloadTask().setup(mli.dataSource, self.reloadItemCallback)
+            task = EpisodeReloadTask().setup(mli.dataSource, self.reloadItemCallback, with_progress=with_progress)
             self.tasks.add(task)
             tasks.append(task)
 
         backgroundthread.BGThreader.addTasks(tasks)
 
-    def reloadItemCallback(self, episode):
+    def reloadItemCallback(self, episode, with_progress=False):
         selected = self.episodeListControl.getSelectedItem()
 
         for mli in self.episodeListControl:
             if mli.dataSource == episode:
                 self.setPostReloadItemInfo(episode, mli)
+                if with_progress:
+                    self.episodesPaginator.prepareListItem(None, mli)
                 if mli == selected:
                     self.setProgress(mli)
                 return
