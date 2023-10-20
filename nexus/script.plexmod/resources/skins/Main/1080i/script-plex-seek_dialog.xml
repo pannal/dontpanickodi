@@ -1008,12 +1008,13 @@
         </control>
 
         <!-- SKIP MARKER BUTTON -->
-        <control type="group" id="790">
-            <posx>0</posx>
-            <posy>797</posy>
+        <control type="grouplist" id="790">
+            <right>30</right>
+            <top>797</top>
             <width>1670</width>
             <height>143</height>
             <align>right</align>
+            <orientation>horizontal</orientation>
             <control type="button" id="791">
                 <visible>!String.IsEmpty(Window.Property(show.markerSkip)) + [String.IsEmpty(Window.Property(show.markerSkip_OSDOnly)) | [!String.IsEmpty(Window.Property(show.markerSkip_OSDOnly)) + !String.IsEmpty(Window.Property(show.OSD))]]</visible>
                 <animation effect="zoom" start="100" end="110,120" time="100" center="auto" reversible="false">Focus</animation>
@@ -1021,17 +1022,16 @@
                 <animation type="Conditional" condition="String.IsEmpty(Window.Property(show.OSD)) + !Window.IsVisible(seekbar)" reversible="false">
                     <effect type="slide" end="0,100" time="100" delay="100"></effect>
                 </animation>
-                <right>30</right>
-                <top>0</top>
                 <width min="200">auto</width>
-                <align>center</align>
                 <height>143</height>
+                <align>center</align>
+                <right>0</right>
+                <top>0</top>
                 <texturefocus colordiffuse="FFE5A00D" border="50">script.plex/buttons/blank-focus.png</texturefocus>
                 <texturenofocus colordiffuse="99FFFFFF" border="50">script.plex/buttons/blank.png</texturenofocus>
                 <textoffsetx>70</textoffsetx>
                 <textcolor>FF000000</textcolor>
                 <focusedcolor>FF000000</focusedcolor>
-                <!--<label>$ADDON[script.plexmod 32495]</label>-->
                 <label>$INFO[Window.Property(skipMarkerName)]</label>
             </control>
         </control>

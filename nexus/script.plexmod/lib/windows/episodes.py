@@ -25,7 +25,6 @@ from . import pagination
 
 from lib.util import T
 
-
 VIDEO_RELOAD_KW = dict(includeExtras=1, includeExtrasCount=10, includeChapters=1)
 
 
@@ -48,7 +47,7 @@ class EpisodeReloadTask(backgroundthread.Task):
             self.episode.reload(checkFiles=1, includeChapters=1)
             if self.isCanceled():
                 return
-            self.callback(self.episode, with_progress=self.withProgress)
+            self.callback(self, self.episode, with_progress=self.withProgress)
         except:
             util.ERROR()
 
@@ -233,10 +232,9 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
         self.episodesPaginator = None
         self.relatedPaginator = None
         kodigui.ControlledWindow.doClose(self)
-        if not self.tasks:
-            return
-        self.tasks.cancel()
-        self.tasks = None
+        if self.tasks:
+            self.tasks.cancel()
+            self.tasks = None
         player.PLAYER.off('new.video', self.onNewVideo)
 
     @busy.dialog()
@@ -277,12 +275,12 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
 
         reloadItems = [mli]
         for v in self._reloadVideos:
-            for mli in self.episodeListControl:
-                if mli.dataSource == v:
-                    reloadItems.append(mli)
+            for m in self.episodeListControl:
+                if m.dataSource == v:
+                    reloadItems.append(m)
 
         self.reloadItems(items=reloadItems, with_progress=True)
-        self.episodesPaginator.setEpisode(self._reloadVideos[-1])
+        self.episodesPaginator.setEpisode(self._reloadVideos and self._reloadVideos[-1] or mli)
         self._reloadVideos = []
         self.fillRelated()
 
@@ -687,6 +685,8 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
             if choice['key'] == 'resume':
                 resume = True
 
+        self._reloadVideos.append(episode)
+
         pl = playlist.LocalPlaylist(self.show_.all(), self.show_.getServer())
         if len(pl):  # Don't use playlist if it's only this video
             pl.setCurrent(episode)
@@ -744,7 +744,8 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
             options.append(dropdown.SEPARATOR)
 
         options.append({'key': 'to_show', 'display': T(32323, 'Go To Show')})
-        options.append({'key': 'to_section', 'display': T(32324, u'Go to {0}').format(self.show_.getLibrarySectionTitle())})
+        options.append({'key': 'to_section', 'display': T(32324, u'Go to {0}').format(
+            self.show_.getLibrarySectionTitle())})
 
         pos = (500, 620)
         bottom = False
@@ -758,7 +759,8 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
                 pos = (1490, 167 + (viewPos * 100))
                 bottom = False
             setDropdownProp = True
-        choice = dropdown.showDropdown(options, pos, pos_is_bottom=bottom, close_direction='left', set_dropdown_prop=setDropdownProp)
+        choice = dropdown.showDropdown(options, pos, pos_is_bottom=bottom, close_direction='left',
+                                       set_dropdown_prop=setDropdownProp)
         if not choice:
             return
 
@@ -829,6 +831,10 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
         return success
 
     def checkForHeaderFocus(self, action):
+        # don't continue if we're still waiting for tasks
+        if self.tasks or not self.episodesPaginator:
+            return
+
         if self.episodesPaginator.boundaryHit:
             items = self.episodesPaginator.paginate()
             self.reloadItems(items)
@@ -841,6 +847,14 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
         lastItem = self.lastItem
 
         if action in (xbmcgui.ACTION_MOVE_RIGHT, xbmcgui.ACTION_MOVE_LEFT):
+            mliPos = self.episodeListControl.getManagedItemPosition(mli)
+
+            # don't act on actions at the absolute data boundaries
+            if action == xbmcgui.ACTION_MOVE_LEFT and mliPos == 0:
+                return
+            elif action == xbmcgui.ACTION_MOVE_RIGHT and mliPos + 1 == len(self.episodeListControl):
+                return
+
             items = self.episodesPaginator.wrap(mli, lastItem, action)
             xbmc.sleep(100)
             mli = self.episodeListControl.getSelectedItem()
@@ -848,7 +862,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
                 self.reloadItems(items)
                 return True
 
-        if mli != self.lastItem:
+        if mli != self.lastItem and not mli.getProperty("is.boundary"):
             self.lastItem = mli
             self.setProgress(mli)
 
@@ -977,6 +991,8 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
 
         if video.viewOffset.asInt():
             mli.setProperty('remainingTime', T(33615, "{time} left").format(time=video.remainingTimeString))
+        else:
+            mli.setProperty('remainingTime', '')
 
     def createListItem(self, episode):
         if episode.index:
@@ -1012,7 +1028,10 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
 
         backgroundthread.BGThreader.addTasks(tasks)
 
-    def reloadItemCallback(self, episode, with_progress=False):
+    def reloadItemCallback(self, task, episode, with_progress=False):
+        self.tasks.remove(task)
+        del task
+
         selected = self.episodeListControl.getSelectedItem()
 
         for mli in self.episodeListControl:

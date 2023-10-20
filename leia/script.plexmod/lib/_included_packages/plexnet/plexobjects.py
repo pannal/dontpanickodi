@@ -272,7 +272,7 @@ class PlexObject(Checks):
                 title = data.attrib.get('title1')
                 if title:
                     self.librarySectionTitle = title
-        return title
+        return str(title)
 
     def getLibrarySectionType(self):
         type_ = self.get('librarySectionType')

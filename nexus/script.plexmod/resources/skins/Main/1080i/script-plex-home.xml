@@ -7962,6 +7962,7 @@
                         <label>$INFO[Window.Property(server.name)]</label>
                         <onunfocus condition="!String.IsEmpty(Window.Property(show.servers))">SetFocus(260)</onunfocus>
                     </control>
+                    <!-- server control -->
                     <control type="group">
                         <posx>-93</posx>
                         <width>93</width>
@@ -7979,6 +7980,26 @@
                             <width>16</width>
                             <height>15</height>
                             <texture>$INFO[Window.Property(server.iconmod)]</texture>
+                        </control>
+                        <!-- secure + local -->
+                        <control type="image">
+                            <visible>!String.IsEmpty(Window.Property(server.iconmod))</visible>
+                            <posx>0</posx>
+                            <posy>20</posy>
+                            <width>16</width>
+                            <height>14</height>
+                            <texture>$INFO[Window.Property(server.iconmod2)]</texture>
+                            <colordiffuse>FFEEEEEE</colordiffuse>
+                        </control>
+                        <!-- local -->
+                        <control type="image">
+                            <visible>String.IsEmpty(Window.Property(server.iconmod))</visible>
+                            <posx>0</posx>
+                            <posy>38</posy>
+                            <width>16</width>
+                            <height>14</height>
+                            <texture>$INFO[Window.Property(server.iconmod2)]</texture>
+                            <colordiffuse>FFEEEEEE</colordiffuse>
                         </control>
                         <control type="image">
                             <visible>!Control.HasFocus(201)</visible>
@@ -8063,7 +8084,7 @@
                                         <posy>0</posy>
                                         <width>500</width>
                                         <height>100</height>
-                                        <texture colordiffuse="FF1F1F1F" border="10">script.plex/white-square-rounded.png</texture>
+                                        <texture colordiffuse="FF1F1F1F" border="10">script.plex/white-square-top-rounded.png</texture>
                                     </control>
                                     <control type="group">
                                         <visible>!String.IsEmpty(ListItem.Label2)</visible>
@@ -8103,6 +8124,43 @@
                                         <label>$INFO[ListItem.Label]</label>
                                     </control>
 
+                                    <!-- not status + not current + local -->
+                                    <control type="image">
+                                        <visible>String.IsEmpty(ListItem.Property(status)) + String.IsEmpty(ListItem.Property(current)) + !String.IsEmpty(ListItem.Property(local)) </visible>
+                                        <posx>456</posx>
+                                        <posy>38</posy>
+                                        <width>24</width>
+                                        <height>21</height>
+                                        <texture>script.plex/home/device/home.png</texture>
+                                    </control>
+                                    <!-- not status + current + local -->
+                                    <control type="image">
+                                        <visible>String.IsEmpty(ListItem.Property(status)) + !String.IsEmpty(ListItem.Property(current)) + !String.IsEmpty(ListItem.Property(local)) </visible>
+                                        <posx>415</posx>
+                                        <posy>38</posy>
+                                        <width>24</width>
+                                        <height>21</height>
+                                        <texture>script.plex/home/device/home.png</texture>
+                                    </control>
+                                    <!-- status + not current + local -->
+                                    <control type="image">
+                                        <visible>!String.IsEmpty(ListItem.Property(status)) + String.IsEmpty(ListItem.Property(current)) + !String.IsEmpty(ListItem.Property(local)) </visible>
+                                        <posx>415</posx>
+                                        <posy>38</posy>
+                                        <width>24</width>
+                                        <height>21</height>
+                                        <texture>script.plex/home/device/home.png</texture>
+                                    </control>
+                                    <!-- status + current + local -->
+                                    <control type="image">
+                                        <visible>!String.IsEmpty(ListItem.Property(status)) + !String.IsEmpty(ListItem.Property(current)) + !String.IsEmpty(ListItem.Property(local)) </visible>
+                                        <posx>374</posx>
+                                        <posy>38</posy>
+                                        <width>24</width>
+                                        <height>21</height>
+                                        <texture>script.plex/home/device/home.png</texture>
+                                    </control>
+                                    <!-- status + not current -->
                                     <control type="image">
                                         <visible>!String.IsEmpty(ListItem.Property(status)) + String.IsEmpty(ListItem.Property(current))</visible>
                                         <posx>456</posx>
@@ -8111,6 +8169,7 @@
                                         <height>24</height>
                                         <texture>script.plex/home/device/$INFO[ListItem.Property(status)]</texture>
                                     </control>
+                                    <!-- status + current -->
                                     <control type="image">
                                         <visible>!String.IsEmpty(ListItem.Property(status)) + !String.IsEmpty(ListItem.Property(current))</visible>
                                         <posx>415</posx>
@@ -8160,7 +8219,7 @@
                                         <posy>0</posy>
                                         <width>500</width>
                                         <height>100</height>
-                                        <texture colordiffuse="FFE5A00D" border="10">script.plex/white-square-rounded.png</texture>
+                                        <texture colordiffuse="FFE5A00D" border="10">script.plex/white-square-top-rounded.png</texture>
                                     </control>
                                     <control type="group">
                                         <visible>!String.IsEmpty(ListItem.Label2)</visible>
@@ -8200,6 +8259,42 @@
                                         <label>$INFO[ListItem.Label]</label>
                                     </control>
 
+                                    <!-- not status + not current + local -->
+                                    <control type="image">
+                                        <visible>String.IsEmpty(ListItem.Property(status)) + String.IsEmpty(ListItem.Property(current)) + !String.IsEmpty(ListItem.Property(local)) </visible>
+                                        <posx>456</posx>
+                                        <posy>38</posy>
+                                        <width>24</width>
+                                        <height>21</height>
+                                        <texture>script.plex/home/device/home.png</texture>
+                                    </control>
+                                    <!-- not status + current + local -->
+                                    <control type="image">
+                                        <visible>String.IsEmpty(ListItem.Property(status)) + !String.IsEmpty(ListItem.Property(current)) + !String.IsEmpty(ListItem.Property(local)) </visible>
+                                        <posx>415</posx>
+                                        <posy>38</posy>
+                                        <width>24</width>
+                                        <height>21</height>
+                                        <texture>script.plex/home/device/home.png</texture>
+                                    </control>
+                                    <!-- status + not current + local -->
+                                    <control type="image">
+                                        <visible>!String.IsEmpty(ListItem.Property(status)) + String.IsEmpty(ListItem.Property(current)) + !String.IsEmpty(ListItem.Property(local)) </visible>
+                                        <posx>415</posx>
+                                        <posy>38</posy>
+                                        <width>24</width>
+                                        <height>21</height>
+                                        <texture>script.plex/home/device/home.png</texture>
+                                    </control>
+                                    <!-- status + current + local -->
+                                    <control type="image">
+                                        <visible>!String.IsEmpty(ListItem.Property(status)) + !String.IsEmpty(ListItem.Property(current)) + !String.IsEmpty(ListItem.Property(local)) </visible>
+                                        <posx>374</posx>
+                                        <posy>38</posy>
+                                        <width>24</width>
+                                        <height>21</height>
+                                        <texture>script.plex/home/device/home.png</texture>
+                                    </control>
                                     <control type="image">
                                         <visible>!String.IsEmpty(ListItem.Property(status)) + String.IsEmpty(ListItem.Property(current))</visible>
                                         <posx>456</posx>

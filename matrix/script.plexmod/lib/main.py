@@ -102,7 +102,7 @@ def _main():
                             background.setBusy()
                             util.DEBUG_LOG('Main: Waiting for selected server...')
                             try:
-                                for timeout, skip_preferred, skip_owned in ((10, True, False), (10, True, True)):
+                                for timeout, skip_preferred, skip_owned in ((10, False, False), (10, True, True)):
                                     plex.CallbackEvent(plexapp.util.APP, 'change:selectedServer', timeout=timeout).wait()
 
                                     selectedServer = plexapp.SERVERMANAGER.checkSelectedServerSearch(skip_preferred=skip_preferred, skip_owned=skip_owned)

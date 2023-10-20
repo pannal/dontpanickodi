@@ -25,6 +25,7 @@ class MyPlexManager(object):
         util.APP.startRequest(request, context, "_method=PUT")
 
     def refreshResources(self, force=False):
+        util.LOG('MyPlexManager().refreshResources() - Force: {}'.format(force))
         if force:
             plexapp.SERVERMANAGER.resetLastTest()
 

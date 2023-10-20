@@ -37,6 +37,7 @@ class PlexResource(object):
                 hasSecureConn = True
                 break
 
+        addLocalConsFound = []
         for conn in data.findall('Connection'):
             connection = plexconnection.PlexConnection(
                 plexconnection.PlexConnection.SOURCE_MYPLEX,
@@ -47,10 +48,15 @@ class PlexResource(object):
             )
 
             # Keep the secure connection on top
-            if connection.isSecure:
+            if connection.isSecure and not util.LOCAL_OVER_SECURE:
+                self.connections.insert(0, connection)
+            elif not connection.isSecure and util.LOCAL_OVER_SECURE:
                 self.connections.insert(0, connection)
             else:
                 self.connections.append(connection)
+
+            if connection.isSecureButLocal:
+                addLocalConsFound.append((connection.isSecureButLocal, connection.address))
 
             # If the connection is one of our plex.direct secure connections, add
             # the nonsecure variant as well, unless https is required.
@@ -65,6 +71,29 @@ class PlexResource(object):
                         True
                     )
                 )
+
+        # add discovered local cons if necessary
+        for ipPort, origAddress in addLocalConsFound:
+            ip, port = ipPort
+            address = "http://" + ip + ":" + str(port)
+            for conn in self.connections:
+                if conn.address == address:
+                    continue
+
+            util.DEBUG_LOG(
+                "Secure connection {0} has a locally reachable IP, add it to the checklist".format(origAddress))
+            lcon = plexconnection.PlexConnection(
+                plexconnection.PlexConnection.SOURCE_DISCOVERED,
+                "http://" + ip + ":" + str(port),
+                True,
+                self.accessToken,
+                not util.LOCAL_OVER_SECURE,
+                skipLocalCheck=True
+            )
+            if util.LOCAL_OVER_SECURE:
+                self.connections.insert(0, lcon)
+            else:
+                self.connections.append(lcon)
 
     def __repr__(self):
         return '<{0}:{1}>'.format(self.__class__.__name__, self.name.encode('utf8'))

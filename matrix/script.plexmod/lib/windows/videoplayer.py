@@ -188,6 +188,7 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
         if not self.postPlayMode:
             return
 
+        timeoutCanceled = bool(self.timeout)
         self.cancelTimer()
 
         if controlID == self.HOME_BUTTON_ID:
@@ -201,7 +202,8 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
         elif controlID == self.PREV_BUTTON_ID:
             self.playVideo(prev=True)
         elif controlID == self.NEXT_BUTTON_ID:
-            self.playVideo()
+            if not timeoutCanceled:
+                self.playVideo()
         elif controlID == self.PLAYER_STATUS_BUTTON_ID:
             self.showAudioPlayer()
         elif controlID == self.SEARCH_BUTTON_ID:
@@ -331,7 +333,7 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
         self.rolesListControl.reset()
 
     @busy.dialog()
-    def postPlay(self, video=None, playlist=None, handler=None, **kwargs):
+    def postPlay(self, video=None, playlist=None, handler=None, stoppedInBingeMode=False, **kwargs):
         util.DEBUG_LOG('VideoPlayer: Starting post-play')
         self.showPostPlay()
         self.prev = video
@@ -362,7 +364,10 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
         self.fillOnDeck()
         hasPrev = self.fillRelated()
         self.fillRoles(hasPrev)
-        self.startTimer()
+
+        if not stoppedInBingeMode:
+            self.startTimer()
+
         if self.next:
             self.setFocusId(self.NEXT_BUTTON_ID)
         else:

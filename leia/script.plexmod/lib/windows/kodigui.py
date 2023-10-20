@@ -50,7 +50,10 @@ class BaseFunctions:
 
     def modal(self):
         self.isOpen = True
-        self.doModal()
+        try:
+            self.doModal()
+        except SystemExit:
+            pass
         self.onClosed()
         self.isOpen = False
 
@@ -504,7 +507,7 @@ class ManagedControlList(object):
             elif pos >= size:
                 self.selectItem(size - 1)
 
-        self._updateItems(0, self.size())
+        return self._updateItems(0, self.size())
 
     def getListItem(self, pos):
         li = self.control.getListItem(pos)

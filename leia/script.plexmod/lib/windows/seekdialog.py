@@ -23,7 +23,6 @@ from lib.kodijsonrpc import builtin
 from lib.util import T
 from six.moves import range
 
-
 KEY_MOVE_SET = frozenset(
     (
         xbmcgui.ACTION_MOVE_LEFT,
@@ -46,6 +45,9 @@ MARKERS = OrderedDict([
     ("intro", {
         "marker": None,
         "name": T(32495, 'Skip intro'),
+        "autoSkipName": T(32800, 'Skipping intro'),
+        "overrideStartOff": None,
+        "countdown": None,
 
         # attrs
         "markerAutoSkip": "autoSkipIntro",
@@ -56,6 +58,10 @@ MARKERS = OrderedDict([
     ("credits", {
         "marker": None,
         "name": T(32496, 'Skip credits'),
+        "autoSkipName": T(32801, 'Skipping credits'),
+        "overrideStartOff": None,
+        "countdown": None,
+
         "markerAutoSkip": "autoSkipCredits",
         "markerAutoSkipped": "_creditsAutoSkipped",
         "markerAutoSkipShownTimer": "_creditsSkipShownStarted",
@@ -63,8 +69,10 @@ MARKERS = OrderedDict([
     })
 ])
 
-FINAL_MARKER_NEGOFF = 1000
+FINAL_MARKER_NEGOFF = 5000
+MARKER_SHOW_NEGOFF = 3000
 MARKER_OFF = 500
+MARKER_CHAPTER_OVERLAP_THRES = 30000  # 30 seconds
 
 
 class SeekDialog(kodigui.BaseDialog):
@@ -160,10 +168,11 @@ class SeekDialog(kodigui.BaseDialog):
         self._lastAction = None
         self.lastTimelineResponse = None
         self._ignoreInput = False
+        self._ignoreTick = False
 
         # optimize
         self._enableMarkerSkip = plexapp.ACCOUNT.hasPlexPass()
-        self._markers = None
+        self.markers = None
         self.chapters = None
         self._introSkipShownStarted = None
         self._introAutoSkipped = False
@@ -230,6 +239,11 @@ class SeekDialog(kodigui.BaseDialog):
         self.resetSkipSteps()
 
     def applyMarkerProps(self):
+        self.setProperty('show.markerSkip', '')
+        self.setProperty('show.markerSkip_OSDOnly', '')
+        self.setProperty('marker.autoSkip', '')
+        self.setProperty('skipMarkerName', '')
+
         self.bingeMode = self.player.video.type == 'episode' and self.player.video.bingeMode
 
         # don't auto skip intro when on binge mode on the first episode of a season
@@ -242,8 +256,9 @@ class SeekDialog(kodigui.BaseDialog):
         self._introSkipShownStarted = None
         self._introAutoSkipped = False
         self._creditsSkipShownStarted = None
+        self._currentMarker = None
         self._creditsAutoSkipped = False
-        self._markers = None
+        self.markers = None
 
     def trueOffset(self):
         if self.handler.mode == self.handler.MODE_ABSOLUTE:
@@ -269,6 +284,10 @@ class SeekDialog(kodigui.BaseDialog):
             self._markers = markers
 
         return self._markers
+
+    @markers.setter
+    def markers(self, val):
+        self._markers = val
 
     def onFirstInit(self):
         try:
@@ -305,6 +324,7 @@ class SeekDialog(kodigui.BaseDialog):
     def onReInit(self):
         self.lastTimelineResponse = None
         self._lastAction = None
+        self._ignoreTick = False
 
         self.resetTimeout()
         self.resetSeeking()
@@ -350,7 +370,6 @@ class SeekDialog(kodigui.BaseDialog):
                 passThroughMain = False
                 if controlID == self.SKIP_MARKER_BUTTON_ID:
                     if action == xbmcgui.ACTION_SELECT_ITEM:
-                        self.setProperty('show.markerSkip_OSDOnly', '1')
                         markerDef = self._currentMarker
                         if markerDef["marker"]:
                             marker = markerDef["marker"]
@@ -362,13 +381,13 @@ class SeekDialog(kodigui.BaseDialog):
                                 markerOff = FINAL_MARKER_NEGOFF
 
                             util.DEBUG_LOG('MarkerSkip: Skipping marker {}'.format(markerDef["marker"]))
+                            self.setProperty('show.markerSkip', '')
+                            self.setProperty('show.markerSkip_OSDOnly', '')
                             self.doSeek(math.ceil(float(marker.endTimeOffset)) - markerOff)
 
                             if marker.type == "credits" and not final:
                                 # non-final marker
                                 setattr(self, markerDef["markerAutoSkipShownTimer"], None)
-                                self.setProperty('show.markerSkip', '')
-                                self.setProperty('show.markerSkip_OSDOnly', '')
                                 self.resetAutoSeekTimer(None)
 
                         return
@@ -445,10 +464,10 @@ class SeekDialog(kodigui.BaseDialog):
                             return
 
                     if action in (
-                        xbmcgui.ACTION_MOVE_UP,
-                        xbmcgui.ACTION_MOVE_DOWN,
-                        xbmcgui.ACTION_BIG_STEP_FORWARD,
-                        xbmcgui.ACTION_BIG_STEP_BACK
+                            xbmcgui.ACTION_MOVE_UP,
+                            xbmcgui.ACTION_MOVE_DOWN,
+                            xbmcgui.ACTION_BIG_STEP_FORWARD,
+                            xbmcgui.ACTION_BIG_STEP_BACK
                     ) and not self._seekingWithoutOSD:
                         self.selectedOffset = self.trueOffset()
                         self.setBigSeekShift()
@@ -511,9 +530,7 @@ class SeekDialog(kodigui.BaseDialog):
                         if self.osdVisible():
                             self.hideOSD()
                         else:
-                            self.doClose()
-                            # self.handler.onSeekAborted()
-                            self.handler.player.stop()
+                            self.stop()
                         return
         except:
             util.ERROR()
@@ -524,7 +541,7 @@ class SeekDialog(kodigui.BaseDialog):
         command = {
             xbmcgui.ACTION_MOVE_UP: "Up",
             xbmcgui.ACTION_MOVE_DOWN: "Down",
-            xbmcgui.ACTION_MOVE_LEFT: "Right", # Not sure if these are actually reversed or something else is up here
+            xbmcgui.ACTION_MOVE_LEFT: "Right",  # Not sure if these are actually reversed or something else is up here
             xbmcgui.ACTION_MOVE_RIGHT: "Left",
             xbmcgui.ACTION_SELECT_ITEM: "Select",
             xbmcgui.ACTION_PREVIOUS_MENU: "Back",
@@ -608,6 +625,14 @@ class SeekDialog(kodigui.BaseDialog):
             self.skipBack()
         elif controlID == self.SKIP_FORWARD_BUTTON_ID:
             self.skipForward()
+
+    def stop(self):
+        self._ignoreTick = True
+        self.doClose()
+        # self.handler.onSeekAborted()
+        if self.bingeMode:
+            self.handler.stoppedInBingeMode = True
+        self.handler.player.stop()
 
     def doClose(self, delete=False):
         if self.handler.playlist:
@@ -829,8 +854,8 @@ class SeekDialog(kodigui.BaseDialog):
     def videoSettingsHaveChanged(self):
         changed = False
         if (
-            self.player.video.settings.prefOverrides != self.initialVideoSettings or
-            self.player.video.selectedAudioStream() != self.initialAudioStream
+                self.player.video.settings.prefOverrides != self.initialVideoSettings or
+                self.player.video.selectedAudioStream() != self.initialAudioStream
         ):
             self.initialVideoSettings = dict(self.player.video.settings.prefOverrides)
             self.initialAudioStream = self.player.video.selectedAudioStream()
@@ -903,7 +928,8 @@ class SeekDialog(kodigui.BaseDialog):
                 }
             )
 
-        choice = dropdown.showDropdown(options, (1360, 1060), close_direction='down', pos_is_bottom=True, close_on_playback_ended=True)
+        choice = dropdown.showDropdown(options, (1360, 1060), close_direction='down', pos_is_bottom=True,
+                                       close_on_playback_ended=True)
 
         if not choice:
             return
@@ -1014,46 +1040,71 @@ class SeekDialog(kodigui.BaseDialog):
 
         # replace bigSeek with chapters or markers if possible
         if self.showChapters:
+            chaps = []
+            chapOffsets = []
             if self.chapters:
                 self.setProperty('chapters.label', T(33605, 'Video Chapters').upper())
                 for index, chapter in enumerate(self.chapters):
                     thumb = chapter.thumb and chapter.thumb.asTranscodedImageURL(
                         *PlaylistDialog.LI_AR16X9_THUMB_DIM) or None
-                    mli = kodigui.ManagedListItem(data_source=chapter.startTime(),
-                                                  thumbnailImage=thumb,
-                                                  label=chapter.tag or T(33607, 'Chapter {}').format(index+1))
-                    items.append(mli)
+                    # mli = kodigui.ManagedListItem(data_source=chapter.startTime(),
+                    #                               thumbnailImage=thumb,
+                    #                               label=chapter.tag or T(33607, 'Chapter {}').format(index + 1))
+                    # items.append(mli)
+                    st = chapter.startTime()
+                    chapOffsets.append(st)
+                    chaps.append((st, thumb, chapter.tag or T(33607, 'Chapter {}').format(index + 1)))
+
             # fake chapters by using markers
-            elif util.getSetting('virtual_chapters', True) and self.markers:
-                self.setProperty('chapters.label', T(33606, 'Virtual Chapters').upper())
+            if util.getSetting('virtual_chapters', True) and self.markers:
+                if not self.chapters:
+                    self.setProperty('chapters.label', T(33606, 'Virtual Chapters').upper())
+                else:
+                    self.setProperty('chapters.label', T(33634, 'Combined Chapters').upper())
                 creditsCounter = 0
                 preparedMarkers = []
                 for markerDef in self.markers:
                     marker = markerDef["marker"]
                     if marker:
                         if markerDef["marker_type"] == "intro":
-                            preparedMarkers.append((int(marker.startTimeOffset), T(33608, "Intro")))
-                            preparedMarkers.append((int(marker.endTimeOffset), T(33610, "Main")))
+                            preparedMarkers.append((int(marker.startTimeOffset), T(33608, "Intro"), False))
+                            preparedMarkers.append((int(marker.endTimeOffset), T(33610, "Main"), False))
 
                         elif markerDef["marker_type"] == "credits":
                             creditsCounter += 1
-                            preparedMarkers.append((int(marker.startTimeOffset), T(33609, "Credits") + "{}"))
+                            if creditsCounter > 1 and getattr(marker, "final", False):
+                                label = T(33635, "Final Credits")
+                            else:
+                                label = T(33609, "Credits") + "{}"
+                            preparedMarkers.append((int(marker.startTimeOffset), label, True))
 
                 # add staggered virtual markers
-                preparedMarkers.append((int(self.duration * 0.25), "25 %"))
-                preparedMarkers.append((int(self.duration * 0.50), "50 %"))
-                preparedMarkers.append((int(self.duration * 0.75), "75 %"))
+                preparedMarkers.append((int(self.duration * 0.25), "25 %", False))
+                preparedMarkers.append((int(self.duration * 0.50), "50 %", False))
+                preparedMarkers.append((int(self.duration * 0.75), "75 %", False))
 
                 credCnt = 1
-                for offset, label in sorted(preparedMarkers):
-                    mli = kodigui.ManagedListItem(data_source=offset,
-                                                  label=label.format(
-                                                      " #{}".format(credCnt) if creditsCounter > 1 else ""
-                                                      ))
-                    items.append(mli)
+                for offset, label, credits in sorted(preparedMarkers):
+                    # filter intersections
+                    skipMarker = False
+                    for cOffset in chapOffsets:
+                        if offset - MARKER_CHAPTER_OVERLAP_THRES <= cOffset <= offset + MARKER_CHAPTER_OVERLAP_THRES:
+                            skipMarker = True
+                            break
 
-                    if creditsCounter > 1:
+                    # skip marker if we're overlapping with any chapter
+                    if skipMarker:
+                        continue
+
+                    chaps.append((offset, self.handler.player.playerObject.getBifUrl(offset),
+                                  label.format(" #{}".format(credCnt) if credits and creditsCounter > 1 else "")))
+
+                    if credits:
                         credCnt += 1
+
+                for offset, thumb, label in sorted(chaps):
+                    mli = kodigui.ManagedListItem(data_source=offset, thumbnailImage=thumb, label=label)
+                    items.append(mli)
 
         else:
             div = int(self.duration / 12)
@@ -1162,7 +1213,7 @@ class SeekDialog(kodigui.BaseDialog):
             self.updateProgress(set_to_current=False)
             self.setProperty('button.seek', '1')
 
-    def shouldShowMarkerSkip(self):
+    def getCurrentMarkerDef(self):
         """
         Show intro/credits skip button at current time
         """
@@ -1177,48 +1228,39 @@ class SeekDialog(kodigui.BaseDialog):
 
                 # show intro skip early? (only if intro is during the first X minutes)
                 if self.showIntroSkipEarly and markerDef["marker_type"] == "intro" and \
-                        startTimeOffset <= util.advancedSettings.skipIntroButtonShowEarlyThreshold * 1000:
+                        startTimeOffset <= util.advancedSettings.skipIntroButtonShowEarlyThreshold1 * 1000:
                     startTimeOffset = 0
+                    markerDef["overrideStartOff"] = 0
 
-                if startTimeOffset <= self.offset < int(marker.endTimeOffset) - FINAL_MARKER_NEGOFF:
+                if startTimeOffset - MARKER_SHOW_NEGOFF <= self.offset < \
+                        int(marker.endTimeOffset) - FINAL_MARKER_NEGOFF:
                     # we've had a marker already; reset autoSkip state
                     if self._currentMarker and self._currentMarker != markerDef:
                         setattr(self, markerDef["markerAutoSkipped"], False)
 
-                    if getattr(self, markerDef["markerAutoSkip"], False) \
-                            and not getattr(self, markerDef["markerAutoSkipped"], False):
-                        return markerDef
-
-                    self.setProperty('show.markerSkip', '1')
-
-                    timer = getattr(self, markerDef["markerAutoSkipShownTimer"])
-
-                    if timer is None:
-                        setattr(self, markerDef["markerAutoSkipShownTimer"], time.time())
-
-                    else:
-                        if timer + getattr(self, markerDef["markerSkipBtnTimeout"]) <= time.time():
-                            self.setProperty('show.markerSkip_OSDOnly', '1')
                     return markerDef
-                self.setProperty('show.markerSkip', '')
 
     def setup(self, duration, offset=0, bif_url=None, title='', title2='', chapters=None):
         self.title = title
         self.title2 = title2
         self.chapters = chapters or []
-        self._markers = None
+        self.markers = None
         self.showChapters = util.getUserSetting('show_chapters', True) and (
-                    bool(chapters) or (util.getUserSetting('virtual_chapters', True) and bool(self.markers)))
+                bool(chapters) or (util.getUserSetting('virtual_chapters', True) and bool(self.markers)))
         self.setProperty('video.title', title)
         self.setProperty('is.show', (self.player.video.type == 'episode') and '1' or '')
         self.setProperty('has.playlist', self.handler.playlist and '1' or '')
         self.setProperty('shuffled', (self.handler.playlist and self.handler.playlist.isShuffled) and '1' or '')
         self.setProperty('has.chapters', self.showChapters and '1' or '')
+        self.applyMarkerProps()
         self.baseOffset = offset
         self.offset = 0
         self._duration = duration
-        self.bifURL = bif_url
-        self.hasBif = bool(self.bifURL)
+        self._ignoreTick = False
+        if not self.showChapters:
+            self.bifURL = bif_url
+            self.hasBif = bool(self.bifURL)
+
         if self.hasBif:
             self.baseURL = re.sub('/\d+\?', '/{0}?', self.bifURL)
         self.update()
@@ -1323,12 +1365,126 @@ class SeekDialog(kodigui.BaseDialog):
     def onPlaybackStarted(self):
         if self._ignoreInput:
             self._ignoreInput = False
+        self.tick()
 
     def onPlaybackPaused(self):
         self._osdHideFast = False
 
+    def displayMarkers(self):
+        # intro/credits marker display logic
+        markerDef = self.getCurrentMarkerDef()
+
+        if not markerDef:
+            # no marker to display, hide it
+            self.setProperty('show.markerSkip', '')
+            self.setProperty('show.markerSkip_OSDOnly', '')
+            if self._currentMarker:
+                self._currentMarker["countdown"] = None
+            return False
+
+        markerAutoSkip = getattr(self, markerDef["markerAutoSkip"])
+        markerAutoSkipped = getattr(self, markerDef["markerAutoSkipped"])
+
+        # getCurrentMarkerDef might have overridden the startTimeOffset, use that
+        startTimeOff = markerDef["overrideStartOff"] if markerDef["overrideStartOff"] is not None else \
+            int(markerDef["marker"].startTimeOffset)
+        sTOffWThres = startTimeOff + util.advancedSettings.autoSkipOffset * 1000
+
+        autoSkippingNow = markerDef \
+            and markerAutoSkip \
+            and not markerAutoSkipped \
+            and not self._navigatedViaMarkerOrChapter \
+            and (markerDef["countdown"] == 0 or startTimeOff == 0)
+        # and (startTimeOff == 0 or sTOffWThres <= self.offset) \
+
+        # auto skip marker
+        # delay marker autoskip by autoSkipOffset to avoid cutting off content at the expense of being
+        # slightly too late
+        if autoSkippingNow:
+            setattr(self, markerDef["markerAutoSkipped"], True)
+            self.setProperty('show.markerSkip', '')
+            self.setProperty('show.markerSkip_OSDOnly', '')
+            self.resetAutoSeekTimer(None)
+            final = getattr(markerDef["marker"], "final", False)
+            markerDef["countdown"] = None
+
+            if final:
+                # final marker is _not_ at the end of video, seek and do nothing
+                if int(markerDef["marker"].endTimeOffset) < self.duration - FINAL_MARKER_NEGOFF:
+                    target = int(markerDef["marker"].endTimeOffset)
+                    util.DEBUG_LOG(
+                        "MarkerAutoSkip: Skipping final marker, its endTime is too early, "
+                        "though, seeking and playing back")
+                    self.doSeek(target)
+                    return False
+
+                self.handler.seekOnStart = 0  # fixme: might be unnecessary
+                # tell plex we've arrived at the end of the video, playing back
+                self.handler.updateNowPlaying(True, state=self.player.STATE_PLAYING, time=self.duration - 1000)
+
+                # go to next video immediately if on bingeMode
+                if self.handler.playlist and self.handler.playlist.hasNext() and self.bingeMode:
+                    # skip final marker
+                    util.DEBUG_LOG("MarkerAutoSkip: Skipping final marker, going to next video")
+                    next(self.handler)
+                    return True
+                else:
+                    util.DEBUG_LOG("MarkerAutoSkip: Skipping final marker, stopping")
+                    self.stop()
+                return False
+
+            util.DEBUG_LOG('MarkerAutoSkip: Skipping marker {}'.format(markerDef["marker"]))
+            self.doSeek(int(markerDef["marker"].endTimeOffset) + 1000)
+            return True
+
+        # got a marker, display logic
+        # hide marker into OSD after a timeout
+        timer = getattr(self, markerDef["markerAutoSkipShownTimer"])
+
+        if timer is None:
+            setattr(self, markerDef["markerAutoSkipShownTimer"], time.time())
+
+        else:
+            if timer + getattr(self, markerDef["markerSkipBtnTimeout"]) <= time.time():
+                self.setProperty('show.markerSkip_OSDOnly', '1')
+            else:
+                self.setProperty('show.markerSkip_OSDOnly', '')
+
+        # no marker auto skip or not yet auto skipped, normal display
+        if not markerAutoSkip or markerAutoSkip and not markerAutoSkipped:
+            self.setProperty('show.markerSkip', '1')
+        # marker auto skip and already skipped - hide in OSD
+        elif markerAutoSkip and markerAutoSkipped:
+            self.setProperty('show.markerSkip_OSDOnly', '1')
+
+        # set marker name, count down
+        if markerAutoSkip and not markerAutoSkipped:
+            if markerDef["countdown"] is None:
+                # reset countdown on new marker
+                if not self._currentMarker or self._currentMarker != markerDef or markerDef["countdown"] is None:
+                    # fixme: round might not be right here, but who cares
+                    markerDef["countdown"] = max(round((sTOffWThres - self.offset) / 1000.0) + 1, 1)
+
+            markerDef["countdown"] -= 1
+            if markerDef["countdown"] > 0:
+                markerName = "{} ({})".format(markerDef["autoSkipName"], markerDef["countdown"])
+            else:
+                markerName = markerDef["autoSkipName"]
+        else:
+            markerName = markerDef["name"]
+        self.setProperty('skipMarkerName', markerName)
+
+        # store current marker
+        self._currentMarker = markerDef
+
+        # focus marker if OSD is hidden, last focus wasn't the marker button and we're not auto skipping this marker
+        if not self.osdVisible() and self.lastFocusID != self.SKIP_MARKER_BUTTON_ID and \
+                not self.getProperty('show.markerSkip_OSDOnly') and self.getProperty('show.markerSkip') \
+                and not markerAutoSkip:
+            self.setFocusId(self.SKIP_MARKER_BUTTON_ID)
+
     def tick(self, offset=None):
-        if not self.initialized:
+        if not self.initialized or self._ignoreTick:
             return
 
         if xbmc.getCondVisibility('Window.IsActive(busydialog) + !Player.Caching'):
@@ -1355,38 +1511,9 @@ class SeekDialog(kodigui.BaseDialog):
             self.resetSeeking()
             return
 
-        markerDef = self.shouldShowMarkerSkip()
-        startTimeOff = None
-        if markerDef:
-            self.setProperty('skipMarkerName', markerDef["name"])
-            self._currentMarker = markerDef
-            startTimeOff = int(markerDef["marker"].startTimeOffset)
-
-        # auto skip marker
-        # delay marker autoskip ny autoSkipOffset to avoid cutting off content at the expense of being slightly too late
-        if markerDef and getattr(self, markerDef["markerAutoSkip"]) \
-                and not getattr(self, markerDef["markerAutoSkipped"])\
-                and not self._navigatedViaMarkerOrChapter \
-                and (startTimeOff == 0 or (startTimeOff + util.advancedSettings.autoSkipOffset * 1000) <= self.offset):
-
-            setattr(self, markerDef["markerAutoSkipped"], True)
-            self.resetAutoSeekTimer(None)
-            markerOff = 0
-            final = getattr(markerDef["marker"], "final", False)
-
-            if final:
-                markerOff = FINAL_MARKER_NEGOFF
-
-            util.DEBUG_LOG('MarkerAutoSkip: Skipping marker {}'.format(markerDef["marker"]))
-            self.doSeek(int(markerDef["marker"].endTimeOffset) + 1000 - markerOff)
-            if not final:
-                self.setProperty('show.markerSkip', '')
-                self.setProperty('show.markerSkip_OSDOnly', '')
-            return True
-
-        if markerDef and not self.osdVisible() and self.lastFocusID != self.SKIP_MARKER_BUTTON_ID and \
-                not self.getProperty('show.markerSkip_OSDOnly') and self.getProperty('show.markerSkip'):
-            self.setFocusId(self.SKIP_MARKER_BUTTON_ID)
+        cancelTick = self.displayMarkers()
+        if cancelTick:
+            return
 
         if offset or (self.autoSeekTimeout and time.time() >= self.autoSeekTimeout and
                       self.offset != self.selectedOffset):
@@ -1427,7 +1554,7 @@ class SeekDialog(kodigui.BaseDialog):
     def hideOSD(self):
         self.setProperty('show.OSD', '')
         self.setFocusId(self.NO_OSD_BUTTON_ID)
-        if self.shouldShowMarkerSkip() and not self.getProperty('show.markerSkip_OSDOnly'):
+        if self.getCurrentMarkerDef() and not self.getProperty('show.markerSkip_OSDOnly'):
             self.setFocusId(self.SKIP_MARKER_BUTTON_ID)
 
         self.resetSeeking()
@@ -1491,14 +1618,18 @@ class PlaylistDialog(kodigui.BaseDialog):
             episode.grandparentTitle,
             u'{0}{1} \u2022 {2}{3}'.format(T(32310, 'S'), episode.parentIndex, T(32311, 'E'), episode.index)
         )
-        mli = kodigui.ManagedListItem(episode.title, label2, thumbnailImage=episode.thumb.asTranscodedImageURL(*self.LI_AR16X9_THUMB_DIM), data_source=episode)
+        mli = kodigui.ManagedListItem(episode.title, label2,
+                                      thumbnailImage=episode.thumb.asTranscodedImageURL(*self.LI_AR16X9_THUMB_DIM),
+                                      data_source=episode)
         mli.setProperty('track.duration', util.durationToShortText(episode.duration.asInt()))
         mli.setProperty('video', '1')
         mli.setProperty('watched', episode.isWatched and '1' or '')
         return mli
 
     def createMovieListItem(self, movie):
-        mli = kodigui.ManagedListItem(movie.title, movie.year, thumbnailImage=movie.art.asTranscodedImageURL(*self.LI_AR16X9_THUMB_DIM), data_source=movie)
+        mli = kodigui.ManagedListItem(movie.title, movie.year,
+                                      thumbnailImage=movie.art.asTranscodedImageURL(*self.LI_AR16X9_THUMB_DIM),
+                                      data_source=movie)
         mli.setProperty('track.duration', util.durationToShortText(movie.duration.asInt()))
         mli.setProperty('video', '1')
         mli.setProperty('watched', movie.isWatched and '1' or '')

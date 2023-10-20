@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="script.plexmod"
        name="Plex"
-       version="0.6.0-rc1"
+       version="0.6.2"
        provider-name="pannal">
     <requires>
         <import addon="xbmc.python" version="2.26.0"/>
@@ -25,36 +25,38 @@
         <source>https://github.com/pannal/plex-for-kodi</source>
         <platform>all</platform>
         <news>
-- Add Kodi Buffer/Cache settings to new System tab
-- Add pm4k_cache_template.xml to allow further customization (copy to profile folder)
-- Add addon path and Kodi profile path to Settings/About
-- Add advanced/addon setting to set (Plex) HTTP request timeouts; change default from 10 to 5 (on display/crash issues, increase timeout)
-- Add explicit LAN check for servers (docker-based ones won't show as local by default); only works on Kodi 19 and above; add icmplib and license
-- Add setting to specify LAN check connection timeout (default 10ms)
-- If desired, prefer an insecure local server over a secure one after switching users, as well
-- Add warning when preferring local server connections over secure ones
-- Add long timeout for essential plex.tv requests
-- Add force server list refresh button to server list (allows reloading the available servers after changing PMS network settings)
-- Add setting to verify local/LAN connections even if plex.tv doesn't think they're local
-- Add setting to prefer local connections over secure ones, enabling enforced manual servers
-- Add advanced/addon setting to add an offset to intro/credits autoskip, as the Plex markers might be a little early (default +2 seconds)
+- Add system setting to execute action upon sleep event (e.g. exit Kodi when display goes to sleep; fixes passthrough issues on SHIELD)
+- Allow canceling postplay timeout with enter/OK
+- Binge mode: show postplay if video was exited manually
+- Show local/LAN server status in status bar and server list via new icon; server list is live now
+- Discover local/LAN servers automatically (if any of the plex.tv/resource's DNS points to a local IP and is reachable)
+- plexapp/account/main: init account earlier to pick up ID early; slightly reorder initialization sequence to pick up preferred servers earlier
+- Connection logic: refactor connection significance; wait for manual connections if necessary/wanted; add way more logging (as this might break things)
+- Remember last used server per user
+- Refactor seekdialog autoskip handling and chapter/marker display logic
+- Harden the episodeswindow's paginator, making it less easy to generate a huge amount of requests when paging quickly (holding down left/right)
+- Harden chapter/marker autoskip
+- Add "combined chapters", intelligently merging chapters and markers into one, if available
+- Add BIF preview images to markers if available ("Enable video preview thumbnails" needs to be enabled on server and library)
+- Add separate "show autoskip info early" offset to addon settings (default: 2.5s)
+- Add countdown to autoskip info button, informing the user that we're about to auto skip the next marker (intro/credits)
+- Set skip intro button show early threshold to 60s (was 120s) to skip recaps but only those
+- Seek as fast as possible on immediately occurring intro; skip directly to next video if possible on last credits with autoskip enabled
+- Add separate connectivity check timeout; properly set up timeouts for async requests; log ping in local network tests
+- Harden server discovery; further improvements to preferring local over secure
+- Update reachability of servers live in server list;
+- Remove server refresh button due to issues;
+- Add fontawesome license
+- Show busy dialog when selecting a new user, preventing errors
+- Trigger force available servers/connections refresh when changing network settings;
 
-- Show video chapters if available in playback instead of bigSeek (also add a setting)
-- Show virtual chapters in playback (from Plex markers, intro, credits etc.) if no chapters exist for a video file
-- Reload items properly with chapters upon preplay-reinit
-- Reorder settings, advanced is now system, add network settings
-- Show chapters and/or markers in info view of a video item
-
-- Implement TV binge mode (auto skip intros if not first EP of season; auto skip credits; skip postplay)
-- Implement per-user settings
-- Make Binge-mode overridable per show
-- Make Binge-mode, all auto-skip and whether to display chapters or markers a per-user setting
-
-- Fix focusing the wrong episode after opening the info screen
-- Fix reloading episodes list after watching multiple episodes
-- Strip out MP4 file name in stream URL to prevent subtitles trying to be downloaded, fixing long wait time (thanks @microadam)
-- Fix failure on video with no audio stream
-- Optimize remaining time calculations for preplay screen
+- Fix Bingemode not properly stored per user
+- Fix multiple credits naming in seekdialog
+- Fix error upon episodes window reinit; catch error upon missing listitem
+- Remove time left tag after watching more than one episode
+- Add some missing advanced/addon setting descriptions; cleanup
+- Disable GDM discovery by default
+- Fix late display of embedded subtitles; the change has been forgotten, sorry; fixes #54
         </news>
         <assets>
             <icon>icon.png</icon>

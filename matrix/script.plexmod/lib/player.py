@@ -14,7 +14,6 @@ from plexnet import plexplayer
 from plexnet import plexapp
 from plexnet import signalsmixin
 from plexnet import util as plexnetUtil
-
 from six.moves import range
 
 FIVE_MINUTES_MILLIS = 300000
@@ -97,7 +96,8 @@ class BasePlayerHandler(object):
 
         return 0
 
-    def updateNowPlaying(self, force=False, refreshQueue=False, state=None):
+    def updateNowPlaying(self, force=False, refreshQueue=False, state=None, time=None):
+        util.DEBUG_LOG("UpdateNowPlaying: force: {0} refreshQueue: {1} state: {2}".format(force, refreshQueue, state))
         if self.ignoreTimelines:
             return
 
@@ -116,7 +116,7 @@ class BasePlayerHandler(object):
         self.lastTimelineState = state
         # self.timelineTimer.reset()
 
-        time = int(self.trueTime * 1000)
+        time = time or int(self.trueTime * 1000)
 
         # self.trigger("progress", [m, item, time])
 
@@ -149,6 +149,7 @@ class SeekPlayerHandler(BasePlayerHandler):
         self.title = ''
         self.title2 = ''
         self.chapters = None
+        self.stoppedInBingeMode = False
         self.reset()
 
     def reset(self):
@@ -159,6 +160,7 @@ class SeekPlayerHandler(BasePlayerHandler):
         self.seekOnStart = 0
         self.mode = self.MODE_RELATIVE
         self.ended = False
+        self.stoppedInBingeMode = False
 
     def setup(self, duration, offset, bif_url, title='', title2='', seeking=NO_SEEK, chapters=None):
         self.ended = False
@@ -194,7 +196,7 @@ class SeekPlayerHandler(BasePlayerHandler):
         if self.playlist and self.playlist.TYPE == 'playlist':
             return False
 
-        if self.player.video.bingeMode:
+        if self.player.video.bingeMode and not self.stoppedInBingeMode:
             return False
 
         if (not util.advancedSettings.postplayAlways and self.player.video.duration.asInt() <= FIVE_MINUTES_MILLIS)\
@@ -210,7 +212,10 @@ class SeekPlayerHandler(BasePlayerHandler):
         self.seeking = self.SEEK_POST_PLAY
         self.hideOSD(delete=True)
 
-        self.player.trigger('post.play', video=self.player.video, playlist=self.playlist, handler=self)
+        self.player.trigger('post.play', video=self.player.video, playlist=self.playlist, handler=self,
+                            stoppedInBingeMode=self.stoppedInBingeMode)
+
+        self.stoppedInBingeMode = False
 
         return True
 
@@ -390,11 +395,13 @@ class SeekPlayerHandler(BasePlayerHandler):
         self.updateOffset()
         # self.showOSD(from_seek=True)
 
-    def setSubtitles(self):
+    def setSubtitles(self, do_sleep=True):
         subs = self.player.video.selectedSubtitleStream(
             forced_subtitles_override=util.advancedSettings.forcedSubtitlesOverride)
         if subs:
-            xbmc.sleep(100)
+            if do_sleep:
+                xbmc.sleep(100)
+
             self.player.showSubtitles(False)
             path = subs.getSubtitleServerPath()
             if path:
@@ -444,7 +451,7 @@ class SeekPlayerHandler(BasePlayerHandler):
     def initPlayback(self):
         self.seeking = self.NO_SEEK
 
-        self.setSubtitles()
+        #self.setSubtitles()
         self.setAudioTrack()
 
         if self.mode == self.MODE_ABSOLUTE:
@@ -626,6 +633,7 @@ class AudioPlayerHandler(BasePlayerHandler):
 
     def onPlayBackStarted(self):
         self.player.lastPlayWasBGM = False
+        self.handler.setSubtitles(do_sleep=False)
         self.updatePlayQueue(delay=True)
         self.extractTrackInfo()
         self.updateNowPlaying(state='playing')
@@ -1033,11 +1041,12 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
         return (url, li)
 
     def onPrePlayStarted(self):
-        util.DEBUG_LOG('Player - PRE-PLAY')
+        util.DEBUG_LOG('Player - PRE-PLAY; handler: %r' % self.handler)
         self.trigger('preplay.started')
         if not self.handler:
             return
         self.handler.onPrePlayStarted()
+        self.handler.setSubtitles(do_sleep=False)
 
     def onPlayBackStarted(self):
         self.started = True

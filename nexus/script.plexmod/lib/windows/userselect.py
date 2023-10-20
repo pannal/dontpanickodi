@@ -4,6 +4,7 @@ from kodi_six import xbmcgui
 
 from . import kodigui
 from . import dropdown
+from . import busy
 
 from lib import util, image, backgroundthread
 from plexnet import plexapp
@@ -183,6 +184,7 @@ class UserSelectWindow(kodigui.BaseWindow):
             item.setProperty('pin', item.dataSource.title)
             item.setProperty('editing.pin', '')
 
+    @busy.dialog()
     def userSelected(self, item, pin=None):
         user = item.dataSource
         # xbmc.sleep(500)

@@ -1357,3 +1357,72 @@ msgstr ""
 msgctxt "#32631"
 msgid "Player (user-specific)"
 msgstr ""
+
+msgctxt "#33632"
+msgid "Server connectivity check timeout (seconds)"
+msgstr ""
+
+msgctxt "#33633"
+msgid "Set the maximum amount of time a server connection has to answer a connectivity request. Default: 2.5"
+msgstr ""
+
+msgctxt "#33634"
+msgid "Combined Chapters"
+msgstr ""
+
+msgctxt "#33635"
+msgid "Final Credits"
+msgstr ""
+
+msgctxt "#32700"
+msgid "Action on Sleep event"
+msgstr ""
+
+msgctxt "#32701"
+msgid "When Kodi receives a sleep event from the system, run the following action."
+msgstr ""
+
+msgctxt "#32702"
+msgid "Nothing"
+msgstr ""
+
+msgctxt "#32703"
+msgid "Stop playback"
+msgstr ""
+
+msgctxt "#32704"
+msgid "Quit Kodi"
+msgstr ""
+
+msgctxt "#32705"
+msgid "CEC Standby"
+msgstr ""
+
+msgctxt "#32800"
+msgid "Skipping intro"
+msgstr ""
+
+msgctxt "#32801"
+msgid "Skipping credits"
+msgstr ""
+
+msgctxt "#32900"
+msgid "While playing back an item and seeking on the seekbar, automatically seek to the selected position after a delay instead of having to confirm the selection."
+msgstr ""
+
+msgctxt "#32901"
+msgid "Seek delay in seconds."
+msgstr ""
+
+msgctxt "#32902"
+msgid "Kodi has its own skip step settings. Try to use them if they're configured instead of the default ones."
+msgstr ""
+
+msgctxt "#32903"
+msgid "Use the above for seeking on the timeline as well."
+msgstr ""
+
+msgctxt "#32904"
+msgid "In seconds."
+msgstr ""
+

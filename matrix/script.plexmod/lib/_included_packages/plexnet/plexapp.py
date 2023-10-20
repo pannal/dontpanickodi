@@ -13,18 +13,21 @@ import six
 Res = simpleobjects.Res
 SERVERMANAGER = None
 ACCOUNT = None
+MANAGER = None
 
 PLATFORM = util.X_PLEX_DEVICE
+
 
 def init():
     global MANAGER, SERVERMANAGER, ACCOUNT
     from . import myplexaccount
     ACCOUNT = myplexaccount.ACCOUNT
+    ACCOUNT.init()
     from . import plexservermanager
     SERVERMANAGER = plexservermanager.MANAGER
     from . import myplexmanager
-    util.MANAGER = myplexmanager.MANAGER
-    ACCOUNT.init()
+    util.MANAGER = MANAGER = myplexmanager.MANAGER
+    ACCOUNT.verifyAccount()
 
 
 class App(signalsmixin.SignalsMixin):

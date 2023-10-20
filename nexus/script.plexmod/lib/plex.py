@@ -11,7 +11,7 @@ import six
 
 from kodi_six import xbmc
 
-from plexnet import plexapp, myplex, util as plexnet_util
+from plexnet import plexapp, myplex, util as plexnet_util, asyncadapter, http as pnhttp
 from . windows.settings import PlayedThresholdSetting
 from . import util
 from six.moves import range
@@ -81,11 +81,13 @@ class BingeModeManager(object):
     _data = None
     _currentServerUUID = None
     _currentUserID = None
-    default = False
+
+    # this could be a property, but w/e
+    glob = False
 
     def __init__(self):
         self.reset()
-        plexapp.util.APP.on('change:binge_mode', lambda **kwargs: self.setDefault(**kwargs))
+        plexapp.util.APP.on('change:binge_mode', lambda **kwargs: self.setGlob(**kwargs))
         plexapp.util.APP.on('change:selectedServer', lambda **kwargs: self.setServerUUID(**kwargs))
         plexapp.util.APP.on("change:user", lambda **kwargs: self.setUserID(**kwargs))
         plexapp.util.APP.on('init', lambda **kwargs: self.setUserID(**kwargs))
@@ -113,10 +115,10 @@ class BingeModeManager(object):
             return value
 
         if not obj.ratingKey:
-            return self.default
+            return self.glob
 
         # get
-        return self._data.get(csid, {}).get(cuid, {}).get(obj.ratingKey, self.default)
+        return self._data.get(csid, {}).get(cuid, {}).get(obj.ratingKey, self.glob)
 
     def reset(self):
         self._data = self.load()
@@ -125,13 +127,13 @@ class BingeModeManager(object):
 
         if plexapp.ACCOUNT:
             self.setUserID()
-        self.setDefault()
+        self.setGlob()
 
-    def setDefault(self, key=None, value=None):
-        if value is None and self._currentUserID:
-            self.default = util.getSetting('binge_mode.{}'.format(self._currentUserID), False)
-        else:
-            self.default = value
+    def setGlob(self, key=None, value=None):
+        if value is None:
+            self.glob = util.getUserSetting('binge_mode', False)
+        elif value is not None:
+            self.glob = value
 
     def setServerUUID(self, server=None):
         if not server and not plexapp.SERVERMANAGER.selectedServer:
@@ -142,6 +144,7 @@ class BingeModeManager(object):
         if not account and not plexapp.ACCOUNT:
             return
         self._currentUserID = (account if account is not None and reallyChanged else plexapp.ACCOUNT).ID
+        self.setGlob()
 
     def load(self):
         jstring = plexapp.util.INTERFACE.getRegistry("BingeModeSettings")
@@ -340,10 +343,20 @@ class PlexInterface(plexapp.AppInterface):
 
 def onSmartDiscoverLocalChange(value=None, **kwargs):
     plexnet_util.CHECK_LOCAL = value
+    plexapp.refreshResources(True)
 
 
 def onPreferLANChange(value=None, **kwargs):
     plexnet_util.LOCAL_OVER_SECURE = value
+    plexapp.refreshResources(True)
+
+
+def onPreferLocalChange(**kwargs):
+    plexapp.refreshResources(True)
+
+
+def onManualIPChange(**kwargs):
+    plexapp.refreshResources(True)
 
 
 plexapp.util.setInterface(PlexInterface())
@@ -351,13 +364,23 @@ plexapp.setUserAgent(defaultUserAgent())
 plexapp.util.INTERFACE.bingeModeManager = BingeModeManager()
 plexapp.util.APP.on('change:smart_discover_local', onSmartDiscoverLocalChange)
 plexapp.util.APP.on('change:prefer_local', onPreferLANChange)
+plexapp.util.APP.on('change:same_network', onPreferLocalChange)
+plexapp.util.APP.on('change:manual_ip_0', onManualIPChange)
+plexapp.util.APP.on('change:manual_ip_1', onManualIPChange)
+plexapp.util.APP.on('change:manual_port_0', onManualIPChange)
+plexapp.util.APP.on('change:manual_port_1', onManualIPChange)
 
 plexapp.util.CHECK_LOCAL = util.getSetting('smart_discover_local', True)
 plexapp.util.LOCAL_OVER_SECURE = util.getSetting('prefer_local', False)
 
 # set requests timeout
-plexapp.util.TIMEOUT = float(util.advancedSettings.requestsTimeout)
+TIMEOUT = float(util.advancedSettings.requestsTimeout)
+CONNCHECK_TIMEOUT = float(util.advancedSettings.connCheckTimeout)
+plexapp.util.TIMEOUT = TIMEOUT
+plexapp.util.CONN_CHECK_TIMEOUT = asyncadapter.AsyncTimeout(CONNCHECK_TIMEOUT).setConnectTimeout(CONNCHECK_TIMEOUT)
 plexapp.util.LAN_REACHABILITY_TIMEOUT = util.advancedSettings.localReachTimeout / 1000.0
+pnhttp.DEFAULT_TIMEOUT = asyncadapter.AsyncTimeout(TIMEOUT).setConnectTimeout(TIMEOUT)
+asyncadapter.DEFAULT_TIMEOUT = pnhttp.DEFAULT_TIMEOUT
 
 
 class CallbackEvent(plexapp.util.CompatEvent):
@@ -409,11 +432,14 @@ def init():
         plexapp.init()
         util.DEBUG_LOG('Waiting for account initialization...')
 
+    util.DEBUG_LOG('Account initialized: {}'.format(plexapp.ACCOUNT.ID))
+
     retry = True
 
     while retry:
         retry = False
         if not plexapp.ACCOUNT.authToken:
+            util.DEBUG_LOG("No auth token, authorizing")
             token = authorize()
 
             if not token:

@@ -1,3 +1,38 @@
+[- 0.6.2 -]
+- Add system setting to execute action upon sleep event (e.g. exit Kodi when display goes to sleep; fixes passthrough issues on SHIELD)
+- Allow canceling postplay timeout with enter/OK
+- Binge mode: show postplay if video was exited manually
+- Show local/LAN server status in status bar and server list via new icon; server list is live now
+- Discover local/LAN servers automatically (if any of the plex.tv/resource's DNS points to a local IP and is reachable)
+- plexapp/account/main: init account earlier to pick up ID early; slightly reorder initialization sequence to pick up preferred servers earlier
+- Connection logic: refactor connection significance; wait for manual connections if necessary/wanted; add way more logging (as this might break things)
+- Remember last used server per user
+- Refactor seekdialog autoskip handling and chapter/marker display logic
+- Harden the episodeswindow's paginator, making it less easy to generate a huge amount of requests when paging quickly (holding down left/right)
+- Harden chapter/marker autoskip
+- Add "combined chapters", intelligently merging chapters and markers into one, if available
+- Add BIF preview images to markers if available ("Enable video preview thumbnails" needs to be enabled on server and library)
+- Add separate "show autoskip info early" offset to addon settings (default: 2.5s)
+- Add countdown to autoskip info button, informing the user that we're about to auto skip the next marker (intro/credits)
+- Set skip intro button show early threshold to 60s (was 120s) to skip recaps but only those
+- Seek as fast as possible on immediately occurring intro; skip directly to next video if possible on last credits with autoskip enabled
+- Add separate connectivity check timeout; properly set up timeouts for async requests; log ping in local network tests
+- Harden server discovery; further improvements to preferring local over secure
+- Update reachability of servers live in server list;
+- Remove server refresh button due to issues;
+- Add fontawesome license
+- Show busy dialog when selecting a new user, preventing errors
+- Trigger force available servers/connections refresh when changing network settings;
+
+- Fix Bingemode not properly stored per user
+- Fix multiple credits naming in seekdialog
+- Fix error upon episodes window reinit; catch error upon missing listitem
+- Remove time left tag after watching more than one episode
+- Add some missing advanced/addon setting descriptions; cleanup
+- Disable GDM discovery by default
+- Fix late display of embedded subtitles; the change has been forgotten, sorry; fixes #54
+
+
 [- 0.6.0-rc1 -]
 - Add Kodi Buffer/Cache settings to new System tab
 - Add pm4k_cache_template.xml to allow further customization (copy to profile folder)

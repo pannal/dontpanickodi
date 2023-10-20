@@ -1330,7 +1330,7 @@ msgstr "Intro überspringen"
 #: 
 msgctxt "#32496"
 msgid "Skip credits"
-msgstr "Credits überspringen"
+msgstr "Abspann überspringen"
 
 #: 
 msgctxt "#32500"
@@ -1370,22 +1370,22 @@ msgstr "Festlegen, wie lange die Schaltfläche zum Überspringen des Intros ange
 #: 
 msgctxt "#32525"
 msgid "Skip Credits Button Timeout"
-msgstr "Zeitlimit für die Schaltfläche Credits überspringen"
+msgstr "Zeitlimit für die Schaltfläche Abspann überspringen"
 
 #: 
 msgctxt "#32526"
 msgid "Automatically Skip Credits"
-msgstr "Automatisches Überspringen von Credits"
+msgstr "Automatisches Überspringen von Abspann"
 
 #: 
 msgctxt "#32527"
 msgid "Automatically skip credits if available."
-msgstr "Automatisches Überspringen von Credits, falls vorhanden. Überschreibt aktivierten Binge-Modus nicht."
+msgstr "Automatisches Überspringen von Abspann, falls vorhanden. Überschreibt aktivierten Binge-Modus nicht."
 
 #: 
 msgctxt "#32528"
 msgid "Set how long the skip credits button shows for."
-msgstr "Festlegen, wie lange die Schaltfläche zum Überspringen des Credits angezeigt werden soll."
+msgstr "Festlegen, wie lange die Schaltfläche zum Überspringen des Abspann angezeigt werden soll."
 
 #: 
 msgctxt "#32540"
@@ -1655,3 +1655,71 @@ msgstr "Intro-/Abspann-Markierungen können ein wenig früh erscheinen in Plex. 
 msgctxt "#32631"
 msgid "Player (user-specific)"
 msgstr "Wiedergabe (benutzerspezifisch)"
+
+msgctxt "#33632"
+msgid "Server connectivity check timeout (seconds)"
+msgstr "Server Konnektivitätscheck-Timeout (Sekunden)"
+
+msgctxt "#33633"
+msgid "Set the maximum amount of time a server connection has to answer a connectivity request. Default: 2.5"
+msgstr "Setzt die maximale Zeit, in der eine Serververbindung antworten muss. Default: 2.5"
+
+msgctxt "#33634"
+msgid "Combined Chapters"
+msgstr "Kombinierte Kapitel"
+
+msgctxt "#33635"
+msgid "Finaler Abspann"
+msgstr ""
+
+msgctxt "#32700"
+msgid "Action on Sleep event"
+msgstr "Aktion bei Sleep-Ereignis"
+
+msgctxt "#32701"
+msgid "When Kodi receives a sleep event from the system, run the following action."
+msgstr "Wenn Kodi ein Sleep-Ereignis vom System erhält, folgende Aktion ausführen."
+
+msgctxt "#32702"
+msgid "Nothing"
+msgstr "Nichts"
+
+msgctxt "#32703"
+msgid "Stop playback"
+msgstr "Abspielen stoppen"
+
+msgctxt "#32704"
+msgid "Quit Kodi"
+msgstr "Kodi beenden"
+
+msgctxt "#32705"
+msgid "CEC Standby"
+msgstr "CEC Standby"
+
+msgctxt "#32800"
+msgid "Überspringe Intro"
+msgstr ""
+
+msgctxt "#32801"
+msgid "Überspringe Abspann"
+msgstr ""
+
+msgctxt "#32900"
+msgid "While playing back an item and seeking on the seekbar, automatically seek to the selected position after a delay instead of having to confirm the selection."
+msgstr "Wird während des Abspielens die Position auf der Zeitleiste verändert, automatisch nach einer Verzögerung auf die gewählte Position springen, ohne diese bestätigen zu müssen."
+
+msgctxt "#32901"
+msgid "Seek delay in seconds."
+msgstr "Sprungverzögerung in Sekunden"
+
+msgctxt "#32902"
+msgid "Kodi has its own skip step settings. Try to use them if they're configured instead of the default ones."
+msgstr "Kodi besitzt seine eigenen Sprungeinstellungen. Versuche diese anstatt der standardmäßigen zu verwenden, sollten sie konfiguriert sein."
+
+msgctxt "#32903"
+msgid "Use the above for seeking on the timeline as well."
+msgstr "Benutze die obrige Einstellung auch für die Zeitleiste."
+
+msgctxt "#32904"
+msgid "In seconds."
+msgstr "In Sekunden."

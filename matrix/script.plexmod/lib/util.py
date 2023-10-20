@@ -58,6 +58,9 @@ def getSetting(key, default=None):
 
 
 def getUserSetting(key, default=None):
+    if not plexapp.ACCOUNT:
+        return default
+
     key = '{}.{}'.format(key, plexapp.ACCOUNT.ID)
     with SETTINGS_LOCK:
         setting = ADDON.getSetting(key)
@@ -109,10 +112,11 @@ class AdvancedSettings(object):
         ("show_media_ends_label", True),
         ("background_colour", None),
         ("oldprofile", False),
-        ("skip_intro_button_show_early_threshold", 120),
+        ("skip_intro_button_show_early_threshold1", 60),
         ("requests_timeout", 5.0),
         ("local_reach_timeout", 10),
-        ("auto_skip_offset", 2)
+        ("auto_skip_offset", 2.5),
+        ("conn_check_timeout", 2.5)
     )
 
     def __init__(self):
@@ -171,6 +175,39 @@ class UtilityMonitor(xbmc.Monitor, signalsmixin.SignalsMixin):
     def watchStatusChanged(self):
         self.trigger('changed.watchstatus')
 
+    def actionStop(self):
+        if xbmc.Player().isPlaying():
+            LOG('OnSleep: Stopping media playback')
+            xbmc.Player().stop()
+
+    def actionQuit(self):
+        LOG('OnSleep: Exit Kodi')
+        xbmc.executebuiltin('Quit')
+
+    def actionReboot(self):
+        LOG('OnSleep: Reboot')
+        xbmc.restart()
+
+    def actionShutdown(self):
+        LOG('OnSleep: Shutdown')
+        xbmc.shutdown()
+
+    def actionHibernate(self):
+        LOG('OnSleep: Hibernate')
+        xbmc.executebuiltin('Hibernate')
+
+    def actionSuspend(self):
+        LOG('OnSleep: Suspend')
+        xbmc.executebuiltin('Suspend')
+
+    def actionCecstandby(self):
+        LOG('OnSleep: CEC Standby')
+        xbmc.executebuiltin('CECStandby')
+
+    def actionLogoff(self):
+        LOG('OnSleep: Sign Out')
+        xbmc.executebuiltin('System.LogOff')
+
     def onNotification(self, sender, method, data):
         DEBUG_LOG("Notification: {} {} {}".format(sender, method, data))
         if sender == 'script.plexmod' and method.endswith('RESTORE'):
@@ -178,6 +215,9 @@ class UtilityMonitor(xbmc.Monitor, signalsmixin.SignalsMixin):
             getAdvancedSettings()
             populateTimeFormat()
             xbmc.executebuiltin('ActivateWindow({0})'.format(kodigui.BaseFunctions.lastWinID))
+
+        elif sender == "xbmc" and method == "System.OnSleep" and getSetting('action_on_sleep', "none") != "none":
+            getattr(self, "action{}".format(getSetting('action_on_sleep', "none").capitalize()))()
 
 
 MONITOR = UtilityMonitor()

@@ -62,7 +62,7 @@ class PlexConnection(object):
         7: SOURCE_ALL
     }
 
-    def __init__(self, source, address, isLocal, token, isFallback=False):
+    def __init__(self, source, address, isLocal, token, isFallback=False, skipLocalCheck=False):
         self.state = self.STATE_UNKNOWN
         self.sources = source
         self.address = address
@@ -77,8 +77,10 @@ class PlexConnection(object):
         self.lastTestedAt = 0
         self.hasPendingRequest = False
 
+        self.isSecureButLocal = False
+
         # check whether hostname is on LAN
-        if HAS_ICMPLIB and util.CHECK_LOCAL:
+        if HAS_ICMPLIB and util.CHECK_LOCAL and not skipLocalCheck:
             self.checkLocal()
 
         self.getScore(True)
@@ -115,13 +117,17 @@ class PlexConnection(object):
         return False
 
     def checkLocal(self):
-        hostname = urlparse(self.address).hostname
+        pUrl = urlparse(self.address)
+        hostname = pUrl.hostname
         try:
             ips = resolve(hostname)
         except (socket.gaierror, ICMPLibError):
             return False
 
         for ip in ips:
+            if ip == hostname:
+                continue
+
             network = self.ipInLocalNet(ip)
             if not network:
                 continue
@@ -133,7 +139,12 @@ class PlexConnection(object):
 
             if host.is_alive:
                 self.isLocal = True
-                util.LOG("Found IP {0} in local network ({1}).".format(ip, network))
+                util.LOG("Found IP {0} in local network ({1}) when checking {2}. Ping: {3}ms (max: {4}ms)"
+                         .format(ip, network, self.address, host.max_rtt, int(util.LAN_REACHABILITY_TIMEOUT * 1000)))
+
+                if self.isSecure:
+                    # alert the server that we've found the IP locally, so we can test non-secure connectivity
+                    self.isSecureButLocal = (ip, pUrl.port)
 
         return False
 
@@ -191,7 +202,8 @@ class PlexConnection(object):
             ):
                 util.DEBUG_LOG("Invalid insecure connection test in progress")
             self.request = http.HttpRequest(self.buildUrl(server, "/"))
-            context = self.request.createRequestContext("reachability", callback.Callable(self.onReachabilityResponse))
+            context = self.request.createRequestContext("reachability", callback.Callable(self.onReachabilityResponse),
+                                                        timeout=util.CONN_CHECK_TIMEOUT)
             context.server = server
             util.addPlexHeaders(self.request, server.getToken())
             self.hasPendingRequest = util.APP.startRequest(self.request, context)
