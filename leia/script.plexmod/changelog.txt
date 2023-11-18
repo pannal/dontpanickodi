@@ -1,3 +1,39 @@
+[- 0.6.4 -]
+- Fix preplay mediachoice issues
+- Fix seeking with auto-skip scenarios on slower devices
+- Fix online/trailer quality issues (was always using a low quality before)
+- Fix round-robining in episode view
+- Fix Kodi 18
+- Fix some rare Kodi playback errors in logs, mostly cosmetic
+- Fix player sometimes not sending the last timeline state after playback ends
+- Fix playback issues when multiple versions exist but one of them is missing
+- Fix embedded subtitle display delays on playback start and on subtitle change while playing back (backseeks 1 second)
+- Fix double-back-button necessary to exit when cancelling autoskip
+- Fix chapters not showing when no markers present
+- Fix User Pin entry not showing errors
+- Fix reactivating addon after minimize
+- Fix autoskip marker continuing to count down when paused; don't hide autoskip marker when paused
+
+- Add support for multiple media versions and fix individual stream selection support
+- Add support for stream selection in trailers/extras
+- Add current cache/buffer state to progress bar
+- Add video/audio/subtitle stream selection for trailers
+- Add zero drift playback timers for current time, time left, ends at
+- Add minimize option to exit
+- Add playback settings manager to enable full settings per TV show instead of just binge mode toggle;
+- Add slow connection support (e.g. in a hotel); waits for the buffer to fill to a reasonable amount until playback; sets readfactor to 20 (don't use with passthrough)
+Migrate previous binge mode data to new extensible format, stored as addon_data/playback_settings.json
+
+- Player: Better/more immediate intro-auto-skip implementation
+- Cache/Buffer: Allow 26% and 30% "overcommit" (+android 23%)
+- Cache/Buffer: Add readfactor to settings (needs Kodi restart)
+- Cache/Buffer: Add support for new kodi-omega-master Cache/Buffer GUI settings
+- Harden next/prev episode handling in auto-skip scenarios
+- Harden next/prev button handling
+- Settings: allow vertical round-robining for settings and options lists
+- User Switch: Allow cancellation of switch; select the current user by default when switching
+
+
 [- 0.6.2 -]
 - Add system setting to execute action upon sleep event (e.g. exit Kodi when display goes to sleep; fixes passthrough issues on SHIELD)
 - Allow canceling postplay timeout with enter/OK

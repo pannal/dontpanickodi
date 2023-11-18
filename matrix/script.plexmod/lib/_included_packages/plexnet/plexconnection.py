@@ -10,7 +10,7 @@ HAS_ICMPLIB = False
 try:
     from icmplib import ping, resolve, ICMPLibError
 except:
-    util.WARN_LOG("icmplib not found, can't check local connectivity")
+    pass
 else:
     HAS_ICMPLIB = True
     from urllib.parse import urlparse
@@ -78,6 +78,9 @@ class PlexConnection(object):
         self.hasPendingRequest = False
 
         self.isSecureButLocal = False
+
+        if not HAS_ICMPLIB:
+            util.WARN_LOG("icmplib not found, can't check local connectivity")
 
         # check whether hostname is on LAN
         if HAS_ICMPLIB and util.CHECK_LOCAL and not skipLocalCheck:

@@ -302,7 +302,10 @@ class MyPlexAccount(object):
             path = '/api/home/users/{0}/switch'.format(userId)
             req = myplexrequest.MyPlexRequest(path)
             xml = req.postToStringWithTimeout({'pin': pin}, seconds=util.LONG_TIMEOUT)
-            data = ElementTree.fromstring(xml)
+            try:
+                data = ElementTree.fromstring(xml)
+            except:
+                return False
 
             if data.attrib.get('authenticationToken'):
                 self.isAuthenticated = True

@@ -1,4 +1,6 @@
 from __future__ import absolute_import
+from functools import wraps
+
 from . import plexobjects
 from . import media
 from . import plexmedia
@@ -7,6 +9,7 @@ from . import exceptions
 from . import compat
 from . import plexlibrary
 from . import util
+from . import mediachoice
 
 
 class PlexVideoItemList(plexobjects.PlexItemList):
@@ -28,10 +31,22 @@ class PlexVideoItemList(plexobjects.PlexItemList):
         return self._items
 
 
+def forceMediaChoice(method):
+    @wraps(method)
+    def _impl(self, *method_args, **method_kwargs):
+        # set mediaChoice if we don't have any yet, or the one we have is incomplete and the new one isn't
+        media = method_kwargs.get("media", self.media()[0])
+        partIndex = method_kwargs.get("partIndex", 0)
+        if not self.mediaChoice or (not self.mediaChoice.media.hasStreams() and media.hasStreams()):
+            self.setMediaChoice(media=media, partIndex=partIndex)
+        return method(self, *method_args, **method_kwargs)
+    return _impl
+
+
 class Video(media.MediaItem):
     TYPE = None
     manually_selected_sub_stream = False
-    bingeMode = False
+    current_subtitle_is_embedded = False
 
     def __init__(self, *args, **kwargs):
         self._settings = None
@@ -55,14 +70,25 @@ class Video(media.MediaItem):
     def settings(self, value):
         self._settings = value
 
-    def selectedAudioStream(self):
+    def selectedVideoStream(self, fallback=False):
+        if self.videoStreams:
+            for stream in self.videoStreams:
+                if stream.isSelected():
+                    return stream
+            if fallback:
+                return self.videoStreams[0]
+        return None
+
+    def selectedAudioStream(self, fallback=False):
         if self.audioStreams:
             for stream in self.audioStreams:
                 if stream.isSelected():
                     return stream
+            if fallback:
+                return self.audioStreams[0]
         return None
 
-    def selectedSubtitleStream(self, forced_subtitles_override=False):
+    def selectedSubtitleStream(self, forced_subtitles_override=False, fallback=False):
         if self.subtitleStreams:
             for stream in self.subtitleStreams:
                 if stream.isSelected():
@@ -83,10 +109,18 @@ class Video(media.MediaItem):
                                            (possible_alt, stream))
                             stream.setSelected(False)
                             possible_alt.setSelected(True)
+                            self.current_subtitle_is_embedded = possible_alt.embedded
                             return possible_alt
                     return stream
+            if fallback:
+                return self.subtitleStreams[0]
         return None
 
+    def setMediaChoice(self, media=None, partIndex=0):
+        media = media or self.media()[0]
+        self.mediaChoice = mediachoice.MediaChoice(media, partIndex=partIndex)
+
+    @forceMediaChoice
     def selectStream(self, stream, _async=True):
         self.mediaChoice.part.setSelectedStream(stream.streamType.asInt(), stream.id, _async)
         # Update any affected streams
@@ -100,17 +134,21 @@ class Video(media.MediaItem):
             for subtitleStream in self.subtitleStreams:
                 if subtitleStream.id == stream.id:
                     subtitleStream.setSelected(True)
+                    self.current_subtitle_is_embedded = subtitleStream.embedded
                 elif subtitleStream.isSelected():
                     subtitleStream.setSelected(False)
 
     def isVideoItem(self):
         return True
 
-    def _findStreams(self, streamtype):
+    @forceMediaChoice
+    def _findStreams(self, streamtype, withMC=True):
         idx = 0
         streams = []
-        for media_ in self.media():
-            for part in media_.parts:
+        source = [self.mediaChoice.media] if withMC else self.media()
+        for media_ in source:
+            parts = [self.mediaChoice.part] if withMC else media_.parts
+            for part in parts:
                 for stream in part.streams:
                     if stream.streamType.asInt() == streamtype:
                         stream.typeIndex = idx
@@ -175,18 +213,20 @@ class Video(media.MediaItem):
         return server.buildUrl('/{0}/:/transcode/universal/start.m3u8?{1}'.format(streamtype, compat.urlencode(final)), includeToken=True)
         # path = "/video/:/transcode/universal/" + command + "?session=" + AppSettings().GetGlobal("clientIdentifier")
 
+    @forceMediaChoice
     def resolutionString(self):
-        res = self.media[0].videoResolution
+        res = self.mediaChoice.media.videoResolution
         if not res:
             return ''
 
         if res.isdigit():
-            return '{0}p'.format(self.media[0].videoResolution)
+            return '{0}p'.format(self.mediaChoice.media.videoResolution)
         else:
             return res.upper()
 
+    @forceMediaChoice
     def audioCodecString(self):
-        codec = (self.media[0].audioCodec or '').lower()
+        codec = (self.mediaChoice.media.audioCodec or '').lower()
 
         if codec in ('dca', 'dca-ma', 'dts-hd', 'dts-es', 'dts-hra'):
             codec = "DTS"
@@ -195,37 +235,23 @@ class Video(media.MediaItem):
 
         return codec
 
+    @forceMediaChoice
     def videoCodecString(self):
-        return (self.media[0].videoCodec or '').upper()
+        return (self.mediaChoice.media.videoCodec or '').upper()
 
+    @property
+    @forceMediaChoice
     def videoCodecRendering(self):
-        render = "sdr"
-        stream = None
-
-        for media in self.media:
-            for part in media.parts:
-                for s in part.streams:
-                    if s.streamType.asInt() == plexstream.PlexStream.TYPE_VIDEO:
-                        stream = s
-                        break
+        stream = self.mediaChoice.videoStream
 
         if not stream:
             return ''
 
-        if stream.colorTrc == "smpte2084":
-            if stream.DOVIProfile == "8" and stream.DOVIBLCompatID == "1":
-                render = "dv/hdr10"
-            elif stream.DOVIProfile:
-                render = "dv"
-            else:
-                render = "hdr"
-        elif stream.colorTrc == "arib-std-b67":
-            render = "hlg"
+        return stream.videoCodecRendering
 
-        return render.upper()
-
+    @forceMediaChoice
     def audioChannelsString(self, translate_func=util.dummyTranslate):
-        channels = self.media[0].audioChannels.asInt()
+        channels = self.mediaChoice.media.audioChannels.asInt()
 
         if channels == 1:
             return translate_func("Mono")
@@ -252,7 +278,7 @@ class Video(media.MediaItem):
         return (hours and "{}h ".format(hours) or '') + (minutes and "{}m".format(minutes) or "0m")
 
     def available(self):
-        return self.media()[0].isAccessible()
+        return any(v.isAccessible() for v in self.media())
 
 
 class RelatedMixin(object):
@@ -299,6 +325,9 @@ class SectionOnDeckMixin(object):
 
 class PlayableVideo(Video, RelatedMixin):
     TYPE = None
+    _videoStreams = None
+    _audioStreams = None
+    _subtitleStreams = None
 
     def _setData(self, data):
         Video._setData(self, data)
@@ -306,13 +335,64 @@ class PlayableVideo(Video, RelatedMixin):
             self.extras = PlexVideoItemList(data.find('Extras'), initpath=self.initpath, server=self.server, container=self)
             self.chapters = plexobjects.PlexItemList(data, media.Chapter, media.Chapter.TYPE, server=self.server)
 
+        self.resetStreams()
+
+    def setMediaChoice(self, *args, **kwargs):
+        """
+        Reset cached streams after setting a mediaChoice
+        """
+        super(PlayableVideo, self).setMediaChoice(*args, **kwargs)
+        self.resetStreams()
+
+    def resetStreams(self):
+        self._videoStreams = None
+        self._audioStreams = None
+        self._subtitleStreams = None
+
     def reload(self, *args, **kwargs):
         if not kwargs.get('_soft'):
             if self.get('viewCount'):
                 del self.viewCount
             if self.get('viewOffset'):
                 del self.viewOffset
+
+        fromMediaChoice = kwargs.get("fromMediaChoice", False)
+
+        # capture current IDs
+        mediaID = None
+        partID = None
+        streamIDs = None
+        reSelect = False
+        if fromMediaChoice and self.mediaChoice:
+            reSelect = True
+            mediaID = self.mediaChoice.media.id
+            partID = self.mediaChoice.part.id
+            streamIDs = []
+            if self.mediaChoice.media.hasStreams():
+                subtitleStream = self.selectedSubtitleStream(fallback=False)
+                streamIDs = [self.selectedVideoStream(fallback=True).id,
+                             self.selectedAudioStream(fallback=True).id]
+                if subtitleStream:
+                    streamIDs.append(subtitleStream.id)
+
         Video.reload(self, *args, **kwargs)
+
+        # re-select selected IDs
+        if reSelect:
+            selMedia = None
+            selPartIndex = 0
+            for media in self.media:
+                if media.id == mediaID:
+                    selMedia = media
+                    media.set('selected', '1')
+                    for index, part in enumerate(media.parts):
+                        if part.id == partID:
+                            selPartIndex = index
+                            for stream in part.streams:
+                                if stream.id in streamIDs:
+                                    stream.setSelected(True)
+            self.mediaChoice = mediachoice.MediaChoice(selMedia, partIndex=selPartIndex)
+
         return self
 
     def postPlay(self, **params):
@@ -348,10 +428,6 @@ class Movie(PlayableVideo):
                 self.media = plexobjects.PlexMediaItemList(data, plexmedia.PlexMedia, media.Media.TYPE, initpath=self.initpath, server=self.server, media=self)
 
         self.markers = plexobjects.PlexItemList(data, media.Marker, media.Marker.TYPE, server=self.server)
-
-        self._videoStreams = None
-        self._audioStreams = None
-        self._subtitleStreams = None
 
         # data for active sessions
         self.sessionKey = plexobjects.PlexValue(data.attrib.get('sessionKey', ''), self)
@@ -419,12 +495,8 @@ class Show(Video, RelatedMixin, SectionOnDeckMixin):
         return self.viewedLeafCount == self.leafCount
 
     @property
-    def bingeMode(self):
-        return util.INTERFACE.bingeModeManager(self)
-
-    @bingeMode.setter
-    def bingeMode(self, value):
-        util.INTERFACE.bingeModeManager(self, value)
+    def playbackSettings(self):
+        return util.INTERFACE.playbackManager(self)
 
     def seasons(self):
         path = self.key
@@ -517,10 +589,6 @@ class Episode(PlayableVideo, SectionOnDeckMixin):
 
         self.markers = plexobjects.PlexItemList(data, media.Marker, media.Marker.TYPE, server=self.server)
 
-        self._videoStreams = None
-        self._audioStreams = None
-        self._subtitleStreams = None
-
         # data for active sessions
         self.sessionKey = plexobjects.PlexValue(data.attrib.get('sessionKey', ''), self)
         self.user = self._findUser(data)
@@ -559,12 +627,8 @@ class Episode(PlayableVideo, SectionOnDeckMixin):
         return self.get('viewCount').asInt() > 0 or self.get('viewOffset').asInt() > 0
 
     @property
-    def bingeMode(self):
-        return self.show().bingeMode
-
-    @bingeMode.setter
-    def bingeMode(self, value):
-        self.show().bingeMode(value)
+    def playbackSettings(self):
+        return self.show().playbackSettings
 
     def getStreamURL(self, **params):
         return self._getStreamURL(**params)
@@ -614,3 +678,21 @@ class Clip(PlayableVideo):
 
     def getStreamURL(self, **params):
         return self._getStreamURL(**params)
+
+    @property
+    def videoStreams(self):
+        if self._videoStreams is None:
+            self._videoStreams = self._findStreams(plexstream.PlexStream.TYPE_VIDEO)
+        return self._videoStreams
+
+    @property
+    def audioStreams(self):
+        if self._audioStreams is None:
+            self._audioStreams = self._findStreams(plexstream.PlexStream.TYPE_AUDIO)
+        return self._audioStreams
+
+    @property
+    def subtitleStreams(self):
+        if self._subtitleStreams is None:
+            self._subtitleStreams = self._findStreams(plexstream.PlexStream.TYPE_SUBTITLE)
+        return self._subtitleStreams

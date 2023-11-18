@@ -99,7 +99,7 @@
                     <align>left</align>
                     <aligny>center</aligny>
                     <textcolor>FFFFFFFF</textcolor>
-                    <label>$INFO[Window.Property(time.current)]</label>
+                    <label>$INFO[Player.Time($INFO[Window.Property(time.fmt)])]</label>
                 </control>
                 <control type="label">
                     <visible>Player.IsTempo</visible>
@@ -114,7 +114,6 @@
                     <label>$INFO[Player.PlaySpeed]x</label>
                 </control>
                 <control type="label">
-                    <visible>!String.IsEmpty(Window.Property(media.show_ends))</visible>
                     <posx>1860</posx>
                     <posy>0</posy>
                     <width>800</width>
@@ -123,7 +122,7 @@
                     <align>right</align>
                     <aligny>center</aligny>
                     <textcolor>FFFFFFFF</textcolor>
-                    <label>$INFO[Window.Property(time.left)]</label>
+                    <label>$INFO[Player.TimeRemaining($INFO[Window.Property(time.fmt)])]</label>
                 </control>
                 <control type="label">
                     <visible>!String.IsEmpty(Window.Property(media.show_ends))</visible>
@@ -135,7 +134,7 @@
                     <align>right</align>
                     <aligny>center</aligny>
                     <textcolor>A0FFFFFF</textcolor>
-                    <label>$INFO[Window.Property(time.ends_label)] $INFO[Window.Property(time.end)]</label>
+                    <label>$INFO[Window.Property(time.ends_label)]$INFO[Player.FinishTime($INFO[Window.Property(time.fmt.ends)])]</label>
                 </control>
                 <control type="label">
                     <visible>Player.Paused + String.IsEmpty(Window.Property(show.OSD))</visible>
@@ -162,6 +161,15 @@
                     <height>10</height>
                     <texture>script.plex/white-square.png</texture>
                     <colordiffuse>A0000000</colordiffuse>
+                </control>
+                <control type="image" id="206">
+                    <visible>!String.IsEmpty(Window.Property(show.buffer))</visible>
+                    <posx>0</posx>
+                    <posy>2</posy>
+                    <width>1</width>
+                    <height>6</height>
+                    <texture>script.plex/white-square.png</texture>
+                    <colordiffuse>EE4E4842</colordiffuse>
                 </control>
                 <control type="image" id="201">
                     <posx>0</posx>
@@ -1016,7 +1024,7 @@
             <align>right</align>
             <orientation>horizontal</orientation>
             <control type="button" id="791">
-                <visible>!String.IsEmpty(Window.Property(show.markerSkip)) + [String.IsEmpty(Window.Property(show.markerSkip_OSDOnly)) | [!String.IsEmpty(Window.Property(show.markerSkip_OSDOnly)) + !String.IsEmpty(Window.Property(show.OSD))]]</visible>
+                <visible>[!String.IsEmpty(Window.Property(show.markerSkip)) + String.IsEmpty(Window.Property(show.markerSkip_OSDOnly))] | [!String.IsEmpty(Window.Property(show.markerSkip_OSDOnly)) + !String.IsEmpty(Window.Property(show.OSD))]</visible>
                 <animation effect="zoom" start="100" end="110,120" time="100" center="auto" reversible="false">Focus</animation>
                 <animation effect="zoom" start="110,120" end="100" time="100" center="auto" reversible="false">UnFocus</animation>
                 <animation type="Conditional" condition="String.IsEmpty(Window.Property(show.OSD)) + !Window.IsVisible(seekbar)" reversible="false">

@@ -23,6 +23,7 @@ class BaseFunctions:
 
     usesGenerate = False
     lastWinID = None
+    lastDialogID = None
 
     def __init__(self):
         self.isOpen = True
@@ -160,7 +161,7 @@ class BaseDialog(xbmcgui.WindowXMLDialog, BaseFunctions):
 
     def onInit(self):
         self._winID = xbmcgui.getCurrentWindowDialogId()
-        BaseFunctions.lastWinID = self._winID
+        BaseFunctions.lastDialogID = self._winID
         if self.started:
             self.onReInit()
         else:

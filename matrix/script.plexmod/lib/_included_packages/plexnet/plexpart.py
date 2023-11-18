@@ -158,7 +158,7 @@ class PlexPart(plexobjects.PlexObject):
         return bool(self.streams)
 
     def __str__(self):
-        return "Part {0} {1}".format(self.id("NaN"), self.key)
+        return "PlexPart {0} {1}".format(self.id("NaN"), self.key)
 
     def __eq__(self, other):
         if other is None:

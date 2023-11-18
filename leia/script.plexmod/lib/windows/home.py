@@ -498,6 +498,10 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver):
                     self.showUserMenu(mouse=True)
                     self.setBoolProperty('show.options', True)
                     return
+            elif controlID == self.SERVER_LIST_ID:
+                if action == xbmcgui.ACTION_SELECT_ITEM:
+                    self.setFocusId(self.SERVER_BUTTON_ID)
+                    return
 
             if controlID == self.SERVER_BUTTON_ID and action == xbmcgui.ACTION_MOVE_RIGHT:
                 self.setFocusId(self.USER_BUTTON_ID)
@@ -547,8 +551,15 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver):
                         self.lastNonOptionsFocusID = None
                         return
 
-                if action in(xbmcgui.ACTION_NAV_BACK, xbmcgui.ACTION_PREVIOUS_MENU) and not self.confirmExit():
-                    return
+                if action in (xbmcgui.ACTION_NAV_BACK, xbmcgui.ACTION_PREVIOUS_MENU):
+                    ex = self.confirmExit()
+                    # 0 = exit; 1 = minimize; 2 = cancel
+                    if ex in (2, None):
+                        return
+                    elif ex == 1:
+                        xbmc.executebuiltin('ActivateWindow(10000)')
+                        return
+                    # 0 passes the action to the BaseWindow and exits HOME
         except:
             util.ERROR()
 
@@ -599,10 +610,11 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver):
             T(32334, 'Confirm Exit'),
             T(32335, 'Are you ready to exit Plex?'),
             T(32336, 'Exit'),
+            T(32924, 'Minimize'),
             T(32337, 'Cancel')
         )
 
-        return button == 0
+        return button
 
     def searchButtonClicked(self):
         self.processCommand(search.dialog(self))
@@ -1216,7 +1228,6 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver):
             return
 
         server = mli.dataSource
-        self.setFocusId(self.SERVER_BUTTON_ID)
 
         if not server.isReachable():
             if server.pendingReachabilityRequests > 0:

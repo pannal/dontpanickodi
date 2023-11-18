@@ -188,8 +188,10 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
         if not self.postPlayMode:
             return
 
-        timeoutCanceled = bool(self.timeout)
-        self.cancelTimer()
+        timeoutCanceled = False
+        if util.advancedSettings.postplayCancel:
+            timeoutCanceled = bool(self.timeout)
+            self.cancelTimer()
 
         if controlID == self.HOME_BUTTON_ID:
             self.goHome()

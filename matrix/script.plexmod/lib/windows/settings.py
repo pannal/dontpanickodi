@@ -120,7 +120,7 @@ class BoolUserSetting(BoolSetting):
         old = self.get()
         if old != val:
             util.DEBUG_LOG('Setting: {0} - changed from [{1}] to [{2}]'.format(self.userAwareID, old, val))
-            plexnet.util.APP.trigger('change:{0}'.format(self.ID), key=self.userAwareID, value=val)
+            plexnet.util.APP.trigger('change:{0}'.format(self.ID), key=self.userAwareID, value=val, skey=self.ID)
         return util.setSetting(self.userAwareID, val)
 
 
@@ -158,7 +158,20 @@ class BufferSetting(OptionsSetting):
             util.DEBUG_LOG('Setting: {0} - changed from [{1}] to [{2}]'.format(self.ID, old, val))
             plexnet.util.APP.trigger('change:{0}'.format(self.ID), value=val)
 
-        util.kcm.write(val)
+        util.kcm.write(memorySize=val)
+
+
+class ReadFactorSetting(OptionsSetting):
+    def get(self):
+        return util.kcm.readFactor
+
+    def set(self, val):
+        old = self.get()
+        if old != val:
+            util.DEBUG_LOG('Setting: {0} - changed from [{1}] to [{2}]'.format(self.ID, old, val))
+            plexnet.util.APP.trigger('change:{0}'.format(self.ID), value=val)
+
+        util.kcm.write(readFactor=val)
 
 
 class InfoSetting(BasicSetting):
@@ -263,7 +276,7 @@ class Settings(object):
         'video': (
             T(32053, 'Video'), (
                 QualitySetting('local_quality', T(32020, 'Local Quality'), 13),
-                QualitySetting('remote_quality', T(32021, 'Remote Quality'), 8),
+                QualitySetting('remote_quality', T(32021, 'Remote Quality'), 13),
                 QualitySetting('online_quality', T(32022, 'Online Quality'), 13),
                 BoolSetting('playback_directplay', T(32025, 'Allow Direct Play'), True),
                 BoolSetting('playback_remux', T(32026, 'Allow Direct Stream'), True),
@@ -382,7 +395,7 @@ class Settings(object):
                 IPSetting('manual_ip_0', T(32044, 'Connection 1 IP'), ''),
                 IntegerSetting('manual_port_0', T(32045, 'Connection 1 Port'), 32400),
                 IPSetting('manual_ip_1', T(32046, 'Connection 2 IP'), ''),
-                IntegerSetting('manual_port_1', T(32047, 'Connection 2 Port'), 32400)
+                IntegerSetting('manual_port_1', T(32047, 'Connection 2 Port'), 32400),
             )
         ),
         'system': (
@@ -390,17 +403,32 @@ class Settings(object):
 
                 BoolSetting('kiosk.mode', T(32043, 'Start Plex On Kodi Startup'), False),
                 BufferSetting('cache_size',
-                               T(33613, 'Kodi Buffer Size (MB)'),
-                               20,
-                               [(mem, '{} MB'.format(mem)) for mem in util.kcm.viableOptions])
-                .description(T(33614, 'Set the Kodi Cache/Buffer size. Free: {} MB, '
-                                      'Recommended max: {} MB, Default: 20 MB. '
-                                      'Needs Kodi restart. WARNING: This will overwrite advancedsettings.xml!\n\n'
-                                      'To customize other cache/network-related values, '
-                                      'copy "script.plexmod/pm4k_cache_template.xml" to profile folder and edit it to '
-                                      'your liking. (See About section for the file paths)'
-                               ).format(util.kcm.free, util.kcm.recMax)
+                              T(33613, 'Kodi Buffer Size (MB)'),
+                              20,
+                              [(mem, '{} MB'.format(mem)) for mem in util.kcm.viableOptions])
+                .description(
+                    T(33614, 'Set the Kodi Cache/Buffer size. Free: {} MB, '
+                             'Recommended max: {} MB, Default: 20 MB. '
+                             'Needs Kodi restart. WARNING: This will overwrite advancedsettings.xml!\n\n'
+                             'To customize other cache/network-related values, '
+                             'copy "script.plexmod/pm4k_cache_template.xml" to profile folder and edit it to '
+                             'your liking. (See About section for the file paths)'
+                      ).format(util.kcm.free, util.kcm.recMax)
                 ),
+                ReadFactorSetting('readfactor',
+                                  T(32922, 'Kodi Cache Readfactor'),
+                                  4,
+                                  [(rf, str(rf)) for rf in util.kcm.readFactorOpts])
+                .description(
+                    T(32923, 'Sets the Kodi cache readfactor value. Default: 4, recommended: 4-10.'
+                             'With "Slow connection" enabled this will be set to 20, as otherwise the cache doesn\'t'
+                             'fill fast/aggressively enough.'
+                      )
+                ),
+                BoolSetting(
+                    'slow_connection', T(32915, 'Slow connection'), False
+                ).description("Use with a wonky/slow connection, e.g. in a hotel room. Adjusts the UI to visually "
+                              "wait for item refreshes and waits for the buffer to fill when starting playback."),
                 OptionsSetting(
                     'action_on_sleep',
                     T(32700, 'Action on Sleep event'),
@@ -428,7 +456,7 @@ class Settings(object):
                 ServerVersionSetting('server_version', T(32057, 'Current Server Version'), None),
                 InfoSetting('addon_path', T(33616, 'Addon Path'), util.ADDON.getAddonInfo("path")),
                 InfoSetting('userdata_path', T(33617, 'Userdata/Profile Path'),
-                            xbmcvfs.translatePath("special://profile")),
+                            util.translatePath("special://profile")),
             )
         ),
     }

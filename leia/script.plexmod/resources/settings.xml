@@ -18,44 +18,14 @@
                     <default>false</default>
                     <control type="toggle"/>
                 </setting>
-                <setting id="requests_timeout" type="number" label="33620" help="33621">
+                <setting id="forced_subtitles_override" type="boolean" label="32493">
                     <level>0</level>
-                    <default>5</default>
-                    <constraints>
-                        <minimum>0.1</minimum>
-                        <step>0.1</step>
-                        <maximum>20</maximum>
-                    </constraints>
-                    <control type="slider" format="number">
-                        <popup>false</popup>
-                    </control>
-                </setting>
-                <setting id="conn_check_timeout" type="number" label="33632" help="33633">
-                    <level>0</level>
-                    <default>2.5</default>
-                    <constraints>
-                        <minimum>0.1</minimum>
-                        <step>0.1</step>
-                        <maximum>20</maximum>
-                    </constraints>
-                    <control type="slider" format="number">
-                        <popup>false</popup>
-                    </control>
-                </setting>
-                <setting id="local_reach_timeout" type="number" label="33622" help="33623">
-                    <level>0</level>
-                    <default>10</default>
-                    <constraints>
-                        <minimum>1</minimum>
-                        <step>1</step>
-                        <maximum>1000</maximum>
-                    </constraints>
-                    <control type="slider" format="number">
-                        <popup>false</popup>
-                    </control>
+                    <default>false</default>
+                    <control type="toggle"/>
                 </setting>
             </group>
         </category>
+        <!-- Player -->
         <category id="player" label="32464">
             <group id="2" label="">
                 <setting id="auto_seek" type="boolean" label="32466" help="32900">
@@ -88,18 +58,53 @@
                     <default>false</default>
                     <control type="toggle"/>
                 </setting>
-                <setting id="forced_subtitles_override" type="boolean" label="32493">
+                <setting id="show_media_ends_info" type="boolean" label="32540" help="32541">
                     <level>0</level>
-                    <default>false</default>
+                    <default>true</default>
                     <control type="toggle"/>
                 </setting>
-                <setting id="postplay_timeout" type="integer" label="32501" help="32904">
+                <setting id="show_media_ends_label" type="boolean" label="32542" help="">
                     <level>0</level>
-                    <default>16</default>
-                    <control type="edit" format="integer">
-                        <heading>32501</heading>
+                    <default>true</default>
+                    <control type="toggle"/>
+                    <dependencies>
+                        <dependency type="enable" setting="show_media_ends_info">true</dependency>
+                    </dependencies>
+                </setting>
+                <setting id="player_show_buffer" type="boolean" label="32912" help="32913">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="buffer_wait_max" type="integer" label="32918" help="32919">
+                    <level>0</level>
+                    <default>120</default>
+                    <constraints>
+                        <minimum>0</minimum>
+                        <step>1</step>
+                        <maximum>600</maximum>
+                    </constraints>
+                    <control type="slider" format="integer">
+                        <popup>false</popup>
                     </control>
                 </setting>
+                <setting id="buffer_insufficient_wait" type="integer" label="32920" help="32921">
+                    <level>0</level>
+                    <default>10</default>
+                    <constraints>
+                        <minimum>0</minimum>
+                        <step>1</step>
+                        <maximum>600</maximum>
+                    </constraints>
+                    <control type="slider" format="integer">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+            </group>
+        </category>
+        <!-- Markers -->
+        <category id="markers" label="33612">
+            <group id="3" label="">
                 <setting id="auto_skip_offset" type="number" label="33629" help="33630">
                     <level>0</level>
                     <default>2.5</default>
@@ -152,21 +157,19 @@
                         <popup>false</popup>
                     </control>
                 </setting>
-                <setting id="show_media_ends_info" type="boolean" label="32540" help="32541">
+                <setting id="skip_marker_timer_cancel" type="boolean" label="32906" help="32907">
                     <level>0</level>
                     <default>true</default>
                     <control type="toggle"/>
                 </setting>
-                <setting id="show_media_ends_label" type="boolean" label="32542" help="">
+                <setting id="skip_marker_timer_immediate" type="boolean" label="32908" help="32909">
                     <level>0</level>
-                    <default>true</default>
+                    <default>false</default>
                     <control type="toggle"/>
-                    <dependencies>
-                        <dependency type="enable" setting="show_media_ends_info">true</dependency>
-                    </dependencies>
                 </setting>
             </group>
         </category>
+        <!-- UI -->
         <category id="user_interface" label="32467">
             <group id="4" label="">
                 <setting id="fast_back" type="boolean" label="32485">
@@ -227,6 +230,18 @@
                     <default>true</default>
                     <control type="toggle"/>
                 </setting>
+                <setting id="postplay_timeout" type="integer" label="32501" help="32904">
+                    <level>0</level>
+                    <default>16</default>
+                    <control type="edit" format="integer">
+                        <heading>32501</heading>
+                    </control>
+                </setting>
+                <setting id="postplay_cancel" type="boolean" label="32905">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
             </group>
         </category>
         <category id="screensaver" label="32488">
@@ -235,6 +250,46 @@
                     <level>0</level>
                     <default>false</default>
                     <control type="toggle"/>
+                </setting>
+            </group>
+        </category>
+        <category id="system" label="33600">
+            <group id="6" label="">
+                <setting id="requests_timeout" type="number" label="33620" help="33621">
+                    <level>0</level>
+                    <default>5</default>
+                    <constraints>
+                        <minimum>0.1</minimum>
+                        <step>0.1</step>
+                        <maximum>20</maximum>
+                    </constraints>
+                    <control type="slider" format="number">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting id="conn_check_timeout" type="number" label="33632" help="33633">
+                    <level>0</level>
+                    <default>2.5</default>
+                    <constraints>
+                        <minimum>0.1</minimum>
+                        <step>0.1</step>
+                        <maximum>20</maximum>
+                    </constraints>
+                    <control type="slider" format="number">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting id="local_reach_timeout" type="number" label="33622" help="33623">
+                    <level>0</level>
+                    <default>10</default>
+                    <constraints>
+                        <minimum>1</minimum>
+                        <step>1</step>
+                        <maximum>1000</maximum>
+                    </constraints>
+                    <control type="slider" format="number">
+                        <popup>false</popup>
+                    </control>
                 </setting>
             </group>
         </category>

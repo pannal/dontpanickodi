@@ -34,9 +34,11 @@ _splitver = xbmc.getInfoLabel('System.BuildVersion').split()[0].split(".")
 KODI_VERSION_MAJOR, KODI_VERSION_MINOR = int(_splitver[0].split("-")[0]), int(_splitver[1].split("-")[0])
 
 if KODI_VERSION_MAJOR > 18:
-    PROFILE = xbmcvfs.translatePath(ADDON.getAddonInfo('profile'))
+    translatePath = xbmcvfs.translatePath
 else:
-    PROFILE = xbmc.translatePath(ADDON.getAddonInfo('profile'))
+    translatePath = xbmc.translatePath
+
+PROFILE = translatePath(ADDON.getAddonInfo('profile'))
 
 
 def getChannelMapping():
@@ -116,7 +118,14 @@ class AdvancedSettings(object):
         ("requests_timeout", 5.0),
         ("local_reach_timeout", 10),
         ("auto_skip_offset", 2.5),
-        ("conn_check_timeout", 2.5)
+        ("conn_check_timeout", 2.5),
+        ("postplayCancel", True),
+        ("skip_marker_timer_cancel", True),
+        ("skip_marker_timer_immediate", False),
+        ("low_drift_timer", True),
+        ("player_show_buffer", True),
+        ("buffer_wait_max", 120),
+        ("buffer_insufficient_wait", 10),
     )
 
     def __init__(self):
@@ -223,6 +232,7 @@ class UtilityMonitor(xbmc.Monitor, signalsmixin.SignalsMixin):
 MONITOR = UtilityMonitor()
 
 ADV_MSIZE_RE = re.compile(r'<memorysize>(\d+)</memorysize>')
+ADV_RFACT_RE = re.compile(r'<readfactor>(\d+)</readfactor>')
 ADV_CACHE_RE = re.compile(r'\s*<cache>.*</cache>', re.S | re.I)
 
 
@@ -231,18 +241,32 @@ class KodiCacheManager(object):
     A pretty cheap approach at managing the <cache> section of advancedsettings.xml
     """
     _cleanData = None
+    useModernAPI = False
     memorySize = 20  # in MB
+    readFactor = 4
     template = None
     orig_tpl_path = os.path.join(ADDON.getAddonInfo('path'), "pm4k_cache_template.xml")
     custom_tpl_path = "special://profile/pm4k_cache_template.xml"
-    translated_ctpl_path = xbmcvfs.translatePath(custom_tpl_path)
+    translated_ctpl_path = translatePath(custom_tpl_path)
 
     # give Android a little more leeway with its sometimes weird memory management; otherwise stick with 23% of free mem
     safeFactor = .20 if xbmc.getCondVisibility('System.Platform.Android') else .23
 
     def __init__(self):
-        self.load()
-        self.template = self.getTemplate()
+        try:
+            self.memorySize = rpc.Settings.GetSettingValue(setting='filecache.memorysize')['value']
+            self.readFactor = rpc.Settings.GetSettingValue(setting='filecache.readfactor')['value'] // 100
+            DEBUG_LOG("Not using advancedsettings.xml for cache/buffer management, we're at least Kodi 21 non-alpha")
+            self.useModernAPI = True
+        except:
+            pass
+
+        if not self.useModernAPI:
+            self.load()
+            self.template = self.getTemplate()
+
+        plexapp.util.APP.on('change:slow_connection',
+                            lambda value=None, **kwargs: self.write(readFactor=value and 20 or 4))
 
     def getTemplate(self):
         if xbmcvfs.exists(self.custom_tpl_path):
@@ -278,22 +302,35 @@ class KodiCacheManager(object):
                 except (ValueError, IndexError, TypeError):
                     DEBUG_LOG("script.plex: invalid or not found memorysize in advancedsettings.xml")
 
+                try:
+                    self.readFactor = int(ADV_RFACT_RE.search(cachexml).group(1))
+                except (ValueError, IndexError, TypeError):
+                    DEBUG_LOG("script.plex: invalid or not found readfactor in advancedsettings.xml")
+
                 self._cleanData = data.replace(cachexml, "")
             else:
                 self._cleanData = data
 
-    def write(self, memorySize=None):
-        if memorySize:
-            self.memorySize = memorySize
-        else:
-            memorySize = self.memorySize
+    def write(self, memorySize=None, readFactor=None):
+        memorySize = self.memorySize = memorySize if memorySize is not None else self.memorySize
+        readFactor = self.readFactor = readFactor if readFactor is not None else self.readFactor
+
+        if self.useModernAPI:
+            # kodi cache settings have moved to Services>Caching
+            try:
+                rpc.Settings.SetSettingValue(setting='filecache.memorysize', value=self.memorySize)
+                rpc.Settings.SetSettingValue(setting='filecache.readfactor', value=self.readFactor * 100)
+            except:
+                pass
+            return
 
         cd = self._cleanData
         if not cd:
             cd = "<advancedsettings>\n</advancedsettings>"
 
         finalxml = "{}\n</advancedsettings>".format(
-            cd.replace("</advancedsettings>", self.template.format(memorysize=memorySize * 1024 * 1024))
+            cd.replace("</advancedsettings>", self.template.format(memorysize=memorySize * 1024 * 1024,
+                                                                   readfactor=readFactor))
         )
 
         try:
@@ -307,8 +344,20 @@ class KodiCacheManager(object):
     def viableOptions(self):
         default = list(filter(lambda x: x < self.recMax, [20, 40, 60, 80, 120, 160, 200, 400]))
 
+        # add option to overcommit slightly
+        overcommit = []
+        if xbmc.getCondVisibility('System.Platform.Android'):
+            overcommit.append(min(int(self.free * 0.23), 2000))
+
+        overcommit.append(min(int(self.free * 0.26), 2000))
+        overcommit.append(min(int(self.free * 0.3), 2000))
+
         # re-append current memorySize here, as recommended max might have changed
-        return list(sorted(list(set(default + [self.memorySize, self.recMax]))))
+        return list(sorted(list(set(default + [self.memorySize, self.recMax] + overcommit))))
+
+    @property
+    def readFactorOpts(self):
+        return list(sorted(list(set([4, 5, 10, 20] + [self.readFactor]))))
 
     @property
     def free(self):
@@ -331,7 +380,10 @@ def T(ID, eng=''):
     return ADDON.getLocalizedString(ID)
 
 
-hasCustomBGColour = not advancedSettings.dynamicBackgrounds and advancedSettings.backgroundColour != "-"
+hasCustomBGColour = False
+if KODI_VERSION_MAJOR > 18:
+    hasCustomBGColour = not advancedSettings.dynamicBackgrounds and advancedSettings.backgroundColour and \
+                        advancedSettings.backgroundColour != "-"
 
 
 def getAdvancedSettings():
@@ -368,10 +420,7 @@ def getGlobalProperty(key):
 
 def showNotification(message, time_ms=3000, icon_path=None, header=ADDON.getAddonInfo('name')):
     try:
-        if KODI_VERSION_MAJOR > 18:
-            icon_path = icon_path or xbmcvfs.translatePath(ADDON.getAddonInfo('icon'))
-        else:
-            icon_path = icon_path or xbmc.translatePath(ADDON.getAddonInfo('icon'))
+        icon_path = icon_path or translatePath(ADDON.getAddonInfo('icon'))
         xbmc.executebuiltin('Notification({0},{1},{2},{3})'.format(header, message, time_ms, icon_path))
     except RuntimeError:  # Happens when disabling the addon
         LOG(message)
@@ -766,16 +815,18 @@ def getTimeFormat():
     # Kodi Omega on Android seems to have borked the regional format returned separately
     # (not happening on Windows at least). Format returned can be "%H:mm:ss", which is incompatible with strftime; fix.
     adjustedFmt = adjustedFmt.replace("mm", "%M").replace("ss", "%S").replace("xx", "%p")
+    adjustedFmtKN = adjustedFmt.replace("%M", "mm").replace("%H", "hh").replace("%I", "h").replace("%S", "ss").\
+        replace("%p", "xx").replace(nonPadIF, "h").replace(nonPadHF, "h")
 
-    return adjustedFmt, padHour
+    return adjustedFmt,  adjustedFmtKN, padHour
 
 
-timeFormat, padHour = getTimeFormat()
+timeFormat, timeFormatKN, padHour = getTimeFormat()
 
 
 def populateTimeFormat():
-    global timeFormat, padHour
-    timeFormat, padHour = getTimeFormat()
+    global timeFormat, timeFormatKN, padHour
+    timeFormat, timeFormatKN, padHour = getTimeFormat()
 
 
 def getPlatform():

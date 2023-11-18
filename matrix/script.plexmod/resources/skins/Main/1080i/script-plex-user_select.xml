@@ -216,8 +216,6 @@
                 <height>455</height>
                 <scrolltime>200</scrolltime>
                 <onup>500</onup>
-                <onleft>100</onleft>
-                <onright>100</onright>
                 <ondown condition="Player.HasAudio">600</ondown>
                 <ondown condition="!String.IsEmpty(Container(101).ListItem.Property(protected))">400</ondown>
                 <orientation>horizontal</orientation>

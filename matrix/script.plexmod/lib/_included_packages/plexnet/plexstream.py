@@ -117,11 +117,31 @@ class PlexStream(plexobjects.PlexObject):
 
         return self.getServer().buildUrl(self.getSubtitlePath(), True)
 
+    @property
+    def embedded(self):
+        return not bool(self.getSubtitleServerPath())
+
     def isSelected(self):
         return self.selected.asBool()
 
     def setSelected(self, selected):
         self.selected = plexobjects.PlexValue(selected and '1' or '0')
+
+    @property
+    def videoCodecRendering(self):
+        render = "sdr"
+
+        if self.colorTrc == "smpte2084":
+            if self.DOVIProfile == "8" and self.DOVIBLCompatID == "1":
+                render = "dv/hdr10"
+            elif self.DOVIProfile:
+                render = "dv"
+            else:
+                render = "hdr"
+        elif self.colorTrc == "arib-std-b67":
+            render = "hlg"
+
+        return render.upper()
 
     def __str__(self):
         return self.getTitle()

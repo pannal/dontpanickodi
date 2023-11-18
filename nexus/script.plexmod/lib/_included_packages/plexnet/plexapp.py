@@ -230,7 +230,7 @@ class AppInterface(object):
         if qualityType == self.QUALITY_LOCAL:
             return self.getPreference("local_quality", 13)
         elif qualityType == self.QUALITY_ONLINE:
-            return self.getPreference("online_quality", 8)
+            return self.getPreference("online_quality", 13)
         else:
             return self.getPreference("remote_quality", 13)
 
@@ -274,7 +274,7 @@ class PlayerSettingsInterface(object):
         if qualityType == util.INTERFACE.QUALITY_LOCAL:
             return self.getPreference("local_quality", 13)
         elif qualityType == util.INTERFACE.QUALITY_ONLINE:
-            return self.getPreference("online_quality", 8)
+            return self.getPreference("online_quality", 13)
         else:
             return self.getPreference("remote_quality", 13)
 

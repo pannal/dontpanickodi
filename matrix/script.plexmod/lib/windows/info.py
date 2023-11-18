@@ -52,8 +52,17 @@ class InfoWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
         summary = [self.info]
 
         addMedia = ["\n\n\n\nMedia\n"]
+        onlyOneMedia = len(self.video.media()) == 1
         for media_ in self.video.media():
+            if not media_.isAccessible():
+                addMedia.append("Unavailable: {}\n\n".format(", ".join(os.path.basename(pf.file) for pf in media_.parts)))
+                continue
+
             for part in media_.parts:
+                if not part:
+                    addMedia.append("Unavailable: {}".format(os.path.basename(part.file)))
+                    continue
+
                 addMedia.append("File: ")
                 splitFnAt = 74
                 fnLen = len(os.path.basename(part.file))
@@ -66,12 +75,13 @@ class InfoWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
                     addMedia.append("{}\n".format(s))
 
                 subs = []
+                subsOver = 0
                 for stream in part.streams:
                     streamtype = stream.streamType.asInt()
                     # video
                     if streamtype == 1:
-                        addMedia.append("Video: {}x{}, {}/{}bit/{}/{}@{} kBit, {} fps\n".format(
-                            stream.width, stream.height, stream.codec.upper(),
+                        addMedia.append("Video: {}x{}, {} {}/{}bit/{}/{}@{} kBit, {} fps\n".format(
+                            stream.width, stream.height, stream.videoCodecRendering, stream.codec.upper(),
                             stream.bitDepth, stream.chromaSubsampling, stream.colorPrimaries, stream.bitrate,
                             stream.frameRate))
                     # audio
@@ -84,12 +94,16 @@ class InfoWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
                             stream.samplingRate))
                     # subtitle
                     elif streamtype == 3:
+                        if len(subs) > 4:
+                            subsOver += 1
+                            continue
                         subs.append("{} ({})".format(stream.language, stream.codec.upper()))
 
                 if subs:
-                    addMedia.append("Subtitles: {}\n\n".format(", ".join(subs)))
-
-            addMedia.append("\n\n")
+                    addMedia.append("Subtitles: {}{}\n".format(", ".join(subs),
+                                                               subsOver and " (+{})".format(subsOver) or ''))
+            if not onlyOneMedia:
+                addMedia.append("--------------\n")
 
         chapters = []
         for index, chapter in enumerate(self.video.chapters):

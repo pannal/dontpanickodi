@@ -179,7 +179,7 @@ class CurrentPlaylistWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
             self.goHome(track.getLibrarySectionId())
 
     def stopButtonClicked(self):
-        xbmc.executebuiltin(f'Action(Back, {self.musicPlayerWinID})')
+        xbmc.executebuiltin('Action(Back, {})'.format(self.musicPlayerWinID))
         xbmc.sleep(500)
         self.doClose()
 

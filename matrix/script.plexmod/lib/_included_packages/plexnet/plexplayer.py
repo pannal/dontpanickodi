@@ -223,6 +223,7 @@ class PlexPlayer(object):
 
                 if decision.isSuccess():
                     util.LOG("MDE: Server was happy with client's original decision. {0}".format(decision))
+                    return self
                 elif decision.isDecision(True):
                     util.WARN_LOG("MDE: Server was unhappy with client's original decision. {0}".format(decision))
                     return decision.getDecision()

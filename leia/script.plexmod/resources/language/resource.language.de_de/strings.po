@@ -1512,16 +1512,16 @@ msgid "Show the intro skip button from the start of a video with an intro marker
 msgstr "Zeige den Intro-Überspringen-Knopf von Anfang an. Die Automatische-Intro-Überspringen-Einstellung wird angewandt. Überschreibt aktivierten Binge-Modus nicht."
 
 msgctxt "#33507"
-msgid "Enable binge mode"
-msgstr "Binge mode aktivieren"
+msgid "Enabled"
+msgstr "Aktiviert"
 
 msgctxt "#33508"
-msgid "Disable binge mode"
-msgstr "Binge mode deaktiv."
+msgid "Disabled"
+msgstr "Deaktiviert"
 
 msgctxt "#33509"
-msgid "Early intro skip threshold (default: < 120s/2m)"
-msgstr "Frühes Intro-Überspringen Grenzwert (default: < 120s/2m)"
+msgid "Early intro skip threshold (default: < 60s/1m)"
+msgstr "Frühes Intro-Überspringen Grenzwert (default: < 60s/1m)"
 
 msgctxt "#33510"
 msgid "When showing the intro skip button early, only do so if the intro starts within the first X seconds."
@@ -1723,3 +1723,83 @@ msgstr "Benutze die obrige Einstellung auch für die Zeitleiste."
 msgctxt "#32904"
 msgid "In seconds."
 msgstr "In Sekunden."
+
+msgctxt "#32905"
+msgid "Cancel post-play timer by pressing OK/SELECT"
+msgstr "Post-Play Timer durch OK/SELECT abbrechen"
+
+msgctxt "#32906"
+msgid "Cancel skip marker timer with BACK"
+msgstr "Markierung überspringen durch Zurück abbrechen"
+
+msgctxt "#32907"
+msgid "When auto-skipping a marker, allow cancelling the timer by pressing BACK."
+msgstr "Wenn eine Markierung mit einem Zeitgeber automatisch übersprungen wird, durch Zurück-Taste abbrechen."
+
+msgctxt "#32908"
+msgid "Immediately skip marker with OK/SELECT"
+msgstr "Markierung sofort überspringen mit OK/SELECT"
+
+msgctxt "#32909"
+msgid "When auto-skipping a marker with a timer, allow skipping immediately by pressing OK/SELECT."
+msgstr "Wenn eine Markierung mit einem Zeitgeber automatisch übersprungen wird, durch OK/SELECT-Taste sofort überspringen."
+
+msgctxt "#32912"
+msgid "Show buffer-state on timeline"
+msgstr "Zeige Puffer-Stand auf Zeitachse"
+
+msgctxt "#32913"
+msgid "Shows the current Kodi buffer/cache state on the video player timeline."
+msgstr "Zeigt den aktuellen Kodi Puffer/Cache-Stand auf der Videoplayer Zeitachse."
+
+msgctxt "#32914"
+msgid "Loading"
+msgstr "Lädt"
+
+msgctxt "#32915"
+msgid "Slow connection"
+msgstr "Langsame Verbindung"
+
+msgctxt "#32916"
+msgid "Use with a wonky/slow connection, e.g. in a hotel room. Adjusts the UI to visually wait for item refreshes and waits for the buffer to fill when starting playback. Automatically sets readfactor=20, requires Kodi restart."
+msgstr "Mit wackeliger/langsamer Verbindung benutzen, z.B. im Hotel. Passt die Oberfläche visuell an um auf Media Auffrischungen zu warten und füllt den Kodi Puffer vor dem Abspielen. Setzt automatisch Kodi Cache readfactor=20, benötigt Kodi Neustart."
+
+msgctxt "#32917"
+msgid "Couldn't fill buffer in time ({}s)"
+msgstr "Konnte den Puffer nicht schnell genug füllen ({} s)"
+
+msgctxt "#32918"
+msgid "Buffer wait timeout (seconds)"
+msgstr "Puffer-Wartezeit (Sekunden)"
+
+msgctxt "#32919"
+msgid "When slow connection is enabled in the addon, wait this long for the buffer to fill. Default: 120 s"
+msgstr "Wenn Langsame Verbindung im Addon aktiviert ist, warte so lange bis der Puffer gefüllt ist. Default: 120 s"
+
+msgctxt "#32920"
+msgid "Insufficient buffer wait (seconds)"
+msgstr "Ungenügender Puffer Wartezeit (Sekunden)"
+
+msgctxt "#32921"
+msgid "When slow connection is enabled in the addon and the configured cache/buffer isn't big enough for us to determine its fill state, wait this long when starting playback. Default: 10 s"
+msgstr "Wenn Langsame Verbindung im Addon aktiviert und der konfigurierte Puffer/Cache nicht groß genug ist, damit wir dessen Füllstand ermitteln können, warte so lange vor dem Abspielen. Default: 10 s"
+
+msgctxt "#32922"
+msgid "Kodi Cache Readfactor"
+msgstr "Kodi Puffer Readfactor"
+
+msgctxt "#32923"
+msgid "Sets the Kodi cache readfactor value. Default: 4, recommended: 4-10. With \"Slow connection\" enabled this will be set to 20, as otherwise the cache doesn't fill fast/aggressively enough."
+msgstr "Setzt den Kodi Cache/Puffer readfactor Wert. Default: 4, empfohlen: 4-10. Bei aktivem \"Langsame Verbindung\" wird dies automatisch auf 20 gesetzt, da ansonsten der Cache nicht schnell/agressiv genug gefüllt wird."
+
+msgctxt "#32924"
+msgid "Minimize"
+msgstr "Minimieren"
+
+msgctxt "#32925"
+msgid "Playback Settings"
+msgstr "Abspieleinstell."
+
+msgctxt "#32926"
+msgid "Wrong pin entered!"
+msgstr "Falsche pin eingegeben!"

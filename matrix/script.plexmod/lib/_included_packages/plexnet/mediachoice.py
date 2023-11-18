@@ -25,6 +25,11 @@ class MediaChoice(object):
         if media:
             self.indirectHeaders = media.indirectHeaders
             self.part = media.parts[partIndex]
+            if not self.part:
+                for part in media.parts:
+                    if part.isAccessible():
+                        self.part = part
+
             if self.part:
                 # We generally just rely on PMS to have told us selected streams, so
                 # initialize our streams accordingly.

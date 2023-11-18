@@ -24,6 +24,7 @@ from . import dropdown
 from . import windowutils
 from . import search
 from . import pagination
+from . import playbacksettings
 
 from lib.util import T
 from lib.windows.home import MOVE_SET
@@ -34,7 +35,7 @@ class RelatedPaginator(pagination.BaseRelatedPaginator):
         return self.parentWindow.mediaItem.getRelated(offset=offset, limit=amount)
 
 
-class ShowWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
+class ShowWindow(kodigui.ControlledWindow, windowutils.UtilMixin, playbacksettings.PlaybackSettingsMixin):
     xmlFile = 'script-plex-seasons.xml'
     path = util.ADDON.getAddonInfo('path')
     theme = 'Main'
@@ -442,11 +443,8 @@ class ShowWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
             if self.mediaItem.type == "show":
                 if options:
                     options.append(dropdown.SEPARATOR)
-                oldBingeModeValue = INTERFACE.bingeModeManager(self.mediaItem)
-                if oldBingeModeValue:
-                    options.append({'key': 'binge_mode', 'display': T(33508, 'Disable binge mode')})
-                else:
-                    options.append({'key': 'binge_mode', 'display': T(33507, 'Enable binge mode')})
+
+                options.append({'key': 'playback_settings', 'display': T(32925, 'Playback Settings')})
 
         # if xbmc.getCondVisibility('Player.HasAudio') and self.section.TYPE == 'artist':
         #     options.append({'key': 'add_to_queue', 'display': 'Add To Queue'})
@@ -457,8 +455,9 @@ class ShowWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
         options.append(dropdown.SEPARATOR)
 
         options.append({'key': 'to_section', 'display': u'Go to {0}'.format(self.mediaItem.getLibrarySectionTitle())})
+        pos = (880, 618)
 
-        choice = dropdown.showDropdown(options, (880, 618), close_direction='left')
+        choice = dropdown.showDropdown(options, pos, close_direction='left')
         if not choice:
             return
 
@@ -476,11 +475,8 @@ class ShowWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
             util.MONITOR.watchStatusChanged()
         elif choice['key'] == 'to_section':
             self.goHome(self.mediaItem.getLibrarySectionId())
-        elif choice['key'] == 'binge_mode':
-            util.DEBUG_LOG(
-                "Changing binge mode setting for {} from {} to {}".format(self.mediaItem.ratingKey, oldBingeModeValue,
-                                                                          not oldBingeModeValue))
-            INTERFACE.bingeModeManager(self.mediaItem, not oldBingeModeValue)
+        elif choice['key'] == 'playback_settings':
+            self.playbackSettings(self.mediaItem, pos, False)
 
     def roleClicked(self):
         mli = self.rolesListControl.getSelectedItem()

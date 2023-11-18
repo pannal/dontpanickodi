@@ -30,6 +30,9 @@ class DropdownDialog(kodigui.BaseDialog):
         self.withIndicator = kwargs.get('with_indicator', False)
         self.suboptionCallback = kwargs.get('suboption_callback')
         self.closeOnPlaybackEnded = kwargs.get('close_on_playback_ended', False)
+        self.closeOnlyWithBack = kwargs.get('close_only_with_back', False)
+        self.alignItems = kwargs.get('align_items', 'center')
+        self.optionsCallback = kwargs.get('options_callback', None)
         self.header = kwargs.get('header')
         self.choice = None
 
@@ -122,7 +125,10 @@ class DropdownDialog(kodigui.BaseDialog):
                 choice['sub'] = sub
 
         self.choice = choice
-        self.doClose()
+        if not self.closeOnlyWithBack:
+            self.doClose()
+        if self.optionsCallback:
+            self.optionsCallback(self.optionsList, mli)
 
     def showOptions(self):
         items = []
@@ -131,6 +137,7 @@ class DropdownDialog(kodigui.BaseDialog):
             if o:
                 item = kodigui.ManagedListItem(o['display'], thumbnailImage=o.get('indicator', ''), data_source=o)
                 item.setProperty('with.indicator', self.withIndicator and '1' or '')
+                item.setProperty('align', self.alignItems)
                 items.append(item)
                 options.append(o)
             else:
@@ -163,6 +170,9 @@ def showDropdown(
     with_indicator=False,
     suboption_callback=None,
     close_on_playback_ended=False,
+    close_only_with_back=False,
+    align_items='center',
+    options_callback=None,
     header=None
 ):
 
@@ -176,6 +186,9 @@ def showDropdown(
             with_indicator=with_indicator,
             suboption_callback=suboption_callback,
             close_on_playback_ended=close_on_playback_ended,
+            close_only_with_back=close_only_with_back,
+            align_items=align_items,
+            options_callback=options_callback,
             header=header
         )
     else:
@@ -188,6 +201,9 @@ def showDropdown(
             with_indicator=with_indicator,
             suboption_callback=suboption_callback,
             close_on_playback_ended=close_on_playback_ended,
+            close_only_with_back=close_only_with_back,
+            align_items=align_items,
+            options_callback=options_callback,
             header=header
         )
     choice = w.choice

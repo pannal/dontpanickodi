@@ -16,6 +16,10 @@ def chooseVersion(video):
         if not choice:
             return False
 
+        for media in video.media:
+            media.set('selected', '')
+
+        video.setMediaChoice(choice['key'])
         choice['key'].set('selected', 1)
 
     return True

@@ -30,6 +30,9 @@ class BasePlayerHandler(object):
         self.playQueue = None
         self.sessionID = session_id
 
+    def onAVChange(self):
+        pass
+
     def onPrePlayStarted(self):
         pass
 
@@ -75,6 +78,15 @@ class BasePlayerHandler(object):
     def close(self):
         pass
 
+    def setSubtitles(self, *args, **kwargs):
+        pass
+
+    def getIntroOffset(self):
+        pass
+
+    def setup(self, duration, offset, bif_url, **kwargs):
+        pass
+
     @property
     def trueTime(self):
         return self.baseOffset + self.player.currentTime
@@ -88,7 +100,7 @@ class BasePlayerHandler(object):
         return item.ratingKey and item.getServer()
 
     def currentDuration(self):
-        if self.player.playerObject:
+        if self.player.playerObject and self.player.isPlaying():
             try:
                 return int(self.player.getTotalTime() * 1000)
             except RuntimeError:
@@ -99,6 +111,7 @@ class BasePlayerHandler(object):
     def updateNowPlaying(self, force=False, refreshQueue=False, state=None, time=None):
         util.DEBUG_LOG("UpdateNowPlaying: force: {0} refreshQueue: {1} state: {2}".format(force, refreshQueue, state))
         if self.ignoreTimelines:
+            util.DEBUG_LOG("UpdateNowPlaying: ignoring timeline as requested")
             return
 
         item = self.getCurrentItem()
@@ -172,6 +185,7 @@ class SeekPlayerHandler(BasePlayerHandler):
         self.title2 = title2
         self.chapters = chapters or []
         self.playedThreshold = plexapp.util.INTERFACE.getPlayedThresholdValue()
+        self.ignoreTimelines = False
         self.getDialog(setup=True)
         self.dialog.setup(self.duration, int(self.baseOffset * 1000), self.bifURL, self.title, self.title2,
                           chapters=self.chapters)
@@ -219,6 +233,9 @@ class SeekPlayerHandler(BasePlayerHandler):
 
         return True
 
+    def getIntroOffset(self):
+        return self.getDialog().displayMarkers(onlyReturnIntroMD=True)
+
     def next(self, on_end=False):
         if self.playlist and next(self.playlist):
             self.seeking = self.SEEK_PLAYLIST
@@ -230,6 +247,8 @@ class SeekPlayerHandler(BasePlayerHandler):
         if not self.playlist:
             return False
 
+        xbmc.sleep(500)
+
         self.player.playVideoPlaylist(self.playlist, handler=self, resume=self.player.resume)
 
         return True
@@ -239,6 +258,7 @@ class SeekPlayerHandler(BasePlayerHandler):
             return False
 
         self.seeking = self.SEEK_PLAYLIST
+        xbmc.sleep(500)
         self.player.playVideoPlaylist(self.playlist, handler=self, resume=self.player.resume)
 
         return True
@@ -323,6 +343,11 @@ class SeekPlayerHandler(BasePlayerHandler):
             self.player.seekTime(self.seekOnStart / 1000.0)
         return True
 
+    def onAVChange(self):
+        util.DEBUG_LOG('SeekHandler: onAVChange')
+        if self.dialog:
+            self.dialog.onAVChange()
+
     def onPlayBackStarted(self):
         util.DEBUG_LOG('SeekHandler: onPlayBackStarted - mode={0}'.format(self.mode))
         self.updateNowPlaying(force=True, refreshQueue=True)
@@ -382,6 +407,9 @@ class SeekPlayerHandler(BasePlayerHandler):
             self.dialog.onPlaybackPaused()
 
     def onPlayBackSeek(self, stime, offset):
+        if self.dialog:
+            self.dialog.onPlaybackSeek(stime, offset)
+
         if self.seekOnStart:
             seeked = False
             if self.dialog:
@@ -446,7 +474,10 @@ class SeekPlayerHandler(BasePlayerHandler):
                 self.player.setAudioStream(track.typeIndex)
 
     def updateOffset(self):
-        self.offset = int(self.player.getTime() * 1000)
+        try:
+            self.offset = int(self.player.getTime() * 1000)
+        except RuntimeError:
+            pass
 
     def initPlayback(self):
         self.seeking = self.NO_SEEK
@@ -484,7 +515,8 @@ class SeekPlayerHandler(BasePlayerHandler):
         self.hideOSD()
         util.DEBUG_LOG('SeekHandler: onVideoWindowClosed - Seeking={0}'.format(self.seeking))
         if not self.seeking:
-            self.player.stop()
+            if self.player.isPlaying():
+                self.player.stop()
             if not self.playlist or not self.playlist.hasNext():
                 if not self.shouldShowPostPlay():
                     self.sessionEnded()
@@ -633,7 +665,6 @@ class AudioPlayerHandler(BasePlayerHandler):
 
     def onPlayBackStarted(self):
         self.player.lastPlayWasBGM = False
-        self.handler.setSubtitles(do_sleep=False)
         self.updatePlayQueue(delay=True)
         self.extractTrackInfo()
         self.updateNowPlaying(state='playing')
@@ -902,6 +933,12 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
         else:
             if offset:
                 self.handler.seekOnStart = meta.playStart * 1000
+            else:
+                probOff = self.handler.getIntroOffset()
+                if probOff:
+                    util.DEBUG_LOG("Seeking behind intro: {}".format(probOff))
+                    self.handler.seekOnStart = probOff
+
             self.handler.mode = self.handler.MODE_ABSOLUTE
 
         url = util.addURLParams(url, {
@@ -1060,6 +1097,12 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
             return
         self.handler.onPlayBackStarted()
 
+    def onAVChange(self):
+        util.DEBUG_LOG('Player - AVChange')
+        if not self.handler:
+            return
+        self.handler.onAVChange()
+
     def onPlayBackPaused(self):
         util.DEBUG_LOG('Player - PAUSED')
         if not self.handler:
@@ -1187,7 +1230,11 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
 
         ct = 0
         while self.isPlayingVideo() and not util.MONITOR.abortRequested() and not self._closed:
-            self.currentTime = self.getTime()
+            try:
+                self.currentTime = self.getTime()
+            except RuntimeError:
+                break
+
             util.MONITOR.waitForAbort(0.1)
             if xbmc.getCondVisibility('Window.IsActive(videoosd)'):
                 if not self.hasOSD:
@@ -1224,7 +1271,11 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
         self.handler.onMonitorInit()
         ct = 0
         while self.isPlayingAudio() and not util.MONITOR.abortRequested() and not self._closed:
-            self.currentTime = self.getTime()
+            try:
+                self.currentTime = self.getTime()
+            except RuntimeError:
+                break
+
             util.MONITOR.waitForAbort(0.1)
 
             ct += 1

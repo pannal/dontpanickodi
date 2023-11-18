@@ -2,8 +2,7 @@ from __future__ import absolute_import
 from kodi_six import xbmc
 
 if xbmc.getInfoLabel('Window(10000).Property(script.plex.running)') == "1":
-    command = 'XBMC.NotifyAll({0},{1},{2})'.format('script.plexmod', 'RESTORE', None)
-    xbmc.executebuiltin(command)
+    xbmc.executebuiltin('NotifyAll({0},{1},{2})'.format('script.plexmod', 'RESTORE', '{}'))
     raise SystemExit
 
 import gc
@@ -60,6 +59,7 @@ def signout():
 def main():
     global BACKGROUND
     util.setGlobalProperty('running', '1')
+    # fixme: reopen windowutils.HOME if still running?
     try:
         with util.Cron(1):
             BACKGROUND = background.BackgroundWindow.create(function=_main)
@@ -78,6 +78,7 @@ def _main():
         while not util.MONITOR.abortRequested():
             if plex.init():
                 background.setSplash(False)
+                fromSwitch = False
                 while not util.MONITOR.abortRequested():
                     if (
                         not plexapp.ACCOUNT.isOffline and not
@@ -93,7 +94,12 @@ def _main():
                             break
                         elif result == 'signin':
                             break
-                        util.DEBUG_LOG('Main: User selected')
+                        elif result == 'cancel' and fromSwitch:
+                            util.DEBUG_LOG('Main: User selection canceled, reusing previous user')
+                            plexapp.ACCOUNT.isAuthenticated = True
+
+                        if not fromSwitch:
+                            util.DEBUG_LOG('Main: User selected')
 
                     try:
                         selectedServer = plexapp.SERVERMANAGER.selectedServer
@@ -130,6 +136,7 @@ def _main():
                             break
                         elif closeOption == 'switch':
                             plexapp.ACCOUNT.isAuthenticated = False
+                            fromSwitch = True
                     finally:
                         windowutils.shutdownHome()
                         BACKGROUND.activate()

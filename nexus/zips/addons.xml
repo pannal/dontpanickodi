@@ -32,7 +32,7 @@
 
 <addon id="script.plexmod"
        name="Plex"
-       version="0.6.2"
+       version="0.6.4"
        provider-name="pannal">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
@@ -56,38 +56,39 @@
         <source>https://github.com/pannal/plex-for-kodi</source>
         <platform>all</platform>
         <news>
-- Add system setting to execute action upon sleep event (e.g. exit Kodi when display goes to sleep; fixes passthrough issues on SHIELD)
-- Allow canceling postplay timeout with enter/OK
-- Binge mode: show postplay if video was exited manually
-- Show local/LAN server status in status bar and server list via new icon; server list is live now
-- Discover local/LAN servers automatically (if any of the plex.tv/resource's DNS points to a local IP and is reachable)
-- plexapp/account/main: init account earlier to pick up ID early; slightly reorder initialization sequence to pick up preferred servers earlier
-- Connection logic: refactor connection significance; wait for manual connections if necessary/wanted; add way more logging (as this might break things)
-- Remember last used server per user
-- Refactor seekdialog autoskip handling and chapter/marker display logic
-- Harden the episodeswindow's paginator, making it less easy to generate a huge amount of requests when paging quickly (holding down left/right)
-- Harden chapter/marker autoskip
-- Add "combined chapters", intelligently merging chapters and markers into one, if available
-- Add BIF preview images to markers if available ("Enable video preview thumbnails" needs to be enabled on server and library)
-- Add separate "show autoskip info early" offset to addon settings (default: 2.5s)
-- Add countdown to autoskip info button, informing the user that we're about to auto skip the next marker (intro/credits)
-- Set skip intro button show early threshold to 60s (was 120s) to skip recaps but only those
-- Seek as fast as possible on immediately occurring intro; skip directly to next video if possible on last credits with autoskip enabled
-- Add separate connectivity check timeout; properly set up timeouts for async requests; log ping in local network tests
-- Harden server discovery; further improvements to preferring local over secure
-- Update reachability of servers live in server list;
-- Remove server refresh button due to issues;
-- Add fontawesome license
-- Show busy dialog when selecting a new user, preventing errors
-- Trigger force available servers/connections refresh when changing network settings;
+- Fix preplay mediachoice issues
+- Fix seeking with auto-skip scenarios on slower devices
+- Fix online/trailer quality issues (was always using a low quality before)
+- Fix round-robining in episode view
+- Fix Kodi 18
+- Fix some rare Kodi playback errors in logs, mostly cosmetic
+- Fix player sometimes not sending the last timeline state after playback ends
+- Fix playback issues when multiple versions exist but one of them is missing
+- Fix embedded subtitle display delays on playback start and on subtitle change while playing back (backseeks 1 second)
+- Fix double-back-button necessary to exit when cancelling autoskip
+- Fix chapters not showing when no markers present
+- Fix User Pin entry not showing errors
+- Fix reactivating addon after minimize
+- Fix autoskip marker continuing to count down when paused; don't hide autoskip marker when paused
 
-- Fix Bingemode not properly stored per user
-- Fix multiple credits naming in seekdialog
-- Fix error upon episodes window reinit; catch error upon missing listitem
-- Remove time left tag after watching more than one episode
-- Add some missing advanced/addon setting descriptions; cleanup
-- Disable GDM discovery by default
-- Fix late display of embedded subtitles; the change has been forgotten, sorry; fixes #54
+- Add support for stream selection in trailers/extras
+- Add support for multiple media versions and fix individual stream selection support
+- Add current cache/buffer state to progress bar
+- Add video/audio/subtitle stream selection for trailers
+- Add zero drift playback timers for current time, time left, ends at
+- Add minimize option to exit
+- Add playback settings manager to enable full settings per TV show instead of just binge mode toggle;
+- Add slow connection support (e.g. in a hotel); waits for the buffer to fill to a reasonable amount until playback; sets readfactor to 20 (don't use with passthrough)
+Migrate previous binge mode data to new extensible format, stored as addon_data/playback_settings.json
+
+- Player: Better/more immediate intro-auto-skip implementation
+- Cache/Buffer: Allow 26% and 30% "overcommit" (+android 23%)
+- Cache/Buffer: Add readfactor to settings (needs Kodi restart)
+- Cache/Buffer: Add support for new kodi-omega-master Cache/Buffer GUI settings
+- Harden next/prev episode handling in auto-skip scenarios
+- Harden next/prev button handling
+- Settings: allow vertical round-robining for settings and options lists
+- User Switch: Allow cancellation of switch; select the current user by default when switching
         </news>
         <assets>
             <icon>icon.png</icon>
@@ -281,6 +282,72 @@
 		<disclaimer lang="zh_CN">Plextuary 是 Kodi 的默认皮肤，删除它可能导致故障。</disclaimer>
 		<disclaimer lang="zh_TW">Plextuary 是 Kodi 預設的佈景主題，移除它可能會造成問題</disclaimer>
 	</extension>
+</addon>
+
+<addon id="script.plexmod"
+       name="Plex"
+       version="0.6.2"
+       provider-name="pannal">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+        <import addon="script.module.requests" version="2.27.1+matrix.1"/>
+        <import addon="script.module.six" version="1.15.0+matrix.1"/>
+        <import addon="script.module.kodi-six" version="0.1.3.1" />
+    </requires>
+    <extension point="xbmc.python.script" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.python.pluginsource" library="plugin.py">
+        <provides>executable</provides>
+    </extension>
+    <extension point="xbmc.service" library="service.py" />
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">PlexMod for Kodi</summary>
+        <description lang="en_GB">Unofficial Plex for Kodi add-on</description>
+        <license>GPL-2.0-only</license>
+        <forum>https://forums.plex.tv/t/plexmod-for-kodi-18-19-20-21/481208</forum>
+        <website>https://www.plex.tv</website>
+        <source>https://github.com/pannal/plex-for-kodi</source>
+        <platform>all</platform>
+        <news>
+- Add system setting to execute action upon sleep event (e.g. exit Kodi when display goes to sleep; fixes passthrough issues on SHIELD)
+- Allow canceling postplay timeout with enter/OK
+- Binge mode: show postplay if video was exited manually
+- Show local/LAN server status in status bar and server list via new icon; server list is live now
+- Discover local/LAN servers automatically (if any of the plex.tv/resource's DNS points to a local IP and is reachable)
+- plexapp/account/main: init account earlier to pick up ID early; slightly reorder initialization sequence to pick up preferred servers earlier
+- Connection logic: refactor connection significance; wait for manual connections if necessary/wanted; add way more logging (as this might break things)
+- Remember last used server per user
+- Refactor seekdialog autoskip handling and chapter/marker display logic
+- Harden the episodeswindow's paginator, making it less easy to generate a huge amount of requests when paging quickly (holding down left/right)
+- Harden chapter/marker autoskip
+- Add "combined chapters", intelligently merging chapters and markers into one, if available
+- Add BIF preview images to markers if available ("Enable video preview thumbnails" needs to be enabled on server and library)
+- Add separate "show autoskip info early" offset to addon settings (default: 2.5s)
+- Add countdown to autoskip info button, informing the user that we're about to auto skip the next marker (intro/credits)
+- Set skip intro button show early threshold to 60s (was 120s) to skip recaps but only those
+- Seek as fast as possible on immediately occurring intro; skip directly to next video if possible on last credits with autoskip enabled
+- Add separate connectivity check timeout; properly set up timeouts for async requests; log ping in local network tests
+- Harden server discovery; further improvements to preferring local over secure
+- Update reachability of servers live in server list;
+- Remove server refresh button due to issues;
+- Add fontawesome license
+- Show busy dialog when selecting a new user, preventing errors
+- Trigger force available servers/connections refresh when changing network settings;
+
+- Fix Bingemode not properly stored per user
+- Fix multiple credits naming in seekdialog
+- Fix error upon episodes window reinit; catch error upon missing listitem
+- Remove time left tag after watching more than one episode
+- Add some missing advanced/addon setting descriptions; cleanup
+- Disable GDM discovery by default
+- Fix late display of embedded subtitles; the change has been forgotten, sorry; fixes #54
+        </news>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+        </assets>
+    </extension>
 </addon>
 
 <addon id="script.plexmod"

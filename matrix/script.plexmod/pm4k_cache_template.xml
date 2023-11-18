@@ -1,20 +1,5 @@
   <cache><!-- managed by PM4K -->
     <buffermode>1</buffermode>
     <memorysize>{memorysize}</memorysize>
-    <readfactor>5</readfactor>
-<!--<chunksize>65536</chunksize>--> <!-- Filesystem like e.g. NFS might not properly receive the server's max read chunk values and therefore end up with a very low
-                                default, causing issues during Cache filling and buffering. This values can be tuned between 256 Bytes and 1048576 Bytes.
-                                Depending on the filesystem this value is overwritten by e.g. FileCache implementation when another default is appropriate -->
+    <readfactor>{readfactor}</readfactor>
   </cache>
-<!--  <network>                                             -->
-<!--    <curlclienttimeout>10</curlclienttimeout>           --> <!-- Timeout in seconds for libcurl (http/ftp) connections -->
-<!--    <curllowspeedtime>20</curllowspeedtime>             --> <!-- Time in seconds for libcurl to consider a connection lowspeed -->
-<!--    <curlretries>2</curlretries>                        --> <!-- Amount of retries for certain failed libcurl operations (e.g. timeout) -->
-<!--    <httpproxyusername></httpproxyusername>             --> <!-- username for Basic Proxy Authentication -->
-<!--    <httpproxypassword></httpproxypassword>             --> <!-- password for Basic Proxy Authentication -->
-<!--    <disableipv6>false</disableipv6>                    --> <!-- Certain hardware/OS combinations have trouble with ipv6. Set "true" to disable -->
-<!--    <disablehttp2>false</disablehttp2>                  --> <!-- Added in v19- Allows disabling HTTP2 for broken Curl / HTTP2 servers -->
-<!--    <nfstimeout>30</nfstimeout>                         --> <!-- Added in v19- Timeout in seconds for NFS access, 0 = wait forever (previous behaviour) default is 5s  -->
-<!--    <catrustfile>filepath</catrustfile>                 --> <!-- Added in v19- Allows specifying a custom SSL CA trust store bundle. e.g. special://masterprofile/cacerts.pem -->
-<!--    <curlkeepaliveinterval>30</curlkeepaliveinterval>   --> <!-- Added in v19- Enable TCP keepalive probes in curl  -->
-<!--  </network>                                            -->

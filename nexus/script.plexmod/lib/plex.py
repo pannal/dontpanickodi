@@ -9,9 +9,11 @@ import time
 import requests
 import six
 
-from kodi_six import xbmc
+from kodi_six import xbmc, xbmcaddon
 
 from plexnet import plexapp, myplex, util as plexnet_util, asyncadapter, http as pnhttp
+
+from .playback_utils import PlaybackManager
 from . windows.settings import PlayedThresholdSetting
 from . import util
 from six.moves import range
@@ -20,6 +22,7 @@ if six.PY2:
     _Event = threading._Event
 else:
     _Event = threading.Event
+
 
 class PlexTimer(plexapp.util.Timer):
     def shouldAbort(self):
@@ -71,98 +74,6 @@ def defaultUserAgent():
                      '%s/%s' % ('Kodi', xbmc.getInfoLabel('System.BuildVersion').replace(' ', '-')),
                      '%s/%s' % (_implementation, _implementation_version),
                      '%s/%s' % (p_system, p_release)])
-
-
-class BingeModeManager(object):
-    """
-    Manages the auto-skip-intro setting for individual shows; falls back to the global default if no specifics set
-    """
-
-    _data = None
-    _currentServerUUID = None
-    _currentUserID = None
-
-    # this could be a property, but w/e
-    glob = False
-
-    def __init__(self):
-        self.reset()
-        plexapp.util.APP.on('change:binge_mode', lambda **kwargs: self.setGlob(**kwargs))
-        plexapp.util.APP.on('change:selectedServer', lambda **kwargs: self.setServerUUID(**kwargs))
-        plexapp.util.APP.on("change:user", lambda **kwargs: self.setUserID(**kwargs))
-        plexapp.util.APP.on('init', lambda **kwargs: self.setUserID(**kwargs))
-
-    def __call__(self, obj, value=None):
-        # shouldn't happen
-        if not self._currentServerUUID or not self._currentUserID:
-            util.DEBUG_LOG("APP.BingeModeManager, something's wrong: ServerUUID: %s, UserID: %s" % (
-                self._currentServerUUID, self._currentUserID))
-            return
-
-        csid = self._currentServerUUID
-        cuid = self._currentUserID
-
-        # set
-        if value is not None:
-            if csid not in self._data:
-                self._data[csid] = {}
-
-            if cuid not in self._data[csid]:
-                self._data[csid][cuid] = {}
-
-            self._data[csid][cuid][obj.ratingKey] = value
-            self.save()
-            return value
-
-        if not obj.ratingKey:
-            return self.glob
-
-        # get
-        return self._data.get(csid, {}).get(cuid, {}).get(obj.ratingKey, self.glob)
-
-    def reset(self):
-        self._data = self.load()
-        if plexapp.SERVERMANAGER and plexapp.SERVERMANAGER.selectedServer:
-            self.setServerUUID()
-
-        if plexapp.ACCOUNT:
-            self.setUserID()
-        self.setGlob()
-
-    def setGlob(self, key=None, value=None):
-        if value is None:
-            self.glob = util.getUserSetting('binge_mode', False)
-        elif value is not None:
-            self.glob = value
-
-    def setServerUUID(self, server=None):
-        if not server and not plexapp.SERVERMANAGER.selectedServer:
-            return
-        self._currentServerUUID = (server if server is not None else plexapp.SERVERMANAGER.selectedServer).uuid
-
-    def setUserID(self, account=None, reallyChanged=False):
-        if not account and not plexapp.ACCOUNT:
-            return
-        self._currentUserID = (account if account is not None and reallyChanged else plexapp.ACCOUNT).ID
-        self.setGlob()
-
-    def load(self):
-        jstring = plexapp.util.INTERFACE.getRegistry("BingeModeSettings")
-        if not jstring:
-            # fallback
-            jstring = plexapp.util.INTERFACE.getRegistry("AutoSkipSettings")
-        if not jstring:
-            return {}
-
-        try:
-            obj = json.loads(jstring)
-        except:
-            obj = None
-        return obj
-
-    def save(self):
-        plexapp.util.INTERFACE.setRegistry("BingeModeSettings", json.dumps(self._data))
-        return self._data
 
 
 class PlexInterface(plexapp.AppInterface):
@@ -311,7 +222,7 @@ class PlexInterface(plexapp.AppInterface):
         if qualityType == self.QUALITY_LOCAL:
             return self.getPreference("local_quality", 13)
         elif qualityType == self.QUALITY_ONLINE:
-            return self.getPreference("online_quality", 8)
+            return self.getPreference("online_quality", 13)
         else:
             return self.getPreference("remote_quality", 13)
 
@@ -361,7 +272,7 @@ def onManualIPChange(**kwargs):
 
 plexapp.util.setInterface(PlexInterface())
 plexapp.setUserAgent(defaultUserAgent())
-plexapp.util.INTERFACE.bingeModeManager = BingeModeManager()
+plexapp.util.INTERFACE.playbackManager = PlaybackManager()
 plexapp.util.APP.on('change:smart_discover_local', onSmartDiscoverLocalChange)
 plexapp.util.APP.on('change:prefer_local', onPreferLANChange)
 plexapp.util.APP.on('change:same_network', onPreferLocalChange)

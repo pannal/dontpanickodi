@@ -57,7 +57,7 @@ class MediaItem(plexobjects.PlexObject):
         return self.deleted
 
     def exists(self):
-        if self.deleted:
+        if self.deleted or self.deletedAt:
             return False
 
         data = self.server.query('/library/metadata/{0}'.format(self.ratingKey))

@@ -31,18 +31,10 @@ class PlexMedia(plexobjects.PlexObject):
         return self.get('indirect') == '1'
 
     def isAccessible(self):
-        for part in self.parts:
-            if not part.isAccessible():
-                return False
-
-        return True
+        return any(p.isAccessible() for p in self.parts)
 
     def isAvailable(self):
-        for part in self.parts:
-            if not part.isAvailable():
-                return False
-
-        return True
+        return any(p.isAvailable() for p in self.parts)
 
     def resolveIndirect(self):
         if not self.isIndirect() or locks.LOCKS.isLocked("resolve_indirect"):
