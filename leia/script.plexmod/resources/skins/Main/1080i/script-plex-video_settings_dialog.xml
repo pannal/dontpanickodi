@@ -22,7 +22,7 @@
             </control>
         </control>
         <control type="group">
-            <visible>!Window.IsVisible(sliderdialog) + !Window.IsVisible(osdvideosettings) + !Window.IsVisible(osdaudiosettings)</visible>
+            <visible>!Window.IsVisible(sliderdialog) + !Window.IsVisible(osdvideosettings) + !Window.IsVisible(osdaudiosettings) + !Window.IsVisible(osdsubtitlesettings) + !Window.IsVisible(subtitlesearch)</visible>
             <posx>460</posx>
             <posy>200</posy>
             <control type="image">
@@ -70,12 +70,14 @@
             <control type="list" id="100">
                 <posx>0</posx>
                 <posy>80</posy>
-                <width>1000</width>
+                <width>990</width>
                 <height>600</height>
                 <onup>noop</onup>
                 <ondown>noop</ondown>
                 <scrolltime>200</scrolltime>
                 <orientation>vertical</orientation>
+                <pagecontrol>101</pagecontrol>
+                <onright>101</onright>
                 <!-- ITEM LAYOUT ########################################## -->
                 <itemlayout height="100">
                     <control type="label">
@@ -92,7 +94,7 @@
                     <control type="label">
                         <posx>320</posx>
                         <posy>0</posy>
-                        <width>660</width>
+                        <width>650</width>
                         <height>100</height>
                         <font>font12</font>
                         <align>right</align>
@@ -123,7 +125,7 @@
                     <control type="label">
                         <posx>320</posx>
                         <posy>0</posy>
-                        <width>660</width>
+                        <width>650</width>
                         <height>100</height>
                         <font>font12</font>
                         <align>right</align>
@@ -133,6 +135,24 @@
                     </control>
                 </focusedlayout>
             </control>
+        </control>
+        <control type="scrollbar" id="101">
+            <hitrect x="1108" y="33" w="90" h="734" />
+            <left>1450</left>
+            <top>280</top>
+            <width>10</width>
+            <height>600</height>
+            <onleft>101</onleft>
+            <visible>true</visible>
+            <texturesliderbackground colordiffuse="30000000" border="5">script.plex/white-square.png</texturesliderbackground>
+            <texturesliderbar colordiffuse="77FFFFFF" border="5">script.plex/white-square.png</texturesliderbar>
+            <texturesliderbarfocus colordiffuse="FFE5A00D" border="5">script.plex/white-square.png</texturesliderbarfocus>
+            <textureslidernib>-</textureslidernib>
+            <textureslidernibfocus>-</textureslidernibfocus>
+            <pulseonselect>false</pulseonselect>
+            <orientation>vertical</orientation>
+            <showonepage>false</showonepage>
+            <onleft>100</onleft>
         </control>
 
     </controls>

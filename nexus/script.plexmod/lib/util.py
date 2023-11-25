@@ -98,7 +98,6 @@ class AdvancedSettings(object):
         ("auto_seek", True),
         ("auto_seek_delay", 1),
         ("dynamic_timeline_seek", False),
-        ("forced_subtitles_override", False),
         ("fast_back", False),
         ("dynamic_backgrounds", True),
         ("background_art_blur_amount", 0),
@@ -126,6 +125,8 @@ class AdvancedSettings(object):
         ("player_show_buffer", True),
         ("buffer_wait_max", 120),
         ("buffer_insufficient_wait", 10),
+        ("continue_use_thumb", True),
+        ("use_bg_fallback", False),
     )
 
     def __init__(self):
@@ -853,13 +854,18 @@ def getProgressImage(obj):
     return 'script.plex/progress/{0}.png'.format(pct)
 
 
+LAST_BG_URL = None
+
+
 def backgroundFromArt(art, width=1920, height=1080, background=colors.noAlpha.Background):
-    return art.asTranscodedImageURL(
+    global LAST_BG_URL
+    LAST_BG_URL = art.asTranscodedImageURL(
         width, height,
         blur=advancedSettings.backgroundArtBlurAmount,
         opacity=advancedSettings.backgroundArtOpacityAmount,
         background=background
     )
+    return LAST_BG_URL
 
 
 def trackIsPlaying(track):

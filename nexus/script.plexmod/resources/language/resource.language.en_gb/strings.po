@@ -1062,7 +1062,7 @@ msgid "Kodi Subtitle Settings"
 msgstr ""
 
 msgctxt "#32493"
-msgid "Prefer normal over forced subtitles if available (PMS selects forced by default)"
+msgid "When a media file has a forced/foreign subtitle for a subtitle-enabled language, the Plex Media Server preselects it. This behaviour is usually not necessary and not configurable. This setting fixes that by ignoring the PMSs decision and selecting the same language without a forced flag if possible."
 msgstr ""
 
 msgctxt "#32495"
@@ -1355,7 +1355,7 @@ msgid "Intro/credits markers might be a little early in Plex. When auto skipping
 msgstr ""
 
 msgctxt "#32631"
-msgid "Player (user-specific)"
+msgid "Playback (user-specific)"
 msgstr ""
 
 msgctxt "#33632"
@@ -1504,4 +1504,64 @@ msgstr ""
 
 msgctxt "#32926"
 msgid "Wrong pin entered!"
+msgstr ""
+
+msgctxt "#32927"
+msgid "Use episode thumbnails in continue hub"
+msgstr ""
+
+msgctxt "#32928"
+msgid "Instead of using media artwork, use thumbnails for episodes in the continue hub on the home screen if available."
+msgstr ""
+
+msgctxt "#32929"
+msgid "Use legacy background fallback image"
+msgstr ""
+
+msgctxt "#32930"
+msgid "Previous Subtitle"
+msgstr ""
+
+msgctxt "#32931"
+msgid "Audio/Subtitles"
+msgstr ""
+
+msgctxt "#32932"
+msgid "Show subtitle quick-actions button"
+msgstr ""
+
+msgctxt "#32933"
+msgid "Show FFWD/RWD buttons"
+msgstr ""
+
+msgctxt "#32934"
+msgid "Show repeat button"
+msgstr ""
+
+msgctxt "#32935"
+msgid "Show shuffle button"
+msgstr ""
+
+msgctxt "#32936"
+msgid "Show playlist button"
+msgstr ""
+
+msgctxt "#32937"
+msgid "Show prev/next button"
+msgstr ""
+
+msgctxt "#32938"
+msgid "Only for Episodes"
+msgstr ""
+
+msgctxt "#32939"
+msgid "Only applies to video player UI"
+msgstr ""
+
+msgctxt "#32940"
+msgid "Player UI"
+msgstr ""
+
+msgctxt "#32941"
+msgid "Forced subtitles fix"
 msgstr ""

@@ -27,6 +27,7 @@ class BasePlayerHandler(object):
         self.timelineType = None
         self.lastTimelineState = None
         self.ignoreTimelines = False
+        self.ignorePlaybackEnded = False
         self.playQueue = None
         self.sessionID = session_id
 
@@ -163,6 +164,7 @@ class SeekPlayerHandler(BasePlayerHandler):
         self.title2 = ''
         self.chapters = None
         self.stoppedInBingeMode = False
+        self.prePlayWitnessed = False
         self.reset()
 
     def reset(self):
@@ -174,6 +176,7 @@ class SeekPlayerHandler(BasePlayerHandler):
         self.mode = self.MODE_RELATIVE
         self.ended = False
         self.stoppedInBingeMode = False
+        self.prePlayWitnessed = False
 
     def setup(self, duration, offset, bif_url, title='', title2='', seeking=NO_SEEK, chapters=None):
         self.ended = False
@@ -186,6 +189,9 @@ class SeekPlayerHandler(BasePlayerHandler):
         self.chapters = chapters or []
         self.playedThreshold = plexapp.util.INTERFACE.getPlayedThresholdValue()
         self.ignoreTimelines = False
+        self.ignorePlaybackEnded = False
+        self.stoppedInBingeMode = False
+        self.prePlayWitnessed = False
         self.getDialog(setup=True)
         self.dialog.setup(self.duration, int(self.baseOffset * 1000), self.bifURL, self.title, self.title2,
                           chapters=self.chapters)
@@ -348,12 +354,20 @@ class SeekPlayerHandler(BasePlayerHandler):
         if self.dialog:
             self.dialog.onAVChange()
 
+    def onPrePlayStarted(self):
+        util.DEBUG_LOG('SeekHandler: onPrePlayStarted')
+        self.prePlayWitnessed = True
+        self.setSubtitles(do_sleep=False)
+
     def onPlayBackStarted(self):
         util.DEBUG_LOG('SeekHandler: onPlayBackStarted - mode={0}'.format(self.mode))
         self.updateNowPlaying(force=True, refreshQueue=True)
 
         if self.dialog:
             self.dialog.onPlaybackStarted()
+
+        if not self.prePlayWitnessed:
+            self.setSubtitles(do_sleep=False)
 
     def onPlayBackResumed(self):
         self.updateNowPlaying()
@@ -391,6 +405,10 @@ class SeekPlayerHandler(BasePlayerHandler):
 
         self.updateNowPlaying()
 
+        if self.ignorePlaybackEnded:
+            util.DEBUG_LOG('SeekHandler: onPlayBackEnded - event ignored')
+            return
+
         if self.next(on_end=True):
             return
 
@@ -423,9 +441,10 @@ class SeekPlayerHandler(BasePlayerHandler):
         self.updateOffset()
         # self.showOSD(from_seek=True)
 
-    def setSubtitles(self, do_sleep=True):
+    def setSubtitles(self, do_sleep=True, honor_forced_subtitles_override=True):
         subs = self.player.video.selectedSubtitleStream(
-            forced_subtitles_override=util.advancedSettings.forcedSubtitlesOverride)
+            forced_subtitles_override=honor_forced_subtitles_override and util.getSetting("forced_subtitles_override",
+                                                                                          False))
         if subs:
             if do_sleep:
                 xbmc.sleep(100)
@@ -1083,7 +1102,6 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
         if not self.handler:
             return
         self.handler.onPrePlayStarted()
-        self.handler.setSubtitles(do_sleep=False)
 
     def onPlayBackStarted(self):
         self.started = True
@@ -1209,6 +1227,9 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
                     self._audioMonitor()
                 elif self.isPlaying():
                     util.DEBUG_LOG('Monitoring pre-play...')
+
+                    # note: this might never be triggered depending on how fast the video playback starts.
+                    # don't rely on it in any way.
                     self._preplayMonitor()
 
             self.handler.close()

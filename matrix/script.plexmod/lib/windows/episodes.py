@@ -262,7 +262,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, playbackse
     def onFirstInit(self):
         self._onFirstInit()
 
-        if self.show_ and self.show_.theme:
+        if self.show_ and self.show_.theme and not util.getSetting("slow_connection", False):
             volume = self.show_.settings.getThemeMusicValue()
             if volume > 0:
                 player.PLAYER.playBackgroundMusic(self.show_.theme.asURL(True), volume,
@@ -998,7 +998,8 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, playbackse
         sas = video.selectedAudioStream()
         mli.setProperty('audio', sas and sas.getTitle(metadata.apiTranslate) or T(32309, 'None'))
 
-        sss = video.selectedSubtitleStream(forced_subtitles_override=util.advancedSettings.forcedSubtitlesOverride)
+        sss = video.selectedSubtitleStream(forced_subtitles_override=
+                                           util.getSetting("forced_subtitles_override", False))
         if sss:
             if len(video.subtitleStreams) > 1:
                 mli.setProperty(
@@ -1074,6 +1075,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, playbackse
                 if with_progress:
                     self.episodesPaginator.prepareListItem(None, mli)
                 if mli == selected:
+                    self.lastItem = mli
                     self.setProgress(mli)
                 return
 

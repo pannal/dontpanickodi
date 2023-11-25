@@ -47,6 +47,7 @@ class Video(media.MediaItem):
     TYPE = None
     manually_selected_sub_stream = False
     current_subtitle_is_embedded = False
+    _current_subtitle_idx = None
 
     def __init__(self, *args, **kwargs):
         self._settings = None
@@ -70,6 +71,19 @@ class Video(media.MediaItem):
     def settings(self, value):
         self._settings = value
 
+    # overridden by Movie/Episode
+    @property
+    def subtitleStreams(self):
+        return []
+
+    @property
+    def videoStreams(self):
+        return []
+
+    @property
+    def audioStreams(self):
+        return []
+
     def selectedVideoStream(self, fallback=False):
         if self.videoStreams:
             for stream in self.videoStreams:
@@ -89,6 +103,12 @@ class Video(media.MediaItem):
         return None
 
     def selectedSubtitleStream(self, forced_subtitles_override=False, fallback=False):
+        if self._current_subtitle_idx:
+            try:
+                return self.subtitleStreams[self._current_subtitle_idx]
+            except IndexError:
+                pass
+
         if self.subtitleStreams:
             for stream in self.subtitleStreams:
                 if stream.isSelected():
@@ -110,10 +130,18 @@ class Video(media.MediaItem):
                             stream.setSelected(False)
                             possible_alt.setSelected(True)
                             self.current_subtitle_is_embedded = possible_alt.embedded
+                            if self._current_subtitle_idx != possible_alt.typeIndex:
+                                self._current_subtitle_idx = possible_alt.typeIndex
                             return possible_alt
+
+                    if self._current_subtitle_idx != stream.typeIndex:
+                        self._current_subtitle_idx = stream.typeIndex
                     return stream
             if fallback:
-                return self.subtitleStreams[0]
+                stream = self.subtitleStreams[0]
+                if self._current_subtitle_idx != stream.typeIndex:
+                    self._current_subtitle_idx = stream.typeIndex
+                return stream
         return None
 
     def setMediaChoice(self, media=None, partIndex=0):
@@ -123,6 +151,7 @@ class Video(media.MediaItem):
     @forceMediaChoice
     def selectStream(self, stream, _async=True):
         self.mediaChoice.part.setSelectedStream(stream.streamType.asInt(), stream.id, _async)
+        self.current_subtitle_is_embedded = False
         # Update any affected streams
         if stream.streamType.asInt() == plexstream.PlexStream.TYPE_AUDIO:
             for audioStream in self.audioStreams:
@@ -131,12 +160,52 @@ class Video(media.MediaItem):
                 elif audioStream.isSelected():
                     audioStream.setSelected(False)
         elif stream.streamType.asInt() == plexstream.PlexStream.TYPE_SUBTITLE:
+            self._current_subtitle_idx = None
             for subtitleStream in self.subtitleStreams:
                 if subtitleStream.id == stream.id:
                     subtitleStream.setSelected(True)
                     self.current_subtitle_is_embedded = subtitleStream.embedded
+                    self._current_subtitle_idx = subtitleStream.typeIndex
                 elif subtitleStream.isSelected():
                     subtitleStream.setSelected(False)
+
+    @forceMediaChoice
+    def cycleSubtitles(self, forward=True):
+        amount = len(self.subtitleStreams)
+        if not amount:
+            return False
+        cur = self.selectedSubtitleStream()
+        if not cur:
+            # use fallback
+            stream = self.selectedSubtitleStream(fallback=True)
+        else:
+            # set next if we're not at the end of the list
+            if forward:
+                if cur.typeIndex < len(self.subtitleStreams) - 1:
+                    stream = self.subtitleStreams[cur.typeIndex+1]
+                else:
+                    stream = self.subtitleStreams[0]
+            else:
+                if cur.typeIndex > 0:
+                    stream = self.subtitleStreams[cur.typeIndex - 1]
+                else:
+                    stream = self.subtitleStreams[-1]
+
+        util.DEBUG_LOG("Selecting subtitle stream: {} (was: {})".format(stream, cur))
+        self.selectStream(stream)
+        return stream
+
+    @forceMediaChoice
+    def disableSubtitles(self):
+        self.selectStream(plexstream.NONE_STREAM)
+
+    @property
+    def hasSubtitle(self):
+        return bool(self.selectedSubtitleStream())
+
+    @property
+    def hasSubtitles(self):
+        return bool(self.subtitleStreams)
 
     def isVideoItem(self):
         return True
@@ -328,6 +397,7 @@ class PlayableVideo(Video, RelatedMixin):
     _videoStreams = None
     _audioStreams = None
     _subtitleStreams = None
+    _current_subtitle_idx = None
 
     def _setData(self, data):
         Video._setData(self, data)

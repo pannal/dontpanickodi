@@ -103,12 +103,14 @@ class BaseWindow(xbmcgui.WindowXML, BaseFunctions):
     def onInit(self):
         self._winID = xbmcgui.getCurrentWindowId()
         BaseFunctions.lastWinID = self._winID
-        self.setProperty('use_solid_background', not hasCustomBGColour and '1' or '')
+        self.setProperty('use_solid_background', hasCustomBGColour and '1' or '')
         if hasCustomBGColour:
             bgColour = advancedSettings.backgroundColour if advancedSettings.backgroundColour != "-" else "ff000000"
             self.setProperty('background_colour', "0x%s" % bgColour.lower())
         else:
             self.setProperty('background_colour', "0xff111111")
+
+        self.setBoolProperty('use_bg_fallback', advancedSettings.useBgFallback)
 
         if self.started:
             self.onReInit()

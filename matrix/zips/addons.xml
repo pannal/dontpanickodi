@@ -105,7 +105,7 @@
 
 <addon id="script.plexmod"
        name="Plex"
-       version="0.6.4"
+       version="0.6.5"
        provider-name="pannal">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
@@ -129,39 +129,29 @@
         <source>https://github.com/pannal/plex-for-kodi</source>
         <platform>all</platform>
         <news>
-- Fix preplay mediachoice issues
-- Fix seeking with auto-skip scenarios on slower devices
-- Fix online/trailer quality issues (was always using a low quality before)
-- Fix round-robining in episode view
-- Fix Kodi 18
-- Fix some rare Kodi playback errors in logs, mostly cosmetic
-- Fix player sometimes not sending the last timeline state after playback ends
-- Fix playback issues when multiple versions exist but one of them is missing
-- Fix embedded subtitle display delays on playback start and on subtitle change while playing back (backseeks 1 second)
-- Fix double-back-button necessary to exit when cancelling autoskip
-- Fix chapters not showing when no markers present
-- Fix User Pin entry not showing errors
-- Fix reactivating addon after minimize
-- Fix autoskip marker continuing to count down when paused; don't hide autoskip marker when paused
+- Fix rare postplay still shown on bingemode/autoskip credits
+- Fix quick subtitle selection when override forced advanced setting is active
+- Fix rare round robin case skipping item 0 onup in dropdowns
+- Fix episode progress and time remaining not updating (thanks @bowlingbeeg)
+- Fix embedded subtitle display delay when Cycling/using buttons to switch subtitles
+- Fix rare subtitles not shown issue
 
-- Add support for stream selection in trailers/extras
-- Add support for multiple media versions and fix individual stream selection support
-- Add current cache/buffer state to progress bar
-- Add video/audio/subtitle stream selection for trailers
-- Add zero drift playback timers for current time, time left, ends at
-- Add minimize option to exit
-- Add playback settings manager to enable full settings per TV show instead of just binge mode toggle;
-- Add slow connection support (e.g. in a hotel); waits for the buffer to fill to a reasonable amount until playback; sets readfactor to 20 (don't use with passthrough)
-Migrate previous binge mode data to new extensible format, stored as addon_data/playback_settings.json
-
-- Player: Better/more immediate intro-auto-skip implementation
-- Cache/Buffer: Allow 26% and 30% "overcommit" (+android 23%)
-- Cache/Buffer: Add readfactor to settings (needs Kodi restart)
-- Cache/Buffer: Add support for new kodi-omega-master Cache/Buffer GUI settings
-- Harden next/prev episode handling in auto-skip scenarios
-- Harden next/prev button handling
-- Settings: allow vertical round-robining for settings and options lists
-- User Switch: Allow cancellation of switch; select the current user by default when switching
+- Add: Allow video player UI buttons customization via settings; remove a couple of player navbar buttons by default
+- Add "Previous Subtitle" to quick subtitles nav item
+- Remember subtitle actions (prev, next, download, delay) via quick nav
+- Use our own CycleSubtitles/ShowSubtitles implementation;
+- Rely even less on Kodi's Player states for subtitles
+- Parse and show SDH/HI flag for subtitle streams
+- Hide OSD faster after closing settings; try hiding OSD faster in general if necessary
+- Lose orange fallback BG on userselect as well by default
+- Settings: rename Player to Player UI, rename Player (user-specific) to Playback (user-specific)
+- Settings: Move forced subtitles fix from plugin settings to settings interface audio/subtitles
+- Store last background URL in settings if dynamic backgrounds is active; use last BG url on startup to prevent blank BG
+- Reduce embedded subtitle display backseek to 100ms
+- Use episode thumbnails in continue hub if available, by default; add advanced setting
+- Set default background blur to 0 (was 4), background opacity to 20 (was 30)
+- Disable legacy background image fallback by default; add advanced setting
+- Core improvements
         </news>
         <assets>
             <icon>icon.png</icon>
@@ -355,6 +345,73 @@ Migrate previous binge mode data to new extensible format, stored as addon_data/
 		<disclaimer lang="zh_CN">Plextuary 是 Kodi 的默认皮肤，删除它可能导致故障。</disclaimer>
 		<disclaimer lang="zh_TW">Plextuary 是 Kodi 預設的佈景主題，移除它可能會造成問題</disclaimer>
 	</extension>
+</addon>
+
+<addon id="script.plexmod"
+       name="Plex"
+       version="0.6.4"
+       provider-name="pannal">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+        <import addon="script.module.requests" version="2.27.1+matrix.1"/>
+        <import addon="script.module.six" version="1.15.0+matrix.1"/>
+        <import addon="script.module.kodi-six" version="0.1.3.1" />
+    </requires>
+    <extension point="xbmc.python.script" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.python.pluginsource" library="plugin.py">
+        <provides>executable</provides>
+    </extension>
+    <extension point="xbmc.service" library="service.py" />
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">PlexMod for Kodi</summary>
+        <description lang="en_GB">Unofficial Plex for Kodi add-on</description>
+        <license>GPL-2.0-only</license>
+        <forum>https://forums.plex.tv/t/plexmod-for-kodi-18-19-20-21/481208</forum>
+        <website>https://www.plex.tv</website>
+        <source>https://github.com/pannal/plex-for-kodi</source>
+        <platform>all</platform>
+        <news>
+- Fix preplay mediachoice issues
+- Fix seeking with auto-skip scenarios on slower devices
+- Fix online/trailer quality issues (was always using a low quality before)
+- Fix round-robining in episode view
+- Fix Kodi 18
+- Fix some rare Kodi playback errors in logs, mostly cosmetic
+- Fix player sometimes not sending the last timeline state after playback ends
+- Fix playback issues when multiple versions exist but one of them is missing
+- Fix embedded subtitle display delays on playback start and on subtitle change while playing back (backseeks 1 second)
+- Fix double-back-button necessary to exit when cancelling autoskip
+- Fix chapters not showing when no markers present
+- Fix User Pin entry not showing errors
+- Fix reactivating addon after minimize
+- Fix autoskip marker continuing to count down when paused; don't hide autoskip marker when paused
+
+- Add support for stream selection in trailers/extras
+- Add support for multiple media versions and fix individual stream selection support
+- Add current cache/buffer state to progress bar
+- Add video/audio/subtitle stream selection for trailers
+- Add zero drift playback timers for current time, time left, ends at
+- Add minimize option to exit
+- Add playback settings manager to enable full settings per TV show instead of just binge mode toggle;
+- Add slow connection support (e.g. in a hotel); waits for the buffer to fill to a reasonable amount until playback; sets readfactor to 20 (don't use with passthrough)
+Migrate previous binge mode data to new extensible format, stored as addon_data/playback_settings.json
+
+- Player: Better/more immediate intro-auto-skip implementation
+- Cache/Buffer: Allow 26% and 30% "overcommit" (+android 23%)
+- Cache/Buffer: Add readfactor to settings (needs Kodi restart)
+- Cache/Buffer: Add support for new kodi-omega-master Cache/Buffer GUI settings
+- Harden next/prev episode handling in auto-skip scenarios
+- Harden next/prev button handling
+- Settings: allow vertical round-robining for settings and options lists
+- User Switch: Allow cancellation of switch; select the current user by default when switching
+        </news>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+        </assets>
+    </extension>
 </addon>
 
 <addon id="skin.plextuary" version="3.0.10-pm4k0.1" name="Plextuary" provider-name="phil65, pannal, Ichabod Fletchman">

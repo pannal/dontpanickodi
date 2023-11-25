@@ -50,10 +50,19 @@ class InfoWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
             return self.info
 
         summary = [self.info]
+        medias = self.video.media()
+        mediaCount = len(medias)
+        onlyOneMedia = mediaCount == 1
+        partCount = sum(len(m.parts) for m in medias)
+        pcInfo = []
+        if not onlyOneMedia:
+            pcInfo.append("Files: {}".format(mediaCount))
+        if partCount > 1:
+            pcInfo.append("Parts: {}".format(partCount))
+        pcInfoStr = ", ".join(pcInfo)
 
-        addMedia = ["\n\n\n\nMedia\n"]
-        onlyOneMedia = len(self.video.media()) == 1
-        for media_ in self.video.media():
+        addMedia = ["\n\n\n\nMedia{}\n".format(" ({})".format(pcInfoStr) if pcInfoStr else "")]
+        for media_ in medias:
             if not media_.isAccessible():
                 addMedia.append("Unavailable: {}\n\n".format(", ".join(os.path.basename(pf.file) for pf in media_.parts)))
                 continue
@@ -73,6 +82,8 @@ class InfoWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
                         appended = True
                         continue
                     addMedia.append("{}\n".format(s))
+                addMedia.append("Duration: {}, Size: {}\n".format(util.durationToShortText(int(part.duration)),
+                                                                  util.simpleSize(int(part.size))))
 
                 subs = []
                 subsOver = 0
@@ -106,11 +117,15 @@ class InfoWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
                 addMedia.append("--------------\n")
 
         chapters = []
+        chOver = 0
         for index, chapter in enumerate(self.video.chapters):
+            if len(chapters) > 4:
+                chOver += 1
+                continue
             chapters.append(chapter.tag or "Chapter #{}".format(str(index+1)))
 
         if chapters:
-            addMedia.append("Chapters: {}".format(", ".join(chapters))+"\n")
+            addMedia.append("Chapters: {}{}\n".format(", ".join(chapters), chOver and " (+{})".format(chOver) or ''))
 
         if self.video.markers:
             addMedia.append("Markers: {}".format(", ".join(name for off, name in sorted(

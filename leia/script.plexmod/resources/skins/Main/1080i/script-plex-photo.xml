@@ -11,7 +11,7 @@
     <controls>
         <control type="group">
             <control type="image">
-                <visible>!String.IsEmpty(Window.Property(use_solid_background))</visible>
+                <visible>String.IsEmpty(Window.Property(use_solid_background)) + !String.IsEmpty(Window.Property(use_bg_fallback))</visible>
                 <posx>0</posx>
                 <posy>0</posy>
                 <width>1920</width>

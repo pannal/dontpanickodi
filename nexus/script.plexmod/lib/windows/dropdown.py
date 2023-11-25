@@ -22,7 +22,7 @@ class DropdownDialog(kodigui.BaseDialog):
         kodigui.BaseDialog.__init__(self, *args, **kwargs)
         self.options = kwargs.get('options')
         self.pos = kwargs.get('pos')
-        self.lastSelectedItem = 0
+        self.lastSelectedItem = None
         self.roundRobin = kwargs.get('round_robin', True)
         self.posIsBottom = kwargs.get('pos_is_bottom')
         self.closeDirection = kwargs.get('close_direction')
@@ -34,6 +34,7 @@ class DropdownDialog(kodigui.BaseDialog):
         self.alignItems = kwargs.get('align_items', 'center')
         self.optionsCallback = kwargs.get('options_callback', None)
         self.header = kwargs.get('header')
+        self.selectIndex = kwargs.get('select_index')
         self.choice = None
 
     @property
@@ -157,6 +158,9 @@ class DropdownDialog(kodigui.BaseDialog):
 
         self.setFocusId(self.OPTIONS_LIST_ID)
 
+        if self.selectIndex is not None:
+            self.optionsList.setSelectedItemByPos(self.selectIndex)
+
 
 class DropdownHeaderDialog(DropdownDialog):
     xmlFile = 'script-plex-dropdown_header.xml'
@@ -173,7 +177,8 @@ def showDropdown(
     close_only_with_back=False,
     align_items='center',
     options_callback=None,
-    header=None
+    header=None,
+    select_index=None,
 ):
 
     if header:
@@ -189,7 +194,8 @@ def showDropdown(
             close_only_with_back=close_only_with_back,
             align_items=align_items,
             options_callback=options_callback,
-            header=header
+            header=header,
+            select_index=select_index,
         )
     else:
         pos = pos or (810, 400)
@@ -204,7 +210,8 @@ def showDropdown(
             close_only_with_back=close_only_with_back,
             align_items=align_items,
             options_callback=options_callback,
-            header=header
+            header=header,
+            select_index=select_index,
         )
     choice = w.choice
     del w

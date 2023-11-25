@@ -1319,8 +1319,8 @@ msgstr "Kodi Untertitel-Einstellungen"
 
 #: 
 msgctxt "#32493"
-msgid "Prefer normal over forced subtitles if available (PMS selects forced by default)"
-msgstr "Bevorzuge normale gegenüber erzwungenen Untertiteln, falls verfügbar (PMS wählt standardmäßig erzwungene aus)"
+msgid "When a media file has a forced/foreign subtitle for a subtitle-enabled language, the Plex Media Server preselects it. This behaviour is usually not necessary and not configurable. This setting fixes that by ignoring the PMSs decision and selecting the same language without a forced flag if possible."
+msgstr "Hat eine Mediendatei erzwungenge Untertitel für eine Sprache, bei der Untertitel erwünscht sind, wählt der Plex Media Server diesen standardmäßig aus. Das Verhalten ist normalerweise unerwünscht und nicht konfigurierbar. Diese Einstellung behebt das Problem, indem versucht wird, einen Untertitel der selben Sprache ohne Erzwungen-Markierung zu wählen."
 
 #: 
 msgctxt "#32495"
@@ -1527,10 +1527,9 @@ msgctxt "#33510"
 msgid "When showing the intro skip button early, only do so if the intro starts within the first X seconds."
 msgstr "Wenn der Into-Überspringen-Knopf früher angezeigt werden soll, nur anzeigen, wenn das Intro innerhalb der ersten X Sekunden startet."
 
-
 msgctxt "#33600"
 msgid "System"
-msgstr ""
+msgstr "System"
 
 msgctxt "#33601"
 msgid "Show video chapters"
@@ -1574,11 +1573,11 @@ msgstr "Haupt"
 
 msgctxt "#33611"
 msgid "Chapters"
-msgstr ""
+msgstr "Kapitel"
 
 msgctxt "#33612"
 msgid "Markers"
-msgstr ""
+msgstr "Markierungen"
 
 msgctxt "#33613"
 msgid "Kodi Buffer Size (MB)"
@@ -1653,7 +1652,7 @@ msgid "Intro/credits markers might be a little early in Plex. When auto skipping
 msgstr "Intro-/Abspann-Markierungen können ein wenig früh erscheinen in Plex. Wenn diese automatisch übersprungen werden sollen, addiere (oder subtrahiere) diese Menge an Sekunden. Das verhindert das verfrühte Abschneiden von Inhalten, kann aber zu etwas verspätetem Springen führen."
 
 msgctxt "#32631"
-msgid "Player (user-specific)"
+msgid "Playback (user-specific)"
 msgstr "Wiedergabe (benutzerspezifisch)"
 
 msgctxt "#33632"
@@ -1662,15 +1661,15 @@ msgstr "Server Konnektivitätscheck-Timeout (Sekunden)"
 
 msgctxt "#33633"
 msgid "Set the maximum amount of time a server connection has to answer a connectivity request. Default: 2.5"
-msgstr "Setzt die maximale Zeit, in der eine Serververbindung antworten muss. Default: 2.5"
+msgstr "Setzt die maximale Zeit, in der eine Serververbindung antworten muss. Voreinstellung: 2.5"
 
 msgctxt "#33634"
 msgid "Combined Chapters"
 msgstr "Kombinierte Kapitel"
 
 msgctxt "#33635"
-msgid "Finaler Abspann"
-msgstr ""
+msgid "Final Credits"
+msgstr "Finaler Abspann"
 
 msgctxt "#32700"
 msgid "Action on Sleep event"
@@ -1697,12 +1696,12 @@ msgid "CEC Standby"
 msgstr "CEC Standby"
 
 msgctxt "#32800"
-msgid "Überspringe Intro"
-msgstr ""
+msgid "Skipping intro"
+msgstr "Überspringe Intro"
 
 msgctxt "#32801"
-msgid "Überspringe Abspann"
-msgstr ""
+msgid "Skipping credits"
+msgstr "Überspringe Abspann"
 
 msgctxt "#32900"
 msgid "While playing back an item and seeking on the seekbar, automatically seek to the selected position after a delay instead of having to confirm the selection."
@@ -1710,7 +1709,7 @@ msgstr "Wird während des Abspielens die Position auf der Zeitleiste verändert,
 
 msgctxt "#32901"
 msgid "Seek delay in seconds."
-msgstr "Sprungverzögerung in Sekunden"
+msgstr "Sprungverzögerung in Sekunden."
 
 msgctxt "#32902"
 msgid "Kodi has its own skip step settings. Try to use them if they're configured instead of the default ones."
@@ -1726,11 +1725,11 @@ msgstr "In Sekunden."
 
 msgctxt "#32905"
 msgid "Cancel post-play timer by pressing OK/SELECT"
-msgstr "Post-Play Timer durch OK/SELECT abbrechen"
+msgstr "Post-Play Timer durch OK/AUSWAHL abbrechen"
 
 msgctxt "#32906"
 msgid "Cancel skip marker timer with BACK"
-msgstr "Markierung überspringen durch Zurück abbrechen"
+msgstr "Markierung überspringen durch Zurück-Taste abbrechen"
 
 msgctxt "#32907"
 msgid "When auto-skipping a marker, allow cancelling the timer by pressing BACK."
@@ -1738,11 +1737,11 @@ msgstr "Wenn eine Markierung mit einem Zeitgeber automatisch übersprungen wird,
 
 msgctxt "#32908"
 msgid "Immediately skip marker with OK/SELECT"
-msgstr "Markierung sofort überspringen mit OK/SELECT"
+msgstr "Markierung sofort überspringen mit OK/AUSWAHL"
 
 msgctxt "#32909"
 msgid "When auto-skipping a marker with a timer, allow skipping immediately by pressing OK/SELECT."
-msgstr "Wenn eine Markierung mit einem Zeitgeber automatisch übersprungen wird, durch OK/SELECT-Taste sofort überspringen."
+msgstr "Wenn eine Markierung mit einem Zeitgeber automatisch übersprungen wird, durch OK/AUSWAHL-Taste sofort überspringen."
 
 msgctxt "#32912"
 msgid "Show buffer-state on timeline"
@@ -1762,11 +1761,11 @@ msgstr "Langsame Verbindung"
 
 msgctxt "#32916"
 msgid "Use with a wonky/slow connection, e.g. in a hotel room. Adjusts the UI to visually wait for item refreshes and waits for the buffer to fill when starting playback. Automatically sets readfactor=20, requires Kodi restart."
-msgstr "Mit wackeliger/langsamer Verbindung benutzen, z.B. im Hotel. Passt die Oberfläche visuell an um auf Media Auffrischungen zu warten und füllt den Kodi Puffer vor dem Abspielen. Setzt automatisch Kodi Cache readfactor=20, benötigt Kodi Neustart."
+msgstr "Bei langsamer Verbindung benutzen, z.B. im Hotel. Passt die Oberfläche visuell an um auf Media Auffrischungen zu warten und füllt den Kodi Puffer vor dem Abspielen. Setzt automatisch Kodi Cache readfactor=20, benötigt einen Kodi Neustart."
 
 msgctxt "#32917"
 msgid "Couldn't fill buffer in time ({}s)"
-msgstr "Konnte den Puffer nicht schnell genug füllen ({} s)"
+msgstr "Konnte den Puffer nicht schnell genug füllen ({} Sek.)"
 
 msgctxt "#32918"
 msgid "Buffer wait timeout (seconds)"
@@ -1774,7 +1773,7 @@ msgstr "Puffer-Wartezeit (Sekunden)"
 
 msgctxt "#32919"
 msgid "When slow connection is enabled in the addon, wait this long for the buffer to fill. Default: 120 s"
-msgstr "Wenn Langsame Verbindung im Addon aktiviert ist, warte so lange bis der Puffer gefüllt ist. Default: 120 s"
+msgstr "Wenn Langsame Verbindung im Addon aktiviert ist, warte so lange bis der Puffer gefüllt ist. Voreinstellung: 120 Sek."
 
 msgctxt "#32920"
 msgid "Insufficient buffer wait (seconds)"
@@ -1782,7 +1781,7 @@ msgstr "Ungenügender Puffer Wartezeit (Sekunden)"
 
 msgctxt "#32921"
 msgid "When slow connection is enabled in the addon and the configured cache/buffer isn't big enough for us to determine its fill state, wait this long when starting playback. Default: 10 s"
-msgstr "Wenn Langsame Verbindung im Addon aktiviert und der konfigurierte Puffer/Cache nicht groß genug ist, damit wir dessen Füllstand ermitteln können, warte so lange vor dem Abspielen. Default: 10 s"
+msgstr "Wenn \"Langsame Verbindung\" im Addon aktiviert ist und der konfigurierte Puffer/Cache nicht groß genug ist, um seinen Füllstand zu ermitteln, wird so lange gewartet, bevor die Wiedergabe gestartet wird. Voreinstellung: 10 Sek."
 
 msgctxt "#32922"
 msgid "Kodi Cache Readfactor"
@@ -1790,7 +1789,7 @@ msgstr "Kodi Puffer Readfactor"
 
 msgctxt "#32923"
 msgid "Sets the Kodi cache readfactor value. Default: 4, recommended: 4-10. With \"Slow connection\" enabled this will be set to 20, as otherwise the cache doesn't fill fast/aggressively enough."
-msgstr "Setzt den Kodi Cache/Puffer readfactor Wert. Default: 4, empfohlen: 4-10. Bei aktivem \"Langsame Verbindung\" wird dies automatisch auf 20 gesetzt, da ansonsten der Cache nicht schnell/agressiv genug gefüllt wird."
+msgstr "Setzt den Kodi Cache/Puffer readfactor Wert. Standard: 4, Empfohlen: 4-10. Bei aktivem \"Langsame Verbindung\" wird dies automatisch auf 20 gesetzt, da ansonsten der Cache nicht schnell/agressiv genug gefüllt wird."
 
 msgctxt "#32924"
 msgid "Minimize"
@@ -1802,4 +1801,64 @@ msgstr "Abspieleinstell."
 
 msgctxt "#32926"
 msgid "Wrong pin entered!"
-msgstr "Falsche pin eingegeben!"
+msgstr "Falsche PIN eingegeben!"
+
+msgctxt "#32927"
+msgid "Use episode thumbnails in continue hub"
+msgstr "Vorschaubild für Episoden im Fortsetzen-Hub verwenden"
+
+msgctxt "#32928"
+msgid "Instead of using media artwork, use thumbnails for episodes in the continue hub on the home screen if available."
+msgstr "Verwende Vorschaubilder anstatt Media-Artwork für Episoden im Fortsetzen-Hub auf der Start-Ansicht."
+
+msgctxt "#32929"
+msgid "Use legacy background fallback image"
+msgstr "Veraltetes Ausweich-Hintergrundbild verwenden"
+
+msgctxt "#32930"
+msgid "Previous Subtitle"
+msgstr "Vorheriger Untertitel"
+
+msgctxt "#32931"
+msgid "Audio/Subtitles"
+msgstr "Audio/Untertitel"
+
+msgctxt "#32932"
+msgid "Show subtitle quick-actions button"
+msgstr "Zeige Untertitel-Schnellaktionen-Knopf"
+
+msgctxt "#32933"
+msgid "Show FFWD/RWD buttons"
+msgstr "Zeige Vorspulen-Zurückspulen-Knopf"
+
+msgctxt "#32934"
+msgid "Show repeat button"
+msgstr "Zeige Wiederholen-Knopf"
+
+msgctxt "#32935"
+msgid "Show shuffle button"
+msgstr "Zeige Zufällige-Wiedergabe-Knopf"
+
+msgctxt "#32936"
+msgid "Show playlist button"
+msgstr "Zeige Wiedergabeliste-Knopf"
+
+msgctxt "#32937"
+msgid "Show prev/next button"
+msgstr "Zeige Vorheriger/Nächster-Knopf"
+
+msgctxt "#32938"
+msgid "Only for Episodes"
+msgstr "Nur bei Episoden"
+
+msgctxt "#32939"
+msgid "Only applies to video player UI"
+msgstr "Gilt nur für die Video Abspieloberfläche"
+
+msgctxt "#32940"
+msgid "Player UI"
+msgstr "Abspieloberfläche"
+
+msgctxt "#32941"
+msgid "Forced subtitles fix"
+msgstr "Erzwungene Untertitel beheben"

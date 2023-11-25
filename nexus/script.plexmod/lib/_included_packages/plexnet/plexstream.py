@@ -58,6 +58,9 @@ class PlexStream(plexobjects.PlexObject):
             if codec:
                 extras.append(codec)
 
+            if self.sdh:
+                title += " {}".format(translate_func("SDH"))
+
             if not self.key:
                 extras.append(translate_func("Embedded"))
 
@@ -128,6 +131,11 @@ class PlexStream(plexobjects.PlexObject):
         self.selected = plexobjects.PlexValue(selected and '1' or '0')
 
     @property
+    def sdh(self):
+        return self.hearingImpaired or "SDH" in self.title or "SDH" in self.displayTitle \
+               or "SDH" in self.extendedDisplayTitle
+
+    @property
     def videoCodecRendering(self):
         render = "sdr"
 
@@ -169,3 +177,6 @@ class NoneStream(PlexStream):
 
     def getTitle(self, translate_func=util.dummyTranslate):
         return translate_func("None")
+
+
+NONE_STREAM = NoneStream()
