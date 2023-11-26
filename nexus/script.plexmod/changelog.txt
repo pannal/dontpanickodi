@@ -1,3 +1,8 @@
+[- 0.6.5+rev2 -]
+- Theme music: Harden BGM handler; wait for correct volume to be re-set, might fix not-so-rare stale volume issue
+- Episodes: Show TV Show's seasons in episodes window
+
+
 [- 0.6.5 -]
 - Fix rare postplay still shown on bingemode/autoskip credits
 - Fix quick subtitle selection when override forced advanced setting is active

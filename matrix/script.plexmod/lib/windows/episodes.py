@@ -25,6 +25,7 @@ from . import pagination
 from . import playbacksettings
 
 from lib.util import T
+from .mixins import SeasonsMixin
 
 VIDEO_RELOAD_KW = dict(includeExtras=1, includeExtrasCount=10, includeChapters=1)
 
@@ -169,7 +170,8 @@ class RelatedPaginator(pagination.BaseRelatedPaginator):
         return self.parentWindow.show_.getRelated(offset=offset, limit=amount)
 
 
-class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, playbacksettings.PlaybackSettingsMixin):
+class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMixin,
+                     playbacksettings.PlaybackSettingsMixin):
     xmlFile = 'script-plex-episodes.xml'
     path = util.ADDON.getAddonInfo('path')
     theme = 'Main'
@@ -183,12 +185,13 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, playbackse
     EXTRA_DIM = (329, 185)
     ROLES_DIM = (268, 268)
 
-    EPISODE_LIST_ID = 400
     LIST_OPTIONS_BUTTON_ID = 111
 
-    EXTRA_LIST_ID = 401
-    RELATED_LIST_ID = 402
-    ROLES_LIST_ID = 403
+    EPISODE_LIST_ID = 400
+    SEASONS_LIST_ID = 401
+    EXTRA_LIST_ID = 402
+    RELATED_LIST_ID = 403
+    ROLES_LIST_ID = 404
 
     OPTIONS_GROUP_ID = 200
 
@@ -204,6 +207,8 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, playbackse
     INFO_BUTTON_ID = 304
     SETTINGS_BUTTON_ID = 305
     MEDIA_BUTTON_ID = 307
+
+    SEASONS_CONTROL_ATTR = "seasonsListControl"
 
     def __init__(self, *args, **kwargs):
         kodigui.ControlledWindow.__init__(self, *args, **kwargs)
@@ -250,6 +255,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, playbackse
         self.extraListControl = kodigui.ManagedControlList(self, self.EXTRA_LIST_ID, 5)
         self.relatedListControl = kodigui.ManagedControlList(self, self.RELATED_LIST_ID, 5)
         self.rolesListControl = kodigui.ManagedControlList(self, self.ROLES_LIST_ID, 5)
+        self.seasonsListControl = kodigui.ManagedControlList(self, self.SEASONS_LIST_ID, 5)
 
         self._setup()
         self.postSetup()
@@ -319,7 +325,11 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, playbackse
 
         self.updateProperties()
         self.fillEpisodes()
-        hasPrev = self.fillExtras()
+        hasSeasons = self.fillSeasons(self.show_, seasonsFilter=lambda x: len(x) > 1)
+        hasPrev = self.fillExtras(hasSeasons)
+
+        if not hasPrev and hasSeasons:
+            hasPrev = True
         hasPrev = self.fillRelated(hasPrev)
         self.fillRoles(hasPrev)
 
@@ -449,6 +459,15 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, playbackse
             self.infoButtonClicked()
         elif controlID == self.SEARCH_BUTTON_ID:
             self.searchButtonClicked()
+        elif controlID == self.SEASONS_LIST_ID:
+            mli = self.seasonsListControl.getSelectedItem()
+            if not mli:
+                return
+            item = mli.dataSource
+            if item != self.season:
+                self.openItem(self.seasonsListControl)
+            else:
+                self.setFocusId(self.EPISODE_LIST_ID)
         elif controlID == self.EXTRA_LIST_ID:
             self.openItem(self.extraListControl)
         elif controlID == self.RELATED_LIST_ID:
@@ -901,6 +920,8 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, playbackse
             self.setProperty('episodes.header', u'Episodes')
             self.setProperty('extras.header', u'Extras')
 
+        self.setProperty('seasons.header',
+                         u'{0} \u2022 {1}'.format(showTitle, T(32942, 'Seasons')))
         self.setProperty('related.header', T(32306, 'Related Shows'))
         self.genre = self.show_.genres() and self.show_.genres()[0].tag or ''
 
@@ -1079,7 +1100,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, playbackse
                     self.setProgress(mli)
                 return
 
-    def fillExtras(self):
+    def fillExtras(self, has_prev=False):
         items = []
         idx = 0
 
@@ -1110,6 +1131,8 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, playbackse
 
         self.extraListControl.reset()
         self.extraListControl.addItems(items)
+
+        self.setProperty('divider.{0}'.format(self.EXTRA_LIST_ID), has_prev and '1' or '')
         return True
 
     def fillRelated(self, has_prev=False):

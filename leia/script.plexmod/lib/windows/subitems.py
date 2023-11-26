@@ -27,7 +27,7 @@ from . import pagination
 from . import playbacksettings
 
 from lib.util import T
-from lib.windows.home import MOVE_SET
+from .mixins import SeasonsMixin
 
 
 class RelatedPaginator(pagination.BaseRelatedPaginator):
@@ -35,28 +35,13 @@ class RelatedPaginator(pagination.BaseRelatedPaginator):
         return self.parentWindow.mediaItem.getRelated(offset=offset, limit=amount)
 
 
-class ShowWindow(kodigui.ControlledWindow, windowutils.UtilMixin, playbacksettings.PlaybackSettingsMixin):
+class ShowWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMixin, playbacksettings.PlaybackSettingsMixin):
     xmlFile = 'script-plex-seasons.xml'
     path = util.ADDON.getAddonInfo('path')
     theme = 'Main'
     res = '1080i'
     width = 1920
     height = 1080
-
-    THUMB_DIMS = {
-        'show': {
-            'main.thumb': (347, 518),
-            'item.thumb': (174, 260)
-        },
-        'episode': {
-            'main.thumb': (347, 518),
-            'item.thumb': (198, 295)
-        },
-        'artist': {
-            'main.thumb': (519, 519),
-            'item.thumb': (215, 215)
-        }
-    }
 
     EXTRA_DIM = (329, 185)
     RELATED_DIM = (268, 397)
@@ -540,22 +525,7 @@ class ShowWindow(kodigui.ControlledWindow, windowutils.UtilMixin, playbacksettin
 
     @busy.dialog()
     def fill(self, update=False):
-        items = []
-        idx = 0
-        for season in self.mediaItem.seasons():
-            mli = self.createListItem(season)
-            if mli:
-                mli.setProperty('index', str(idx))
-                mli.setProperty('thumb.fallback', 'script.plex/thumb_fallbacks/show.png')
-                mli.setProperty('unwatched.count', not season.isWatched and str(season.unViewedLeafCount) or '')
-                items.append(mli)
-                idx += 1
-
-        if update:
-            self.subItemListControl.replaceItems(items)
-        else:
-            self.subItemListControl.reset()
-            self.subItemListControl.addItems(items)
+        self.fillSeasons(self.mediaItem, update=update)
 
     def fillExtras(self):
         items = []

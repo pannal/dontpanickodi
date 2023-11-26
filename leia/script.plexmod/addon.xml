@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="script.plexmod"
        name="Plex"
-       version="0.6.5"
+       version="0.6.5+rev2"
        provider-name="pannal">
     <requires>
         <import addon="xbmc.python" version="2.26.0"/>
@@ -25,29 +25,8 @@
         <source>https://github.com/pannal/plex-for-kodi</source>
         <platform>all</platform>
         <news>
-- Fix rare postplay still shown on bingemode/autoskip credits
-- Fix quick subtitle selection when override forced advanced setting is active
-- Fix rare round robin case skipping item 0 onup in dropdowns
-- Fix episode progress and time remaining not updating (thanks @bowlingbeeg)
-- Fix embedded subtitle display delay when Cycling/using buttons to switch subtitles
-- Fix rare subtitles not shown issue
-
-- Add: Allow video player UI buttons customization via settings; remove a couple of player navbar buttons by default
-- Add "Previous Subtitle" to quick subtitles nav item
-- Remember subtitle actions (prev, next, download, delay) via quick nav
-- Use our own CycleSubtitles/ShowSubtitles implementation;
-- Rely even less on Kodi's Player states for subtitles
-- Parse and show SDH/HI flag for subtitle streams
-- Hide OSD faster after closing settings; try hiding OSD faster in general if necessary
-- Lose orange fallback BG on userselect as well by default
-- Settings: rename Player to Player UI, rename Player (user-specific) to Playback (user-specific)
-- Settings: Move forced subtitles fix from plugin settings to settings interface audio/subtitles
-- Store last background URL in settings if dynamic backgrounds is active; use last BG url on startup to prevent blank BG
-- Reduce embedded subtitle display backseek to 100ms
-- Use episode thumbnails in continue hub if available, by default; add advanced setting
-- Set default background blur to 0 (was 4), background opacity to 20 (was 30)
-- Disable legacy background image fallback by default; add advanced setting
-- Core improvements
+- Theme music: Harden BGM handler; wait for correct volume to be re-set, might fix not-so-rare stale volume issue
+- Episodes: Show TV Show's seasons in episodes window
         </news>
         <assets>
             <icon>icon.png</icon>

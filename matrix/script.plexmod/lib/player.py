@@ -733,16 +733,37 @@ class BGMPlayerHandler(BasePlayerHandler):
         util.DEBUG_LOG("BGM: playing theme for %s" % self.currentlyPlaying)
         self.player.bgmPlaying = True
 
+    def getVolume(self):
+        return util.rpc.Application.GetProperties(properties=["volume"])["volume"]
+
     def setVolume(self, volume=None, reset=False):
         vlm = self.oldVolume if reset else volume
-        util.DEBUG_LOG("BGM: %ssetting volume to: %s" % ("re-" if reset else "", vlm))
-        xbmc.executebuiltin("SetVolume(%s)" % vlm)
+        curVolume = self.getVolume()
+
+        if curVolume != vlm:
+            util.DEBUG_LOG("BGM: {}setting volume to: {}".format("re-" if reset else "", vlm))
+            xbmc.executebuiltin("SetVolume({})".format(vlm))
+        else:
+            util.DEBUG_LOG("BGM: Volume already at {}".format(vlm))
+            return
+
+        waited = 0
+        waitMax = 5
+        while curVolume != vlm and waited < waitMax:
+            util.DEBUG_LOG("Waiting for volume to change from {} to {}".format(curVolume, vlm))
+            xbmc.sleep(100)
+            waited += 1
+            curVolume = self.getVolume()
+
+        if waited == waitMax:
+            util.DEBUG_LOG("BGM: Timeout setting volume to {} (is: {}). Might have been externally changed in the "
+                           "meantime".format(vlm, self.getVolume()))
 
     def resetVolume(self):
         self.setVolume(reset=True)
 
     def onPlayBackStopped(self):
-        util.DEBUG_LOG("BGM: stopped theme for %s" % self.currentlyPlaying)
+        util.DEBUG_LOG("BGM: stopped theme for {}".format(self.currentlyPlaying))
         util.setGlobalProperty('theme_playing', '')
         self.player.bgmPlaying = False
         self.resetVolume()

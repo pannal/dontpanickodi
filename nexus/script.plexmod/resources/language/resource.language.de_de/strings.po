@@ -1862,3 +1862,7 @@ msgstr "Abspieloberfläche"
 msgctxt "#32941"
 msgid "Forced subtitles fix"
 msgstr "Erzwungene Untertitel beheben"
+
+msgctxt "#32942"
+msgid "Seasons"
+msgstr "Staffeln"
