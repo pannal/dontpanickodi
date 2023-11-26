@@ -81,7 +81,8 @@ class DropdownDialog(kodigui.BaseDialog):
             last_index = self.optionsList.size() - 1
 
             if last_index > 0:
-                if action == xbmcgui.ACTION_MOVE_UP and self.lastSelectedItem == 0 and self.optionsList.topHasFocus():
+                if action == xbmcgui.ACTION_MOVE_UP and self.lastSelectedItem in (0, None) \
+                        and self.optionsList.topHasFocus():
                     to_pos = last_index
 
                 elif action == xbmcgui.ACTION_MOVE_DOWN and self.lastSelectedItem == last_index \
