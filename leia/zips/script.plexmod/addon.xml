@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="script.plexmod"
        name="Plex"
-       version="0.6.5+rev3"
+       version="0.6.5+rev4"
        provider-name="pannal">
     <requires>
         <import addon="xbmc.python" version="2.26.0"/>
@@ -27,7 +27,7 @@
         <news>
 - Fix dropdown roundrobin needing two UPs if first selected item is item 0, introduced in 0.6.5
 - Theme music: Harden BGM handler; wait for correct volume to be re-set, might fix not-so-rare stale volume issue
-- Episodes: Show TV Show's seasons in episodes window
+- Episodes: Show TV Show's other seasons in episodes window
         </news>
         <assets>
             <icon>icon.png</icon>

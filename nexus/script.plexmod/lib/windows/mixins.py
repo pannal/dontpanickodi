@@ -29,7 +29,7 @@ class SeasonsMixin():
         )
         return mli
 
-    def fillSeasons(self, mediaItem, update=False, seasonsFilter=None):
+    def fillSeasons(self, mediaItem, update=False, seasonsFilter=None, selectSeason=None):
         seasons = mediaItem.seasons()
         if not seasons or (seasonsFilter and not seasonsFilter(seasons)):
             return False
@@ -37,6 +37,9 @@ class SeasonsMixin():
         items = []
         idx = 0
         for season in seasons:
+            if selectSeason and season == selectSeason:
+                continue
+
             mli = self._createListItem(mediaItem, season)
             if mli:
                 mli.setProperty('index', str(idx))

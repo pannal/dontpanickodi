@@ -1567,5 +1567,5 @@ msgid "Forced subtitles fix"
 msgstr ""
 
 msgctxt "#32942"
-msgid "Seasons"
+msgid "Other seasons"
 msgstr ""

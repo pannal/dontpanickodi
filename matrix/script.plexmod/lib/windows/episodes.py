@@ -325,7 +325,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
 
         self.updateProperties()
         self.fillEpisodes()
-        hasSeasons = self.fillSeasons(self.show_, seasonsFilter=lambda x: len(x) > 1)
+        hasSeasons = self.fillSeasons(self.show_, seasonsFilter=lambda x: len(x) > 1, selectSeason=self.season)
         hasPrev = self.fillExtras(hasSeasons)
 
         if not hasPrev and hasSeasons:

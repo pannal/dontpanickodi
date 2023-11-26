@@ -1864,5 +1864,5 @@ msgid "Forced subtitles fix"
 msgstr "Erzwungene Untertitel beheben"
 
 msgctxt "#32942"
-msgid "Seasons"
-msgstr "Staffeln"
+msgid "Other seasons"
+msgstr "Weitere Staffeln"
