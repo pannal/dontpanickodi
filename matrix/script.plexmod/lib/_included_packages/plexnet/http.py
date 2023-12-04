@@ -115,7 +115,7 @@ class HttpRequest(object):
             self.removeAsPending()
             return
         except Exception as e:
-            util.ERROR('Request failed {0}'.format(util.cleanToken(self.url)), e)
+            util.ERROR('Request failed {0}'.format(util.cleanToken(self.url)))
             if not hasattr(e, 'response'):
                 return
             res = e.response

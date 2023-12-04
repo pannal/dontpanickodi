@@ -7,12 +7,18 @@ import requests
 import six
 
 from requests.packages.urllib3 import HTTPConnectionPool, HTTPSConnectionPool
+from requests.packages.urllib3.connection import HTTPConnection
 from requests.packages.urllib3.poolmanager import PoolManager, proxy_from_url
-from requests.packages.urllib3.connectionpool import VerifiedHTTPSConnection
+try:
+    from requests.packages.urllib3.connectionpool import VerifiedHTTPSConnection
+except ImportError:
+    # urllib3 >= 2.1.0
+    from requests.packages.urllib3.connection import HTTPSConnection as VerifiedHTTPSConnection
+
 from requests.adapters import HTTPAdapter
 from requests.compat import urlparse
 
-from six.moves.http_client import HTTPConnection
+#from six.moves.http_client import HTTPConnection
 import errno
 
 DEFAULT_POOLBLOCK = False
@@ -228,7 +234,11 @@ class AsyncHTTPSConnectionPool(HTTPSConnectionPool):
 
         self.connections.append(connection)
 
-        return self._prepare_conn(connection)
+        try:
+            return self._prepare_conn(connection)
+        except AttributeError:
+            # urllib3 2.1.0
+            return connection
 
     def cancel(self):
         for c in self.connections:

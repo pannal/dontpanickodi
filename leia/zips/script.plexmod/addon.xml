@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="script.plexmod"
        name="Plex"
-       version="0.6.5+rev4"
+       version="0.6.5+rev5"
        provider-name="pannal">
     <requires>
         <import addon="xbmc.python" version="2.26.0"/>
@@ -25,9 +25,7 @@
         <source>https://github.com/pannal/plex-for-kodi</source>
         <platform>all</platform>
         <news>
-- Fix dropdown roundrobin needing two UPs if first selected item is item 0, introduced in 0.6.5
-- Theme music: Harden BGM handler; wait for correct volume to be re-set, might fix not-so-rare stale volume issue
-- Episodes: Show TV Show's other seasons in episodes window
+- Fix compatibility with urllib3 >= 2.1.0
         </news>
         <assets>
             <icon>icon.png</icon>
