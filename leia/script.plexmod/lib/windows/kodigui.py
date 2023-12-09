@@ -5,10 +5,9 @@ from kodi_six import xbmcgui
 import time
 import threading
 import traceback
-import six
 from six.moves import range
 from six.moves import zip
-from .. util import hasCustomBGColour, advancedSettings
+from .. import util
 
 MONITOR = None
 
@@ -46,7 +45,11 @@ class BaseFunctions:
         window = cls(cls.xmlFile, cls.path, cls.theme, cls.res, **kwargs)
         if show:
             window.show()
-        window.isOpen = True
+            if xbmcgui.getCurrentWindowId() < 13000:
+                window.isOpen = False
+                return window
+
+        window.isOpen = xbmcgui.getCurrentWindowId() >= 13000
         return window
 
     def modal(self):
@@ -92,6 +95,9 @@ class BaseFunctions:
         self.setProperty(key, boolean and '1' or '')
 
 
+LAST_BG_URL = None
+
+
 class BaseWindow(xbmcgui.WindowXML, BaseFunctions):
     def __init__(self, *args, **kwargs):
         BaseFunctions.__init__(self)
@@ -101,21 +107,31 @@ class BaseWindow(xbmcgui.WindowXML, BaseFunctions):
         self.finishedInit = False
 
     def onInit(self):
+        global LAST_BG_URL
         self._winID = xbmcgui.getCurrentWindowId()
         BaseFunctions.lastWinID = self._winID
-        self.setProperty('use_solid_background', hasCustomBGColour and '1' or '')
-        if hasCustomBGColour:
-            bgColour = advancedSettings.backgroundColour if advancedSettings.backgroundColour != "-" else "ff000000"
+        self.setProperty('use_solid_background', util.hasCustomBGColour and '1' or '')
+        if util.hasCustomBGColour:
+            bgColour = util.advancedSettings.backgroundColour if util.advancedSettings.backgroundColour != "-" \
+                else "ff000000"
             self.setProperty('background_colour', "0x%s" % bgColour.lower())
+            self.setProperty('background_colour_opaque', "0x%s" % bgColour.lower())
         else:
-            self.setProperty('background_colour', "0xff111111")
+            # set background color to 0 to avoid kodi UI BG clearing, improves performance
+            if util.advancedSettings.dbgCrossfade:
+                self.setProperty('background_colour', "0x00000000")
+            else:
+                self.setProperty('background_colour', "0xff111111")
+            self.setProperty('background_colour_opaque', "0xff111111")
 
-        self.setBoolProperty('use_bg_fallback', advancedSettings.useBgFallback)
+        self.setBoolProperty('use_bg_fallback', util.advancedSettings.useBgFallback)
 
         if self.started:
             self.onReInit()
         else:
             self.started = True
+            if LAST_BG_URL:
+                self.windowSetBackground(LAST_BG_URL)
             self.onFirstInit()
             self.finishedInit = True
 
@@ -138,6 +154,38 @@ class BaseWindow(xbmcgui.WindowXML, BaseFunctions):
         except RuntimeError:
             xbmc.log('kodigui.BaseWindow.setProperty: Missing window', xbmc.LOGDEBUG)
 
+    def updateBackgroundFrom(self, ds):
+        if util.advancedSettings.dynamicBackgrounds:
+            return self.windowSetBackground(util.backgroundFromArt(ds.art, width=self.width,
+                                                                   height=self.height))
+
+    def windowSetBackground(self, value):
+        if not util.advancedSettings.dbgCrossfade:
+            if not value:
+                return
+            self.setProperty("background_static", value)
+            return value
+
+        global LAST_BG_URL
+
+        if not value:
+            if LAST_BG_URL:
+                self.setProperty("background_static", LAST_BG_URL)
+                return LAST_BG_URL
+            return
+
+        cur1 = self.getProperty('background')
+        if not cur1:
+            self.setProperty("background_static", value)
+            self.setProperty("background", value)
+
+        elif LAST_BG_URL != value:
+            self.setProperty("background_static", LAST_BG_URL)
+            self.setProperty("background", value)
+
+        LAST_BG_URL = value
+        return value
+
     def doClose(self):
         if not self.isOpen:
             return
@@ -147,8 +195,9 @@ class BaseWindow(xbmcgui.WindowXML, BaseFunctions):
 
     def show(self):
         self._closing = False
-        self.isOpen = True
+        #self.isOpen = True
         xbmcgui.WindowXML.show(self)
+        self.isOpen = xbmcgui.getCurrentWindowId() >= 13000
 
     def onClosed(self):
         pass

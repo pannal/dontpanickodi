@@ -507,6 +507,13 @@ class Movie(PlayableVideo):
         self.transcodeSession = self._findTranscodeSession(data)
 
     @property
+    def defaultTitle(self):
+        title = self.title or ''
+        if self.editionTitle:
+            title = title + " \u2022 " + self.editionTitle
+        return title
+
+    @property
     def maxHeight(self):
         height = 0
         for m in self.media:

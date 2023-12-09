@@ -139,8 +139,8 @@ msgstr "Automatisch"
 
 #: 
 msgctxt "#32031"
-msgid "Burn Subtitles (Direct Play Only)"
-msgstr "Untertitel einbrennen (bei direkter Wiedergabe)"
+msgid "Burn-in Subtitles"
+msgstr "Untertitel einbrennen"
 
 #: 
 msgctxt "#32032"
@@ -289,18 +289,18 @@ msgstr "Kodi-Audiokanäle verwenden"
 
 #: 
 msgctxt "#32061"
-msgid "When transcoding audio, target the audio channels set in Kodi. Not recommended for non-HDMI/SPDIF"
-msgstr "Beim Transkodieren von Audio werden die in Kodi eingestellten Audiokanäle verwendet. Nicht empfohlen für nicht-HDMI/SPDIF"
+msgid "When transcoding audio, target the audio channels set in Kodi."
+msgstr "Beim Transkodieren von Audio werden die in Kodi eingestellten Audiokanäle verwendet."
 
 #: 
 msgctxt "#32062"
-msgid "Force transcoded audio to AC3"
-msgstr "Erzwingen der Transcodierung von Audio in AC3"
+msgid "Transcode audio to AC3"
+msgstr "Transkodiere Ton zu AC3"
 
 #: 
 msgctxt "#32063"
-msgid "When transcoding multi-channel audio, always instruct PMS encode to AC3 (useful for Optical passthrough)"
-msgstr "Bei der Transkodierung von Mehrkanalton sollte die PMS-Kodierung immer in AC3 erfolgen (nützlich für Optical Passthrough)"
+msgid "Transcode audio to AC3 in certain conditions (useful for passthrough)."
+msgstr "Transkodiere Ton zu AC3 in bestimmten Umständen (nützlich für Passthrough)"
 
 #: 
 msgctxt "#32064"
@@ -309,8 +309,18 @@ msgstr "DTS wie AC3 behandeln"
 
 #: 
 msgctxt "#32065"
-msgid "When the above is enabled, treat DTS the same as AC3 (useful for Optical passthrough)"
-msgstr "Wenn die obige Option aktiviert ist, wird DTS wie AC3 behandelt (nützlich für Optical Passthrough)"
+msgid "When any of the force AC3 settings are enabled, treat DTS the same as AC3 (useful for Optical passthrough)"
+msgstr "Wenn einer der AC3 Optionen aktiviert ist, wird DTS wie AC3 behandelt (nützlich für Optical Passthrough)"
+
+
+msgctxt "#32066"
+msgid "Force audio to AC3"
+msgstr "Audio immer als AC3 erzwingen"
+
+
+msgctxt "#32067"
+msgid "Only force multichannel audio to AC3"
+msgstr "Nur Mehrkanal-Audio als AC3 erzwingen"
 
 #: 
 msgctxt "#32100"
@@ -1866,3 +1876,31 @@ msgstr "Erzwungene Untertitel beheben"
 msgctxt "#32942"
 msgid "Other seasons"
 msgstr "Weitere Staffeln"
+
+msgctxt "#32943"
+msgid "Crossfade dynamic background art"
+msgstr "Dynamische Hintergrundbilder überblenden"
+
+msgctxt "#32944"
+msgid "Burn-in SSA subtitles (DirectStream)"
+msgstr "SSA-Untertitel einbrennen (DirectStream)"
+
+msgctxt "#32945"
+msgid "When Direct Streaming instruct the Plex Server to burn in SSA/ASS subtitles (thus transcoding the video stream). If disabled it will not touch the video stream, but will convert the subtitle to unstyled text."
+msgstr "Wird Direct Streaming verwendet, den Plex Server dazu bringen, SSA/ASS-Untertitel einzubrennen (also den Video Stream zu transcoden). Wenn deaktiviert, wird dieser den Video Stream nicht anfassen, jedoch den Untertitel als reinen Text anzeigen."
+
+msgctxt "#32946"
+msgid "Stop video playback on idle after"
+msgstr "Bei Inaktivität Video stoppen nach"
+
+msgctxt "#32947"
+msgid "Stop video playback on screensaver"
+msgstr "Video stoppen bei Bildschirmschoner"
+
+msgctxt "#32948"
+msgid "Allow auto-skip when transcoding"
+msgstr "Überspringen beim Transkodieren erlauben"
+
+msgctxt "#32949"
+msgid "When transcoding/DirectStreaming, allow auto-skip functionality."
+msgstr "Beim Transkodieren/DirectStream die automatische Überspringen-Funktionalität erlauben."

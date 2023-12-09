@@ -281,6 +281,7 @@ class PlaylistWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
         mli.setProperty('watched', episode.isWatched and '1' or '')
 
     def createMovieListItem(self, mli, movie):
+        mli.setLabel(movie.defaultTitle)
         mli.setLabel2(movie.year)
         mli.setThumbnailImage(movie.art.asTranscodedImageURL(*self.LI_AR16X9_THUMB_DIM))
         mli.setProperty('track.duration', util.durationToShortText(movie.duration.asInt()))

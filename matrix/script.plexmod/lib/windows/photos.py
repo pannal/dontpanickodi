@@ -68,10 +68,8 @@ class PhotoWindow(kodigui.BaseWindow):
         self.initialLoad = True
 
     def onFirstInit(self):
-        if util.KODI_VERSION_MAJOR > 18:
-            self.tempFolder = os.path.join(xbmcvfs.translatePath("special://temp/"), *self.tempSubFolder)
-        else:
-            self.tempFolder = os.path.join(xbmc.translatePath("special://temp/"), *self.tempSubFolder)
+        self.tempFolder = os.path.join(util.translatePath("special://temp/"), *self.tempSubFolder)
+
         if not os.path.exists(self.tempFolder):
             try:
                 os.makedirs(self.tempFolder)
@@ -80,7 +78,7 @@ class PhotoWindow(kodigui.BaseWindow):
                     util.ERROR()
 
         self.pqueueList = kodigui.ManagedControlList(self, self.PQUEUE_LIST_ID, 14)
-        self.setProperty('photo', 'script.plex/indicators/busy-photo.gif')
+        #self.setProperty('photo', 'script.plex/indicators/busy-photo.gif')
         self.getPlayQueue()
         self.start()
         self.osdTimer = kodigui.PropertyTimer(self._winID, 4, 'OSD', '', init_value=False, callback=self.osdTimerCallback)
@@ -271,9 +269,9 @@ class PhotoWindow(kodigui.BaseWindow):
         elif self.showPhotoThread.is_alive():
             waitedFor = 0
             self.setBoolProperty('is.updating', True)
-            while waitedFor < 10:
+            while waitedFor < 100:
                 if not self.showPhotoThread.is_alive() and not util.MONITOR.abortRequested():
-                    return self.showPhoto(**kwargs)
+                    return self.showPhoto(trigger=trigger, **kwargs)
                 elif util.MONITOR.abortRequested():
                     self.setBoolProperty('is.updating', False)
                     return
@@ -298,6 +296,7 @@ class PhotoWindow(kodigui.BaseWindow):
         self.playerObject = plexplayer.PlexPhotoPlayer(photo)
 
         addToStack = []
+        currentFailed = False
         try:
             for item in loadItems:
                 if not item:
@@ -311,13 +310,14 @@ class PhotoWindow(kodigui.BaseWindow):
                 bgURL = item.thumb.asTranscodedImageURL(self.width, self.height, blur=128, opacity=60,
                                                         background=colors.noAlpha.Background)
 
-                isCurrent = item == photo
+                isCurrent = currentFailed or item == photo
                 if isCurrent and not self.initialLoad:
                     self.setBoolProperty('is.updating', True)
 
                 path, background = self.getCachedPhotoData(url, bgURL)
                 if not (path and background):
-                    return
+                    currentFailed = True
+                    continue
 
                 if (path, background) not in self.photoStack:
                     if item == next:
@@ -362,8 +362,11 @@ class PhotoWindow(kodigui.BaseWindow):
                     util.ERROR("Couldn't load image: %s" % e, notify=True)
                     return None, None
                 else:
-                    with open(p, 'wb') as f:
-                        f.write(r.content)
+                    try:
+                        with open(p, 'wb') as f:
+                            f.write(r.content)
+                    except:
+                        return None, None
 
         return tmpPath, tmpBgPath
 

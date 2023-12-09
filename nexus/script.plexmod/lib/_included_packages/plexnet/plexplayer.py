@@ -6,7 +6,7 @@ from . import http
 from . import plexrequest
 from . import mediadecisionengine
 from . import serverdecision
-from lib.util import CACHE_SIZE, advancedSettings
+from lib.util import CACHE_SIZE, advancedSettings, KODI_VERSION_MAJOR
 
 from six.moves import range
 
@@ -265,7 +265,8 @@ class PlexPlayer(object):
 
             # Global variables for all decisions
             # Kodi default is 20971520 (20MB)
-            decisionPath = http.addUrlParam(decisionPath, "mediaBufferSize={}".format(str(CACHE_SIZE)[:-3]))
+            decisionPath = http.addUrlParam(decisionPath,
+                                            "mediaBufferSize={}".format(str(CACHE_SIZE * 1024)))
             decisionPath = http.addUrlParam(decisionPath, "hasMDE=1")
 
             if not advancedSettings.oldprofile:
@@ -342,18 +343,17 @@ class PlexPlayer(object):
 
         clampToOrig = self.item.settings.getPreference("audio_clamp_to_orig", True)
         useKodiAudio = self.item.settings.getPreference("audio_channels_kodi", False)
-        forceAC3 = self.item.settings.getPreference("audio_force_ac3", False)
+        AC3Cond = self.item.settings.getPreference("audio_force_ac3_cond", 'never')
         dtsIsAC3 = self.item.settings.getPreference("audio_ac3dts", True)
         hasAudioChoice = self.choice.audioStream is not None
+        forceAC3 = AC3Cond != 'never'
 
-        streamAudioMC = hasAudioChoice and self.choice.audioStream.channels.asInt(8) > 2
-
-        # only force AC3 for multi channel audio
-        if hasAudioChoice and not streamAudioMC:
-            forceAC3 = False
+        ach = None
+        if AC3Cond in ('2', '5'):
+            ach = int(AC3Cond)
 
         # fixme: still necessary?
-        if True:  # if self.choice.subtitleDecision == self.choice.SUBTITLES_BURN:  # Must burn transcoded because we can't set offset
+        if self.choice.subtitleDecision == self.choice.SUBTITLES_BURN:
             builder.addParam("subtitles", "burn")
             captionSize = captions.CAPTIONS.getBurnedSize()
             if captionSize is not None:
@@ -365,10 +365,11 @@ class PlexPlayer(object):
             # video playback starts via roCaptionRenderer: GetSubtitleTracks() and
             # ChangeSubtitleTrack()
 
-            obj.subtitleConfig = {'TrackName': "mkv/3"}
+            obj.subtitleConfig = {'TrackName': "mkv/3" if hasAudioChoice else "mkv/2"}
 
             # Allow text conversion of subtitles if we only burn image formats
-            if self.item.settings.getPreference("burn_subtitles") == "image":
+            #if self.item.settings.getPreference("burn_subtitles") == "image":
+            if not self.item.settings.getPreference("burn_ssa", True):
                 builder.addParam("advancedSubtitles", "text")
 
             builder.addParam("subtitles", "auto")
@@ -384,6 +385,10 @@ class PlexPlayer(object):
             else:
                 audioCodecs = "ac3"
 
+        subtitleCodecs = "srt,ssa,ass,mov_text,tx3g,ttxt,text,pgs,vobsub,smi,subrip,eia_608_embedded," \
+                         "eia_708_embedded,dvb_subtitle" + (",webvtt" if KODI_VERSION_MAJOR > 19 else '')
+
+
         util.LOG('MDE-prep: enabling codecs: {}'.format(audioCodecs))
 
         # Allow virtually anything in Kodi playback.
@@ -397,7 +402,7 @@ class PlexPlayer(object):
         builder.extras.append(
             "add-transcode-target(type=videoProfile&videoCodec="
             "h264,mpeg1video,mpeg2video,mpeg4,msmpeg4v2,msmpeg4v3,vc1,wmv3&container=mkv&"
-            "audioCodec="+audioCodecs+"&protocol=http&context=streaming)")
+            "audioCodec={}&subtitleCodec={}&protocol=http&context=streaming)".format(audioCodecs, subtitleCodecs))
 
         # builder.extras.append(
         #     "append-transcode-target-audio-codec(type=videoProfile&context=streaming&protocol=http&audioCodec=" +
@@ -442,6 +447,9 @@ class PlexPlayer(object):
 
         # limit max audio channels to audio stream or kodi (whichever is lower)
         maxAudioChannels = numChannels if not useKodiAudio else min(numChannels, self.audioChannels)
+
+        # if we've got a channel limit for AC3/DTS, apply it
+        maxAudioChannels = maxAudioChannels if not ach else min(maxAudioChannels, ach)
 
         if forceAC3 and hasAudioChoice:
             # limit max audio channels to the above or 6 for AC3 (whichever is lower)

@@ -8,8 +8,9 @@
     <backgroundcolor>$INFO[Window.Property(background_colour)]</backgroundcolor>
     <controls>
         <control type="group">
+            <visible>String.IsEmpty(Window.Property(use_solid_background))</visible>
             <control type="image">
-                <visible>String.IsEmpty(Window.Property(use_solid_background)) + !String.IsEmpty(Window.Property(use_bg_fallback))</visible>
+                <visible>!String.IsEmpty(Window.Property(use_bg_fallback))</visible>
                 <posx>0</posx>
                 <posy>0</posy>
                 <width>1920</width>
@@ -17,13 +18,21 @@
                 <texture>script.plex/home/background-fallback.png</texture>
             </control>
             <control type="image">
-                <visible>String.IsEmpty(Window.Property(use_solid_background))</visible>
+                <visible>String.IsEmpty(Window.Property(use_bg_fallback))</visible>
+                <posx>0</posx>
+                <posy>0</posy>
+                <width>1920</width>
+                <height>1080</height>
+                <texture background="true">$INFO[Window.Property(background_static)]</texture>
+            </control>
+            <control type="image">
+                <visible>String.IsEmpty(Window.Property(use_bg_fallback))</visible>
                 <posx>0</posx>
                 <posy>0</posy>
                 <width>1920</width>
                 <height>1080</height>
                 <fadetime>1000</fadetime>
-                <texture  background="true">$INFO[Window.Property(background)]</texture>
+                <texture background="true">$INFO[Window.Property(background)]</texture>
             </control>
         </control>
 
@@ -52,6 +61,7 @@
 
             <control type="grouplist" id="300">
                 <animation effect="fade" start="0" end="100" time="200" reversible="true">VisibleChange</animation>
+                <visible>!String.IsEmpty(Window.Property(initialized))</visible>
                 <defaultcontrol always="true">301</defaultcontrol>
                 <posx>30</posx>
                 <posy>405</posy>
@@ -157,6 +167,7 @@
                         <width>657</width>
                         <height>393</height>
                         <texture background="true">script.plex/thumb_fallbacks/show.png</texture>
+                        <animation effect="fade" start="0" end="100" time="0" delay="500">WindowOpen</animation>
                         <aspectratio>scale</aspectratio>
                     </control>
                     <control type="image">
@@ -189,7 +200,7 @@
                     <control type="label">
                         <width>auto</width>
                         <height>60</height>
-                        <font>font16</font>
+                        <font>font13</font>
                         <align>left</align>
                         <aligny>top</aligny>
                         <textcolor>FFFFFFFF</textcolor>
@@ -217,7 +228,7 @@
                     <posy>50</posy>
                     <width>1360</width>
                     <height>60</height>
-                    <font>font16</font>
+                    <font>font13</font>
                     <align>left</align>
                     <aligny>top</aligny>
                     <textcolor>FFFFFFFF</textcolor>
@@ -441,6 +452,7 @@
             </control>
 
             <control type="grouplist" id="60">
+                <visible>!String.IsEmpty(Window.Property(initialized))</visible>
                 <posx>0</posx>
                 <posy>565</posy>
                 <width>1920</width>

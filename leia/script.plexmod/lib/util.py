@@ -100,8 +100,8 @@ class AdvancedSettings(object):
         ("dynamic_timeline_seek", False),
         ("fast_back", False),
         ("dynamic_backgrounds", True),
-        ("background_art_blur_amount", 0),
-        ("background_art_opacity_amount", 40),
+        ("background_art_blur_amount2", 0),
+        ("background_art_opacity_amount2", 20),
         ("screensaver_quiz", False),
         ("postplay_always", False),
         ("postplay_timeout", 16),
@@ -127,6 +127,7 @@ class AdvancedSettings(object):
         ("buffer_insufficient_wait", 10),
         ("continue_use_thumb", True),
         ("use_bg_fallback", False),
+        ("dbg_crossfade", True),
     )
 
     def __init__(self):
@@ -186,9 +187,7 @@ class UtilityMonitor(xbmc.Monitor, signalsmixin.SignalsMixin):
         self.trigger('changed.watchstatus')
 
     def actionStop(self):
-        if xbmc.Player().isPlaying():
-            LOG('OnSleep: Stopping media playback')
-            xbmc.Player().stop()
+        self.stopPlayback()
 
     def actionQuit(self):
         LOG('OnSleep: Exit Kodi')
@@ -219,15 +218,37 @@ class UtilityMonitor(xbmc.Monitor, signalsmixin.SignalsMixin):
         xbmc.executebuiltin('System.LogOff')
 
     def onNotification(self, sender, method, data):
-        DEBUG_LOG("Notification: {} {} {}".format(sender, method, data))
+        LOG("Notification: {} {} {}".format(sender, method, data))
         if sender == 'script.plexmod' and method.endswith('RESTORE'):
             from .windows import kodigui
+            if not kodigui.BaseFunctions.lastWinID:
+                ERROR("Addon never properly started, can't reactivate")
+                return
+            if kodigui.BaseFunctions.lastWinID > 13000:
+                xbmc.executebuiltin('ActivateWindow({0})'.format(kodigui.BaseFunctions.lastWinID))
+            else:
+                ERROR("Addon never properly started, can't reactivate")
+                return
+
             getAdvancedSettings()
             populateTimeFormat()
-            xbmc.executebuiltin('ActivateWindow({0})'.format(kodigui.BaseFunctions.lastWinID))
 
         elif sender == "xbmc" and method == "System.OnSleep" and getSetting('action_on_sleep', "none") != "none":
             getattr(self, "action{}".format(getSetting('action_on_sleep', "none").capitalize()))()
+
+    def stopPlayback(self):
+        if xbmc.Player().isPlaying():
+            LOG('Monitor: Stopping media playback')
+            xbmc.Player().stop()
+
+    def onScreensaverActivated(self):
+        DEBUG_LOG("Monitor: OnScreensaverActivated")
+        if getSetting('player_stop_on_screensaver', True):
+            self.stopPlayback()
+
+    def onDPMSActivated(self):
+        DEBUG_LOG("Monitor: OnDPMSActivated")
+        #self.stopPlayback()
 
 
 MONITOR = UtilityMonitor()
@@ -528,11 +549,13 @@ def simpleSize(size):
         return '0B'
 
 
-def timeDisplay(ms):
+def timeDisplay(ms, cutHour=False):
     h = ms / 3600000
     m = (ms % 3600000) / 60000
     s = (ms % 60000) / 1000
-    return '{0:0>2}:{1:0>2}:{2:0>2}'.format(int(h), int(m), int(s))
+    if h >= 1 or not cutHour:
+        return '{0:0>2}:{1:0>2}:{2:0>2}'.format(int(h), int(m), int(s))
+    return '{0:0>2}:{1:0>2}'.format(int(m), int(s))
 
 
 def simplifiedTimeDisplay(ms):
@@ -854,18 +877,15 @@ def getProgressImage(obj):
     return 'script.plex/progress/{0}.png'.format(pct)
 
 
-LAST_BG_URL = None
-
-
 def backgroundFromArt(art, width=1920, height=1080, background=colors.noAlpha.Background):
-    global LAST_BG_URL
-    LAST_BG_URL = art.asTranscodedImageURL(
+    if not art:
+        return
+    return art.asTranscodedImageURL(
         width, height,
-        blur=advancedSettings.backgroundArtBlurAmount,
-        opacity=advancedSettings.backgroundArtOpacityAmount,
+        blur=advancedSettings.backgroundArtBlurAmount2,
+        opacity=advancedSettings.backgroundArtOpacityAmount2,
         background=background
     )
-    return LAST_BG_URL
 
 
 def trackIsPlaying(track):

@@ -111,6 +111,7 @@ class ShowWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMixin, 
                                                  parent_window=self)
 
         self.updateProperties()
+        self.setBoolProperty("initialized", True)
         self.fill()
         hasPrev = self.fillExtras()
         hasPrev = self.fillRelated(hasPrev)
@@ -120,10 +121,7 @@ class ShowWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMixin, 
         self.setProperty('title', self.mediaItem.title)
         self.setProperty('summary', self.mediaItem.summary)
         self.setProperty('thumb', self.mediaItem.defaultThumb.asTranscodedImageURL(*self.THUMB_DIMS[self.mediaItem.type]['main.thumb']))
-        self.setProperty(
-            'background',
-            util.backgroundFromArt(self.mediaItem.art, width=self.width, height=self.height)
-        )
+        self.updateBackgroundFrom(self.mediaItem)
         self.setProperty('duration', util.durationToText(self.mediaItem.fixedDuration()))
         self.setProperty('info', '')
         self.setProperty('date', self.mediaItem.year)
@@ -214,10 +212,16 @@ class ShowWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMixin, 
                 self.setFocusId(300)
                 self.prev()
 
+            if action == xbmcgui.ACTION_MOVE_UP and (controlID == self.SUB_ITEM_LIST_ID or
+                    self.INFO_BUTTON_ID <= controlID <= self.OPTIONS_BUTTON_ID):
+                self.updateBackgroundFrom(self.mediaItem)
+
             if controlID == self.RELATED_LIST_ID:
                 if self.relatedPaginator.boundaryHit:
                     self.relatedPaginator.paginate()
                     return
+                elif action in (xbmcgui.ACTION_MOVE_LEFT, xbmcgui.ACTION_MOVE_RIGHT):
+                    self.updateBackgroundFrom(self.relatedListControl.getSelectedItem().dataSource)
 
         except:
             util.ERROR()
@@ -253,6 +257,9 @@ class ShowWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMixin, 
 
         if 399 < controlID < 500:
             self.setProperty('hub.focus', str(controlID - 400))
+
+            if controlID == self.RELATED_LIST_ID:
+                self.updateBackgroundFrom(self.relatedListControl.getSelectedItem().dataSource)
 
         if xbmc.getCondVisibility('ControlGroup(50).HasFocus(0) + ControlGroup(300).HasFocus(0)'):
             self.setProperty('on.extras', '')
@@ -617,10 +624,7 @@ class ArtistWindow(ShowWindow):
     def updateProperties(self):
         self.setProperty('summary', self.mediaItem.summary)
         self.setProperty('thumb', self.mediaItem.defaultThumb.asTranscodedImageURL(*self.THUMB_DIMS[self.mediaItem.type]['main.thumb']))
-        self.setProperty(
-            'background',
-            util.backgroundFromArt(self.mediaItem.art, width=self.width, height=self.height)
-        )
+        self.updateBackgroundFrom(self.mediaItem)
 
     @busy.dialog()
     def fill(self):

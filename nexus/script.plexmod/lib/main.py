@@ -19,7 +19,6 @@ from . import player
 from . import backgroundthread
 from . import util
 
-
 BACKGROUND = None
 
 
@@ -58,13 +57,23 @@ def signout():
 
 def main():
     global BACKGROUND
-    util.setGlobalProperty('running', '1')
-    # fixme: reopen windowutils.HOME if still running?
     try:
-        with util.Cron(1):
+        with util.Cron(0.1):
             BACKGROUND = background.BackgroundWindow.create(function=_main)
-            BACKGROUND.modal()
-            del BACKGROUND
+
+            tries = 0
+            while not BACKGROUND.isOpen and not util.MONITOR.waitForAbort(2) and tries < 60:
+                if tries == 0:
+                    util.LOG("Couldn't start main loop, other dialog open? Retrying for 120s.")
+                BACKGROUND.show()
+                tries += 1
+
+            if BACKGROUND.isOpen:
+                util.setGlobalProperty('running', '1')
+                BACKGROUND.modal()
+                del BACKGROUND
+            else:
+                util.LOG("Couldn't start main loop, exiting.")
     finally:
         util.setGlobalProperty('running', '')
 

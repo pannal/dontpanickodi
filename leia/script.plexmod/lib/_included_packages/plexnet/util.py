@@ -271,6 +271,9 @@ class Timer(object):
             self.thread.join()
         self.start()
 
+    def is_alive(self):
+        return self.thread and self.thread.is_alive()
+
     def shouldAbort(self):
         return False
 

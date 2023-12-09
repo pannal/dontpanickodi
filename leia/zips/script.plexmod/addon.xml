@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="script.plexmod"
        name="Plex"
-       version="0.6.5+rev5"
+       version="0.7.0"
        provider-name="pannal">
     <requires>
         <import addon="xbmc.python" version="2.26.0"/>
@@ -25,7 +25,39 @@
         <source>https://github.com/pannal/plex-for-kodi</source>
         <platform>all</platform>
         <news>
-- Fix compatibility with urllib3 >= 2.1.0
+- Fix kiosk mode startup issue when other modal dialogs were active when PM4K was trying to start in kiosk mode
+- Fix video OSD hiding too fast in certain circumstances
+- Fix photoplayer issues; skip ugly initial loading image; show loading state only when it takes longer than 500ms; fix prev/next not always working; increase speed by x10
+- Fix episodes view replaying the theme music when returning from a different-season-view
+- Fix mediaBufferSize reported to the Plex MDE endpoint was always empty (resulting in Plex assuming we only have 5 MB cache, leading to all sorts of buffer issues)
+- Fix pin entry with J characters looking like an uppercase i
+- Fix episode regularly ending in bingeMode (not credits skipped) still showing post play
+- Fix enabled subtitles always leading to a transcode (and subtitle burn-in) of the video stream in DirectStream scenarios
+- Fix player UI for transcoded/DirectStream sessions
+
+- UI: background/transition/rendering core rework, reducing flickering, "bouncy" background fades, improving overall snappiness of the interface (dialog transition flicker not solved)
+- UI: remove the [...]-loading-spinner for everything that takes under 500ms, making the UI more natural
+- UI: crossfade backgrounds before entering a view, if possible, reducing the animation load between view transitions
+- UI: support more elements as background-providers (e.g. photos)
+- Add advanced/plugin setting to enable/disable background crossfading altogether
+- Add setting to stop video playback when screensaver (Kodi) is activated
+- Add setting to stop video playback after a set idle time
+- Increase home section change timeout from 0.3s to 0.5s and allow immediate section selection using ENTER
+
+- Completely rework the AC3 handling, allowing to select in which channel configurations one wants to transcode to AC3
+- Allow subtitles to be DirectStreamed; resulting in possibly ONLY the audio being transcoded
+- Add setting to burn in SSA/ASS subtitles when DirectStreaming. When disabled, they're converted to raw text and DirectStreamed, if enabled (previous default), they lead to the video stream being transcoded
+- Enable markers (intro/credits) functionality in transcoded/DirectStream sessions
+- Harden chapter selection logic in player UI
+- SeekDialog: Unify time formatting as much as possible between transcoded and directplay modes
+- Add setting to allow or deny auto-skip functionality when transcoding/DirectStreaming
+- Movies preplay: raise the ratings up by 70 pixels to be in line with the title, fixes issues with certain skins
+- Core: improve skin compatibility: font30 is no more as we're not using Confluence but Estuary as default. Replace with its fallback, font13
+- Core: improve skin compatibility: font16 is no more as we're not using Confluence but Estuary as default. Replace with its fallback, font13
+- Core: allow DirectStreaming of webvtt subtitles in Kodi >= 20
+- AdvancedSettings: reset background blur and opacity to their new defaults
+- BGM: store last "good" audio volume before playing theme music, and apply it upon start of the addon, in case the volume reset after BGM failed/was skipped
+- Core: Harden and speed up server change
         </news>
         <assets>
             <icon>icon.png</icon>

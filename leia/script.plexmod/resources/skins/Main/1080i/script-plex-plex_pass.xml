@@ -23,7 +23,7 @@
             <width>275</width>
             <height>100</height>
             <onup>200</onup>
-            <font>font30</font>
+            <font>font13</font>
             <textcolor>FFFFFFFF</textcolor>
             <focusedcolor>FFFFFFFF</focusedcolor>
             <align>center</align>

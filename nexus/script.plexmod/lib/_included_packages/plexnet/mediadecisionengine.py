@@ -219,16 +219,34 @@ class MediaDecisionEngine(object):
         else:
             choice.sorts.audioChannels = 0
 
-        if item.settings.getPreference("audio_force_ac3", False):
+        AC3Cond = item.settings.getPreference("audio_force_ac3_cond", 'never')
+
+        if AC3Cond != 'never':
             allowed = ["ac3"]
             if item.settings.getPreference("audio_ac3dts", False):
                 allowed.append("dca")
 
-            if choice.audioStream.codec not in allowed or choice.sorts.audioChannels > 6:
-                util.LOG("MDE: Server has decided this cannot direct play (AC3/DTS/5.1 max is forced)")
+            if AC3Cond == 'always' and choice.audioStream.codec not in allowed:
+                util.LOG("MDE: Codec {} can't be direct played due to user settings".format(choice.audioStream.codec))
                 choice.isDirectPlayable = False
 
-        choice.sorts.videoDS = not (choice.sorts.videoDS is None or choice.forceTranscode is True) and choice.sorts.videoDS or 0
+            elif AC3Cond in ('2', '5'):
+                ch = int(AC3Cond)
+                ach = choice.sorts.audioChannels
+
+                # got AC3/DTS but channels don't match
+                if choice.audioStream.codec in allowed and ach > ch:
+                    util.LOG("MDE: {}-channel AC3/DTS can't be direct played due "
+                             "to user settings ({} ch)".format(ach, ch))
+                    choice.isDirectPlayable = False
+                # other codec and channels don't match
+                elif ach > ch:
+                    util.LOG("MDE: {}-channel {} can't be direct played due to "
+                             "user settings ({} ch)".format(ach, choice.audioStream.codec, ch))
+                    choice.isDirectPlayable = False
+
+        choice.sorts.videoDS = not (
+                    choice.sorts.videoDS is None or choice.forceTranscode is True) and choice.sorts.videoDS or 0
         choice.sorts.resolution = choice.resolution
 
         # Server properties probably don't need to be associated with each choice

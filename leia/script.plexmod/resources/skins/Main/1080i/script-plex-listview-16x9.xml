@@ -9,8 +9,9 @@
     <backgroundcolor>$INFO[Window.Property(background_colour)]</backgroundcolor>
     <controls>
         <control type="group">
+            <visible>String.IsEmpty(Window.Property(use_solid_background))</visible>
             <control type="image">
-                <visible>String.IsEmpty(Window.Property(use_solid_background)) + !String.IsEmpty(Window.Property(use_bg_fallback))</visible>
+                <visible>!String.IsEmpty(Window.Property(use_bg_fallback))</visible>
                 <posx>0</posx>
                 <posy>0</posy>
                 <width>1920</width>
@@ -18,6 +19,15 @@
                 <texture>script.plex/home/background-fallback.png</texture>
             </control>
             <control type="image">
+                <visible>String.IsEmpty(Window.Property(use_bg_fallback))</visible>
+                <posx>0</posx>
+                <posy>0</posy>
+                <width>1920</width>
+                <height>1080</height>
+                <texture background="true">$INFO[Window.Property(background_static)]</texture>
+            </control>
+            <control type="image">
+                <visible>String.IsEmpty(Window.Property(use_bg_fallback))</visible>
                 <posx>0</posx>
                 <posy>0</posy>
                 <width>1920</width>
@@ -111,6 +121,7 @@
                 <orientation>horizontal</orientation>
                 <scrolltime tween="quadratic" easing="out">200</scrolltime>
                 <usecontrolcoords>true</usecontrolcoords>
+                <visible>!String.IsEmpty(Window.Property(initialized))</visible>
                 <control type="button" id="301">
                     <hitrect x="20" y="20" w="86" h="60" />
                     <visible>!String.IsEqual(Window(10000).Property(script.plex.item.type),collection) | String.IsEqual(Window.Property(media),collection)</visible>
@@ -533,6 +544,7 @@
             <posy>0</posy>
             <width>1920</width>
             <height>135</height>
+            <visible>!String.IsEmpty(Window.Property(initialized))</visible>
             <control type="grouplist">
                 <posx>60</posx>
                 <posy>47.5</posy>

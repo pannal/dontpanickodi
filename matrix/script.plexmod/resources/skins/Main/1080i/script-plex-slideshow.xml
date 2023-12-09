@@ -31,7 +31,7 @@
 					<visible>String.IsEqual(Window.Property(align),0)</visible>
 					<posy>50</posy>
 					<height>20</height>
-					<font>font16</font>
+					<font>font13</font>
 					<align>left</align>
 					<textcolor>FFFFFFFF</textcolor>
 					<shadowcolor>FF000000</shadowcolor>
@@ -51,7 +51,7 @@
 					<visible>String.IsEqual(Window.Property(align),1)</visible>
 					<posy>50</posy>
 					<height>20</height>
-					<font>font16</font>
+					<font>font13</font>
 					<align>right</align>
 					<textcolor>FFFFFFFF</textcolor>
 					<shadowcolor>FF000000</shadowcolor>

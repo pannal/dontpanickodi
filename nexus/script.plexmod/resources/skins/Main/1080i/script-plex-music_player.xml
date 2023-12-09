@@ -70,7 +70,7 @@
                 <posy>305</posy>
                 <width>1000</width>
                 <height>54</height>
-                <font>font16</font>
+                <font>font13</font>
                 <align>left</align>
                 <aligny>center</aligny>
                 <textcolor>FFFFFFFF</textcolor>
@@ -81,7 +81,7 @@
                 <posy>359</posy>
                 <width>1000</width>
                 <height>54</height>
-                <font>font16</font>
+                <font>font13</font>
                 <align>left</align>
                 <aligny>center</aligny>
                 <textcolor>FFFFFFFF</textcolor>
@@ -92,7 +92,7 @@
                 <posy>470</posy>
                 <width>1000</width>
                 <height>54</height>
-                <font>font16</font>
+                <font>font13</font>
                 <align>left</align>
                 <aligny>center</aligny>
                 <textcolor>FFFFFFFF</textcolor>
@@ -103,7 +103,7 @@
                 <posy>580</posy>
                 <width>1000</width>
                 <height>54</height>
-                <font>font16</font>
+                <font>font13</font>
                 <align>left</align>
                 <aligny>center</aligny>
                 <textcolor>FFFFFFFF</textcolor>
@@ -119,7 +119,7 @@
                 <posy>738</posy>
                 <width>1000</width>
                 <height>54</height>
-                <font>font16</font>
+                <font>font13</font>
                 <align>right</align>
                 <aligny>center</aligny>
                 <textcolor>80FFFFFF</textcolor>
@@ -130,7 +130,7 @@
                 <posy>794</posy>
                 <width>1000</width>
                 <height>54</height>
-                <font>font16</font>
+                <font>font13</font>
                 <align>right</align>
                 <aligny>center</aligny>
                 <textcolor>80FFFFFF</textcolor>

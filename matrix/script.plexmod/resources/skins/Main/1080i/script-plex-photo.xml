@@ -7,11 +7,12 @@
     </coordinates>
     <defaultcontrol>250</defaultcontrol>
     <zorder>100</zorder>
-    <onload>SetProperty(photo,script.plex/home/background-fallback.png)</onload>
+    <backgroundcolor>$INFO[Window.Property(background_colour)]</backgroundcolor>
     <controls>
         <control type="group">
+            <visible>String.IsEmpty(Window.Property(use_solid_background))</visible>
             <control type="image">
-                <visible>String.IsEmpty(Window.Property(use_solid_background)) + !String.IsEmpty(Window.Property(use_bg_fallback))</visible>
+                <visible>!String.IsEmpty(Window.Property(use_bg_fallback))</visible>
                 <posx>0</posx>
                 <posy>0</posy>
                 <width>1920</width>
@@ -19,6 +20,15 @@
                 <texture>script.plex/home/background-fallback.png</texture>
             </control>
             <control type="image">
+                <visible>String.IsEmpty(Window.Property(use_bg_fallback))</visible>
+                <posx>0</posx>
+                <posy>0</posy>
+                <width>1920</width>
+                <height>1080</height>
+                <texture background="true">$INFO[Window.Property(background_static)]</texture>
+            </control>
+            <control type="image">
+                <visible>String.IsEmpty(Window.Property(use_bg_fallback))</visible>
                 <posx>0</posx>
                 <posy>0</posy>
                 <width>1920</width>
@@ -39,12 +49,12 @@
                 <width>1920</width>
                 <height>1080</height>
                 <fadetime>1000</fadetime>
-                <texture fallback="script.plex/thumb_fallbacks/broken-photo.png" background="true">$INFO[Window.Property(photo)]</texture>
+                <texture background="true">$INFO[Window.Property(photo)]</texture>
                 <aspectratio>keep</aspectratio>
             </control>
             <control type="group">
                 <visible>!String.IsEmpty(Window.Property(is.updating))</visible>
-                <animation effect="fade" time="500">VisibleChange</animation>
+                <animation effect="fade" time="500" delay="500">VisibleChange</animation>
                 <control type="image">
                     <posx>840</posx>
                     <posy>465</posy>

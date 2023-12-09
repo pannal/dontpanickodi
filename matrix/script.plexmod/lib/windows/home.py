@@ -1,7 +1,6 @@
 from __future__ import absolute_import
 import time
 import threading
-import re
 
 from kodi_six import xbmc
 from kodi_six import xbmcgui
@@ -9,7 +8,6 @@ from kodi_six import xbmcgui
 from . import kodigui
 from lib import util
 from lib import backgroundthread
-from lib import colors
 from lib import player
 
 import plexnet
@@ -338,11 +336,11 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver):
         self.hubControls = None
         self.backgroundSet = False
         self.sectionChangeThread = None
-        self.sectionChangeTimeout = 0
         self.lastFocusID = None
         self.lastNonOptionsFocusID = None
         self.sectionHubs = {}
         self.updateHubs = {}
+        self.changingServer = False
         windowutils.HOME = self
 
         self.lock = threading.Lock()
@@ -354,9 +352,15 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver):
         if util.advancedSettings.dynamicBackgrounds:
             bgUrl = util.getSetting("last_bg_url")
             if bgUrl:
-                self.setProperty(
-                    'background', bgUrl
-                )
+                self.windowSetBackground(bgUrl)
+
+        # set good volume if we've missed re-setting BGM volume before
+        lastGoodVlm = util.getSetting('last_good_volume', 0)
+        BGMVlm = plexapp.util.INTERFACE.getThemeMusicValue()
+        if lastGoodVlm and BGMVlm and util.rpc.Application.GetProperties(properties=["volume"])["volume"] == BGMVlm:
+            util.DEBUG_LOG("Setting volume to {}, we probably missed the "
+                           "re-set on the last BGM encounter".format(lastGoodVlm))
+            xbmc.executebuiltin("SetVolume({})".format(lastGoodVlm))
 
         self.sectionList = kodigui.ManagedControlList(self, self.SECTION_LIST_ID, 7)
         self.serverList = kodigui.ManagedControlList(self, self.SERVER_LIST_ID, 10)
@@ -406,10 +410,11 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver):
                 hubControlIndex = self.lastFocusID - 400
 
                 if hubControlIndex in self.hubFocusIndexes and self.hubControls[hubControlIndex]:
-                    util.DEBUG_LOG("Re-focusing %i" % self.lastFocusID)
-                    self.setFocusId(self.lastFocusID)
+                    # this is basically just used for setting the background upon reinit
+                    # fixme: declutter, separation of concerns
+                    self.checkHubItem(self.lastFocusID)
                 else:
-                    util.DEBUG_LOG("Focus requested on %i, which can't focus. Trying next hub" % self.lastFocusID)
+                    util.DEBUG_LOG("Focus requested on {}, which can't focus. Trying next hub".format(self.lastFocusID))
                     self.focusFirstValidHub(hubControlIndex)
 
             else:
@@ -428,6 +433,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver):
             if self.hubControls[index]:
                 util.DEBUG_LOG("Focusing hub: %i" % (400 + index))
                 self.setFocusId(400+index)
+                self.checkHubItem(400+index)
                 return
 
         if startIndex is not None:
@@ -476,12 +482,26 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver):
             self.showHubs(self.lastSection, update=True)
 
     def shutdown(self):
-        self.serverList.reset()
+        try:
+            self.serverList.reset()
+        except AttributeError:
+            pass
+
         self.unhookSignals()
 
-        if util.advancedSettings.dynamicBackgrounds and util.LAST_BG_URL:
-            # store last BG url
-            util.setSetting("last_bg_url", util.LAST_BG_URL)
+        if util.advancedSettings.dynamicBackgrounds:
+            # store BG url of first hub, first item, as this is most likely to be the one we're focusing on the
+            # next start
+            try:
+                indices = self.hubFocusIndexes
+                for index in indices:
+                    if self.hubControls[index]:
+                        ds = self.hubControls[index][0].dataSource
+                        util.setSetting("last_bg_url",
+                                        util.backgroundFromArt(ds.art, width=self.width, height=self.height))
+                        return
+            except:
+                util.LOG("Couldn't store last background")
 
     def onAction(self, action):
         controlID = self.getFocusId()
@@ -579,6 +599,10 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver):
 
     def onClick(self, controlID):
         if controlID == self.SECTION_LIST_ID:
+            if self.sectionChangeThread and self.sectionChangeThread.is_alive():
+                self.sectionChangeThread.cancel()
+                self._sectionChanged()
+                return
             self.sectionClicked()
         # elif controlID == self.SERVER_BUTTON_ID:
         #     self.showServers()
@@ -606,7 +630,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver):
         if 399 < controlID < 500:
             self.setProperty('hub.focus', str(self.hubFocusIndexes[controlID - 400]))
 
-        if controlID == self.SECTION_LIST_ID:
+        if controlID == self.SECTION_LIST_ID and not self.changingServer:
             self.checkSectionItem()
 
         if xbmc.getCondVisibility('ControlGroup(50).HasFocus(0) + ControlGroup(100).HasFocus(0)'):
@@ -735,9 +759,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver):
         is_valid_mli = mli and mli.getProperty('is.end') != '1'
 
         if util.advancedSettings.dynamicBackgrounds and is_valid_mli:
-            self.setProperty(
-                'background', util.backgroundFromArt(mli.dataSource.art, width=self.width, height=self.height)
-            )
+            self.updateBackgroundFrom(mli.dataSource)
 
         if not mli or not mli.getProperty('is.end') or mli.getProperty('is.updating') == '1':
             return
@@ -774,16 +796,21 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver):
         self.tasks = [t for t in self.tasks if t.isValid()]
 
     def sectionChanged(self, force=False):
-        self.sectionChangeTimeout = time.time() + 0.3
+        """
+        fixme: force is probably invalid or never used; check
+        """
+        if self.sectionChangeThread and self.sectionChangeThread.is_alive():
+            self.sectionChangeThread.cancel()
+            self.sectionChangeThread.join()
+
         if not self.sectionChangeThread or not self.sectionChangeThread.is_alive() or force:
-            self.sectionChangeThread = threading.Thread(target=self._sectionChanged, name="sectionchanged")
-            self.sectionChangeThread.start()
+            if not force:
+                self.sectionChangeThread = threading.Timer(0.5, self._sectionChanged)
+                self.sectionChangeThread.start()
+            else:
+                self._sectionReallyChanged()
 
     def _sectionChanged(self):
-        while not util.MONITOR.waitForAbort(0.1):
-            if time.time() >= self.sectionChangeTimeout:
-                break
-
         self._sectionReallyChanged()
 
     def _sectionReallyChanged(self):
@@ -1018,8 +1045,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver):
         return mli
 
     def createMovieListItem(self, obj, wide=False):
-        mli = self.createSimpleListItem(obj, *self.THUMB_POSTER_DIM)
-        mli.setLabel2(obj.year)
+        mli = kodigui.ManagedListItem(obj.defaultTitle, obj.year, thumbnailImage=obj.defaultThumb.asTranscodedImageURL(*self.THUMB_POSTER_DIM), data_source=obj)
         mli.setProperty('thumb.fallback', 'script.plex/thumb_fallbacks/movie.png')
         if not obj.isWatched:
             mli.setProperty('unwatched', '1')
@@ -1103,7 +1129,8 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver):
         for control in self.hubControls:
             control.reset()
 
-    def _showHub(self, hub, hubitems=None, index=None, with_progress=False, with_art=False, ar16x9=False, text2lines=False, **kwargs):
+    def _showHub(self, hub, hubitems=None, index=None, with_progress=False, with_art=False, ar16x9=False,
+                 text2lines=False, **kwargs):
         control = self.hubControls[index]
         control.dataSource = hub
 
@@ -1121,10 +1148,8 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver):
 
         for obj in hubitems or hub.items:
             if not self.backgroundSet:
-                self.backgroundSet = True
-                self.setProperty(
-                    'background', util.backgroundFromArt(obj.art, width=self.width, height=self.height)
-                )
+                if self.updateBackgroundFrom(obj):
+                    self.backgroundSet = True
             mli = self.createListItem(obj, wide=with_art)
             if mli:
                 items.append(mli)
@@ -1244,18 +1269,30 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver):
         if not mli:
             return
 
-        server = mli.dataSource
+        self.changingServer = True
+        try:
+            with busy.BusySignalContext(plexapp.util.APP, "change:selectedServer") as bc:
+                self.setFocusId(self.SECTION_LIST_ID)
 
-        if not server.isReachable():
-            if server.pendingReachabilityRequests > 0:
-                util.messageDialog(T(32339, 'Server is not accessible'), T(32340, 'Connection tests are in progress. Please wait.'))
-            else:
-                util.messageDialog(
-                    T(32339, 'Server is not accessible'), T(32341, 'Server is not accessible. Please sign into your server and check your connection.')
-                )
-            return
+                server = mli.dataSource
 
-        plexapp.SERVERMANAGER.setSelectedServer(server, force=True)
+                if not server.isReachable():
+                    if server.pendingReachabilityRequests > 0:
+                        util.messageDialog(T(32339, 'Server is not accessible'), T(32340, 'Connection tests are in '
+                                                                                          'progress. Please wait.'))
+                    else:
+                        util.messageDialog(
+                            T(32339, 'Server is not accessible'), T(32341, 'Server is not accessible. Please sign into '
+                                                                           'your server and check your connection.')
+                        )
+                    bc.ignoreSignal = True
+                    return
+
+                changed = plexapp.SERVERMANAGER.setSelectedServer(server, force=True)
+                if not changed:
+                    bc.ignoreSignal = True
+        finally:
+            self.changingServer = False
 
     def showUserMenu(self, mouse=False):
         items = []

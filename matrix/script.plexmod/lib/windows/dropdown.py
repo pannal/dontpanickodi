@@ -1,5 +1,5 @@
 from __future__ import absolute_import
-from kodi_six import xbmcgui
+from kodi_six import xbmc, xbmcgui
 from . import kodigui
 
 from lib import util
@@ -35,6 +35,7 @@ class DropdownDialog(kodigui.BaseDialog):
         self.optionsCallback = kwargs.get('options_callback', None)
         self.header = kwargs.get('header')
         self.selectIndex = kwargs.get('select_index')
+        self.onCloseCallback = kwargs.get('onclose_callback')
         self.choice = None
 
     @property
@@ -107,6 +108,19 @@ class DropdownDialog(kodigui.BaseDialog):
     def playbackSessionEnded(self, **kwargs):
         self.doClose()
 
+    def doClose(self):
+        if self.closeOnPlaybackEnded:
+            from lib import player
+            player.PLAYER.off('session.ended', self.playbackSessionEnded)
+
+        self.setProperty('show', '')
+
+        super(DropdownDialog, self).doClose()
+
+    def onClosed(self):
+        if self.onCloseCallback:
+            self.onCloseCallback(self.choice)
+
     def setChoice(self):
         mli = self.optionsList.getSelectedItem()
         if not mli:
@@ -127,10 +141,13 @@ class DropdownDialog(kodigui.BaseDialog):
                 choice['sub'] = sub
 
         self.choice = choice
-        if not self.closeOnlyWithBack:
-            self.doClose()
         if self.optionsCallback:
             self.optionsCallback(self.optionsList, mli)
+
+        del mli
+
+        if not self.closeOnlyWithBack:
+            self.doClose()
 
     def showOptions(self):
         items = []
@@ -180,6 +197,7 @@ def showDropdown(
     options_callback=None,
     header=None,
     select_index=None,
+    onclose_callback=None,
 ):
 
     if header:
@@ -197,6 +215,7 @@ def showDropdown(
             options_callback=options_callback,
             header=header,
             select_index=select_index,
+            onclose_callback=onclose_callback,
         )
     else:
         pos = pos or (810, 400)
@@ -213,8 +232,10 @@ def showDropdown(
             options_callback=options_callback,
             header=header,
             select_index=select_index,
+            onclose_callback=onclose_callback,
         )
     choice = w.choice
+    w = None
     del w
     util.garbageCollect()
     return choice

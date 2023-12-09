@@ -296,25 +296,38 @@ class Settings(object):
                 ),
                 BoolSetting('audio_channels_kodi', T(32060, 'Use Kodi audio channels'),
                             False).description(
-                    T(32061, 'When transcoding audio, target the audio channels set in Kodi. Not recommended '
-                             'for SPDIF (AC3/DTS 2.1).')
+                    T(32061, 'When transcoding audio, target the audio channels set in Kodi.')
                 ),
-                BoolSetting('audio_force_ac3', T(32062, 'Force transcoded audio to AC3'),
-                            False).description(
-                    T(32063, 'When transcoding multi-channel audio, always instruct PMS '
-                             'encode to AC3 (useful for Optical passthrough)')
+                OptionsSetting(
+                    'audio_force_ac3_cond',
+                    T(32062, 'Transcode audio to AC3'),
+                    'never',
+                    (
+                        ('never', T(32033, 'Never')),
+                        ('always', T(32028, 'Always')),
+                        ('2', '2.1+'),
+                        ('5', '5.1+'),
+                    )
+                ).description(
+                    T(32063, 'Transcode audio to AC3 in certain conditions (useful for passthrough).')
                 ),
                 BoolSetting('audio_ac3dts', T(32064, 'Treat DTS like AC3'),
                             True).description(
-                    T(32065, 'When the above is enabled, treat DTS the same as AC3 '
+                    T(32065, 'When force AC3 settings are enabled, treat DTS the same as AC3 '
                              '(useful for Optical passthrough)')
                 ),
                 OptionsSetting(
                     'burn_subtitles',
-                    T(32031, 'Burn Subtitles (Direct Play Only)'),
+                    T(32031, 'Burn-in Subtitles'),
                     'auto',
                     (('auto', T(32030, 'Auto')), ('image', T(32029, 'Only Image Formats')),
                      ('always', T(32028, 'Always')))
+                ),
+                BoolSetting('burn_ssa', T(32944, 'Burn-in SSA subtitles'),
+                            True).description(
+                    T(32945, 'When Direct Streaming instruct the Plex Server to burn in SSA/ASS subtitles (thus '
+                             'transcoding the video stream). If disabled it will not touch the video stream, but '
+                             'will convert the subtitle to unstyled text.')
                 ),
                 BoolSetting('forced_subtitles_override', T(32941, 'Forced subtitles fix'),
                             False).description(
@@ -383,6 +396,11 @@ class Settings(object):
                 ).description(
                     T(33506, 'Show the intro skip button from the start of a video with an intro marker. The auto-skipp'
                              'ing setting applies. Doesn\'t override enabled binge mode.')
+                ),
+                BoolUserSetting(
+                    'auto_skip_in_transcode', T(32948, 'Allow auto-skip when transcoding'), True
+                ).description(
+                    T(32949, 'When transcoding/DirectStreaming, allow auto-skip functionality.')
                 ),
                 BoolUserSetting(
                     'show_chapters', T(33601, 'Show video chapters'), True
@@ -468,6 +486,16 @@ class Settings(object):
                      ('hibernate', T(32425, 'Hibernate')), ('suspend', T(32424, 'Suspend')),
                      ('cecstandby', T(32705, 'CEC Standby')), ('logoff', T(32421, 'Sign Out')))
                 ).description(T(32701, 'When Kodi receives a sleep event from the system, run the following action.')),
+                OptionsSetting(
+                    'player_stop_on_idle',
+                    T(32946, 'Stop video playback on idle after'),
+                    0,
+                    ((0, T(32033, 'Never')), (30, '30s'), (60, '1m'), (120, '2m'), (300, '5m'), (600, '10m'),
+                     (900, '15m'), (1200, '20m'), (1800, '30m'), (2700, '45m'), (3600, '1h'),)
+                ),
+                BoolSetting(
+                    'player_stop_on_screensaver', T(32947, 'Stop video playback on screensaver'), True
+                ),
                 BoolSetting('debug', T(32024, 'Debug Logging'), False),
             )
         ),

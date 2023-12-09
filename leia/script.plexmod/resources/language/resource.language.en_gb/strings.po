@@ -118,7 +118,7 @@ msgid "Auto"
 msgstr ""
 
 msgctxt "#32031"
-msgid "Burn Subtitles (Direct Play Only)"
+msgid "Burn-in Subtitles"
 msgstr ""
 
 msgctxt "#32032"
@@ -238,15 +238,15 @@ msgid "Use Kodi audio channels"
 msgstr ""
 
 msgctxt "#32061"
-msgid "When transcoding audio, target the audio channels set in Kodi. Not recommended for non-HDMI/SPDIF"
+msgid "When transcoding audio, target the audio channels set in Kodi."
 msgstr ""
 
 msgctxt "#32062"
-msgid "Force transcoded audio to AC3"
+msgid "Transcode audio to AC3"
 msgstr ""
 
 msgctxt "#32063"
-msgid "When transcoding multi-channel audio, always instruct PMS encode to AC3 (useful for Optical passthrough)"
+msgid "Transcode audio to AC3 in certain conditions (useful for passthrough)."
 msgstr ""
 
 msgctxt "#32064"
@@ -254,7 +254,15 @@ msgid "Treat DTS like AC3"
 msgstr ""
 
 msgctxt "#32065"
-msgid "When the above is enabled, treat DTS the same as AC3 (useful for Optical passthrough)"
+msgid "When any of the force AC3 settings are enabled, treat DTS the same as AC3 (useful for Optical passthrough)"
+msgstr ""
+
+msgctxt "#32066"
+msgid "Force audio to AC3"
+msgstr ""
+
+msgctxt "#32067"
+msgid "Only force multichannel audio to AC3"
 msgstr ""
 
 msgctxt "#32100"
@@ -1568,4 +1576,32 @@ msgstr ""
 
 msgctxt "#32942"
 msgid "Other seasons"
+msgstr ""
+
+msgctxt "#32943"
+msgid "Crossfade dynamic background art"
+msgstr ""
+
+msgctxt "#32944"
+msgid "Burn-in SSA subtitles (DirectStream)"
+msgstr ""
+
+msgctxt "#32945"
+msgid "When Direct Streaming instruct the Plex Server to burn in SSA/ASS subtitles (thus transcoding the video stream). If disabled it will not touch the video stream, but will convert the subtitle to unstyled text."
+msgstr ""
+
+msgctxt "#32946"
+msgid "Stop video playback on idle after"
+msgstr ""
+
+msgctxt "#32947"
+msgid "Stop video playback on screensaver"
+msgstr ""
+
+msgctxt "#32948"
+msgid "Allow auto-skip when transcoding"
+msgstr ""
+
+msgctxt "#32949"
+msgid "When transcoding/DirectStreaming, allow auto-skip functionality."
 msgstr ""

@@ -95,21 +95,22 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
         self.video.reload(checkFiles=1, **VIDEO_RELOAD_KW)
         return self.playVideo()
 
-    @busy.dialog(condition=lambda: util.getSetting("slow_connection", False))
+    @busy.dialog()
     def onReInit(self):
         self.initialized = False
         if util.getSetting("slow_connection", False):
             self.progressImageControl.setWidth(1)
             self.setProperty('remainingTime', T(32914, "Loading"))
         self.video.reload(checkFiles=1, fromMediaChoice=self.video.mediaChoice is not None, **VIDEO_RELOAD_KW)
-        self.refreshInfo()
+        self.refreshInfo(from_reinit=True)
         self.initialized = True
 
-    def refreshInfo(self):
+    def refreshInfo(self, from_reinit=False):
         oldFocusId = self.getFocusId()
 
         util.setGlobalProperty('hide.resume', '' if self.video.viewOffset.asInt() else '1')
-        self.setInfo()
+        # skip setting background when coming from reinit (other window) if we've focused something other than main
+        self.setInfo(skip_bg=from_reinit and not (self.PLAY_BUTTON_ID <= oldFocusId <= self.MEDIA_BUTTON_ID))
         self.fillRelated()
         xbmc.sleep(100)
 
@@ -148,10 +149,15 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
                 self.setFocusId(300)
                 self.prev()
 
+            elif action == xbmcgui.ACTION_MOVE_UP and self.PLAY_BUTTON_ID <= controlID <= self.MEDIA_BUTTON_ID:
+                self.updateBackgroundFrom(self.video)
+
             if controlID == self.RELATED_LIST_ID:
                 if self.relatedPaginator.boundaryHit:
                     self.relatedPaginator.paginate()
                     return
+                elif action in (xbmcgui.ACTION_MOVE_LEFT, xbmcgui.ACTION_MOVE_RIGHT):
+                    self.updateBackgroundFrom(self.relatedListControl.getSelectedItem().dataSource)
         except:
             util.ERROR()
 
@@ -189,6 +195,9 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
         if 399 < controlID < 500:
             self.setProperty('hub.focus', str(controlID - 400))
 
+            if controlID == self.RELATED_LIST_ID:
+                self.updateBackgroundFrom(self.relatedListControl.getSelectedItem().dataSource)
+
         if xbmc.getCondVisibility('ControlGroup(50).HasFocus(0) + ControlGroup(300).HasFocus(0)'):
             self.setProperty('on.extras', '')
         elif xbmc.getCondVisibility('ControlGroup(50).HasFocus(0) + !ControlGroup(300).HasFocus(0)'):
@@ -207,7 +216,7 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
     def infoButtonClicked(self):
         opener.handleOpen(
             info.InfoWindow,
-            title=self.video.title,
+            title=self.video.defaultTitle,
             sub_title=self.getProperty('info'),
             thumb=self.video.type == 'episode' and self.video.thumb or self.video.defaultThumb,
             thumb_fallback='script.plex/thumb_fallbacks/{0}.png'.format(self.video.type == 'episode' and 'show' or 'movie'),
@@ -490,12 +499,14 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
                                                  parent_window=self)
 
         self.setInfo()
+        self.setBoolProperty("initialized", True)
         self.fillExtras()
         hasPrev = self.fillRelated()
         self.fillRoles(hasPrev)
 
-    def setInfo(self):
-        self.setProperty('background', util.backgroundFromArt(self.video.art, width=self.width, height=self.height))
+    def setInfo(self, skip_bg=False):
+        if not skip_bg:
+            self.updateBackgroundFrom(self.video)
         self.setProperty('title', self.video.title)
         self.setProperty('duration', util.durationToText(self.video.duration.asInt()))
         self.setProperty('summary', self.video.summary.strip().replace('\t', ' '))
@@ -517,6 +528,7 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
             self.setProperty('writers', writers and u'{0}    {1}'.format(writersLabel, writers) or '')
             self.setProperty('related.header', T(32306, 'Related Shows'))
         elif self.video.type == 'movie':
+            self.setProperty('title', self.video.defaultTitle)
             self.setProperty('preview', '')
             self.setProperty('thumb', self.video.thumb.asTranscodedImageURL(*self.THUMB_POSTER_DIM))
             genres = u' / '.join([g.tag for g in self.video.genres()][:3])

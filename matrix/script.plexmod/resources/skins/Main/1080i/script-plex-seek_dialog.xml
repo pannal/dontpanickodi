@@ -91,6 +91,7 @@
                 <posx>0</posx>
                 <posy>965</posy>
                 <control type="label">
+                    <visible>!String.IsEmpty(Window.Property(direct.play))</visible>
                     <posx>60</posx>
                     <posy>0</posy>
                     <width>1000</width>
@@ -100,6 +101,18 @@
                     <aligny>center</aligny>
                     <textcolor>FFFFFFFF</textcolor>
                     <label>$INFO[Player.Time($INFO[Window.Property(time.fmt)])]</label>
+                </control>
+                <control type="label">
+                    <visible>String.IsEmpty(Window.Property(direct.play))</visible>
+                    <posx>60</posx>
+                    <posy>0</posy>
+                    <width>1000</width>
+                    <height>60</height>
+                    <font>font13</font>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <label>$INFO[Window.Property(time.current)]</label>
                 </control>
                 <control type="label">
                     <visible>Player.IsTempo</visible>
@@ -114,6 +127,7 @@
                     <label>$INFO[Player.PlaySpeed]x</label>
                 </control>
                 <control type="label">
+                    <visible>!String.IsEmpty(Window.Property(direct.play))</visible>
                     <posx>1860</posx>
                     <posy>0</posy>
                     <width>800</width>
@@ -125,7 +139,19 @@
                     <label>$INFO[Player.TimeRemaining($INFO[Window.Property(time.fmt)])]</label>
                 </control>
                 <control type="label">
-                    <visible>!String.IsEmpty(Window.Property(media.show_ends))</visible>
+                    <visible>String.IsEmpty(Window.Property(direct.play))</visible>
+                    <posx>1860</posx>
+                    <posy>0</posy>
+                    <width>800</width>
+                    <height>60</height>
+                    <font>font13</font>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <label>$INFO[Window.Property(time.left)]</label>
+                </control>
+                <control type="label">
+                    <visible>!String.IsEmpty(Window.Property(media.show_ends)) + !String.IsEmpty(Window.Property(direct.play))</visible>
                     <posx>1860</posx>
                     <posy>40</posy>
                     <width>800</width>
@@ -134,7 +160,19 @@
                     <align>right</align>
                     <aligny>center</aligny>
                     <textcolor>A0FFFFFF</textcolor>
-                    <label>$INFO[Window.Property(time.ends_label)]$INFO[Player.FinishTime($INFO[Window.Property(time.fmt.ends)])]</label>
+                    <label>$INFO[Window.Property(time.ends_label)] $INFO[Player.FinishTime($INFO[Window.Property(time.fmt.ends)])]</label>
+                </control>
+                <control type="label">
+                    <visible>!String.IsEmpty(Window.Property(media.show_ends)) + String.IsEmpty(Window.Property(direct.play))</visible>
+                    <posx>1860</posx>
+                    <posy>40</posy>
+                    <width>800</width>
+                    <height>60</height>
+                    <font>font13</font>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <textcolor>A0FFFFFF</textcolor>
+                    <label>$INFO[Window.Property(time.ends_label)] $INFO[Window.Property(time.end)]</label>
                 </control>
                 <control type="label">
                     <visible>Player.Paused + String.IsEmpty(Window.Property(show.OSD))</visible>
@@ -199,9 +237,10 @@
             <texturefocus>-</texturefocus>
             <texturenofocus>-</texturenofocus>
             <label> </label>
-            <onclick condition="String.IsEmpty(Window.Property(button.seek))">SetProperty(show.OSD,1)</onclick>
+            <onclick condition="String.IsEmpty(Window.Property(button.seek)) + String.IsEmpty(Window.Property(marker.countdown))">SetProperty(show.OSD,1)</onclick>
         </control>
 
+        <!-- PPI -->
         <control type="group" id="803">
             <bottom>0</bottom>
             <height>350</height>

@@ -111,6 +111,8 @@ class HttpRequest(object):
             plexapp.util.APP.onRequestTimeout(context)
             self.removeAsPending()
             return
+        except asyncadapter.CanceledException:
+            return
         except (urllib3.exceptions.ProtocolError, requests.exceptions.ConnectionError):
             self.removeAsPending()
             return

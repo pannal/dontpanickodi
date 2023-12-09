@@ -346,6 +346,7 @@
                 <orientation>horizontal</orientation>
                 <scrolltime tween="quadratic" easing="out">200</scrolltime>
                 <usecontrolcoords>true</usecontrolcoords>
+                <visible>!String.IsEmpty(Window.Property(initialized))</visible>
                 <control type="button" id="301">
                     <hitrect x="20" y="20" w="86" h="60" />
                     <visible>!String.IsEqual(Window(10000).Property(script.plex.item.type),collection) | String.IsEqual(Window.Property(media),collection)</visible>
@@ -580,6 +581,7 @@
             <posy>0</posy>
             <width>1920</width>
             <height>135</height>
+            <visible>!String.IsEmpty(Window.Property(initialized))</visible>
             <control type="grouplist">
                 <posx>60</posx>
                 <posy>47.5</posy>

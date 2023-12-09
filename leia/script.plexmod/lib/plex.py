@@ -322,7 +322,7 @@ class CallbackEvent(plexapp.util.CompatEvent):
 
     def triggeredOrTimedOut(self, timeout=None):
         try:
-            if time.time() - self.start() > self.timeout:
+            if time.time() - self.start > self.timeout:
                 util.DEBUG_LOG('{0}: TIMED-OUT'.format(self))
                 return True
 
