@@ -17,7 +17,7 @@
             <checksum>https://raw.githubusercontent.com/pannal/dontpanickodi/master/nexus/zips/addons.xml.md5</checksum>
             <datadir zip="true">https://raw.githubusercontent.com/pannal/dontpanickodi/master/nexus/zips/</datadir>
         </dir>
-        <dir minversion="21.0.0">
+        <dir minversion="20.90.0">
             <info compressed="false">https://raw.githubusercontent.com/pannal/dontpanickodi/master/omega/zips/addons.xml</info>
             <checksum>https://raw.githubusercontent.com/pannal/dontpanickodi/master/omega/zips/addons.xml.md5</checksum>
             <datadir zip="true">https://raw.githubusercontent.com/pannal/dontpanickodi/master/omega/zips/</datadir>
