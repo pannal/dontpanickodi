@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="repository.dontpanic" name="Don't Panic" version="0.2.6" provider-name="pannal">
+<addon id="repository.dontpanic" name="Don't Panic" version="0.2.6-1" provider-name="pannal">
     <extension point="xbmc.addon.repository" name="Don't Panic Kodi Repo">
         <dir minversion="18.0.0" maxversion="18.9.9">
             <info compressed="false">https://raw.githubusercontent.com/pannal/dontpanickodi/master/leia/zips/addons.xml</info>
@@ -11,7 +11,7 @@
             <checksum>https://raw.githubusercontent.com/pannal/dontpanickodi/master/matrix/zips/addons.xml.md5</checksum>
             <datadir zip="true">https://raw.githubusercontent.com/pannal/dontpanickodi/master/matrix/zips/</datadir>
         </dir>
-        <dir minversion="20.0.0">
+        <dir minversion="20.0.0" maxversion="20.9.9">
             <info compressed="false">https://raw.githubusercontent.com/pannal/dontpanickodi/master/nexus/zips/addons.xml</info>
             <checksum>https://raw.githubusercontent.com/pannal/dontpanickodi/master/nexus/zips/addons.xml.md5</checksum>
             <datadir zip="true">https://raw.githubusercontent.com/pannal/dontpanickodi/master/nexus/zips/</datadir>
