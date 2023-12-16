@@ -183,7 +183,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
     POSTER_DIM = (420, 630)
     RELATED_DIM = (268, 397)
     EXTRA_DIM = (329, 185)
-    ROLES_DIM = (268, 268)
+    ROLES_DIM = (334, 334)
 
     LIST_OPTIONS_BUTTON_ID = 111
 
@@ -225,6 +225,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
         self.cameFrom = kwargs.get('came_from')
         self.tasks = backgroundthread.Tasks()
         self.initialized = False
+        self.closing = False
         self._reloadVideos = []
 
     def reset(self, episode, season=None, show=None):
@@ -237,6 +238,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
         #self.initialized = False
 
     def doClose(self):
+        self.closing = True
         self.episodesPaginator = None
         self.relatedPaginator = None
         kodigui.ControlledWindow.doClose(self)
@@ -270,7 +272,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
         self._onFirstInit()
 
         if self.show_ and self.show_.theme and not util.getSetting("slow_connection", False) and \
-                (not self.cameFrom or self.cameFrom != self.mediaItem.ratingKey):
+                (not self.cameFrom or self.cameFrom != self.show_.ratingKey):
             volume = self.show_.settings.getThemeMusicValue()
             if volume > 0:
                 player.PLAYER.playBackgroundMusic(self.show_.theme.asURL(True), volume,
@@ -284,7 +286,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
         self.selectEpisode()
 
         mli = self.episodeListControl.getSelectedItem()
-        if not mli:
+        if not mli or not self.episodesPaginator:
             return
 
         reloadItems = [mli]
@@ -723,6 +725,8 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
 
             if choice['key'] == 'resume':
                 resume = True
+                if util.advancedSettings.dialogFlickerFix:
+                    xbmc.sleep(500)
 
         self._reloadVideos.append(episode)
 
@@ -816,7 +820,8 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
             self.updateItems()
             util.MONITOR.watchStatusChanged()
         elif choice['key'] == 'to_show':
-            xbmc.sleep(500)
+            if util.advancedSettings.dialogFlickerFix:
+                xbmc.sleep(500)
             self.processCommand(opener.open(
                 self.season.parentRatingKey,
                 came_from=self.season.parentRatingKey)
@@ -1095,6 +1100,9 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
     def reloadItemCallback(self, task, episode, with_progress=False):
         self.tasks.remove(task)
         del task
+
+        if self.closing:
+            return
 
         selected = self.episodeListControl.getSelectedItem()
 

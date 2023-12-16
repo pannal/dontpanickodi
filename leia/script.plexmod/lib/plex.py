@@ -271,7 +271,6 @@ def onManualIPChange(**kwargs):
 
 
 plexapp.util.setInterface(PlexInterface())
-plexapp.setUserAgent(defaultUserAgent())
 plexapp.util.INTERFACE.playbackManager = PlaybackManager()
 plexapp.util.APP.on('change:smart_discover_local', onSmartDiscoverLocalChange)
 plexapp.util.APP.on('change:prefer_local', onPreferLANChange)
@@ -292,6 +291,8 @@ plexapp.util.CONN_CHECK_TIMEOUT = asyncadapter.AsyncTimeout(CONNCHECK_TIMEOUT).s
 plexapp.util.LAN_REACHABILITY_TIMEOUT = util.advancedSettings.localReachTimeout / 1000.0
 pnhttp.DEFAULT_TIMEOUT = asyncadapter.AsyncTimeout(TIMEOUT).setConnectTimeout(TIMEOUT)
 asyncadapter.DEFAULT_TIMEOUT = pnhttp.DEFAULT_TIMEOUT
+plexapp.util.ACCEPT_LANGUAGE = util.ACCEPT_LANGUAGE_CODE
+plexapp.setUserAgent(defaultUserAgent())
 
 
 class CallbackEvent(plexapp.util.CompatEvent):

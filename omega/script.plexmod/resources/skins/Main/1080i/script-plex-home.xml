@@ -8054,7 +8054,6 @@
                                 <width>500</width>
                                 <height>900</height>
                                 <onup>201</onup>
-                                <ondown>noop</ondown>
                                 <onleft>203</onleft>
                                 <onright>202</onright>
                                 <onunfocus>SetProperty(show.servers,)</onunfocus>

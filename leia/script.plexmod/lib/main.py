@@ -75,7 +75,11 @@ def main():
             else:
                 util.LOG("Couldn't start main loop, exiting.")
     finally:
-        util.setGlobalProperty('running', '')
+        try:
+            util.setGlobalProperty('running', '')
+            util.setGlobalProperty('stop_running', '')
+        except:
+            pass
 
 
 def _main():
@@ -84,11 +88,11 @@ def _main():
     background.setSplash()
 
     try:
-        while not util.MONITOR.abortRequested():
+        while not util.MONITOR.abortRequested() and not util.getGlobalProperty('stop_running'):
             if plex.init():
                 background.setSplash(False)
                 fromSwitch = False
-                while not util.MONITOR.abortRequested():
+                while not util.MONITOR.abortRequested() and not util.getGlobalProperty('stop_running'):
                     if (
                         not plexapp.ACCOUNT.isOffline and not
                         plexapp.ACCOUNT.isAuthenticated and
@@ -166,11 +170,9 @@ def _main():
         waitForThreads()
         background.setBusy(False)
         background.setSplash(False)
+        background.killMonitor()
 
         util.DEBUG_LOG('FINISHED')
-
-        from .windows import kodigui
-        kodigui.MONITOR = None
         util.shutdown()
 
         gc.collect(2)

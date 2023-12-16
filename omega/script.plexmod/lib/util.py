@@ -30,8 +30,15 @@ ADDON = xbmcaddon.Addon()
 
 SETTINGS_LOCK = threading.Lock()
 
-_splitver = xbmc.getInfoLabel('System.BuildVersion').split()[0].split(".")
+# buildversion looks like: XX.X[-TAG] (a+.b+.c+) (.+)
+_ver, _build = xbmc.getInfoLabel('System.BuildVersion').split()[:2]
+_splitver = _ver.split(".")
 KODI_VERSION_MAJOR, KODI_VERSION_MINOR = int(_splitver[0].split("-")[0]), int(_splitver[1].split("-")[0])
+
+# calculate a comparable build number
+_bmajor, _bminor, _bpatch = _build[1:-1].split(".")
+KODI_BUILD_NUMBER = int("{0}{1:02d}{2:03d}".format(_bmajor, int(_bminor), int(_bpatch)))
+
 
 if KODI_VERSION_MAJOR > 18:
     translatePath = xbmcvfs.translatePath
@@ -51,6 +58,25 @@ try:
     CHANNELMAPPING = dict((t["value"], t["label"]) for t in getChannelMapping())
 except:
     CHANNELMAPPING = None
+
+
+def getLanguageCode(add_def=None):
+    data = rpc.Settings.GetSettingValue(setting='locale.language')['value'].replace('resource.language.', '')
+    lang = ""
+    if "_" in data:
+        base, variant = data.split("_")
+        lang += "{}-{},{}".format(base, variant.upper(), base)
+    else:
+        lang = data
+    if add_def and lang not in add_def:
+        lang += ",{}".format(add_def)
+    return lang
+
+
+try:
+    ACCEPT_LANGUAGE_CODE = getLanguageCode(add_def='en-US,en')
+except:
+    ACCEPT_LANGUAGE_CODE = 'en-US,en'
 
 
 def getSetting(key, default=None):
@@ -128,6 +154,8 @@ class AdvancedSettings(object):
         ("continue_use_thumb", True),
         ("use_bg_fallback", False),
         ("dbg_crossfade", True),
+        ("subtitle_use_extended_title", True),
+        ("dialog_flicker_fix", True),
     )
 
     def __init__(self):
@@ -223,11 +251,13 @@ class UtilityMonitor(xbmc.Monitor, signalsmixin.SignalsMixin):
             from .windows import kodigui
             if not kodigui.BaseFunctions.lastWinID:
                 ERROR("Addon never properly started, can't reactivate")
+                setGlobalProperty('stop_running', '1')
                 return
             if kodigui.BaseFunctions.lastWinID > 13000:
                 xbmc.executebuiltin('ActivateWindow({0})'.format(kodigui.BaseFunctions.lastWinID))
             else:
                 ERROR("Addon never properly started, can't reactivate")
+                setGlobalProperty('stop_running', '1')
                 return
 
             getAdvancedSettings()
@@ -237,13 +267,12 @@ class UtilityMonitor(xbmc.Monitor, signalsmixin.SignalsMixin):
             getattr(self, "action{}".format(getSetting('action_on_sleep', "none").capitalize()))()
 
     def stopPlayback(self):
-        if xbmc.Player().isPlaying():
-            LOG('Monitor: Stopping media playback')
-            xbmc.Player().stop()
+        LOG('Monitor: Stopping media playback')
+        xbmc.Player().stop()
 
     def onScreensaverActivated(self):
         DEBUG_LOG("Monitor: OnScreensaverActivated")
-        if getSetting('player_stop_on_screensaver', True):
+        if getSetting('player_stop_on_screensaver', True) and xbmc.Player().isPlayingVideo():
             self.stopPlayback()
 
     def onDPMSActivated(self):
@@ -261,11 +290,17 @@ ADV_CACHE_RE = re.compile(r'\s*<cache>.*</cache>', re.S | re.I)
 class KodiCacheManager(object):
     """
     A pretty cheap approach at managing the <cache> section of advancedsettings.xml
+
+    Starting with build 20.90.821 (Kodi 21.0-BETA2) a lot of caching issues have been fixed and
+    readfactor behaves better. We need to adjust for that.
     """
     _cleanData = None
     useModernAPI = False
     memorySize = 20  # in MB
     readFactor = 4
+    defRF = 4
+    defRFSM = 20
+    recRFRange = (4, 10)
     template = None
     orig_tpl_path = os.path.join(ADDON.getAddonInfo('path'), "pm4k_cache_template.xml")
     custom_tpl_path = "special://profile/pm4k_cache_template.xml"
@@ -275,20 +310,22 @@ class KodiCacheManager(object):
     safeFactor = .20 if xbmc.getCondVisibility('System.Platform.Android') else .23
 
     def __init__(self):
-        try:
+        if KODI_BUILD_NUMBER >= 2090821:
             self.memorySize = rpc.Settings.GetSettingValue(setting='filecache.memorysize')['value']
-            self.readFactor = rpc.Settings.GetSettingValue(setting='filecache.readfactor')['value'] // 100
+            self.readFactor = rpc.Settings.GetSettingValue(setting='filecache.readfactor')['value'] / 100.0
+            if self.readFactor % 1 == 0:
+                self.readFactor = int(self.readFactor)
             DEBUG_LOG("Not using advancedsettings.xml for cache/buffer management, we're at least Kodi 21 non-alpha")
             self.useModernAPI = True
-        except:
-            pass
+            self.defRFSM = 7
+            self.recRFRange = (1.5, 4)
 
-        if not self.useModernAPI:
+        else:
             self.load()
             self.template = self.getTemplate()
 
         plexapp.util.APP.on('change:slow_connection',
-                            lambda value=None, **kwargs: self.write(readFactor=value and 20 or 4))
+                            lambda value=None, **kwargs: self.write(readFactor=value and self.defRFSM or self.defRF))
 
     def getTemplate(self):
         if xbmcvfs.exists(self.custom_tpl_path):
@@ -341,7 +378,7 @@ class KodiCacheManager(object):
             # kodi cache settings have moved to Services>Caching
             try:
                 rpc.Settings.SetSettingValue(setting='filecache.memorysize', value=self.memorySize)
-                rpc.Settings.SetSettingValue(setting='filecache.readfactor', value=self.readFactor * 100)
+                rpc.Settings.SetSettingValue(setting='filecache.readfactor', value=int(self.readFactor * 100))
             except:
                 pass
             return
@@ -362,24 +399,28 @@ class KodiCacheManager(object):
         except:
             ERROR("Couldn't write advancedsettings.xml")
 
+    def clamp16(self, x):
+        return x - x % 16
+
     @property
     def viableOptions(self):
-        default = list(filter(lambda x: x < self.recMax, [20, 40, 60, 80, 120, 160, 200, 400]))
+        default = list(filter(lambda x: x < self.recMax,
+                              [16, 20, 24, 32, 48, 64, 96, 128, 192, 256, 384, 512, 768, 1024]))
 
         # add option to overcommit slightly
         overcommit = []
         if xbmc.getCondVisibility('System.Platform.Android'):
-            overcommit.append(min(int(self.free * 0.23), 2000))
+            overcommit.append(min(self.clamp16(int(self.free * 0.23)), 2048))
 
-        overcommit.append(min(int(self.free * 0.26), 2000))
-        overcommit.append(min(int(self.free * 0.3), 2000))
+        overcommit.append(min(self.clamp16(int(self.free * 0.26)), 2048))
+        overcommit.append(min(self.clamp16(int(self.free * 0.3)), 2048))
 
         # re-append current memorySize here, as recommended max might have changed
         return list(sorted(list(set(default + [self.memorySize, self.recMax] + overcommit))))
 
     @property
     def readFactorOpts(self):
-        return list(sorted(list(set([4, 5, 10, 20] + [self.readFactor]))))
+        return list(sorted(list(set([1.25, 1.5, 1.75, 2, 2.5, 3, 4, 5, 7, 10, 15, 20, 30, 50] + [self.readFactor]))))
 
     @property
     def free(self):
@@ -388,7 +429,7 @@ class KodiCacheManager(object):
     @property
     def recMax(self):
         freeMem = self.free
-        recMem = min(int(freeMem * self.safeFactor), 2000)
+        recMem = min(int(freeMem * self.safeFactor), 2048)
         LOG("Free memory: {} MB, recommended max: {} MB".format(freeMem, recMem))
         return recMem
 
@@ -428,12 +469,12 @@ def _processSettingForWrite(value):
     return str(value)
 
 
-def setGlobalProperty(key, val):
-    xbmcgui.Window(10000).setProperty('script.plex.{0}'.format(key), val)
+def setGlobalProperty(key, val, base='script.plex.{0}'):
+    xbmcgui.Window(10000).setProperty(base.format(key), val)
 
 
-def setGlobalBoolProperty(key, boolean):
-    xbmcgui.Window(10000).setProperty('script.plex.{0}'.format(key), boolean and '1' or '')
+def setGlobalBoolProperty(key, boolean, base='script.plex.{0}'):
+    xbmcgui.Window(10000).setProperty(base.format(key), boolean and '1' or '')
 
 
 def getGlobalProperty(key):

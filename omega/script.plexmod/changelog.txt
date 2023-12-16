@@ -1,3 +1,38 @@
+[- 0.7.1 -]
+- Fix: Embedded subtitle could be set to the wrong one (edge case)
+- Fix: Episodes: theme music error when clicking on seasons
+- Possibly fix rare traceback when closing an episodes window while waiting for an episode reload task
+- Fix: Core: only stop playback on screensaver if player is playing video (not audio, ...)
+- Fix: rare UI crash for items before 1970-01-02 (yes, we've had media back then)
+
+- Set Accept-Language to Kodi's language setting when talking to the Plex Server, localizes subtitle titles, Library translations etc.
+- Use extended title for subtitles (and add advanced/addon setting)
+- Add: Show buffer state in stream info
+- Reduce dialog flickering in certain situations (not fully, probably impossible)
+- Player: bingeMode/autoskip credits/manual-next: avoid double-next in certain circumstances
+- VideoPlayer: don't react to inputs while waiting for playback (AVStarted) to start (fixes early-back-out-crashes)
+- SeekDialog: stop marker countdown on seek
+- SeekDialog: auto-skip marker: ignore input while auto skipping to next video
+- SeekDialog: only count down marker when OSD not shown
+- SeekDialog: ignore input while handling next-video-pressed
+- SeekDialog: hide OSD fast on ACTION_PAUSE/ACTION_PLAYER_PLAY/ACTION_PLAYER_PLAYPAUSE and OSD is shown
+- Player/SeekDialog: Fix crash when handling SIGINT (alt+f4 on windows)
+- Hubs: make all TV/movie hubs as hub types that receive updates after items being watched or marked (un) watched
+- Settings: Disable alternative home hubs refresh by default
+- ServerList: further hardening, list shouldn't visually "crash" anymore in certain conditions
+- Pagination/Episodes: allow right round-robin on paginated long item lists (>26)
+- Movies: Reorder Cast/Related/Extras according to PlexWeb
+- Movies: Add reviews
+- Cast: Increase Cast picture quality everywhere
+- Core/Settings: Adjust recommended cache/buffer/readfactor values for different Kodi versions, starting with 21.0-BETA2 (20.90.821)
+- Core/Settings: Incorporate new Kodi cache/readfactor values; clamp cache values to divisible by 16
+- Serverlist: allow roundrobin at the bottom boundary
+- StreamInfo: hide OSD after closing streaminfo
+- Settings: Add setting to use Kodi keyboard for searching (default: off)
+- Main: harden main loop (still not exiting properly when exiting fast after server change; reinits previously inited windows on exit, sometimes)
+- SubtitleDownload/OpenSubtitles.com: set global videoinfo infoLabels to improve subtitle search hinting (waiting for PR to be accepted)
+
+
 [- 0.7.0 -]
 - Fix kiosk mode startup issue when other modal dialogs were active when PM4K was trying to start in kiosk mode
 - Fix video OSD hiding too fast in certain circumstances

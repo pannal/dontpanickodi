@@ -241,10 +241,12 @@ class BaseDialog(xbmcgui.WindowXMLDialog, BaseFunctions):
     def doClose(self):
         self._closing = True
         self.close()
+        self.isOpen = False
 
     def show(self):
         self._closing = False
         xbmcgui.WindowXMLDialog.show(self)
+        self.isOpen = True
 
     def onClosed(self):
         pass
@@ -485,7 +487,11 @@ class ManagedControlList(object):
 
         try:
             for idx in range(bottom, top):
-                li = self.control.getListItem(idx)
+                try:
+                    li = self.control.getListItem(idx)
+                except RuntimeError:
+                    continue
+
                 mli = self.items[idx]
                 self._properties.update(mli.properties)
                 mli._manager = self
@@ -493,7 +499,8 @@ class ManagedControlList(object):
                 mli._updateListItem()
                 mli.setProperty('index', str(idx))
         except RuntimeError:
-            xbmc.log('kodigui.ManagedControlList._updateItems: Runtime error', xbmc.LOGINFO)
+            #xbmc.log('kodigui.ManagedControlList._updateItems: Runtime error', xbmc.LOGINFO)
+            util.ERROR('kodigui.ManagedControlList._updateItems: Runtime error')
             return False
 
         return True
@@ -901,14 +908,16 @@ class SafeControlEdit(object):
 
     def processAction(self, action_id):
         if not self._compatibleMode:
+            oldVal = self._text
             self._text = self._win.getControl(self.controlID).getText()
 
             if self._keyCallback:
-                self._keyCallback(action_id)
+                self._keyCallback(action_id, oldVal, self._text)
 
             self.updateLabel()
 
             return True
+        oldVal = self.getText()
 
         if 61793 <= action_id <= 61818:  # Lowercase
             self.processChar(self.CHARS_LOWER[action_id - 61793])
@@ -924,11 +933,12 @@ class SafeControlEdit(object):
             return False
 
         if self._keyCallback:
-            self._keyCallback(action_id)
+            self._keyCallback(action_id, oldVal, self.getText())
 
         return True
 
     def processOffControlAction(self, action_id):
+        oldVal = self.getText() if self._compatibleMode else self._text
         if 61505 <= action_id <= 61530:  # Lowercase
             self.processChar(self.CHARS_LOWER[action_id - 61505])
         elif 192577 <= action_id <= 192602:  # Uppercase
@@ -943,7 +953,7 @@ class SafeControlEdit(object):
             return False
 
         if self._keyCallback:
-            self._keyCallback()
+            self._keyCallback(action_id, oldVal, self.getText())
 
         return True
 

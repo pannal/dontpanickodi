@@ -141,10 +141,18 @@ class PlaylistsSection(object):
 
 
 class ServerListItem(kodigui.ManagedListItem):
-    def init(self):
+    uuid = None
+
+    def hookSignals(self):
         self.dataSource.on('completed:reachability', self.onReachability)
         self.dataSource.on('started:reachability', self.onReachability)
-        return self
+
+    def unHookSignals(self):
+        try:
+            self.dataSource.off('completed:reachability', self.onReachability)
+            self.dataSource.off('started:reachability', self.onReachability)
+        except:
+            pass
 
     def setRefreshing(self):
         self.safeSetProperty('status', 'refreshing.gif')
@@ -159,11 +167,11 @@ class ServerListItem(kodigui.ManagedListItem):
 
         return False
 
-    def safeSetLabel(self, value):
+    def safeSetLabel(self, value, func="setLabel"):
         if value is None:
             return False
         try:
-            self.setLabel(value)
+            getattr(self, func)(value)
             return True
         except AttributeError:
             pass
@@ -192,6 +200,7 @@ class ServerListItem(kodigui.ManagedListItem):
         isLocal = self.safeGetDSProperty("isLocal")
         name = self.safeGetDSProperty("name")
         pendingReachabilityRequests = self.safeGetDSProperty("pendingReachabilityRequests")
+        owned = not self.safeGetDSProperty("owned") and self.safeGetDSProperty("owner") or ''
         if isReachableFunc:
             isReachable = isReachableFunc()
 
@@ -205,16 +214,15 @@ class ServerListItem(kodigui.ManagedListItem):
             self.safeSetProperty('secure', isSecure and '1' or '')
             self.safeSetProperty('local', isLocal and '1' or '')
 
-        self.safeSetProperty('current', plexapp.SERVERMANAGER.selectedServer == self.dataSource and '1' or '')
+        self.safeSetProperty('current', plexapp.SERVERMANAGER.selectedServer.uuid == self.uuid and '1' or '')
         if name:
             self.safeSetLabel(name)
 
+        if owned:
+            self.safeSetLabel(owned, func="setLabel2")
+
     def onDestroy(self):
-        try:
-            self.dataSource.off('completed:reachability', self.onUpdate)
-            self.dataSource.off('started:reachability', self.onUpdate)
-        except AttributeError:
-            util.DEBUG_LOG('Destroying invalidated ServerListItem')
+        self.unHookSignals()
 
 
 class HomeWindow(kodigui.BaseWindow, util.CronReceiver):
@@ -270,31 +278,31 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver):
         # HOME
         'home.continue': {'index': 0, 'with_progress': True, 'with_art': True, 'do_updates': True, 'text2lines': True},
         'home.ondeck': {'index': 1, 'with_progress': True, 'do_updates': True, 'text2lines': True},
-        'home.television.recent': {'index': 2, 'with_progress': True, 'text2lines': True},
-        'home.movies.recent': {'index': 4, 'with_progress': True, 'text2lines': True},
+        'home.television.recent': {'index': 2, 'do_updates': True, 'with_progress': True, 'text2lines': True},
+        'home.movies.recent': {'index': 4, 'do_updates': True, 'with_progress': True, 'text2lines': True},
         'home.music.recent': {'index': 5, 'text2lines': True},
         'home.videos.recent': {'index': 6, 'with_progress': True, 'ar16x9': True},
         #'home.playlists': {'index': 9}, # No other Plex home screen shows playlists so removing it from here
         'home.photos.recent': {'index': 10, 'text2lines': True},
         # SHOW
         'tv.ondeck': {'index': 1, 'with_progress': True, 'do_updates': True, 'text2lines': True},
-        'tv.recentlyaired': {'index': 2, 'with_progress': True, 'text2lines': True},
-        'tv.recentlyadded': {'index': 3, 'with_progress': True, 'text2lines': True},
+        'tv.recentlyaired': {'index': 2, 'do_updates': True, 'with_progress': True, 'text2lines': True},
+        'tv.recentlyadded': {'index': 3, 'do_updates': True, 'with_progress': True, 'text2lines': True},
         'tv.inprogress': {'index': 4, 'with_progress': True, 'do_updates': True, 'text2lines': True},
-        'tv.startwatching': {'index': 7, 'with_progress': True},
-        'tv.rediscover': {'index': 8, 'with_progress': True},
-        'tv.morefromnetwork': {'index': 13, 'with_progress': True},
-        'tv.toprated': {'index': 14, 'with_progress': True},
-        'tv.moreingenre': {'index': 15, 'with_progress': True},
-        'tv.recentlyviewed': {'index': 16, 'with_progress': True, 'text2lines': True},
+        'tv.startwatching': {'index': 7, 'with_progress': True, 'do_updates': True},
+        'tv.rediscover': {'index': 8, 'with_progress': True, 'do_updates': True},
+        'tv.morefromnetwork': {'index': 13, 'with_progress': True, 'do_updates': True},
+        'tv.toprated': {'index': 14, 'with_progress': True, 'do_updates': True},
+        'tv.moreingenre': {'index': 15, 'with_progress': True, 'do_updates': True},
+        'tv.recentlyviewed': {'index': 16, 'with_progress': True, 'text2lines': True, 'do_updates': True},
         # MOVIE
         'movie.inprogress': {'index': 0, 'with_progress': True, 'with_art': True, 'do_updates': True, 'text2lines': True},
-        'movie.recentlyreleased': {'index': 1, 'with_progress': True, 'text2lines': True},
-        'movie.recentlyadded': {'index': 2, 'with_progress': True, 'text2lines': True},
-        'movie.genre': {'index': 3, 'with_progress': True, 'text2lines': True},
-        'movie.by.actor.or.director': {'index': 7, 'with_progress': True, 'text2lines': True},
-        'movie.topunwatched': {'index': 13, 'text2lines': True},
-        'movie.recentlyviewed': {'index': 14, 'with_progress': True, 'text2lines': True},
+        'movie.recentlyreleased': {'index': 1, 'do_updates': True, 'with_progress': True, 'text2lines': True},
+        'movie.recentlyadded': {'index': 2, 'do_updates': True, 'with_progress': True, 'text2lines': True},
+        'movie.genre': {'index': 3, 'with_progress': True, 'text2lines': True, 'do_updates': True},
+        'movie.by.actor.or.director': {'index': 7, 'with_progress': True, 'text2lines': True, 'do_updates': True},
+        'movie.topunwatched': {'index': 13, 'text2lines': True, 'do_updates': True},
+        'movie.recentlyviewed': {'index': 14, 'with_progress': True, 'text2lines': True, 'do_updates': True},
         # ARTIST
         'music.recent.played': {'index': 5, 'do_updates': True},
         'music.recent.added': {'index': 9, 'text2lines': True},
@@ -341,6 +349,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver):
         self.sectionHubs = {}
         self.updateHubs = {}
         self.changingServer = False
+        self._shuttingDown = False
         windowutils.HOME = self
 
         self.lock = threading.Lock()
@@ -482,6 +491,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver):
             self.showHubs(self.lastSection, update=True)
 
     def shutdown(self):
+        self._shuttingDown = True
         try:
             self.serverList.reset()
         except AttributeError:
@@ -553,10 +563,14 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver):
                     self.hubItemClicked(controlID, auto_play=True)
                     return
 
-            if action in(xbmcgui.ACTION_NAV_BACK, xbmcgui.ACTION_PREVIOUS_MENU, xbmcgui.ACTION_CONTEXT_MENU):
+            if action in (xbmcgui.ACTION_NAV_BACK, xbmcgui.ACTION_PREVIOUS_MENU, xbmcgui.ACTION_CONTEXT_MENU):
                 optionsFocused = xbmc.getCondVisibility('ControlGroup({0}).HasFocus(0)'.format(self.OPTIONS_GROUP_ID))
                 offSections = util.getGlobalProperty('off.sections')
                 if action in (xbmcgui.ACTION_NAV_BACK, xbmcgui.ACTION_PREVIOUS_MENU):
+                    # fixme: cheap way of avoiding an early exit after a server change
+                    if self.changingServer:
+                        return
+
                     if self.getFocusId() == self.USER_LIST_ID:
                         self.setFocusId(self.USER_BUTTON_ID)
                         return
@@ -591,6 +605,8 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver):
                     elif ex == 1:
                         xbmc.executebuiltin('ActivateWindow(10000)')
                         return
+                    elif ex == 0:
+                        self._shuttingDown = True
                     # 0 passes the action to the BaseWindow and exits HOME
         except:
             util.ERROR()
@@ -656,7 +672,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver):
         self.processCommand(search.dialog(self))
 
     def updateOnDeckHubs(self, **kwargs):
-        if util.getSetting("speedy_home_hubs", True):
+        if util.getSetting("speedy_home_hubs2", False):
             util.DEBUG_LOG("Using alternative home hub refresh")
             sections = set()
             for mli in self.sectionList:
@@ -1216,7 +1232,10 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver):
 
     def onReachableServer(self, server=None, **kwargs):
         for mli in self.serverList:
-            if mli.dataSource == server:
+            if mli.uuid == server.uuid:
+                mli.unHookSignals()
+                mli.dataSource = server
+                mli.hookSignals()
                 mli.onUpdate()
                 return
         else:
@@ -1225,74 +1244,86 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver):
     def onSelectedServerChange(self, **kwargs):
         if self.serverRefresh():
             self.setFocusId(self.SECTION_LIST_ID)
+            self.changingServer = False
 
     def showServers(self, from_refresh=False, mouse=False):
-        selection = None
-        if from_refresh:
-            mli = self.serverList.getSelectedItem()
-            if mli:
-                selection = mli.dataSource
-        else:
-            plexapp.refreshResources()
+        with self.lock:
+            selection = None
+            if from_refresh:
+                mli = self.serverList.getSelectedItem()
+                if mli:
+                    selection = mli.uuid
 
-        servers = sorted(
-            plexapp.SERVERMANAGER.getServers(),
-            key=lambda x: (x.owned and '0' or '1') + x.name.lower()
-        )
+            servers = sorted(
+                plexapp.SERVERMANAGER.getServers(),
+                key=lambda x: (x.owned and '0' or '1') + x.name.lower()
+            )
 
-        items = []
-        for s in servers:
-            item = ServerListItem(s.name, not s.owned and s.owner or '', data_source=s).init()
-            item.onUpdate()
-            item.setProperty('current', plexapp.SERVERMANAGER.selectedServer == s and '1' or '')
-            items.append(item)
+            items = []
+            for s in servers:
+                item = ServerListItem(s.name, not s.owned and s.owner or '', data_source=s)
+                item.uuid = s.uuid
+                item.onUpdate()
+                item.setProperty('current', plexapp.SERVERMANAGER.selectedServer.uuid == s.uuid and '1' or '')
+                items.append(item)
 
-        if len(items) > 1:
-            items[0].setProperty('first', '1')
-        elif items:
-            items[0].setProperty('only', '1')
+            if len(items) > 1:
+                items[0].setProperty('first', '1')
+            elif items:
+                items[0].setProperty('only', '1')
 
-        self.serverList.replaceItems(items)
+            self.serverList.replaceItems(items)
 
-        self.getControl(800).setHeight((min(len(items), 9) * 100) + 80)
+            self.getControl(800).setHeight((min(len(items), 9) * 100) + 80)
 
-        if selection:
-            for mli in self.serverList:
-                if mli.dataSource == selection:
-                    self.serverList.selectItem(mli.pos())
+            for item in items:
+                if item.dataSource != kodigui.DUMMY_DATA_SOURCE:
+                    item.hookSignals()
 
-        if not from_refresh and items and not mouse:
-            self.setFocusId(self.SERVER_LIST_ID)
+            if selection:
+                for mli in self.serverList:
+                    if mli.uuid == selection:
+                        self.serverList.selectItem(mli.pos())
+
+            if not from_refresh and items and not mouse:
+                self.setFocusId(self.SERVER_LIST_ID)
+
+            if not from_refresh:
+                plexapp.refreshResources()
 
     def selectServer(self):
+        if self._shuttingDown:
+            return
+
         mli = self.serverList.getSelectedItem()
         if not mli:
             return
 
         self.changingServer = True
-        try:
-            with busy.BusySignalContext(plexapp.util.APP, "change:selectedServer") as bc:
-                self.setFocusId(self.SECTION_LIST_ID)
 
-                server = mli.dataSource
+        # this is broken
+        with busy.BusySignalContext(plexapp.util.APP, "change:selectedServer") as bc:
+            self.setFocusId(self.SECTION_LIST_ID)
 
-                if not server.isReachable():
-                    if server.pendingReachabilityRequests > 0:
-                        util.messageDialog(T(32339, 'Server is not accessible'), T(32340, 'Connection tests are in '
-                                                                                          'progress. Please wait.'))
-                    else:
-                        util.messageDialog(
-                            T(32339, 'Server is not accessible'), T(32341, 'Server is not accessible. Please sign into '
-                                                                           'your server and check your connection.')
-                        )
-                    bc.ignoreSignal = True
-                    return
+            server = mli.dataSource
 
-                changed = plexapp.SERVERMANAGER.setSelectedServer(server, force=True)
-                if not changed:
-                    bc.ignoreSignal = True
-        finally:
-            self.changingServer = False
+            # fixme: this might still trigger a dialog, re-triggering the previously opened windows
+            if not self._shuttingDown and not server.isReachable():
+                if server.pendingReachabilityRequests > 0:
+                    util.messageDialog(T(32339, 'Server is not accessible'), T(32340, 'Connection tests are in '
+                                                                                      'progress. Please wait.'))
+                else:
+                    util.messageDialog(
+                        T(32339, 'Server is not accessible'), T(32341, 'Server is not accessible. Please sign into '
+                                                                       'your server and check your connection.')
+                    )
+                bc.ignoreSignal = True
+                return
+
+            changed = plexapp.SERVERMANAGER.setSelectedServer(server, force=True)
+            if not changed:
+                bc.ignoreSignal = True
+                self.changingServer = False
 
     def showUserMenu(self, mouse=False):
         items = []

@@ -523,5 +523,5 @@ class PhotoWindow(kodigui.BaseWindow):
     def showOSD(self):
         self.osdTimer.reset(init=False)
 
-    def hideOSD(self):
+    def hideOSD(self, closing=False):
         self.osdTimer.stop(trigger=True)

@@ -255,13 +255,16 @@ class Settings(object):
                     T(32100, 'Skip user selection and pin entry on startup.')
                 ),
                 BoolSetting(
-                    'speedy_home_hubs', T(33503, 'Use alternative home refresh'), True
+                    'speedy_home_hubs2', T(33503, 'Use alternative hubs refresh'), False
                 ).description(
                     T(
                         33504,
-                        "Use an alternative method to speed up watched state updates in the home hub after playing an i"
-                        "tem."
+                        "Refreshes all hubs for all libraries after an item's watch-state has changed, instead of "
+                        "only those likely affected. Use this if you find a hub that doesn't update properly."
                     )
+                ),
+                BoolSetting(
+                    'search_use_kodi_kbd', T(32955, 'Use Kodi keyboard for searching'), False
                 ),
                 ThemeMusicSetting('theme_music', T(32480, 'Theme music'), 5),
                 PlayedThresholdSetting('played_threshold', T(33501, 'Video played threshold'), 1).description(
@@ -454,23 +457,20 @@ class Settings(object):
                               20,
                               [(mem, '{} MB'.format(mem)) for mem in util.kcm.viableOptions])
                 .description(
-                    T(33614, 'Set the Kodi Cache/Buffer size. Free: {} MB, '
-                             'Recommended max: {} MB, Default: 20 MB. '
-                             'Needs Kodi restart. WARNING: This will overwrite advancedsettings.xml!\n\n'
-                             'To customize other cache/network-related values, '
-                             'copy "script.plexmod/pm4k_cache_template.xml" to profile folder and edit it to '
-                             'your liking. (See About section for the file paths)'
-                      ).format(util.kcm.free, util.kcm.recMax)
+                    '{}{}'.format(T(33614, 'stub1').format(
+                        util.kcm.free, util.kcm.recMax),
+                        '' if util.kcm.useModernAPI else ' '+T(32954, 'stub2'))
                 ),
                 ReadFactorSetting('readfactor',
                                   T(32922, 'Kodi Cache Readfactor'),
                                   4,
                                   [(rf, str(rf)) for rf in util.kcm.readFactorOpts])
                 .description(
-                    T(32923, 'Sets the Kodi cache readfactor value. Default: 4, recommended: 4-10.'
-                             'With "Slow connection" enabled this will be set to 20, as otherwise the cache doesn\'t'
-                             'fill fast/aggressively enough.'
-                      )
+                    T(32923, 'Sets the Kodi cache readfactor value. Default: {0}, recommended: {1}.'
+                             'With "Slow connection" enabled this will be set to {2}, as otherwise the cache doesn\'t'
+                             'fill fast/aggressively enough.').format(util.kcm.defRF,
+                                                                      "{}-{}".format(*util.kcm.recRFRange),
+                                                                      util.kcm.defRFSM)
                 ),
                 BoolSetting(
                     'slow_connection', T(32915, 'Slow connection'), False

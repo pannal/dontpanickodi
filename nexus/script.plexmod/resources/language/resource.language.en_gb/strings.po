@@ -1207,11 +1207,11 @@ msgid "Set this to the same value as your Plex server (Settings>Library>Video pl
 msgstr ""
 
 msgctxt "#33503"
-msgid "Use alternative home refresh"
+msgid "Use alternative hubs refresh"
 msgstr ""
 
 msgctxt "#33504"
-msgid "Use an alternative method to speed up watched state updates in the home hub after playing an item."
+msgid "Refreshes all hubs for all libraries after an item's watch-state has changed, instead of only those likely affected. Use this if you find a hub that doesn't update properly."
 msgstr ""
 
 msgctxt "#33505"
@@ -1295,7 +1295,7 @@ msgid "Kodi Buffer Size (MB)"
 msgstr ""
 
 msgctxt "#33614"
-msgid "Set the Kodi Cache/Buffer size. Free: {} MB, Recommended max: {} MB, Default: 20 MB. Needs Kodi restart. WARNING: This will overwrite advancedsettings.xml!\n\nTo customize other cache/network-related values, copy \"script.plexmod/pm4k_cache_template.xml\" to profile folder and edit it to your liking. (See About section for the file paths)"
+msgid "Set the Kodi Cache/Buffer size. Free: {} MB, Recommended: ~100 MB, Recommended max: {} MB, Default: 20 MB."
 msgstr ""
 
 msgctxt "#33615"
@@ -1499,7 +1499,7 @@ msgid "Kodi Cache Readfactor"
 msgstr ""
 
 msgctxt "#32923"
-msgid "Sets the Kodi cache readfactor value. Default: 4, recommended: 4-10. With \"Slow connection\" enabled this will be set to 20, as otherwise the cache doesn't fill fast/aggressively enough."
+msgid "Sets the Kodi cache readfactor value. Default: {0}, recommended: {1}. With \"Slow connection\" enabled this will be set to {2}, as otherwise the cache doesn't fill fast/aggressively enough."
 msgstr ""
 
 msgctxt "#32924"
@@ -1604,4 +1604,28 @@ msgstr ""
 
 msgctxt "#32949"
 msgid "When transcoding/DirectStreaming, allow auto-skip functionality."
+msgstr ""
+
+msgctxt "#32950"
+msgid "Use extended title for subtitles"
+msgstr ""
+
+msgctxt "#32951"
+msgid "When displaying subtitles use the extendedDisplayTitle Plex exposes."
+msgstr ""
+
+msgctxt "#32952"
+msgid "Dialog flicker fix"
+msgstr ""
+
+msgctxt "#32953"
+msgid "Reviews"
+msgstr ""
+
+msgctxt "#32954"
+msgid "Needs Kodi restart. WARNING: This will overwrite advancedsettings.xml!\n\nTo customize other cache/network-related values, copy \"script.plexmod/pm4k_cache_template.xml\" to profile folder and edit it to your liking. (See About section for the file paths)"
+msgstr ""
+
+msgctxt "#32955"
+msgid "Use Kodi keyboard for searching"
 msgstr ""

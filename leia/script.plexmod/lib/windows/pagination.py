@@ -155,6 +155,9 @@ class MCLPaginator(object):
                 end.setBoolProperty('right.boundary', True)
                 end.setProperty("orig.index", str(int(self.offset + self._currentAmount)))
                 finalItems.append(end)
+            else:
+                # no boundary, rightmost item
+                finalItems[-1].setBoolProperty('last.item', True)
 
             if moreLeft:
                 start = kodigui.ManagedListItem('')
@@ -208,8 +211,14 @@ class MCLPaginator(object):
         index = int(mli.getProperty("index"))
         last_mli_index = int(last_mli.getProperty("index"))
 
+        # special case for our absolute last item
+        is_rightmost = action == xbmcgui.ACTION_MOVE_RIGHT \
+            and mli.getProperty('last.item') \
+            and last_mli.getProperty('last.item')
+
         # _lastAmount is used to immediately wrap again after a wrap has happened; potentially an issue
-        if last_mli_index not in (0, self._currentAmount - 1, (self._lastAmount - 1) if self._lastAmount else None) \
+        if not is_rightmost and last_mli_index not in \
+                (0, self._currentAmount - 1, (self._lastAmount - 1) if self._lastAmount else None) \
                 or self._currentAmount < 2:
             return
 
@@ -227,7 +236,7 @@ class MCLPaginator(object):
                 self.control.selectItem(self._currentAmount)
             else:
                 self.control.selectItem(self.leafCount - 1)
-        elif action == xbmcgui.ACTION_MOVE_RIGHT and index == self._currentAmount - 1:
+        elif action == xbmcgui.ACTION_MOVE_RIGHT and (index == self._currentAmount - 1 or is_rightmost):
             if onlyTwo and last_mli_index == 0:
                 return
 

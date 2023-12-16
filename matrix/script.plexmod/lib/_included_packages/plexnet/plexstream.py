@@ -11,6 +11,10 @@ class PlexStream(plexobjects.PlexObject):
     TYPE_SUBTITLE = 3
     TYPE_LYRICS = 4
 
+    streamTypeNames = (
+        "Unknown", "VideoStream", "AudioStream", "SubtitleStream", "LyricsStream"
+    )
+
     # We have limited font support, so make a very modest effort at using
     # English names for common unsupported languages.
 
@@ -38,8 +42,14 @@ class PlexStream(plexobjects.PlexObject):
         pass
 
     def getTitle(self, translate_func=util.dummyTranslate):
-        title = self.getLanguageName(translate_func)
         streamType = self.streamType.asInt()
+
+        if streamType == self.TYPE_SUBTITLE \
+                and util.INTERFACE.getPreference('subtitle_use_extended_title', True) \
+                and self.extendedDisplayTitle:
+            return self.extendedDisplayTitle
+
+        title = self.getLanguageName(translate_func)
 
         if streamType == self.TYPE_VIDEO:
             title = self.getCodec() or translate_func("Unknown")
@@ -153,6 +163,9 @@ class PlexStream(plexobjects.PlexObject):
 
     def __str__(self):
         return self.getTitle()
+
+    def __repr__(self):
+        return '<{}: {}>'.format(self.streamTypeNames[self.streamType.asInt()], str(self))
 
     def __eq__(self, other):
         if not other:

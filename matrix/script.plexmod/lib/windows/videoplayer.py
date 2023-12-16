@@ -77,7 +77,7 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
     PREV_DIM = (462, 259)
     ONDECK_DIM = (329, 185)
     RELATED_DIM = (268, 397)
-    ROLES_DIM = (268, 268)
+    ROLES_DIM = (334, 334)
 
     OPTIONS_GROUP_ID = 200
 
@@ -115,6 +115,7 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
         self.onDeckPaginator = None
         self.lastFocusID = None
         self.lastNonOptionsFocusID = None
+        self.playBackStarted = False
 
     def doClose(self):
         util.DEBUG_LOG('VideoPlayerWindow: Closing')
@@ -126,6 +127,7 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
 
     def onFirstInit(self):
         player.PLAYER.on('session.ended', self.sessionEnded)
+        player.PLAYER.on('av.started', self.playerPlaybackStarted)
         player.PLAYER.on('post.play', self.postPlay)
         player.PLAYER.on('change.background', self.changeBackground)
 
@@ -179,10 +181,16 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
                     if self.onDeckPaginator.boundaryHit:
                         self.onDeckPaginator.paginate()
                         return
+            else:
+                if not self.playBackStarted:
+                    return
         except:
             util.ERROR()
 
         kodigui.ControlledWindow.onAction(self, action)
+
+    def playerPlaybackStarted(self, *args, **kwargs):
+        self.playBackStarted = True
 
     def onClick(self, controlID):
         if not self.postPlayMode:
@@ -574,10 +582,11 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
 
 def play(video=None, play_queue=None, resume=False):
     w = VideoPlayerWindow.open(video=video, play_queue=play_queue, resume=resume)
-    player.PLAYER.reset()
     player.PLAYER.off('session.ended', w.sessionEnded)
     player.PLAYER.off('post.play', w.postPlay)
+    player.PLAYER.off('av.started', w.playerPlaybackStarted)
     player.PLAYER.off('change.background', w.changeBackground)
+    player.PLAYER.reset()
     command = w.exitCommand
     del w
     util.garbageCollect()

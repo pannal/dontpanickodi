@@ -33,6 +33,7 @@ def resetBaseHeaders():
         'X-Plex-Device': X_PLEX_DEVICE,
         'X-Plex-Client-Identifier': X_PLEX_IDENTIFIER,
         'Accept-Encoding': 'gzip,deflate',
+        'Accept-Language': ACCEPT_LANGUAGE,
         'User-Agent': '{0}/{1}'.format("PM4K", ADDON.getAddonInfo('version'))
     }
 
@@ -47,6 +48,8 @@ LAN_REACHABILITY_TIMEOUT = 10                       # ms
 CHECK_LOCAL = False
 LOCAL_OVER_SECURE = False
 X_PLEX_CONTAINER_SIZE = 50                          # max results to return in a single search page
+
+ACCEPT_LANGUAGE = 'en-US,en'
 
 # Plex Header Configuation
 X_PLEX_PROVIDES = 'player,controller'          # one or more of [player, controller, server]
@@ -164,15 +167,18 @@ def joinArgs(args, includeQuestion=True):
 
 
 def addPlexHeaders(transferObj, token=None):
-    transferObj.addHeader("X-Plex-Platform", INTERFACE.getGlobal("platform"))
-    transferObj.addHeader("X-Plex-Version", INTERFACE.getGlobal("appVersionStr"))
-    transferObj.addHeader("X-Plex-Client-Identifier", INTERFACE.getGlobal("clientIdentifier"))
-    transferObj.addHeader("X-Plex-Platform-Version", INTERFACE.getGlobal("platformVersion", "unknown"))
-    transferObj.addHeader("X-Plex-Product", INTERFACE.getGlobal("product"))
-    transferObj.addHeader("X-Plex-Provides", not INTERFACE.getPreference("remotecontrol", False) and 'player' or '')
-    transferObj.addHeader("X-Plex-Device", INTERFACE.getGlobal("device"))
-    transferObj.addHeader("X-Plex-Model", INTERFACE.getGlobal("model"))
-    transferObj.addHeader("X-Plex-Device-Name", INTERFACE.getGlobal("friendlyName"))
+    headers = {"X-Plex-Platform": INTERFACE.getGlobal("platform"),
+               "X-Plex-Version": INTERFACE.getGlobal("appVersionStr"),
+               "X-Plex-Client-Identifier": INTERFACE.getGlobal("clientIdentifier"),
+               "X-Plex-Platform-Version": INTERFACE.getGlobal("platformVersion", "unknown"),
+               "X-Plex-Product": INTERFACE.getGlobal("product"),
+               "X-Plex-Provides": not INTERFACE.getPreference("remotecontrol", False) and 'player' or '',
+               "X-Plex-Device": INTERFACE.getGlobal("device"),
+               "X-Plex-Model": INTERFACE.getGlobal("model"),
+               "X-Plex-Device-Name": INTERFACE.getGlobal("friendlyName"),
+               }
+
+    transferObj.session.headers.update(headers)
 
     # Adding the X-Plex-Client-Capabilities header causes node.plexapp.com to 500
     if not type(transferObj) == "roUrlTransfer" or 'node.plexapp.com' not in transferObj.getUrl():

@@ -1,6 +1,5 @@
 <window>
     <onload>SetProperty(dropdown,1)</onload>
-    <defaultcontrol>650</defaultcontrol>
     <coordinates>
         <system>1</system>
         <posx>0</posx>
@@ -21,6 +20,15 @@
                 <posy>135</posy>
                 <width>564</width>
                 <height>810</height>
+                <visible>String.IsEmpty(Window.Property(hide.kbd))</visible>
+                <texture colordiffuse="FF2D2D2D">script.plex/white-square.png</texture>
+            </control>
+            <control type="image">
+                <posx>0</posx>
+                <posy>135</posy>
+                <width>564</width>
+                <height>248</height>
+                <visible>!String.IsEmpty(Window.Property(hide.kbd))</visible>
                 <texture colordiffuse="FF2D2D2D">script.plex/white-square.png</texture>
             </control>
             <control type="image">
@@ -28,6 +36,15 @@
                 <posy>945</posy>
                 <width>564</width>
                 <height>135</height>
+                <visible>String.IsEmpty(Window.Property(hide.kbd))</visible>
+                <texture colordiffuse="66000000">script.plex/white-square.png</texture>
+            </control>
+            <control type="image">
+                <posx>0</posx>
+                <posy>383</posy>
+                <width>564</width>
+                <height>697</height>
+                <visible>!String.IsEmpty(Window.Property(hide.kbd))</visible>
                 <texture colordiffuse="66000000">script.plex/white-square.png</texture>
             </control>
         </control>
@@ -441,7 +458,7 @@
                 <posy>360</posy>
                 <width>459</width>
                 <height>439</height>
-
+                <visible>String.IsEmpty(Window.Property(hide.kbd))</visible>
 
                 <!-- IMAGES ROW 1 -->
                 <control type="group">
@@ -1628,6 +1645,7 @@
                 <posy>840</posy>
                 <width>459</width>
                 <height>60</height>
+                <visible>String.IsEmpty(Window.Property(hide.kbd))</visible>
                 <control type="image">
                     <posx>0</posx>
                     <posy>0</posy>

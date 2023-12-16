@@ -24,7 +24,7 @@ from lib import metadata
 from lib.util import T
 
 
-VIDEO_RELOAD_KW = dict(includeExtras=1, includeExtrasCount=10, includeChapters=1)
+VIDEO_RELOAD_KW = dict(includeExtras=1, includeExtrasCount=10, includeChapters=1, includeReviews=1)
 
 
 class RelatedPaginator(pagination.BaseRelatedPaginator):
@@ -43,12 +43,13 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
     THUMB_POSTER_DIM = (347, 518)
     RELATED_DIM = (268, 397)
     EXTRA_DIM = (329, 185)
-    ROLES_DIM = (268, 268)
+    ROLES_DIM = (334, 334)
     PREVIEW_DIM = (343, 193)
 
-    EXTRA_LIST_ID = 400
-    RELATED_LIST_ID = 401
-    ROLES_LIST_ID = 403
+    ROLES_LIST_ID = 400
+    REVIEWS_LIST_ID = 401
+    EXTRA_LIST_ID = 402
+    RELATED_LIST_ID = 403
 
     OPTIONS_GROUP_ID = 200
     PROGRESS_IMAGE_ID = 250
@@ -85,6 +86,7 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
         self.extraListControl = kodigui.ManagedControlList(self, self.EXTRA_LIST_ID, 5)
         self.relatedListControl = kodigui.ManagedControlList(self, self.RELATED_LIST_ID, 5)
         self.rolesListControl = kodigui.ManagedControlList(self, self.ROLES_LIST_ID, 5)
+        self.reviewsListControl = kodigui.ManagedControlList(self, self.REVIEWS_LIST_ID, 5)
 
         self.progressImageControl = self.getControl(self.PROGRESS_IMAGE_ID)
         self.setup()
@@ -149,7 +151,9 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
                 self.setFocusId(300)
                 self.prev()
 
-            elif action == xbmcgui.ACTION_MOVE_UP and self.PLAY_BUTTON_ID <= controlID <= self.MEDIA_BUTTON_ID:
+            elif action == xbmcgui.ACTION_MOVE_UP and controlID in (self.REVIEWS_LIST_ID,
+                                                                    self.ROLES_LIST_ID,
+                                                                    self.EXTRA_LIST_ID):
                 self.updateBackgroundFrom(self.video)
 
             if controlID == self.RELATED_LIST_ID:
@@ -500,9 +504,10 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
 
         self.setInfo()
         self.setBoolProperty("initialized", True)
-        self.fillExtras()
-        hasPrev = self.fillRelated()
-        self.fillRoles(hasPrev)
+        hasRoles = self.fillRoles()
+        hasReviews = self.fillReviews()
+        hasExtras = self.fillExtras()
+        self.fillRelated(hasRoles and not hasExtras and not hasReviews)
 
     def setInfo(self, skip_bg=False):
         if not skip_bg:
@@ -610,7 +615,7 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
         mli = kodigui.ManagedListItem(obj.title or '', thumbnailImage=obj.thumb.asTranscodedImageURL(*self.EXTRA_DIM), data_source=obj)
         return mli
 
-    def fillExtras(self):
+    def fillExtras(self, has_prev=False):
         items = []
         idx = 0
 
@@ -638,6 +643,9 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
 
         self.extraListControl.reset()
         self.extraListControl.addItems(items)
+
+        self.setProperty('divider.{0}'.format(self.EXTRA_LIST_ID), has_prev and '1' or '')
+
         return True
 
     def fillRelated(self, has_prev=False):
@@ -671,8 +679,28 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
         if not items:
             return False
 
-        self.setProperty('divider.{0}'.format(self.ROLES_LIST_ID), has_prev and '1' or '')
-
         self.rolesListControl.reset()
         self.rolesListControl.addItems(items)
+        return True
+
+    def fillReviews(self, has_prev=False):
+        items = []
+        idx = 0
+
+        if not self.video.reviews:
+            self.reviewsListControl.reset()
+            return False
+
+        for review in self.video.reviews():
+            mli = kodigui.ManagedListItem(review.source, review.tag, thumbnailImage=review.ratingImage())
+            mli.setProperty('index', str(idx))
+            mli.setProperty('text', review.text)
+            items.append(mli)
+            idx += 1
+
+        if not items:
+            return False
+
+        self.reviewsListControl.reset()
+        self.reviewsListControl.addItems(items)
         return True

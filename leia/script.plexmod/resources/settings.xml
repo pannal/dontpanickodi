@@ -18,6 +18,11 @@
                     <default>false</default>
                     <control type="toggle"/>
                 </setting>
+                <setting id="subtitle_use_extended_title" type="boolean" label="32950" help="32951">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
             </group>
         </category>
         <!-- Player -->
@@ -254,6 +259,11 @@
                     </control>
                 </setting>
                 <setting id="postplay_cancel" type="boolean" label="32905">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="dialog_flicker_fix" type="boolean" label="32952">
                     <level>0</level>
                     <default>true</default>
                     <control type="toggle"/>

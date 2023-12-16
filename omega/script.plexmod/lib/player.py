@@ -3,6 +3,7 @@ import base64
 import threading
 import six
 import re
+import os
 
 from kodi_six import xbmc
 from kodi_six import xbmcgui
@@ -28,7 +29,7 @@ class BasePlayerHandler(object):
         self.timelineType = None
         self.lastTimelineState = None
         self.ignoreTimelines = False
-        self.ignorePlaybackEnded = False
+        self.queuingNext = False
         self.playQueue = None
         self.sessionID = session_id
 
@@ -197,7 +198,7 @@ class SeekPlayerHandler(BasePlayerHandler):
         self.chapters = chapters or []
         self.playedThreshold = plexapp.util.INTERFACE.getPlayedThresholdValue()
         self.ignoreTimelines = False
-        self.ignorePlaybackEnded = False
+        self.queuingNext = False
         self.stoppedInBingeMode = False
         self.inBingeMode = False
         self.prePlayWitnessed = False
@@ -309,7 +310,7 @@ class SeekPlayerHandler(BasePlayerHandler):
     def hideOSD(self, delete=False):
         util.CRON.forceTick()
         if self.dialog:
-            self.dialog.hideOSD()
+            self.dialog.hideOSD(closing=delete)
             if delete:
                 d = self.dialog
                 self.dialog = None
@@ -374,6 +375,21 @@ class SeekPlayerHandler(BasePlayerHandler):
     def onAVStarted(self):
         util.DEBUG_LOG('SeekHandler: onAVStarted')
 
+        # check if embedded subtitle was set correctly
+        if self.isDirectPlay and self.player.video.current_subtitle_is_embedded:
+            try:
+                playerID = kodijsonrpc.rpc.Player.GetActivePlayers()[0]["playerid"]
+                currIdx = kodijsonrpc.rpc.Player.GetProperties(playerid=playerID, properties=['currentsubtitle'])[
+                    'currentsubtitle']['index']
+                if currIdx != self.player.video._current_subtitle_idx:
+                    util.LOG("Embedded Subtitle index was incorrect ({}), setting to: {}".
+                             format(currIdx, self.player.video._current_subtitle_idx))
+                    self.dialog.setSubtitles()
+                else:
+                    util.DEBUG_LOG("Embedded subtitle was correctly set in Kodi")
+            except:
+                util.ERROR("Exception when trying to check for embedded subtitles")
+
     def onPrePlayStarted(self):
         util.DEBUG_LOG('SeekHandler: onPrePlayStarted, DP: {}'.format(self.isDirectPlay))
         self.prePlayWitnessed = True
@@ -427,15 +443,19 @@ class SeekPlayerHandler(BasePlayerHandler):
 
         self.updateNowPlaying()
 
-        if self.ignorePlaybackEnded:
+        if self.queuingNext:
             util.DEBUG_LOG('SeekHandler: onPlayBackEnded - event ignored')
             return
 
         if self.inBingeMode:
             self.stoppedInBingeMode = False
 
+        if self.playlist and self.playlist.hasNext():
+            self.queuingNext = True
         if self.next(on_end=True):
             return
+        else:
+            self.queuingNext = False
 
         if not self.ended:
             if self.seeking != self.SEEK_PLAYLIST:
@@ -478,14 +498,14 @@ class SeekPlayerHandler(BasePlayerHandler):
             if self.isDirectPlay:
                 self.player.showSubtitles(False)
                 if path:
-                    util.DEBUG_LOG('Setting subtitle path: {0}'.format(path))
+                    util.DEBUG_LOG('Setting subtitle path: {0} ({1})'.format(path, subs))
                     self.player.setSubtitles(path)
                     self.player.showSubtitles(True)
 
                 else:
                     # u_til.TEST(subs.__dict__)
                     # u_til.TEST(self.player.video.mediaChoice.__dict__)
-                    util.DEBUG_LOG('Enabling embedded subtitles at: {0}'.format(subs.typeIndex))
+                    util.DEBUG_LOG('Enabling embedded subtitles at: {0} ({1})'.format(subs.typeIndex, subs))
                     self.player.setSubtitleStream(subs.typeIndex)
                     self.player.showSubtitles(True)
 
@@ -552,6 +572,7 @@ class SeekPlayerHandler(BasePlayerHandler):
     #     self.dialog.activate()
 
     def onVideoWindowOpened(self):
+        util.DEBUG_LOG('SeekHandler: onVideoWindowOpened - Seeking={0}'.format(self.seeking))
         self.getDialog().show()
 
         self.initPlayback()
@@ -834,6 +855,7 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
     def __init__(self, *args, **kwargs):
         xbmc.Player.__init__(self, *args, **kwargs)
         signalsmixin.SignalsMixin.__init__(self)
+        self.handler = AudioPlayerHandler(self)
 
     def init(self):
         self._closed = False
@@ -870,7 +892,7 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
         self.bgmPlaying = False
         self.playerObject = None
         self.pauseAfterPlaybackStarted = False
-        self.handler = AudioPlayerHandler(self)
+        #self.handler = AudioPlayerHandler(self)
         self.currentTime = 0
 
     def control(self, cmd):
@@ -962,11 +984,27 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
         if self.bgmPlaying:
             self.stopAndWait()
 
-        self.handler = handler or SeekPlayerHandler(self, session_id)
+        self.handler = handler if handler and isinstance(handler, SeekPlayerHandler) \
+            else SeekPlayerHandler(self, session_id)
+
         self.video = video
         self.resume = resume
         self.open()
         self._playVideo(resume and video.viewOffset.asInt() or 0, force_update=force_update)
+
+    def getOSSPathHint(self, meta):
+        # only hint the path one folder above for a movie, two folders above for TV
+        try:
+            head1, tail1 = os.path.split(meta.path)
+            head2, tail2 = os.path.split(head1)
+            if self.video.type == "episode":
+                head3, tail3 = os.path.split(head2)
+                cleaned_path = os.path.join(tail3, tail2, tail1)
+            else:
+                cleaned_path = os.path.join(tail2, tail1)
+        except:
+            cleaned_path = ""
+        return cleaned_path
 
     def _playVideo(self, offset=0, seeking=0, force_update=False, playerObject=None):
         self.trigger('new.video', video=self.video)
@@ -1036,6 +1074,9 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
         })
         li = xbmcgui.ListItem(self.video.title, path=url)
         vtype = self.video.type if self.video.type in ('movie', 'episode', 'musicvideo') else 'video'
+
+        util.setGlobalProperty("current_path", self.getOSSPathHint(meta), base='videoinfo.{0}')
+        util.setGlobalProperty("current_size", str(meta.size), base='videoinfo.{0}')
         li.setInfo('video', {
             'mediatype': vtype,
             'title': self.video.title,
@@ -1044,7 +1085,9 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
             'episode': self.video.index.asInt(),
             'season': self.video.parentIndex.asInt(),
             'year': self.video.year.asInt(),
-            'plot': self.video.summary
+            'plot': self.video.summary,
+            'path': meta.path,
+            'size': meta.size,
         })
         li.setArt({
             'poster': self.video.defaultThumb.asTranscodedImageURL(347, 518),
@@ -1058,7 +1101,7 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
         if self.bgmPlaying:
             self.stopAndWait()
 
-        if handler:
+        if handler and isinstance(handler, SeekPlayerHandler):
             self.handler = handler
         else:
             self.handler = SeekPlayerHandler(self, session_id)
@@ -1174,13 +1217,13 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
         self.handler.onPrePlayStarted()
 
     def onPlayBackStarted(self):
+        util.DEBUG_LOG('Player - STARTED')
+        self.trigger('playback.started')
         self.started = True
         if self.pauseAfterPlaybackStarted:
             self.control('pause')
             self.pauseAfterPlaybackStarted = False
 
-        util.DEBUG_LOG('Player - STARTED')
-        self.trigger('playback.started')
         if not self.handler:
             return
         self.handler.onPlayBackStarted()
@@ -1193,6 +1236,7 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
 
     def onAVStarted(self):
         util.DEBUG_LOG('Player - AVStarted: {}'.format(self.handler))
+        self.trigger('av.started')
         if not self.handler:
             return
         self.handler.onAVStarted()
@@ -1235,12 +1279,14 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
         self.handler.onPlayBackSeek(time, offset)
 
     def onPlayBackFailed(self):
-        util.DEBUG_LOG('Player - FAILED')
+        util.DEBUG_LOG('Player - FAILED: {}'.format(self.handler))
         if not self.handler:
             return
 
         if self.handler.onPlayBackFailed():
             util.showNotification(util.T(32448, 'Playback Failed!'))
+            self.stopAndWait()
+            self.close()
             # xbmcgui.Dialog().ok('Failed', 'Playback failed')
 
     def onVideoWindowOpened(self):

@@ -23,6 +23,7 @@ class DropdownDialog(kodigui.BaseDialog):
         self.options = kwargs.get('options')
         self.pos = kwargs.get('pos')
         self.lastSelectedItem = None
+        self.optionsList = None
         self.roundRobin = kwargs.get('round_robin', True)
         self.posIsBottom = kwargs.get('pos_is_bottom')
         self.closeDirection = kwargs.get('close_direction')
@@ -113,6 +114,9 @@ class DropdownDialog(kodigui.BaseDialog):
             from lib import player
             player.PLAYER.off('session.ended', self.playbackSessionEnded)
 
+        self.optionsList.reset()
+        self.optionsList = None
+
         self.setProperty('show', '')
 
         super(DropdownDialog, self).doClose()
@@ -140,7 +144,7 @@ class DropdownDialog(kodigui.BaseDialog):
 
                 choice['sub'] = sub
 
-        self.choice = choice
+        self.choice = {"key": choice["key"], "display": choice["display"]}
         if self.optionsCallback:
             self.optionsCallback(self.optionsList, mli)
 
@@ -152,8 +156,9 @@ class DropdownDialog(kodigui.BaseDialog):
     def showOptions(self):
         items = []
         options = []
-        for o in self.options:
-            if o:
+        for oo in self.options:
+            if oo:
+                o = oo.copy()
                 item = kodigui.ManagedListItem(o['display'], thumbnailImage=o.get('indicator', ''), data_source=o)
                 item.setProperty('with.indicator', self.withIndicator and '1' or '')
                 item.setProperty('align', self.alignItems)

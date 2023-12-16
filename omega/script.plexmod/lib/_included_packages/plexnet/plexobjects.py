@@ -62,7 +62,12 @@ class PlexValue(six.text_type):
             # dt = datetime.strptime(self, '%Y-%m-%d')
             # Avoid datetime.strptime to avoid
             # https://github.com/python/cpython/issues/71587
-            dt = datetime.fromtimestamp(time.mktime(time.strptime(self, '%Y-%m-%d')))
+            try:
+                dt = datetime.fromtimestamp(time.mktime(time.strptime(self, '%Y-%m-%d')))
+            except OverflowError:
+                # special case for dates before 1970-01-02 (yes, there are shows that old), mktime fails on those
+                year, month, day = (int(p) for p in str(self).split("-"))
+                dt = datetime(year=year, month=month, day=day)
 
         if not format_:
             return dt

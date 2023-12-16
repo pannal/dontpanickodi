@@ -23,6 +23,9 @@ class BackgroundWindow(kodigui.BaseWindow):
         self.function()
         self.doClose()
 
+    def onAction(self, action):
+        pass
+
 
 def setBusy(on=True):
     util.setGlobalProperty('background.busy', on and '1' or '')
@@ -34,3 +37,7 @@ def setSplash(on=True):
 
 def setShutdown(on=True):
     util.setGlobalProperty('background.shutdown', on and '1' or '')
+
+
+def killMonitor():
+    kodigui.MONITOR = None

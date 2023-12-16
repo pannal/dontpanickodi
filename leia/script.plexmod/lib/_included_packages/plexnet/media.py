@@ -243,3 +243,16 @@ class Bandwidth(plexobjects.PlexObject):
 class Marker(MediaTag):
     TYPE = 'Marker'
     FILTER = 'Marker'
+
+
+class Review(MediaTag):
+    TYPE = 'Review'
+    FILTER = 'Review'
+
+    def ratingImage(self):
+        # only rottentomatoes currently supported
+        img = str(self.image)
+        if not img or not img.startswith("rottentomatoes://"):
+            return ''
+
+        return img.split('rottentomatoes://')[1]

@@ -64,11 +64,11 @@ def widthDialog(method, msg, *args, **kwargs):
     return dialog(msg or 'LOADING')(method)(*args, **kwargs)
 
 
-class BusyMsgContext(object):
+class BusyContext(object):
     w = None
     timer = None
     shouldClose = False
-    window_cls = BusyClosableMsgWindow
+    window_cls = BusyWindow
     delay = False
 
     def __enter__(self):
@@ -77,9 +77,6 @@ class BusyMsgContext(object):
             self.timer = threading.Timer(0.5, lambda: self.w.show())
         self.w.ctx = self
         return self
-
-    def setMessage(self, msg):
-        self.w.setMessage(msg)
 
     def __exit__(self, exc_type, exc_value, tb):
         if exc_type is not None:
@@ -94,6 +91,13 @@ class BusyMsgContext(object):
         self.w = None
         util.garbageCollect()
         return True
+
+
+class BusyMsgContext(BusyContext):
+    window_cls = BusyClosableMsgWindow
+
+    def setMessage(self, msg):
+        self.w.setMessage(msg)
 
 
 class BusySignalContext(BusyMsgContext):
@@ -135,4 +139,4 @@ class BusySignalContext(BusyMsgContext):
 
 
 class BusyClosableMsgContext(BusyMsgContext):
-    window_cls = BusyWindow
+    pass
