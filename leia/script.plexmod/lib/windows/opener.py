@@ -164,4 +164,4 @@ def directorClicked(director, **kwargs):
 def actorClicked(actor, **kwargs):
     section = plexlibrary.LibrarySection.fromFilter(actor)
     filter_ = {'type': actor.FILTER, 'display': 'Actor', 'sub': {'val': actor.id, 'display': actor.tag}}
-    return sectionClicked(section, filter_, **kwargs)
+    return sectionClicked(section, filter_, ignoreLibrarySettings=True, **kwargs)

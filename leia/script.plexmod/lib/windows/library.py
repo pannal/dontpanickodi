@@ -227,7 +227,8 @@ class PhotoPropertiesTask(backgroundthread.Task):
 
 
 class LibrarySettings(object):
-    def __init__(self, section_or_server_id):
+    def __init__(self, section_or_server_id, ignoreLibrarySettings=False):
+        self.ignoreLibrarySettings = ignoreLibrarySettings
         if isinstance(section_or_server_id, six.string_types):
             self.serverID = section_or_server_id
             self.sectionID = None
@@ -238,6 +239,10 @@ class LibrarySettings(object):
         self._loadSettings()
 
     def _loadSettings(self):
+        if self.ignoreLibrarySettings:
+            self._settings = {}
+            return
+
         if not self.sectionID:
             return
 
@@ -450,7 +455,8 @@ class LibraryWindow(kodigui.MultiWindow, windowutils.UtilMixin):
         self.dragging = False
 
         self.cleared = True
-        self.librarySettings = LibrarySettings(self.section)
+        self.librarySettings = LibrarySettings(self.section,
+                                               ignoreLibrarySettings=kwargs.get("ignoreLibrarySettings", False))
         self.reset()
 
         self.lock = threading.Lock()

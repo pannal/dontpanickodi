@@ -726,7 +726,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
             if choice['key'] == 'resume':
                 resume = True
                 if util.advancedSettings.dialogFlickerFix:
-                    xbmc.sleep(500)
+                    xbmc.sleep(750)
 
         self._reloadVideos.append(episode)
 
@@ -821,7 +821,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
             util.MONITOR.watchStatusChanged()
         elif choice['key'] == 'to_show':
             if util.advancedSettings.dialogFlickerFix:
-                xbmc.sleep(500)
+                xbmc.sleep(750)
             self.processCommand(opener.open(
                 self.season.parentRatingKey,
                 came_from=self.season.parentRatingKey)
