@@ -124,7 +124,7 @@ class AdvancedSettings(object):
         ("auto_seek", True),
         ("auto_seek_delay", 1),
         ("dynamic_timeline_seek", False),
-        ("fast_back", True),
+        ("fast_back", False),
         ("dynamic_backgrounds", True),
         ("background_art_blur_amount2", 0),
         ("background_art_opacity_amount2", 20),

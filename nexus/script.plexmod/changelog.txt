@@ -1,3 +1,11 @@
+[- 0.7.1-rev4 -]
+- Fix: Movies: pressing back in a scrolled movie view with the header options open wouldn't back out properly
+- Fix: reset library filters when Role/Cast view opened
+- Fix: Cast display in movies/preplay
+- Fix: apply dialog flicker fix in Role/Cast
+- Fix: dropdowns were broken sometimes (especially library view)
+
+
 [- 0.7.1 -]
 - Fix: Embedded subtitle could be set to the wrong one (edge case)
 - Fix: Episodes: theme music error when clicking on seasons

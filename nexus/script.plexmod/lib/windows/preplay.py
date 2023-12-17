@@ -126,7 +126,7 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
             if not controlID and self.lastFocusID and not action == xbmcgui.ACTION_MOUSE_MOVE:
                 self.setFocusId(self.lastFocusID)
 
-            if action in(xbmcgui.ACTION_NAV_BACK, xbmcgui.ACTION_CONTEXT_MENU):
+            if action in (xbmcgui.ACTION_NAV_BACK, xbmcgui.ACTION_CONTEXT_MENU):
                 if not xbmc.getCondVisibility('ControlGroup({0}).HasFocus(0)'.format(
                         self.OPTIONS_GROUP_ID)) and \
                         (not util.advancedSettings.fastBack or action == xbmcgui.ACTION_CONTEXT_MENU):
@@ -134,7 +134,8 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
                         self.lastNonOptionsFocusID = self.lastFocusID
                         self.setFocusId(self.OPTIONS_GROUP_ID)
                         return
-                elif xbmc.getCondVisibility('ControlGroup({0}).HasFocus(0)'.format(self.OPTIONS_GROUP_ID)) \
+                elif action == xbmcgui.ACTION_CONTEXT_MENU and \
+                        xbmc.getCondVisibility('ControlGroup({0}).HasFocus(0)'.format(self.OPTIONS_GROUP_ID)) \
                         and self.getProperty('on.extras') and self.lastNonOptionsFocusID:
                     self.setFocusId(self.lastNonOptionsFocusID)
                     self.lastNonOptionsFocusID = None
