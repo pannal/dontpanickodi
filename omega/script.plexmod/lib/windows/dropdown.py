@@ -144,7 +144,7 @@ class DropdownDialog(kodigui.BaseDialog):
 
                 choice['sub'] = sub
 
-        self.choice = {"key": choice["key"], "display": choice["display"]}
+        self.choice = choice
         if self.optionsCallback:
             self.optionsCallback(self.optionsList, mli)
 
