@@ -40,11 +40,11 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
     width = 1920
     height = 1080
 
-    THUMB_POSTER_DIM = (347, 518)
-    RELATED_DIM = (268, 397)
-    EXTRA_DIM = (329, 185)
-    ROLES_DIM = (334, 334)
-    PREVIEW_DIM = (343, 193)
+    THUMB_POSTER_DIM = util.scaleResolution(347, 518)
+    RELATED_DIM = util.scaleResolution(268, 397)
+    EXTRA_DIM = util.scaleResolution(329, 185)
+    ROLES_DIM = util.scaleResolution(334, 334)
+    PREVIEW_DIM = util.scaleResolution(343, 193)
 
     ROLES_LIST_ID = 400
     REVIEWS_LIST_ID = 401
@@ -126,22 +126,26 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
             if not controlID and self.lastFocusID and not action == xbmcgui.ACTION_MOUSE_MOVE:
                 self.setFocusId(self.lastFocusID)
 
-            if action in (xbmcgui.ACTION_NAV_BACK, xbmcgui.ACTION_CONTEXT_MENU):
-                if not xbmc.getCondVisibility('ControlGroup({0}).HasFocus(0)'.format(
-                        self.OPTIONS_GROUP_ID)) and \
-                        (not util.advancedSettings.fastBack or action == xbmcgui.ACTION_CONTEXT_MENU):
+            if action == xbmcgui.ACTION_CONTEXT_MENU:
+                if not xbmc.getCondVisibility('ControlGroup({0}).HasFocus(0)'.format(self.OPTIONS_GROUP_ID)):
+                    self.lastNonOptionsFocusID = self.lastFocusID
+                    self.setFocusId(self.OPTIONS_GROUP_ID)
+                    return
+                else:
+                    if self.lastNonOptionsFocusID:
+                        self.setFocusId(self.lastNonOptionsFocusID)
+                        self.lastNonOptionsFocusID = None
+                        return
+
+            elif action == xbmcgui.ACTION_NAV_BACK:
+                if (not xbmc.getCondVisibility('ControlGroup({0}).HasFocus(0)'.format(
+                        self.OPTIONS_GROUP_ID)) or not controlID) and \
+                        not util.advancedSettings.fastBack:
                     if self.getProperty('on.extras'):
-                        self.lastNonOptionsFocusID = self.lastFocusID
                         self.setFocusId(self.OPTIONS_GROUP_ID)
                         return
-                elif action == xbmcgui.ACTION_CONTEXT_MENU and \
-                        xbmc.getCondVisibility('ControlGroup({0}).HasFocus(0)'.format(self.OPTIONS_GROUP_ID)) \
-                        and self.getProperty('on.extras') and self.lastNonOptionsFocusID:
-                    self.setFocusId(self.lastNonOptionsFocusID)
-                    self.lastNonOptionsFocusID = None
-                    return
 
-            if action == xbmcgui.ACTION_LAST_PAGE and xbmc.getCondVisibility('ControlGroup(300).HasFocus(0)'):
+            elif action == xbmcgui.ACTION_LAST_PAGE and xbmc.getCondVisibility('ControlGroup(300).HasFocus(0)'):
                 next(self)
             elif action == xbmcgui.ACTION_NEXT_ITEM:
                 self.setFocusId(300)
@@ -506,8 +510,11 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
             self.setProperty('preview.no', '1')
 
         self.video.reload(checkFiles=1, **VIDEO_RELOAD_KW)
-        self.relatedPaginator = RelatedPaginator(self.relatedListControl, leaf_count=int(self.video.relatedCount),
-                                                 parent_window=self)
+        try:
+            self.relatedPaginator = RelatedPaginator(self.relatedListControl, leaf_count=int(self.video.relatedCount),
+                                                     parent_window=self)
+        except ValueError:
+            raise util.NoDataException
 
         self.setInfo()
         self.setBoolProperty("initialized", True)

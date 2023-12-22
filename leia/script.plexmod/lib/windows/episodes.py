@@ -179,11 +179,11 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
     width = 1920
     height = 1080
 
-    THUMB_AR16X9_DIM = (657, 393)
-    POSTER_DIM = (420, 630)
-    RELATED_DIM = (268, 397)
-    EXTRA_DIM = (329, 185)
-    ROLES_DIM = (334, 334)
+    THUMB_AR16X9_DIM = util.scaleResolution(657, 393)
+    POSTER_DIM = util.scaleResolution(420, 630)
+    RELATED_DIM = util.scaleResolution(268, 397)
+    EXTRA_DIM = util.scaleResolution(329, 185)
+    ROLES_DIM = util.scaleResolution(334, 334)
 
     LIST_OPTIONS_BUTTON_ID = 111
 
@@ -231,7 +231,11 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
     def reset(self, episode, season=None, show=None):
         self.episode = episode
         self.season = season if season is not None else self.episode.season()
-        self.show_ = show or (self.episode or self.season).show().reload(includeExtras=1, includeExtrasCount=10)
+        try:
+            self.show_ = show or (self.episode or self.season).show().reload(includeExtras=1, includeExtrasCount=10)
+        except IndexError:
+            raise util.NoDataException
+
         self.parentList = None
         self.seasons = None
         self._reloadVideos = []
@@ -283,7 +287,10 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
         if not self.tasks:
             self.tasks = backgroundthread.Tasks()
 
-        self.selectEpisode()
+        try:
+            self.selectEpisode()
+        except AttributeError:
+            raise util.NoDataException
 
         mli = self.episodeListControl.getSelectedItem()
         if not mli or not self.episodesPaginator:
@@ -731,13 +738,17 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
         self._reloadVideos.append(episode)
 
         pl = playlist.LocalPlaylist(self.show_.all(), self.show_.getServer())
-        if len(pl):  # Don't use playlist if it's only this video
-            pl.setCurrent(episode)
-            self.processCommand(videoplayer.play(play_queue=pl, resume=resume))
-            return True
+        try:
+            if len(pl):  # Don't use playlist if it's only this video
+                pl.setCurrent(episode)
+                self.processCommand(videoplayer.play(play_queue=pl, resume=resume))
+                return True
 
-        self.processCommand(videoplayer.play(video=episode, resume=resume))
-        return True
+            self.processCommand(videoplayer.play(video=episode, resume=resume))
+            return True
+        except util.NoDataException:
+            util.ERROR("No data - disconnected?", notify=True, time_ms=5000)
+            self.doClose()
 
     def optionsButtonClicked(self, from_item=False):
         options = []

@@ -174,7 +174,7 @@ class HttpRequest(object):
         except Exception as e:
             info = traceback.extract_tb(sys.exc_info()[2])[-1]
             util.WARN_LOG(
-                "Request errored out - URL: {0} File: {1} Line: {2} Msg: {3}".format(util.cleanToken(self.url), os.path.basename(info[0]), info[1], e.message)
+                "Request errored out - URL: {0} File: {1} Line: {2} Msg: {3}".format(util.cleanToken(self.url), os.path.basename(info[0]), info[1], getattr(e, 'message', ''))
             )
 
         return None

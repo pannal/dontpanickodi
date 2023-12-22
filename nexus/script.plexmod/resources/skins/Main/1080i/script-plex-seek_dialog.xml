@@ -690,7 +690,6 @@
                     <font>font12</font>
                     <texturefocus colordiffuse="FFE5A00D">script.plex/buttons/stop-focus.png</texturefocus>
                     <texturenofocus colordiffuse="99FFFFFF">script.plex/buttons/stop.png</texturenofocus>
-                    <onclick>PlayerControl(Stop)</onclick>
                     <label> </label>
                 </control>
                 <control type="button" id="408">

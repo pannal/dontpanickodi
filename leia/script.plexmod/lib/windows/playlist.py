@@ -77,10 +77,10 @@ class PlaylistWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
     SHUFFLE_BUTTON_ID = 302
     OPTIONS_BUTTON_ID = 303
 
-    LI_AR16X9_THUMB_DIM = (178, 100)
-    LI_SQUARE_THUMB_DIM = (100, 100)
+    LI_AR16X9_THUMB_DIM = util.scaleResolution(178, 100)
+    LI_SQUARE_THUMB_DIM = util.scaleResolution(100, 100)
 
-    ALBUM_THUMB_DIM = (630, 630)
+    ALBUM_THUMB_DIM = util.scaleResolution(630, 630)
 
     PLAYLIST_LIST_ID = 101
 

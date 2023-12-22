@@ -23,6 +23,18 @@
                     <default>true</default>
                     <control type="toggle"/>
                 </setting>
+                <setting id="poster_resolution_scale" type="number" label="32956" help="32957">
+                    <level>0</level>
+                    <default>1.0</default>
+                    <constraints>
+                        <minimum>1.0</minimum>
+                        <step>0.5</step>
+                        <maximum>5.0</maximum>
+                    </constraints>
+                    <control type="slider" format="number">
+                        <popup>false</popup>
+                    </control>
+                </setting>
             </group>
         </category>
         <!-- Player -->

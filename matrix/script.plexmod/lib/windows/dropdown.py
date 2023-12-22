@@ -183,6 +183,7 @@ class DropdownDialog(kodigui.BaseDialog):
 
         if self.selectIndex is not None:
             self.optionsList.setSelectedItemByPos(self.selectIndex)
+            self.lastSelectedItem = self.selectIndex
 
 
 class DropdownHeaderDialog(DropdownDialog):

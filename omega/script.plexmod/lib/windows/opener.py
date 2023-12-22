@@ -70,6 +70,8 @@ def handleOpen(winclass, **kwargs):
         return w.exitCommand or ''
     except AttributeError:
         pass
+    except util.NoDataException:
+        raise
     finally:
         del w
         util.garbageCollect()

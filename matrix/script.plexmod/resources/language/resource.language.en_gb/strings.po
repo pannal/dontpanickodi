@@ -1629,3 +1629,11 @@ msgstr ""
 msgctxt "#32955"
 msgid "Use Kodi keyboard for searching"
 msgstr ""
+
+msgctxt "#32956"
+msgid "Poster resolution scaling"
+msgstr ""
+
+msgctxt "#32957"
+msgid "Scales the resolution of all posters/thumbnails for better image quality. May impact PMS/PM4K performance. Recommended: 2.5 (250 %) for good quality. Needs addon restart."
+msgstr ""

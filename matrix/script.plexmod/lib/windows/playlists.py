@@ -24,10 +24,10 @@ class PlaylistsWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
 
     THUMB_DIMS = {
         'audio': {
-            'item.thumb': (270, 270)
+            'item.thumb': util.scaleResolution(270, 270)
         },
         'video': {
-            'item.thumb': (610, 344)
+            'item.thumb': util.scaleResolution(610, 344)
         }
     }
 

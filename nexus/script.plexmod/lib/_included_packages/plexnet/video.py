@@ -472,6 +472,7 @@ class PlayableVideo(Video, RelatedMixin):
         container = plexobjects.PlexContainer(data, initpath=query, server=self.server, address=query)
 
         hubs = {}
+
         for elem in data:
             hub = plexlibrary.Hub(elem, server=self.server, container=container)
             hubs[hub.hubIdentifier] = hub

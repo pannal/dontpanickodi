@@ -24,7 +24,7 @@ class CurrentPlaylistWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
     height = 1080
 
     LI_THUMB_DIM = (64, 64)
-    ALBUM_THUMB_DIM = (639, 639)
+    ALBUM_THUMB_DIM = util.scaleResolution(639, 639)
 
     PLAYLIST_LIST_ID = 101
 

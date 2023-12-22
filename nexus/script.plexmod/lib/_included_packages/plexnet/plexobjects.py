@@ -247,7 +247,7 @@ class PlexObject(Checks):
 
         try:
             self._setData(data[0])
-        except IndexError:
+        except (IndexError, TypeError, AttributeError):
             util.DEBUG_LOG('No data on reload: {0}'.format(self))
             return self
 
@@ -546,17 +546,18 @@ def listItems(server, path, libtype=None, watched=None, bytag=False, data=None, 
     container = container or PlexContainer(data, path, server, path)
     items = ItemContainer().init(container)
 
-    for elem in data:
-        if libtype and elem.attrib.get('type') != libtype:
-            continue
-        if watched is True and elem.attrib.get('viewCount', 0) == 0:
-            continue
-        if watched is False and elem.attrib.get('viewCount', 0) >= 1:
-            continue
-        try:
-            items.append(buildItem(server, elem, path, bytag, container, tag_fallback))
-        except exceptions.UnknownType:
-            pass
+    if data:
+        for elem in data:
+            if libtype and elem.attrib.get('type') != libtype:
+                continue
+            if watched is True and elem.attrib.get('viewCount', 0) == 0:
+                continue
+            if watched is False and elem.attrib.get('viewCount', 0) >= 1:
+                continue
+            try:
+                items.append(buildItem(server, elem, path, bytag, container, tag_fallback))
+            except exceptions.UnknownType:
+                pass
 
     return items
 

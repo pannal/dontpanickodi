@@ -1,5 +1,7 @@
 # coding=utf-8
 
+from lib import util
+
 from . import kodigui
 
 
@@ -8,16 +10,16 @@ class SeasonsMixin():
 
     THUMB_DIMS = {
         'show': {
-            'main.thumb': (347, 518),
-            'item.thumb': (174, 260)
+            'main.thumb': util.scaleResolution(347, 518),
+            'item.thumb': util.scaleResolution(174, 260)
         },
         'episode': {
-            'main.thumb': (347, 518),
-            'item.thumb': (198, 295)
+            'main.thumb': util.scaleResolution(347, 518),
+            'item.thumb': util.scaleResolution(198, 295)
         },
         'artist': {
-            'main.thumb': (519, 519),
-            'item.thumb': (215, 215)
+            'main.thumb': util.scaleResolution(519, 519),
+            'item.thumb': util.scaleResolution(215, 215)
         }
     }
 

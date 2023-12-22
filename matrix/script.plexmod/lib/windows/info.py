@@ -25,8 +25,8 @@ class InfoWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
 
     PLAYER_STATUS_BUTTON_ID = 204
 
-    THUMB_DIM_POSTER = (519, 469)
-    THUMB_DIM_SQUARE = (519, 519)
+    THUMB_DIM_POSTER = util.scaleResolution(519, 469)
+    THUMB_DIM_SQUARE = util.scaleResolution(519, 519)
 
     def __init__(self, *args, **kwargs):
         kodigui.ControlledWindow.__init__(self, *args, **kwargs)

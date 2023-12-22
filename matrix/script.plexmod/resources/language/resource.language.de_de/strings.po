@@ -1928,3 +1928,11 @@ msgstr "Benötigt Kodi Neustart. ACHTUNG: Überschreibt advancedsettings.xml!\n\
 msgctxt "#32955"
 msgid "Use Kodi keyboard for searching"
 msgstr "Kodi-Tastatur bei der Suche verwenden"
+
+msgctxt "#32956"
+msgid "Poster resolution scaling"
+msgstr "Poster Auflösungsskalierung"
+
+msgctxt "#32957"
+msgid "Scales the resolution of all posters/thumbnails for better image quality. May impact PMS/PM4K performance. Recommended: 2.5 (250 %) for good quality. Needs addon restart."
+msgstr "Skaliert die Auflösung aller Poster/Vorschaubilder für bessere Bildqualität. Kann die PMS/PM4K Performance beeinflussen. Empfohlen: 2.5 (250 %) für gute Qualität. Benötigt Addon-Neustart."

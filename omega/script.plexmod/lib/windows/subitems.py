@@ -43,9 +43,9 @@ class ShowWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMixin, 
     width = 1920
     height = 1080
 
-    EXTRA_DIM = (329, 185)
-    RELATED_DIM = (268, 397)
-    ROLES_DIM = (334, 334)
+    EXTRA_DIM = util.scaleResolution(329, 185)
+    RELATED_DIM = util.scaleResolution(268, 397)
+    ROLES_DIM = util.scaleResolution(334, 334)
 
     SUB_ITEM_LIST_ID = 400
 

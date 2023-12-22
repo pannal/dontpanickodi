@@ -73,11 +73,11 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
     width = 1920
     height = 1080
 
-    NEXT_DIM = (537, 303)
-    PREV_DIM = (462, 259)
-    ONDECK_DIM = (329, 185)
-    RELATED_DIM = (268, 397)
-    ROLES_DIM = (334, 334)
+    NEXT_DIM = util.scaleResolution(537, 303)
+    PREV_DIM = util.scaleResolution(462, 259)
+    ONDECK_DIM = util.scaleResolution(329, 185)
+    RELATED_DIM = util.scaleResolution(268, 397)
+    ROLES_DIM = util.scaleResolution(334, 334)
 
     OPTIONS_GROUP_ID = 200
 
@@ -181,9 +181,6 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
                     if self.onDeckPaginator.boundaryHit:
                         self.onDeckPaginator.paginate()
                         return
-            else:
-                if not self.playBackStarted:
-                    return
         except:
             util.ERROR()
 
@@ -436,7 +433,9 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
         try:
             self.hubs = self.prev.postPlay()
         except:
-            util.ERROR()
+            util.ERROR("No data - disconnected?", notify=True, time_ms=5000)
+            self.doClose()
+            return
 
         self.next = None
 
@@ -581,13 +580,17 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
 
 
 def play(video=None, play_queue=None, resume=False):
-    w = VideoPlayerWindow.open(video=video, play_queue=play_queue, resume=resume)
-    player.PLAYER.off('session.ended', w.sessionEnded)
-    player.PLAYER.off('post.play', w.postPlay)
-    player.PLAYER.off('av.started', w.playerPlaybackStarted)
-    player.PLAYER.off('change.background', w.changeBackground)
-    player.PLAYER.reset()
-    command = w.exitCommand
-    del w
-    util.garbageCollect()
-    return command
+    try:
+        w = VideoPlayerWindow.open(video=video, play_queue=play_queue, resume=resume)
+    except util.NoDataException:
+        raise
+    finally:
+        player.PLAYER.off('session.ended', w.sessionEnded)
+        player.PLAYER.off('post.play', w.postPlay)
+        player.PLAYER.off('av.started', w.playerPlaybackStarted)
+        player.PLAYER.off('change.background', w.changeBackground)
+        player.PLAYER.reset()
+        command = w.exitCommand
+        del w
+        util.garbageCollect()
+        return command

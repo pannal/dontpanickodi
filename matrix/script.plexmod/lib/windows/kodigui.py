@@ -126,14 +126,18 @@ class BaseWindow(xbmcgui.WindowXML, BaseFunctions):
 
         self.setBoolProperty('use_bg_fallback', util.advancedSettings.useBgFallback)
 
-        if self.started:
-            self.onReInit()
-        else:
-            self.started = True
-            if LAST_BG_URL:
-                self.windowSetBackground(LAST_BG_URL)
-            self.onFirstInit()
-            self.finishedInit = True
+        try:
+            if self.started:
+                self.onReInit()
+            else:
+                self.started = True
+                if LAST_BG_URL:
+                    self.windowSetBackground(LAST_BG_URL)
+                self.onFirstInit()
+                self.finishedInit = True
+        except util.NoDataException:
+            self.exitCommand = "NODATA"
+            self.doClose()
 
     def onFirstInit(self):
         pass

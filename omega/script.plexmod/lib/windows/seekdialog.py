@@ -105,6 +105,7 @@ class SeekDialog(kodigui.BaseDialog):
     PREV_BUTTON_ID = 404
     SKIP_BACK_BUTTON_ID = 405
     PLAY_PAUSE_BUTTON_ID = 406
+    STOP_BUTTON_ID = 407
     SKIP_FORWARD_BUTTON_ID = 408
     NEXT_BUTTON_ID = 409
     PLAYLIST_BUTTON_ID = 410
@@ -397,9 +398,7 @@ class SeekDialog(kodigui.BaseDialog):
         self.setProperty('has.chapters', self.showChapters and '1' or '')
         self.setProperty('show.buffer', (util.advancedSettings.playerShowBuffer and self.isDirectPlay) and '1' or '')
 
-        if self.timeKeeper:
-            self.timeKeeper.cancel()
-            self.timeKeeper = None
+        self.killTimeKeeper()
 
         navPlaylist = util.getSetting('video_show_playlist', 'eponly')
         self.setBoolProperty('nav.playlist', (navPlaylist == "eponly" and self.player.video.type == 'episode') or
@@ -417,7 +416,11 @@ class SeekDialog(kodigui.BaseDialog):
 
         # in transcoded scenarios, when seeking, keep previous marker states, as the video restarts
         if not keepMarkerDef:
-            self.applyMarkerProps()
+            try:
+                self.applyMarkerProps()
+            except IndexError:
+                self.doClose(delete=True)
+                raise util.NoDataException
         self.baseOffset = offset
         self.offset = 0
         self.idleTime = None
@@ -427,6 +430,7 @@ class SeekDialog(kodigui.BaseDialog):
         if self._videoBelowOneHour:
             self.timeFmtKodi = self.timeFmtKodi.replace("hh:", "")
         self._ignoreTick = False
+        self._ignoreInput = False
         if not self.showChapters:
             self.bifURL = bif_url
             self.hasBif = bool(self.bifURL)
@@ -629,10 +633,12 @@ class SeekDialog(kodigui.BaseDialog):
                 elif action == xbmcgui.ACTION_NEXT_ITEM:
                     self.handler.ignoreTimelines = True
                     self._ignoreTick = True
+                    self.killTimeKeeper()
                     self.handler.next()
                 elif action == xbmcgui.ACTION_PREV_ITEM:
                     self.handler.ignoreTimelines = True
                     self._ignoreTick = True
+                    self.killTimeKeeper()
                     self.handler.prev()
 
                 if action in cancelActions + (xbmcgui.ACTION_SELECT_ITEM,):
@@ -764,6 +770,8 @@ class SeekDialog(kodigui.BaseDialog):
                 and self.player.playState == self.player.STATE_PLAYING \
                 and self.osdVisible():
             self.hideOSD()
+        elif controlID == self.STOP_BUTTON_ID:
+            self.stop()
         elif controlID == self.SETTINGS_BUTTON_ID:
             self.handleDialog(self.showSettings)
         elif controlID == self.REPEAT_BUTTON_ID:
@@ -780,6 +788,7 @@ class SeekDialog(kodigui.BaseDialog):
                 self.handler.queuingNext = True
                 self._ignoreTick = True
                 self._ignoreInput = True
+                self.killTimeKeeper()
                 next(self.handler)
             return
         elif controlID == self.PLAYLIST_BUTTON_ID:
@@ -815,9 +824,7 @@ class SeekDialog(kodigui.BaseDialog):
                     self.playlistDialog = None
                     util.garbageCollect()
 
-            if self.timeKeeper:
-                self.timeKeeper.cancel()
-                self.timeKeeper = None
+            self.killTimeKeeper()
         finally:
             kodigui.BaseDialog.doClose(self)
 
@@ -1158,7 +1165,7 @@ class SeekDialog(kodigui.BaseDialog):
             self.cycleSubtitles(forward=False)
             self.lastSubtitleNavAction = "backward"
         elif choice['key'] == 'enable':
-            self.toggleSubtitles()
+            enabled = self.toggleSubtitles()
             self.lastSubtitleNavAction = "forward"
 
     def toggleSubtitles(self):
@@ -1167,8 +1174,10 @@ class SeekDialog(kodigui.BaseDialog):
         """
         if xbmc.getCondVisibility('VideoPlayer.SubtitlesEnabled') and self.player.video.hasSubtitle:
             self.disableSubtitles()
+            return False
         else:
             self.cycleSubtitles()
+            return True
 
     def disableSubtitles(self):
         self.player.video.disableSubtitles()
@@ -1699,8 +1708,11 @@ class SeekDialog(kodigui.BaseDialog):
                     self.player.pause()
                 return True
 
-    def onPlaybackResumed(self):
+    def onPlayBackResumed(self):
         util.DEBUG_LOG("SeekDialog: OnPlaybackResumed")
+        if self._ignoreInput:
+            self._ignoreInput = False
+
         self.idleTime = None
         self.ldTimer and self.syncTimeKeeper()
 
@@ -1715,34 +1727,66 @@ class SeekDialog(kodigui.BaseDialog):
             self.tick(waitForBuffer=True)
             return
 
-    def onPlaybackStarted(self):
+    def onAVStarted(self):
+        util.DEBUG_LOG("SeekDialog: OnAVStarted")
+        if self._ignoreInput:
+            self._ignoreInput = False
+
+        self.ldTimer and self.syncTimeKeeper()
+
+    def onPlayBackStarted(self):
         util.DEBUG_LOG("SeekDialog: OnPlaybackStarted")
         if self._ignoreInput:
             self._ignoreInput = False
+
         self.ldTimer and self.syncTimeKeeper()
 
-    def onPlaybackPaused(self):
+    def onPlayBackPaused(self):
         util.DEBUG_LOG("SeekDialog: OnPlaybackPaused")
         self.idleTime = time.time()
 
-    def onPlaybackSeek(self, stime, offset):
+    def onPlayBackSeek(self, stime, offset):
         util.DEBUG_LOG("SeekDialog: OnPlaybackSeek")
         self.idleTime = None
         self.ldTimer and self.syncTimeKeeper()
 
+    def onPlayBackStopped(self):
+        util.DEBUG_LOG("SeekDialog: OnPlayBackStopped")
+        self.killTimeKeeper()
+
+    def onPlayBackEnded(self):
+        util.DEBUG_LOG("SeekDialog: OnPlayBackEnded")
+        self.killTimeKeeper()
+
+    def onPlayBackFailed(self):
+        util.DEBUG_LOG("SeekDialog: OnPlayBackFailed")
+        self.killTimeKeeper()
+
     def syncTimeKeeper(self):
+        if not not self.handler.player.playerObject:
+            return
+
         self.timeKeeperTime = self.trueOffset()#int(self.handler.player.getTime() * 1000)
         if not self.timeKeeper:
             self.timeKeeper = plexapp.util.RepeatingCounterTimer(1.0, self.onTimeKeeperCallback)
         self.onTimeKeeperCallback(tick=False)
         self.timeKeeper.reset()
 
+    def killTimeKeeper(self):
+        if self.timeKeeper:
+            try:
+                self.timeKeeper.cancel()
+                self.timeKeeper.join()
+                self.timeKeeper = None
+            except:
+                util.ERROR("Couldn't stop timeKeeper")
+
     def onTimeKeeperCallback(self, tick=True):
         """
         called by playbackTimer periodically, sets playback time/ends in UI
         """
         # we might be a little early on slower systems
-        if not self.started:
+        if not self.started or not self.handler.player.playerObject:
             return
 
         if self.stopPlaybackOnIdle:
@@ -1754,7 +1798,7 @@ class SeekDialog(kodigui.BaseDialog):
             if not self.idleTime and xbmc.getCondVisibility('Player.Paused'):
                 self.idleTime = time.time()
 
-        if tick and xbmc.getCondVisibility('Player.Playing'):
+        if tick and xbmc.getCondVisibility('Player.HasVideo + Player.Playing'):
             self.timeKeeperTime += 1000
 
         # Update buffer state in PPI if open and old Kodi version
@@ -1859,10 +1903,8 @@ class SeekDialog(kodigui.BaseDialog):
                         self.handler.queuingNext = True
                         self._ignoreTick = True
                         self._ignoreInput = True
-                        if self.player.playState == self.player.STATE_PLAYING:
-                            self.player.pause()
-                        xbmc.sleep(500)
-                        next(self.handler)
+                        self.killTimeKeeper()
+                        self.player.stop()
                     return True
                 else:
                     util.DEBUG_LOG("MarkerAutoSkip: Skipping final marker, stopping")

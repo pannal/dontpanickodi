@@ -174,6 +174,7 @@ class SeekPlayerHandler(BasePlayerHandler):
         self.stoppedInBingeMode = False
         self.inBingeMode = False
         self.prePlayWitnessed = False
+        self.queuingNext = False
         self.reset()
 
     def reset(self):
@@ -186,6 +187,7 @@ class SeekPlayerHandler(BasePlayerHandler):
         self.ended = False
         self.stoppedInBingeMode = False
         self.prePlayWitnessed = False
+        self.queuingNext = False
 
     def setup(self, duration, meta, offset, bif_url, title='', title2='', seeking=NO_SEEK, chapters=None):
         self.ended = False
@@ -268,7 +270,7 @@ class SeekPlayerHandler(BasePlayerHandler):
             if self.showPostPlay():
                 return True
 
-        if not self.playlist:
+        if not self.playlist or self.stoppedInBingeMode:
             return False
 
         xbmc.sleep(500)
@@ -375,8 +377,11 @@ class SeekPlayerHandler(BasePlayerHandler):
     def onAVStarted(self):
         util.DEBUG_LOG('SeekHandler: onAVStarted')
 
+        if self.dialog:
+            self.dialog.onAVStarted()
+
         # check if embedded subtitle was set correctly
-        if self.isDirectPlay and self.player.video.current_subtitle_is_embedded:
+        if self.isDirectPlay and self.player.video and self.player.video.current_subtitle_is_embedded:
             try:
                 playerID = kodijsonrpc.rpc.Player.GetActivePlayers()[0]["playerid"]
                 currIdx = kodijsonrpc.rpc.Player.GetProperties(playerid=playerID, properties=['currentsubtitle'])[
@@ -401,7 +406,7 @@ class SeekPlayerHandler(BasePlayerHandler):
         self.updateNowPlaying(force=True, refreshQueue=True)
 
         if self.dialog:
-            self.dialog.onPlaybackStarted()
+            self.dialog.onPlayBackStarted()
 
         #if not self.prePlayWitnessed and self.isDirectPlay:
         if self.isDirectPlay:
@@ -410,13 +415,20 @@ class SeekPlayerHandler(BasePlayerHandler):
     def onPlayBackResumed(self):
         self.updateNowPlaying()
         if self.dialog:
-            self.dialog.onPlaybackResumed()
+            self.dialog.onPlayBackResumed()
 
             util.CRON.forceTick()
         # self.hideOSD()
 
     def onPlayBackStopped(self):
         util.DEBUG_LOG('SeekHandler: onPlayBackStopped - Seeking={0}'.format(self.seeking))
+
+        if self.dialog:
+            self.dialog.onPlayBackStopped()
+
+        if self.queuingNext and self.inBingeMode:
+            if self.next(on_end=False):
+                return
 
         if self.seeking not in (self.SEEK_IN_PROGRESS, self.SEEK_REWIND):
             self.updateNowPlaying()
@@ -434,6 +446,9 @@ class SeekPlayerHandler(BasePlayerHandler):
 
     def onPlayBackEnded(self):
         util.DEBUG_LOG('SeekHandler: onPlayBackEnded - Seeking={0}'.format(self.seeking))
+
+        if self.dialog:
+            self.dialog.onPlayBackEnded()
 
         if self.player.playerObject.hasMoreParts():
             self.updateNowPlaying(state=self.player.STATE_PAUSED)  # To for update after seek
@@ -467,11 +482,11 @@ class SeekPlayerHandler(BasePlayerHandler):
     def onPlayBackPaused(self):
         self.updateNowPlaying()
         if self.dialog:
-            self.dialog.onPlaybackPaused()
+            self.dialog.onPlayBackPaused()
 
     def onPlayBackSeek(self, stime, offset):
         if self.dialog:
-            self.dialog.onPlaybackSeek(stime, offset)
+            self.dialog.onPlayBackSeek(stime, offset)
 
         if self.seekOnStart:
             seeked = False
@@ -487,6 +502,10 @@ class SeekPlayerHandler(BasePlayerHandler):
         # self.showOSD(from_seek=True)
 
     def setSubtitles(self, do_sleep=True, honor_forced_subtitles_override=True):
+        if not self.player.video:
+            util.LOG("Warning: SetSubtitles: no player.video object available")
+            return
+
         subs = self.player.video.selectedSubtitleStream(
             forced_subtitles_override=honor_forced_subtitles_override and util.getSetting("forced_subtitles_override",
                                                                                           False))
@@ -556,6 +575,9 @@ class SeekPlayerHandler(BasePlayerHandler):
     def onPlayBackFailed(self):
         if self.ended:
             return False
+
+        if self.dialog:
+            self.dialog.onPlayBackFailed()
 
         util.DEBUG_LOG('SeekHandler: onPlayBackFailed - Seeking={0}'.format(self.seeking))
         if self.seeking not in (self.SEEK_IN_PROGRESS, self.SEEK_PLAYLIST):
@@ -872,6 +894,7 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
         self.playerObject = None
         self.currentTime = 0
         self.thread = None
+        self.ignoreStopEvents = False
         if xbmc.getCondVisibility('Player.HasMedia'):
             self.started = True
         self.resume = False
@@ -892,6 +915,7 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
         self.bgmPlaying = False
         self.playerObject = None
         self.pauseAfterPlaybackStarted = False
+        self.ignoreStopEvents = False
         #self.handler = AudioPlayerHandler(self)
         self.currentTime = 0
 
@@ -1034,7 +1058,9 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
         bifURL = self.playerObject.getBifUrl()
         util.DEBUG_LOG('Playing URL(+{1}ms): {0}{2}'.format(plexnetUtil.cleanToken(url), offset, bifURL and ' - indexed' or ''))
 
+        self.ignoreStopEvents = True
         self.stopAndWait()  # Stop before setting up the handler to prevent player events from causing havoc
+        self.ignoreStopEvents = False
 
         self.handler.setup(self.video.duration.asInt(), meta, offset, bifURL, title=self.video.grandparentTitle,
                            title2=self.video.title, seeking=seeking, chapters=self.video.chapters)
@@ -1082,9 +1108,9 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
             'title': self.video.title,
             'originaltitle': self.video.title,
             'tvshowtitle': self.video.grandparentTitle,
-            'episode': self.video.index.asInt(),
-            'season': self.video.parentIndex.asInt(),
-            'year': self.video.year.asInt(),
+            'episode': vtype == "episode" and self.video.index.asInt() or '',
+            'season': vtype == "episode" and self.video.parentIndex.asInt() or '',
+            #'year': self.video.year.asInt(),
             'plot': self.video.summary,
             'path': meta.path,
             'size': meta.size,
@@ -1255,19 +1281,25 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
         self.handler.onPlayBackResumed()
 
     def onPlayBackStopped(self):
+        util.DEBUG_LOG('Player - STOPPED' + (not self.started and ': FAILED' or ''))
+        if self.ignoreStopEvents:
+            return
+
         if not self.started:
             self.onPlayBackFailed()
 
-        util.DEBUG_LOG('Player - STOPPED' + (not self.started and ': FAILED' or ''))
         if not self.handler:
             return
         self.handler.onPlayBackStopped()
 
     def onPlayBackEnded(self):
+        util.DEBUG_LOG('Player - ENDED' + (not self.started and ': FAILED' or ''))
+        if self.ignoreStopEvents:
+            return
+
         if not self.started:
             self.onPlayBackFailed()
 
-        util.DEBUG_LOG('Player - ENDED' + (not self.started and ': FAILED' or ''))
         if not self.handler:
             return
         self.handler.onPlayBackEnded()

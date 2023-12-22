@@ -30,6 +30,8 @@ class UtilMixin():
         if command and command.startswith('HOME'):
             self.exitCommand = command
             self.doClose()
+        elif command and command == "NODATA":
+            raise util.NoDataException
 
     def closeWithCommand(self, command):
         self.exitCommand = command

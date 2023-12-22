@@ -79,7 +79,10 @@ class PhotoWindow(kodigui.BaseWindow):
 
         self.pqueueList = kodigui.ManagedControlList(self, self.PQUEUE_LIST_ID, 14)
         #self.setProperty('photo', 'script.plex/indicators/busy-photo.gif')
-        self.getPlayQueue()
+        try:
+            self.getPlayQueue()
+        except AttributeError:
+            raise util.NoDataException
         self.start()
         self.osdTimer = kodigui.PropertyTimer(self._winID, 4, 'OSD', '', init_value=False, callback=self.osdTimerCallback)
         self.imageControl = self.getControl(600)

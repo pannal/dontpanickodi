@@ -1,9 +1,23 @@
-[- 0.7.1-rev4 -]
+[- 0.7.2 -]
+- Fix: playing next episode when episode played threshold was met when hitting STOP button
+- Fix: Dropdown would roundrobin falsely onup item when initial item wasn't item 0
 - Fix: Movies: pressing back in a scrolled movie view with the header options open wouldn't back out properly
-- Fix: reset library filters when Role/Cast view opened
+- Fix: Reset library filters when Role/Cast view opened
 - Fix: Cast display in movies/preplay
-- Fix: apply dialog flicker fix in Role/Cast
-- Fix: dropdowns were broken sometimes (especially library view)
+- Fix: Apply dialog flicker fix in Role/Cast
+- Fix: Dropdowns were broken sometimes (especially library view)
+- Fix: Addon crash on non-default Kodi (e.g. OSMC) due to System.BuildVersion not matching Kodi's default
+- Fix: Error on no data returned on PlexObject.reload (disconnect); Handle connection errors more gracefully
+- Fix: Background of info page (thanks @bowlingbeeg)
+- Fix: Rare SeekDialog crashes between episodes
+- Fix: OpenSubtitles not finding subtitles for certain Movies
+
+- Core: Harden against network disconnects in multiple views, home and videoplayer/seekdialog
+- Core: Re-enable backing out of videoplayer (inbetween screen)
+- Core: Player: Alternative implementation of bingeMode auto-next; ignore stop events when triggering non-user-stop
+- Core: Add setting for poster/thumbnail resolution scaling, implement in home
+- Core: Thumbnails/Art: use the same parameters as PlexWeb for images
+- SeekDialog: Possible fix for OSD not coming up again in some scenarios
 
 
 [- 0.7.1 -]

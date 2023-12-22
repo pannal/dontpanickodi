@@ -21,6 +21,7 @@ from kodi_six import xbmcaddon
 from kodi_six import xbmcvfs
 
 from . import colors
+from .exceptions import NoDataException
 from plexnet import signalsmixin, plexapp
 
 DEBUG = True
@@ -30,14 +31,27 @@ ADDON = xbmcaddon.Addon()
 
 SETTINGS_LOCK = threading.Lock()
 
-# buildversion looks like: XX.X[-TAG] (a+.b+.c+) (.+)
-_ver, _build = xbmc.getInfoLabel('System.BuildVersion').split()[:2]
+_build = None
+# buildversion looks like: XX.X[-TAG] (a+.b+.c+) (.+); there are kodi builds that don't set the build version
+sys_ver = xbmc.getInfoLabel('System.BuildVersion')
+_ver = sys_ver
+if ' ' in sys_ver and '(' in sys_ver:
+    _ver, _build = sys_ver.split()[:2]
+
 _splitver = _ver.split(".")
-KODI_VERSION_MAJOR, KODI_VERSION_MINOR = int(_splitver[0].split("-")[0]), int(_splitver[1].split("-")[0])
+KODI_VERSION_MAJOR, KODI_VERSION_MINOR = int(_splitver[0].split("-")[0].strip()), \
+                                         int(_splitver[1].split("-")[0].strip())
+
+_bmajor, _bminor, _bpatch = (KODI_VERSION_MAJOR, KODI_VERSION_MINOR, 0)
+if _build:
+    _bmajor, _bminor, _bpatch = _build[1:-1].split(".")
+else:
+    xbmc.log('script.plex: Couldn\'t determine build version, falling back to Kodi version', xbmc.LOGINFO)
 
 # calculate a comparable build number
-_bmajor, _bminor, _bpatch = _build[1:-1].split(".")
 KODI_BUILD_NUMBER = int("{0}{1:02d}{2:03d}".format(_bmajor, int(_bminor), int(_bpatch)))
+xbmc.log('script.plex: Kodi {0}.{1} (build {2})'.format(KODI_VERSION_MAJOR, KODI_VERSION_MINOR, KODI_BUILD_NUMBER),
+         xbmc.LOGINFO)
 
 
 if KODI_VERSION_MAJOR > 18:
@@ -156,6 +170,7 @@ class AdvancedSettings(object):
         ("dbg_crossfade", True),
         ("subtitle_use_extended_title", True),
         ("dialog_flicker_fix", True),
+        ("poster_resolution_scale", 1.0),
     )
 
     def __init__(self):
@@ -183,7 +198,7 @@ def DEBUG_LOG(msg):
     LOG(msg)
 
 
-def ERROR(txt='', hide_tb=False, notify=False):
+def ERROR(txt='', hide_tb=False, notify=False, time_ms=3000):
     short = str(sys.exc_info()[1])
     if hide_tb:
         xbmc.log('script.plex: ERROR: {0} - {1}'.format(txt, short), xbmc.LOGERROR)
@@ -198,7 +213,7 @@ def ERROR(txt='', hide_tb=False, notify=False):
     xbmc.log("_________________________________________________________________________________", xbmc.LOGERROR)
     xbmc.log("`", xbmc.LOGERROR)
     if notify:
-        showNotification('ERROR: {0}'.format(short))
+        showNotification('ERROR: {0}'.format(txt or short), time_ms=time_ms)
     return short
 
 
@@ -610,6 +625,15 @@ def shortenText(text, size):
         return text
 
     return u'{0}\u2026'.format(text[:size - 1])
+
+
+def scaleResolution(w, h, by=advancedSettings.posterResolutionScale):
+    if 0 < by != 1.0:
+        px = w * h * by
+        wratio = h / float(w)
+        hratio = w / float(h)
+        return int(round((px / wratio) ** .5)), int(round((px / hratio) ** .5))
+    return w, h
 
 
 class TextBox:
