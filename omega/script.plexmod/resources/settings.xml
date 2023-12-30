@@ -23,15 +23,15 @@
                     <default>true</default>
                     <control type="toggle"/>
                 </setting>
-                <setting id="poster_resolution_scale" type="number" label="32956" help="32957">
+                <setting id="poster_resolution_scale_perc" type="integer" label="32956" help="32957">
                     <level>0</level>
-                    <default>1.0</default>
+                    <default>100</default>
                     <constraints>
-                        <minimum>1.0</minimum>
-                        <step>0.5</step>
-                        <maximum>5.0</maximum>
+                        <minimum>25</minimum>
+                        <step>25</step>
+                        <maximum>750</maximum>
                     </constraints>
-                    <control type="slider" format="number">
+                    <control type="slider" format="integer">
                         <popup>false</popup>
                     </control>
                 </setting>

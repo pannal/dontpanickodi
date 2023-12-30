@@ -82,7 +82,7 @@
                 <scrolltime>0</scrolltime>
                 <usecontrolcoords>true</usecontrolcoords>
                 <control type="button" id="1001">
-                    <visible>!String.IsEmpty(Window.Property(button.0))</visible>
+                    <visible allowhiddenfocus="true">!String.IsEmpty(Window.Property(button.0))</visible>
                     <animation effect="zoom" start="100" end="110,120" time="100" center="auto" reversible="false">Focus</animation>
                     <animation effect="zoom" start="110,120" end="100" time="100" center="auto" reversible="false">UnFocus</animation>
                     <posx>0</posx>

@@ -561,9 +561,11 @@ class Hub(BaseHub):
         items = plexobjects.listItems(self.server, path)
         self.offset = plexobjects.PlexValue(start)
         self.size = plexobjects.PlexValue(len(items))
-        self.more = plexobjects.PlexValue(
-            (items[0].container.offset.asInt() + items[0].container.size.asInt() < items[0].container.totalSize.asInt()) and '1' or ''
-        )
+        self.more = plexobjects.PlexValue('')
+        if items:
+            self.more = plexobjects.PlexValue(
+                (items[0].container.offset.asInt() + items[0].container.size.asInt() < items[0].container.totalSize.asInt()) and '1' or ''
+            )
         return items
 
 

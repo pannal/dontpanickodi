@@ -339,6 +339,10 @@ class Settings(object):
                              '. This setting fixes that by ignoring the PMSs decision and selecting the same language '
                              'without a forced flag if possible.')
                 ),
+                BoolSetting('calculate_oshash', T(32958, 'Calculate OpenSubtitles.com hash'),
+                            False).description(
+                    T(32959, '')
+                ),
             )
         ),
         'player': (

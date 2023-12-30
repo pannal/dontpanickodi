@@ -61,9 +61,9 @@ class BuiltInMethod:
 
     def __getattr__(self, method):
         def handler(*args, **kwargs):
-            args = [str(a).replace(',', '\,') for a in args]
+            args = [str(a).replace(',', r'\,') for a in args]
             for k, v in kwargs.items():
-                args.append('{0}={v}'.format(k, str(v).replace(',', '\,')))
+                args.append('{0}={v}'.format(k, str(v).replace(',', r'\,')))
 
             if args:
                 command = '{0}.{1}({2})'.format(self.module, method, ','.join(args))
@@ -77,9 +77,9 @@ class BuiltInMethod:
         return handler
 
     def __call__(self, *args, **kwargs):
-        args = [str(a).replace(',', '\,') for a in args]
+        args = [str(a).replace(',', r'\,') for a in args]
         for k, v in kwargs.items():
-            args.append('{0}={v}'.format(k, str(v).replace(',', '\,')))
+            args.append('{0}={v}'.format(k, str(v).replace(',', r'\,')))
 
         if args:
             command = '{0}({1})'.format(self.module, ','.join(args))

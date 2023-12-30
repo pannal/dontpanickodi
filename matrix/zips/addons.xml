@@ -110,7 +110,7 @@
 
 <addon id="script.plexmod"
        name="Plex"
-       version="0.7.2"
+       version="0.7.3"
        provider-name="pannal">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
@@ -134,25 +134,20 @@
         <source>https://github.com/pannal/plex-for-kodi</source>
         <platform>all</platform>
         <news>
-- Fix: playing next episode when episode played threshold was met when hitting STOP button
-- Fix: Dropdown would roundrobin falsely onup item when initial item wasn't item 0
-- Fix: Movies: pressing back in a scrolled movie view with the header options open wouldn't back out properly
-- Fix: Reset library filters when Role/Cast view opened
-- Fix: Cast display in movies/preplay
-- Fix: Apply dialog flicker fix in Role/Cast
-- Fix: Dropdowns were broken sometimes (especially library view)
-- Fix: Addon crash on non-default Kodi (e.g. OSMC) due to System.BuildVersion not matching Kodi's default
-- Fix: Error on no data returned on PlexObject.reload (disconnect); Handle connection errors more gracefully
-- Fix: Background of info page (thanks @bowlingbeeg)
-- Fix: Rare SeekDialog crashes between episodes
-- Fix: OpenSubtitles not finding subtitles for certain Movies
-
-- Core: Harden against network disconnects in multiple views, home and videoplayer/seekdialog
-- Core: Re-enable backing out of videoplayer (inbetween screen)
-- Core: Player: Alternative implementation of bingeMode auto-next; ignore stop events when triggering non-user-stop
-- Core: Add setting for poster/thumbnail resolution scaling, implement in home
-- Core: Thumbnails/Art: use the same parameters as PlexWeb for images
-- SeekDialog: Possible fix for OSD not coming up again in some scenarios
+- Fix: very rare infinite playback loop with enabled embedded subtitles (thanks @florinvlaicu for reporting)
+- Fix: Partially fix issues when switching audio streams during Transcoded/DirectStream playback
+- Fix: Fix error in ExtendHubTask
+- Fix: Partially revert "Home: Increase section change timeout from 0.3s to 0.5s; re-jig section change handling to allow using ENTER/SELECT to immediately select a section below 0.5s wait time" due to instability
+- Fix: Fix a couple of SyntaxWarnings for invalid escape sequences
+- Fix: Unfocusable buttons throw focus errors occasionally on shutdown
+- Fix: Laggy UI after playback/5 minutes due to requesting certain hubs without limits applied. Drastically improving UI smoothness even for smaller hubs (below 1000 items)
+       This also fixes crash and shutdown issues and by proxy should enable everyone to use a poster resolution scale of at least 200%.
+- Fix: Depending on the situation, the home hubs update request could be sent multiple times while waiting for the first one to finish. (thanks @bowlingbeeg)
+- Subtitles: Supply OpenSubtitles.com hash if possible and enabled
+- Subtitles: Add setting to Audio/Subtitles to calculate the OpenSubtitles.com hash (default: off)
+- Core: Advanced Settings: make default resolution scale a percentage; limit to 750% max (based on Plex max poster size)
+- Core: Add more debug logging for player events
+- Core: Add more debug logging details for hub refresh events
         </news>
         <assets>
             <icon>icon.png</icon>

@@ -751,6 +751,7 @@
                         <posx>0</posx>
                         <posy>0</posy>
                         <control type="button" id="1001">
+                            <visible allowhiddenfocus="true">true</visible>
                             <animation effect="zoom" start="100" end="120" time="100" center="37,37" reversible="false">Focus</animation>
                             <animation effect="zoom" start="120" end="100" time="100" center="37,37" reversible="false">UnFocus</animation>
                             <hitrect x="0" y="0" w="75" h="75" />

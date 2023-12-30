@@ -1631,9 +1631,17 @@ msgid "Use Kodi keyboard for searching"
 msgstr ""
 
 msgctxt "#32956"
-msgid "Poster resolution scaling"
+msgid "Poster resolution scaling %"
 msgstr ""
 
 msgctxt "#32957"
-msgid "Scales the resolution of all posters/thumbnails for better image quality. May impact PMS/PM4K performance. Recommended: 2.5 (250 %) for good quality. Needs addon restart."
+msgid "In percent. Scales the resolution of all posters/thumbnails for better image quality. May impact PMS/PM4K performance, will increase the cache usage accordingly. Recommended: 200-300 % for for big screens if your hardware can handle it. Needs addon restart."
+msgstr ""
+
+msgctxt "#32958"
+msgid "Calculate OpenSubtitles.com hash"
+msgstr ""
+
+msgctxt "#32959"
+msgid "When opening the subtitle download feature, automatically calculate the OpenSubtitles.com hash for the given file. Can improve search results, downloads 2*64 KB of the video file to calculate the hash."
 msgstr ""

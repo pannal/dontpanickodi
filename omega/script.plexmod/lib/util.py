@@ -13,6 +13,8 @@ import contextlib
 import six.moves.urllib.request, six.moves.urllib.parse, six.moves.urllib.error
 import six
 import os
+import struct
+import requests
 
 from .kodijsonrpc import rpc
 from kodi_six import xbmc
@@ -21,7 +23,6 @@ from kodi_six import xbmcaddon
 from kodi_six import xbmcvfs
 
 from . import colors
-from .exceptions import NoDataException
 from plexnet import signalsmixin, plexapp
 
 DEBUG = True
@@ -170,7 +171,7 @@ class AdvancedSettings(object):
         ("dbg_crossfade", True),
         ("subtitle_use_extended_title", True),
         ("dialog_flicker_fix", True),
-        ("poster_resolution_scale", 1.0),
+        ("poster_resolution_scale_perc", 100),
     )
 
     def __init__(self):
@@ -579,7 +580,7 @@ def durationToShortText(seconds):
 def cleanLeadingZeros(text):
     if not text:
         return ''
-    return re.sub('(?<= )0(\d)', r'\1', text)
+    return re.sub(r'(?<= )0(\d)', r'\1', text)
 
 
 def removeDups(dlist):
@@ -627,9 +628,12 @@ def shortenText(text, size):
     return u'{0}\u2026'.format(text[:size - 1])
 
 
-def scaleResolution(w, h, by=advancedSettings.posterResolutionScale):
-    if 0 < by != 1.0:
-        px = w * h * by
+def scaleResolution(w, h, by=None):
+    if by is None:
+        by = advancedSettings.posterResolutionScalePerc
+
+    if 0 < by != 100.0:
+        px = w * h * (by / 100.0)
         wratio = h / float(w)
         hratio = w / float(h)
         return int(round((px / wratio) ** .5)), int(round((px / hratio) ** .5))
@@ -964,6 +968,33 @@ def addURLParams(url, params):
             url += '?'
         url += six.moves.urllib.parse.urlencode(params)
         return url
+
+
+OSS_CHUNK = 65536
+
+
+def getOpenSubtitlesHash(size, url):
+    long_long_format = "q"  # long long
+    byte_size = struct.calcsize(long_long_format)
+    hash_ = filesize = size
+    if filesize < OSS_CHUNK * 2:
+        return
+
+    buffer = b''
+    for _range in ((0, OSS_CHUNK), (filesize-OSS_CHUNK, filesize)):
+        try:
+            r = requests.get(url, headers={"range": "bytes={0}-{1}".format(*_range)}, stream=True)
+        except:
+            return ''
+        buffer += r.raw.read(OSS_CHUNK)
+
+    for x in range(int(OSS_CHUNK / byte_size) * 2):
+        size = x * byte_size
+        (l_value,) = struct.unpack(long_long_format, buffer[size:size + byte_size])
+        hash_ += l_value
+        hash_ = hash_ & 0xFFFFFFFFFFFFFFFF
+
+    return format(hash_, "016x")
 
 
 def garbageCollect():

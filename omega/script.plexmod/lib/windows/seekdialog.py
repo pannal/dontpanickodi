@@ -258,27 +258,11 @@ class SeekDialog(kodigui.BaseDialog):
         self.resetAutoSeekTimer(None)
         self.resetSkipSteps()
 
-    def applyMarkerProps(self):
+    def resetMarkerStates(self):
         self.setProperty('show.markerSkip', '')
         self.setProperty('show.markerSkip_OSDOnly', '')
         self.setProperty('marker.autoSkip', '')
         self.setProperty('skipMarkerName', '')
-
-        if self.player.video.type == 'episode':
-            pbs = self.player.video.playbackSettings
-            util.DEBUG_LOG("Playback settings for {}: {}".format(self.player.video.ratingKey, pbs))
-
-            self.bingeMode = pbs.binge_mode
-            self.handler.inBingeMode = self.bingeMode
-
-            # don't auto skip intro when on binge mode on the first episode of a season
-            firstEp = self.player.video.index == '1'
-
-            if self.isDirectPlay or util.getUserSetting('auto_skip_in_transcode', True):
-                self.autoSkipIntro = (self.bingeMode and not firstEp) or pbs.auto_skip_intro
-                self.autoSkipCredits = self.bingeMode or pbs.auto_skip_credits
-
-            self.showIntroSkipEarly = self.bingeMode or pbs.show_intro_skip_early
 
         self._introSkipShownStarted = None
         self._introAutoSkipped = False
@@ -287,9 +271,15 @@ class SeekDialog(kodigui.BaseDialog):
         self._creditsAutoSkipped = False
         self.markers = None
 
+    @property
+    def DPPlayerOffset(self):
+        if self.isDirectPlay and self.handler.player and self.handler.player.playerObject:
+            return self.handler.player.playerObject.startOffset * 1000
+        return 0
+
     def trueOffset(self):
         if self.isDirectPlay:
-            return (self.handler.player.playerObject.startOffset * 1000) + self.offset
+            return self.DPPlayerOffset + self.offset
         else:
             return self.baseOffset + self.offset
 
@@ -414,13 +404,29 @@ class SeekDialog(kodigui.BaseDialog):
         if not self.getProperty('nav.prevnext'):
             self.subtitleButtonLeft += self.NAVBAR_BTN_SIZE
 
-        # in transcoded scenarios, when seeking, keep previous marker states, as the video restarts
-        if not keepMarkerDef:
-            try:
-                self.applyMarkerProps()
-            except IndexError:
-                self.doClose(delete=True)
-                raise util.NoDataException
+        try:
+            if self.player.video.type == 'episode':
+                pbs = self.player.video.playbackSettings
+                util.DEBUG_LOG("Playback settings for {}: {}".format(self.player.video.ratingKey, pbs))
+
+                self.bingeMode = pbs.binge_mode
+                self.handler.inBingeMode = self.bingeMode
+
+                # don't auto skip intro when on binge mode on the first episode of a season
+                firstEp = self.player.video.index == '1'
+
+                if self.isDirectPlay or util.getUserSetting('auto_skip_in_transcode', True):
+                    self.autoSkipIntro = (self.bingeMode and not firstEp) or pbs.auto_skip_intro
+                    self.autoSkipCredits = self.bingeMode or pbs.auto_skip_credits
+
+                self.showIntroSkipEarly = self.bingeMode or pbs.show_intro_skip_early
+
+            # in transcoded scenarios, when seeking, keep previous marker states, as the video restarts
+            if not keepMarkerDef:
+                self.resetMarkerStates()
+        except IndexError:
+            self.doClose(delete=True)
+            raise util.NoDataException
         self.baseOffset = offset
         self.offset = 0
         self.idleTime = None
@@ -1152,6 +1158,15 @@ class SeekDialog(kodigui.BaseDialog):
 
         if choice['key'] == 'download':
             self.hideOSD()
+            if self.handler and self.handler.player and self.handler.player.playerObject \
+                    and util.getSetting('calculate_oshash', False):
+                meta = self.handler.player.playerObject.metadata
+                oss_hash = util.getOpenSubtitlesHash(meta.size, meta.streamUrls[0])
+                if oss_hash:
+                    util.DEBUG_LOG("OpenSubtitles hash: %s" % oss_hash)
+                    util.setGlobalProperty("current_oshash", oss_hash, base='videoinfo.{0}')
+            else:
+                util.setGlobalProperty("current_oshash", '', base='videoinfo.{0}')
             self.lastSubtitleNavAction = "download"
             builtin.ActivateWindow('SubtitleSearch')
         elif choice['key'] == 'delay':
@@ -1197,7 +1212,9 @@ class SeekDialog(kodigui.BaseDialog):
             # this is an embedded stream, seek back a second after setting the subtitle due to long standing kodi
             # issue: https://github.com/xbmc/xbmc/issues/21086
             util.DEBUG_LOG("Switching embedded subtitle stream, seeking due to Kodi issue #21086")
-            self.doSeek(self.trueOffset() - 100)
+
+            # true offset can be 0, which might lead to an infinite loop, seek to 100ms at least.
+            self.doSeek(max(self.trueOffset() - 100, 100))
 
     def showSettings(self):
         with self.propertyContext('settings.visible'):
@@ -1717,7 +1734,7 @@ class SeekDialog(kodigui.BaseDialog):
         self.ldTimer and self.syncTimeKeeper()
 
     def onAVChange(self):
-        util.DEBUG_LOG("SeekDialog: onAVChange")
+        util.DEBUG_LOG("SeekDialog: OnAVChange: DPO: {0}, offset: {1}".format(self.DPPlayerOffset, self.offset))
 
         # wait for buffer if we're not expecting a seek
         if not self.handler.seekOnStart and util.getSetting("slow_connection", False) and not self.waitingForBuffer:
@@ -1728,7 +1745,7 @@ class SeekDialog(kodigui.BaseDialog):
             return
 
     def onAVStarted(self):
-        util.DEBUG_LOG("SeekDialog: OnAVStarted")
+        util.DEBUG_LOG("SeekDialog: OnAVStarted: DPO: {0}, offset: {1}".format(self.DPPlayerOffset, self.offset))
         if self._ignoreInput:
             self._ignoreInput = False
 
@@ -1746,7 +1763,7 @@ class SeekDialog(kodigui.BaseDialog):
         self.idleTime = time.time()
 
     def onPlayBackSeek(self, stime, offset):
-        util.DEBUG_LOG("SeekDialog: OnPlaybackSeek")
+        util.DEBUG_LOG("SeekDialog: OnPlaybackSeek: {0}, {1}".format(stime, offset))
         self.idleTime = None
         self.ldTimer and self.syncTimeKeeper()
 
@@ -2016,6 +2033,8 @@ class SeekDialog(kodigui.BaseDialog):
         if offset or (self.autoSeekTimeout and time.time() >= self.autoSeekTimeout and
                       self.offset != self.selectedOffset):
             self.resetAutoSeekTimer(None)
+            #off = offset is not None and offset or None
+            #self.doSeek(off)
             self.doSeek()
             return True
 

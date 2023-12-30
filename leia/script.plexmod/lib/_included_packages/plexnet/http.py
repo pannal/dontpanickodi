@@ -193,7 +193,7 @@ class HttpRequest(object):
 
     def getRelativeUrl(self):
         url = self.getUrl()
-        m = re.match('^\w+:\/\/.+?(\/.+)', url)
+        m = re.match(r'^\w+://.+?(/.+)', url)
         if m:
             return m.group(1)
         return url
