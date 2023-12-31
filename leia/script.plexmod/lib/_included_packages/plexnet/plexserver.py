@@ -189,14 +189,14 @@ class PlexServer(plexresource.PlexResource, signalsmixin.SignalsMixin):
     def query(self, path, method=None, **kwargs):
         method = method or self.session.get
 
+        limit = kwargs.pop("limit", None)
         params = kwargs.pop("params", None)
         if params:
+            if limit is None:
+                limit = params.get("limit", None)
             path += util.joinArgs(params, '?' not in path)
 
         offset = kwargs.pop("offset", None)
-        # limit can be a kwarg as well as in params["count"] or params["limit"]
-        # fixme: this should be unified.
-        limit = kwargs.pop("limit", params.get("limit", params.get("count", None)) if params else None)
         if kwargs:
             path += util.joinArgs(kwargs, '?' not in path)
             kwargs.clear()

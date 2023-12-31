@@ -1,4 +1,5 @@
-[- 0.7.3 -]
+[- 0.7.3-rev2 -]
+- Fix: certain home hubs were limited to 10 items without pagination
 - Fix: very rare infinite playback loop with enabled embedded subtitles (thanks @florinvlaicu for reporting)
 - Fix: Partially fix issues when switching audio streams during Transcoded/DirectStream playback
 - Fix: Fix error in ExtendHubTask
