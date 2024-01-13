@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="skin.plextuary" version="3.0.10-pm4k0.3" name="Plextuary" provider-name="phil65, pannal, Ichabod Fletchman">
+<addon id="skin.plextuary" version="3.0.10-pm4k0.4" name="Plextuary" provider-name="phil65, pannal, Ichabod Fletchman">
 	<requires>
 		<import addon="xbmc.gui" version="5.17.0"/>
 	</requires>
