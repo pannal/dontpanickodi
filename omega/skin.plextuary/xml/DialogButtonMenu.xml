@@ -54,6 +54,10 @@
 						<visible>System.CanReboot</visible>
 					</item>
 					<item>
+						<label>Restart Kodi</label>
+						<onclick>RestartApp()</onclick>
+					</item>
+					<item>
 						<label>Reboot from eMMC/NAND</label>
 						<onclick>System.ExecWait("/usr/sbin/rebootfromnand")</onclick>
 						<onclick>Reset()</onclick>

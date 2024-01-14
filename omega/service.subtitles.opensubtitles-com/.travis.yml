@@ -1,0 +1,25 @@
+language: python
+python: "3.6"
+install: echo "Install test dependencies"
+script: echo "Run tests"
+before_deploy:
+  - pip install git+https://github.com/romanvm/kodi-addon-submitter.git
+  - submit-addon -z service.subtitles.opensubtitles-com # Create an installable ZIP
+  - export RELEASE_ZIP=$(ls *.zip)
+deploy:
+  # Publish an installable ZIP to GitHub Releases
+  - provider: releases
+    api_key: $GH_TOKEN
+    file_glob: true
+    file: $RELEASE_ZIP
+    skip_cleanup: true
+    on:
+      tags: true
+  # Submit to the official Kodi repo
+  - provider: script
+   # script: submit-addon -r repo-plugins -b leia --pull-request service.subtitles.opensubtitles-com
+    script: submit-addon -r repo-plugins -b leia  service.subtitles.opensubtitles-com
+    on:
+      tags: true
+notifications:
+  email: false
