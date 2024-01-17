@@ -161,10 +161,9 @@ def extract_episode_data():
     :raises ParseError: if cannot determine episode data
     """
     now_played = get_now_played()
-    showname = now_played['showtitle'] or xbmc.getInfoLabel("VideoPlayer.TVshowtitle")
     parsed = urlparse.urlparse(now_played['file'])
     filename = os.path.basename(parsed.path)
-    if addon.getSetting('use_filename') == 'true' or not showname:
+    if addon.getSetting('use_filename') == 'true' or not now_played['showtitle']:
         # Try to get showname/season/episode data from
         # the filename if 'use_filename' setting is true
         # or if the video-file does not have library metadata.
@@ -190,10 +189,8 @@ def extract_episode_data():
         # Get get showname/season/episode data from
         # Kodi if the video-file is being played from
         # the TV-Shows library.
-        season = str(now_played['season'] and now_played['season'] > -1 or
-                     xbmc.getInfoLabel("VideoPlayer.Season")).zfill(2)
-        episode = str(now_played['episode'] and now_played['episode'] > -1 or
-                      xbmc.getInfoLabel("VideoPlayer.Episode")).zfill(2)
+        season = str(now_played['season']).zfill(2)
+        episode = str(now_played['episode']).zfill(2)
         if not os.path.splitext(filename)[1].lower() in VIDEOFILES:
             filename = '{0}.{1}x{2}.foo'.format(
                 showname, season, episode
@@ -213,7 +210,7 @@ def search_subs(params):
     if params['action'] == 'search':
         try:
             episode_data = extract_episode_data()
-        except ParseError:
+        except (ParseError, ValueError, TypeError):
             return
         # Create a search query string
         query = '{0} {1}x{2}'.format(

@@ -64,16 +64,11 @@ def get_now_played():
     :return: currently played item's data
     :rtype: dict
     """
-    request = json.dumps({
-        'jsonrpc': '2.0',
-        'method': 'Player.GetItem',
-        'params': {
-            'playerid': 1,
-            'properties': ['showtitle', 'season', 'episode']
-         },
-        'id': '1'
-    })
-    item = json.loads(xbmc.executeJSONRPC(request))['result']['item']
+    item = {
+        'season': int(xbmc.getInfoLabel('VideoPlayer.Season')),
+        'episode': int(xbmc.getInfoLabel('VideoPlayer.Episode')),
+        'showtitle': xbmc.getInfoLabel('VideoPlayer.TVShowTitle'),
+    }
     path = xbmc.getInfoLabel('Window(10000).Property(videoinfo.current_path)')
     if path:
         item['file'] = os.path.basename(path)

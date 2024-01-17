@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon id="service.subtitles.rvm.addic7ed"
   name="Addic7ed.com"
-  version="3.1.9-pm4k0.2"
+  version="3.1.9-pm4k0.3"
   provider-name="Roman V.M., pannal">
 <requires>
   <import addon="xbmc.python" version="3.0.0"/>
