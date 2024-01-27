@@ -56,6 +56,7 @@
 					<item>
 						<label>Restart Kodi</label>
 						<onclick>RestartApp()</onclick>
+						<visible>Skin.HasSetting(showkodirestart)</visible>
 					</item>
 					<item>
 						<label>Reboot from eMMC/NAND</label>
