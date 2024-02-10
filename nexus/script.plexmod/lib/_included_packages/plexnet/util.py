@@ -1,6 +1,9 @@
 # coding=utf-8
 
 from __future__ import absolute_import
+
+from copy import deepcopy
+
 from . import simpleobjects
 import re
 import sys
@@ -154,6 +157,24 @@ def hideToken(token):
 
 def cleanToken(url):
     return re.sub(r'X-Plex-Token=[^&]+', 'X-Plex-Token=****', url)
+
+
+def cleanObjTokens(dorig, flistkeys=("streamUrls",), fstrkeys=("url", "token")):
+    d = deepcopy(dorig)
+
+    # filter lists
+    for k in flistkeys:
+        if k not in d:
+            continue
+        d[k] = list(map(lambda x: cleanToken(x), d[k][:]))
+
+    # filter strings
+    for k in fstrkeys:
+        if k not in d:
+            continue
+        d[k] = "****" if k == "token" else cleanToken(d[k])
+
+    return d
 
 
 def now(local=False):
