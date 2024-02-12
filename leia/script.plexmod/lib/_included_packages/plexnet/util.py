@@ -2,7 +2,7 @@
 
 from __future__ import absolute_import
 
-from copy import deepcopy
+from copy import copy
 
 from . import simpleobjects
 import re
@@ -160,7 +160,8 @@ def cleanToken(url):
 
 
 def cleanObjTokens(dorig, flistkeys=("streamUrls",), fstrkeys=("url", "token")):
-    d = deepcopy(dorig)
+    d = {}
+    dcopy = copy(dorig)
 
     # filter lists
     for k in flistkeys:
@@ -174,7 +175,8 @@ def cleanObjTokens(dorig, flistkeys=("streamUrls",), fstrkeys=("url", "token")):
             continue
         d[k] = "****" if k == "token" else cleanToken(d[k])
 
-    return d
+    dcopy.update(d)
+    return dcopy
 
 
 def now(local=False):

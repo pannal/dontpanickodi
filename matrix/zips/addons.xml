@@ -131,7 +131,7 @@
 
 <addon id="script.plexmod"
        name="Plex"
-       version="0.7.5"
+       version="0.7.5-rev1"
        provider-name="pannal">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
@@ -163,6 +163,8 @@
         <source>https://github.com/pannal/plex-for-kodi</source>
         <platform>all</platform>
         <news>
+- Fix: transcoding is broken due to deepcopy usage
+- Add IMDB ID to video info
 - Fix: Libraries: Missing items when filters applied and collections exist (thanks @bowlingbeeg )
 - Fix: Libraries: Removed most filters from collections view as they don’t work (thanks @bowlingbeeg)
 - Fix: Chapters not available in episodes during playback after manually changing watch status
@@ -219,6 +221,7 @@
 - Addon Settings: Add setting for Library view chunk size
 - Settings: Add separate playback setting to skip Post Play in TV shows (separate from binge mode)
 - Settings: Clarify and reorder playback settings
+
         </news>
         <assets>
             <icon>icon.png</icon>

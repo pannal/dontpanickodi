@@ -1146,6 +1146,11 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
 
         util.setGlobalProperty("current_path", self.getOSSPathHint(meta), base='videoinfo.{0}')
         util.setGlobalProperty("current_size", str(meta.size), base='videoinfo.{0}')
+
+        imdbNum = None
+        if "com.plexapp.agents.imdb" in self.video.guid:
+            a = self.video.guid
+            imdbNum = a.split("?lang=")[0][a.index("com.plexapp.agents.imdb://")+len("com.plexapp.agents.imdb://"):]
         li.setInfo('video', {
             'mediatype': vtype,
             'title': self.video.title,
@@ -1157,6 +1162,7 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
             'plot': self.video.summary,
             'path': meta.path,
             'size': meta.size,
+            'imdbnumber': imdbNum
         })
         li.setArt({
             'poster': self.video.defaultThumb.asTranscodedImageURL(347, 518),
