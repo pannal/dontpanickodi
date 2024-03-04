@@ -5,9 +5,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: KODI Main\n"
-"Report-Msgid-Bugs-To: https://github.com/xbmc/xbmc/issues/\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-02-26 16:13+0000\n"
+"PO-Revision-Date: 2024-02-12 00:31+0000\n"
 "Last-Translator: Christian Gade <gade@kodi.tv>\n"
 "Language-Team: Afrikaans (South Africa) <https://kodi.weblate.cloud/projects/kodi-add-ons-skins/skin-estuary/af_za/>\n"
 "Language: af_za\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.11\n"
+"X-Generator: Weblate 5.3\n"
 
 msgctxt "Addon Summary"
 msgid "Estuary skin by phil65. (Kodi's default skin)"
@@ -248,14 +248,6 @@ msgstr "Vertoon die inteken skerm met begin"
 msgctxt "#31058"
 msgid "Automatic Login on startup"
 msgstr "Outomatiese Inteken met begin"
-
-msgctxt "#31059"
-msgid "Select + X"
-msgstr "Kies + X"
-
-msgctxt "#31060"
-msgid "Select + Start"
-msgstr "Kies + Begin"
 
 msgctxt "#31061"
 msgid "Main menu items"
@@ -505,7 +497,7 @@ msgstr "Kliek hier om laatste veranderinge te sien..."
 #. Label to show PVR info page
 msgctxt "#31137"
 msgid "PVR"
-msgstr ""
+msgstr "PVR"
 
 #. Label to show player info page
 msgctxt "#31138"
@@ -698,7 +690,7 @@ msgstr "Video aspek"
 #. Label to show the video bitrate
 msgctxt "#31603"
 msgid "Video bitrate"
-msgstr ""
+msgstr "Video bis tempo"
 
 #. Label to show the audio codec name
 msgctxt "#31604"
@@ -713,7 +705,7 @@ msgstr "Oudio kanale"
 #. Label to show the audio bitrate
 msgctxt "#31606"
 msgid "Audio bitrate"
-msgstr ""
+msgstr "Oudio bis tempo"
 
 #. Label to show the screen resolution
 msgctxt "#31607"
@@ -723,7 +715,7 @@ msgstr "Skerm resolusie"
 #. Label to show the system rendering speed
 msgctxt "#31608"
 msgid "System rendering speed"
-msgstr ""
+msgstr "Stelsel teken spoed"
 
 #. Label to show the system CPU usage
 msgctxt "#31609"
@@ -739,6 +731,18 @@ msgstr "Media"
 msgctxt "#31611"
 msgid "System"
 msgstr "Stelsel"
+
+#~ msgctxt "#31615"
+#~ msgid "Extras"
+#~ msgstr "Ekstras"
+
+#~ msgctxt "#31059"
+#~ msgid "Select + X"
+#~ msgstr "Kies + X"
+
+#~ msgctxt "#31060"
+#~ msgid "Select + Start"
+#~ msgstr "Kies + Begin"
 
 #~ msgctxt "#31137"
 #~ msgid "PVR info"

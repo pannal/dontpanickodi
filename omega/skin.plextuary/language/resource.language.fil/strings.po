@@ -251,14 +251,6 @@ msgctxt "#31058"
 msgid "Automatic Login on startup"
 msgstr ""
 
-msgctxt "#31059"
-msgid "Select + X"
-msgstr ""
-
-msgctxt "#31060"
-msgid "Select + Start"
-msgstr ""
-
 msgctxt "#31061"
 msgid "Main menu items"
 msgstr ""

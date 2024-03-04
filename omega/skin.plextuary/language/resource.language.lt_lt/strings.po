@@ -249,14 +249,6 @@ msgctxt "#31058"
 msgid "Automatic Login on startup"
 msgstr "Automatinis prisijungimas paleidžiant"
 
-msgctxt "#31059"
-msgid "Select + X"
-msgstr "Select + X"
-
-msgctxt "#31060"
-msgid "Select + Start"
-msgstr "Select + Start"
-
 msgctxt "#31061"
 msgid "Main menu items"
 msgstr "Meniu elementai"
@@ -739,6 +731,14 @@ msgstr "Medija"
 msgctxt "#31611"
 msgid "System"
 msgstr "Sistema"
+
+#~ msgctxt "#31059"
+#~ msgid "Select + X"
+#~ msgstr "Select + X"
+
+#~ msgctxt "#31060"
+#~ msgid "Select + Start"
+#~ msgstr "Select + Start"
 
 #~ msgctxt "#31137"
 #~ msgid "PVR info"

@@ -265,7 +265,7 @@
 					<right>0</right>
 					<bottom>0</bottom>
 					<texture colordiffuse="button_focus">lists/focus.png</texture>
-					<visible>Control.HasFocus($PARAM[list_id])</visible>
+					<animation effect="fade" start="100" end="50" time="0">UnFocus</animation>
 				</control>
 				<control type="group">
 					<visible>ListItem.Property(PVR.IsRecordingTimer) | ListItem.Property(PVR.IsRemindingTimer)</visible>
@@ -355,6 +355,7 @@
 		<param name="resolution_var">$VAR[ResolutionFlagVar]</param>
 		<definition>
 			<control type="grouplist">
+				<visible>Window.IsActive(Home) | Window.IsActive(10025)</visible>
 				<orientation>horizontal</orientation>
 				<right>20</right>
 				<top>0</top>
@@ -418,6 +419,112 @@
 					<param name="texture" value="$INFO[$PARAM[infolabel_prefix]ListItem.AudioChannels,flags/audiochannel/,.png]" />
 					<param name="visible" value="!String.IsEmpty($PARAM[infolabel_prefix]ListItem.AudioChannels)" />
 				</include>
+			</control>
+			<control type="grouplist">
+				<visible>Container.Content(albums) | Window.IsActive(10502)</visible>
+				<orientation>horizontal</orientation>
+				<right>20</right>
+				<top>0</top>
+				<height>70</height>
+				<align>right</align>
+				<itemgap>10</itemgap>
+				<width>1900</width>
+				<usecontrolcoords>true</usecontrolcoords>
+				<control type="group">
+					<width>115</width>
+					<visible>!String.IsEmpty($PARAM[infolabel_prefix]ListItem.Duration)</visible>
+					<visible>Container.Content(albums) + ![Window.IsVisible(songinformation) | Window.IsVisible(musicinformation)]</visible>
+					<control type="label">
+						<width>110</width>
+						<height>60</height>
+						<align>center</align>
+						<aligny>center</aligny>
+						<label>$INFO[$PARAM[infolabel_prefix]ListItem.Duration]</label>
+						<font>font_flag</font>
+					</control>
+					<include content="MediaFlag">
+						<param name="texture" value="flags/flag.png" />
+					</include>
+				</control>
+				<control type="group">
+					<width>115</width>
+					<visible>!String.IsEmpty($PARAM[infolabel_prefix]ListItem.FileExtension)</visible>
+					<control type="label">
+						<width>110</width>
+						<height>60</height>
+						<align>center</align>
+						<aligny>center</aligny>
+						<label>$INFO[$PARAM[infolabel_prefix]ListItem.FileExtension]</label>
+						<font>font_flag</font>
+					</control>
+					<include content="MediaFlag">
+						<param name="texture" value="flags/flag.png" />
+					</include>
+				</control>
+				<include content="MediaFlag">
+					<param name="texture" value="$INFO[$PARAM[infolabel_prefix]ListItem.MusicChannels,flags/audiochannel/,.png]" />
+					<param name="visible" value="!String.IsEmpty($PARAM[infolabel_prefix]ListItem.MusicChannels)" />
+				</include>
+				<control type="group">
+					<visible>!String.IsEmpty(ListItem.Samplerate)</visible>
+					<width>115</width>
+					<control type="label">
+						<width>110</width>
+						<height>60</height>
+						<align>center</align>
+						<aligny>center</aligny>
+						<label>$INFO[ListItem.Samplerate, ,kHz]</label>
+						<font>font_flag</font>
+					</control>
+					<include content="MediaFlag">
+						<param name="texture" value="flags/flag.png" />
+					</include>
+				</control>
+				<control type="group">
+					<visible>!String.IsEmpty(ListItem.BitRate)</visible>
+					<width>115</width>
+					<control type="label">
+						<width>110</width>
+						<height>60</height>
+						<align>center</align>
+						<aligny>center</aligny>
+						<label>$INFO[ListItem.BitRate, ,kbps]</label>
+						<font>font_flag</font>
+					</control>
+					<include content="MediaFlag">
+						<param name="texture" value="flags/flag.png" />
+					</include>
+				</control>
+				<control type="group">
+					<visible>!String.IsEmpty(ListItem.MusicBitsPerSample)</visible>
+					<width>115</width>
+					<control type="label">
+						<width>110</width>
+						<height>60</height>
+						<align>center</align>
+						<aligny>center</aligny>
+						<label>$INFO[ListItem.MusicBitsPerSample, ,bit]</label>
+						<font>font_flag</font>
+					</control>
+					<include content="MediaFlag">
+						<param name="texture" value="flags/flag.png" />
+					</include>
+				</control>
+				<control type="group">
+					<visible>!String.IsEmpty(ListItem.BMP)</visible>
+					<width>115</width>
+					<control type="label">
+						<width>110</width>
+						<height>60</height>
+						<align>center</align>
+						<aligny>center</aligny>
+						<label>$INFO[ListItem.BMP, ,bpm]</label>
+						<font>font_flag</font>
+					</control>
+					<include content="MediaFlag">
+						<param name="texture" value="flags/flag.png" />
+					</include>
+				</control>
 			</control>
 		</definition>
 	</include>
@@ -1439,7 +1546,7 @@
 			</control>
 			<include content="IconButton">
 				<param name="control_id" value="" />
-				<param name="onclick" value="ActivateWindow(favourites)" />
+				<param name="onclick" value="ActivateWindow(favouritesbrowser)" />
 				<param name="icon" value="icons/favourites.png" />
 				<param name="label" value="$LOCALIZE[10134]" />
 			</include>
@@ -1582,5 +1689,79 @@
 				</control>
 			</control>
 		</focusedlayout>
+	</include>
+	<include name="MediaInfoListLayout">
+		<param name="height">125</param>
+		<param name="width">880</param>
+		<param name="fontcolor">grey</param>
+		<definition>
+			<itemlayout height="$PARAM[height]" width="$PARAM[width]">
+				<control type="image">
+					<left>12</left>
+					<top>7</top>
+					<width>110</width>
+					<height>110</height>
+					<texture>$VAR[VideoListThumbVar]</texture>
+					<aspectratio>keep</aspectratio>
+				</control>
+				<control type="label">
+					<left>135</left>
+					<top>0</top>
+					<right>20</right>
+					<height>60</height>
+					<font>font14</font>
+					<aligny>center</aligny>
+					<textcolor>grey</textcolor>
+					<label>$VAR[MediaInfoListLabelVar]</label>
+				</control>
+				<control type="label">
+					<left>135</left>
+					<top>50</top>
+					<right>20</right>
+					<height>65</height>
+					<font>font12</font>
+					<aligny>center</aligny>
+					<textcolor>grey</textcolor>
+					<label>$VAR[MediaInfoListLabel2Var]</label>
+				</control>
+			</itemlayout>
+			<focusedlayout height="$PARAM[height]" width="$PARAM[width]">
+				<control type="image">
+					<left>0</left>
+					<top>0</top>
+					<right>0</right>
+					<bottom>0</bottom>
+					<texture colordiffuse="button_focus">lists/focus.png</texture>
+					<animation effect="fade" start="100" end="50" time="0">UnFocus</animation>
+				</control>
+				<control type="image">
+					<left>12</left>
+					<top>7</top>
+					<width>110</width>
+					<height>110</height>
+					<texture>$VAR[VideoListThumbVar]</texture>
+					<aspectratio>keep</aspectratio>
+				</control>
+				<control type="label">
+					<left>135</left>
+					<top>0</top>
+					<right>20</right>
+					<height>60</height>
+					<aligny>center</aligny>
+					<scroll>true</scroll>
+					<font>font14</font>
+					<label>$VAR[MediaInfoListLabelVar]</label>
+				</control>
+				<control type="label">
+					<left>135</left>
+					<top>50</top>
+					<right>20</right>
+					<height>65</height>
+					<font>font12</font>
+					<aligny>center</aligny>
+					<label>$VAR[MediaInfoListLabel2Var]</label>
+				</control>
+			</focusedlayout>
+		</definition>
 	</include>
 </includes>

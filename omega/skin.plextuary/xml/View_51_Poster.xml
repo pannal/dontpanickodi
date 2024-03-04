@@ -15,9 +15,9 @@
 			<height>720</height>
 			<control type="image">
 				<left>0</left>
-				<top>4</top>
+				<top>8</top>
 				<width>100%</width>
-				<height>410</height>
+				<height>415</height>
 				<animation effect="fade" start="0" end="100" time="300">WindowOpen</animation>
 				<animation effect="fade" start="100" end="0" time="300">WindowClose</animation>
 				<animation effect="fade" time="200">VisibleChange</animation>
@@ -88,15 +88,8 @@
 							<param name="font" value="font13" />
 						</include>
 					</control>
-					<control type="image">
-						<left>645</left>
-						<top>415</top>
-						<width>32</width>
-						<height>32</height>
-						<texture>$VAR[ListWatchedIconVar]</texture>
-					</control>
 					<control type="label">
-						<left>695</left>
+						<left>645</left>
 						<top>400</top>
 						<right>50</right>
 						<height>40</height>
@@ -144,7 +137,7 @@
 				<texture fallback="DefaultMovies.png" background="true">$VAR[PosterThumbVar]</texture>
 			</control>
 			<control type="group">
-				<visible>String.IsEqual(ListItem.DBtype,tvshow)</visible>
+				<visible>String.IsEqual(ListItem.DBtype,tvshow) | String.IsEqual(ListItem.DBType,season) | ListItem.IsRecording | ListItem.HasReminder | ListItem.HasTimer | ListItem.IsCollection | ListItem.HasVideoVersions | ListItem.IsPlaying | ListItem.IsResumable | ListItem.HasVideoExtras | ListItem.HasArchive | Integer.IsGreater(ListItem.Playcount,0)</visible>
 				<control type="image">
 					<left>4</left>
 					<top>670</top>
@@ -153,23 +146,43 @@
 					<texture colordiffuse="CCFFFFFF">overlays/overlayfade.png</texture>
 					<visible>!String.IsEmpty(ListItem.Art(poster))</visible>
 				</control>
+				<control type="image">
+					<left>10</left>
+					<top>684</top>
+					<width>32</width>
+					<height>32</height>
+					<align>left</align>
+					<aligny>center</aligny>
+					<texture>$VAR[ItemTypeIconVar]</texture>
+				</control>
+				<control type="image">
+					<left>45</left>
+					<top>684</top>
+					<width>32</width>
+					<height>32</height>
+					<align>left</align>
+					<aligny>center</aligny>
+					<texture>overlays/extras.png</texture>
+					<visible>ListItem.HasVideoVersions + ListItem.HasVideoExtras</visible>
+				</control>
 				<control type="label">
-					<left>0</left>
-					<top>690</top>
-					<width>435</width>
-					<height>24</height>
-					<label>$INFO[ListItem.Property(WatchedEpisodes)]$INFO[ListItem.Property(TotalEpisodes), / ,]</label>
+					<left>100</left>
+					<top>684</top>
+					<width>330</width>
+					<height>32</height>
+					<label>$VAR[WatchedStatusVar]</label>
 					<font>font20_title</font>
 					<shadowcolor>text_shadow</shadowcolor>
 					<align>right</align>
 					<aligny>center</aligny>
+					<visible>String.IsEqual(ListItem.DBtype,tvshow) | String.IsEqual(ListItem.DBtype,set) | String.IsEqual(ListItem.DBType,season)</visible>
 				</control>
 				<control type="image">
-					<left>445</left>
-					<top>690</top>
-					<width>24</width>
-					<height>24</height>
-					<texture>lists/played-total.png</texture>
+					<left>435</left>
+					<top>684</top>
+					<width>32</width>
+					<height>32</height>
+					<texture>$VAR[ItemStatusIconVar]</texture>
 					<align>right</align>
 					<aligny>center</aligny>
 				</control>
