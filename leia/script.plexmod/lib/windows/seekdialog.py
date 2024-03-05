@@ -513,12 +513,13 @@ class SeekDialog(kodigui.BaseDialog):
                         if markerDef["marker"]:
                             marker = markerDef["marker"]
                             final = getattr(marker, "final", False)
+                            markerOff = 0 if final else MARKER_END_JUMP_OFF
 
                             util.DEBUG_LOG('MarkerSkip: Skipping marker {}'.format(markerDef["marker"]))
                             self.setProperty('show.markerSkip', '')
                             self.setProperty('show.markerSkip_OSDOnly', '')
                             markerDef["skipped"] = True
-                            self.doSeek(math.ceil(float(marker.endTimeOffset)) + MARKER_END_JUMP_OFF)
+                            self.doSeek(math.ceil(float(marker.endTimeOffset)) + markerOff)
                             self.hideOSD(skipMarkerFocus=True)
 
                             if marker.type == "credits" and not final:

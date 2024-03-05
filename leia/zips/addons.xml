@@ -37,7 +37,7 @@
 
 <addon id="script.plexmod"
        name="Plex"
-       version="0.7.6"
+       version="0.7.6-rev1"
        provider-name="pannal">
     <requires>
         <import addon="xbmc.python" version="2.26.0"/>
@@ -94,6 +94,7 @@
 - SeekDialog: Autoscroll episode/movie title lines for too long titles
 - SeekDialog: Hide non-autoskipping marker into the OSD using NAV_BACK/PREVIOUS_MENU
 - SeekDialog: Apply positive marker endtime offset to manually skipping markers as well (unifying with the autoskip handling), to avoid re-showing the marker occasionally after seeking
+- SeekDialog: Fix final credits marker skipping wrongly on manual marker skip
 - Library: Show current total item count in title
 - Settings: Add description for Direct Stream
         </news>
@@ -289,6 +290,75 @@
 		<disclaimer lang="zh_CN">Plextuary 是 Kodi 的默认皮肤，删除它可能导致故障。</disclaimer>
 		<disclaimer lang="zh_TW">Plextuary 是 Kodi 預設的佈景主題，移除它可能會造成問題</disclaimer>
 	</extension>
+</addon>
+
+<addon id="script.plexmod"
+       name="Plex"
+       version="0.7.6"
+       provider-name="pannal">
+    <requires>
+        <import addon="xbmc.python" version="2.26.0"/>
+        <import addon="script.module.requests" version="2.22.0" />
+        <import addon="script.module.six" version="1.15.0" />
+        <import addon="script.module.kodi-six" version="0.1.3" />
+    </requires>
+    <extension point="xbmc.python.script" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.python.pluginsource" library="plugin.py">
+        <provides>executable</provides>
+    </extension>
+    <extension point="xbmc.service" library="service.py" />
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">PlexMod for Kodi</summary>
+        <summary lang="es_ES">PlexMod para Kodi</summary>
+        <summary lang="de_DE">PlexMod für Kodi</summary>
+        <description lang="en_GB">Unofficial Plex for Kodi add-on</description>
+        <description lang="es_ES">Complemento no oficial de Plex para Kodi</description>
+        <description lang="de_DE">Inoffizielles Plex für Kodi add-on</description>
+        <disclaimer lang="en">This add-on is not supported by Plex</disclaimer>
+        <disclaimer lang="es">Este add-on no está respaldado por Plex</disclaimer>
+        <disclaimer lang="de">Dieses Addon wird nicht von der Firma Plex Inc. unterstützt</disclaimer>
+
+        <license>GPL-2.0-only</license>
+        <forum>https://forums.plex.tv/t/plexmod-for-kodi-18-19-20-21/481208</forum>
+        <website>https://www.plex.tv</website>
+        <source>https://github.com/pannal/plex-for-kodi</source>
+        <platform>all</platform>
+        <news>
+- Core: Avoid DNS rebind protection issues for plex.direct
+- Core: Support ipv6 plex.direct hosts when checking for locality/LAN
+- Core: Network: Massively speed up local connection checks
+- Core: Network: Skip local connection checks for plex.tv
+- Core: Network: Add 172.16.0.0/12 as local network
+- Core: MyPlex: Ignore non-server resources
+- Core: Use correct default for LAN_REACHABILITY_TIMEOUT
+- Core: Cache home users indefinitely; add refresh button to user select
+- Core: Add support for adaptive readfactor from Kodi Omega BETA3 onwards; recommend it instead of the default range
+- Core: Add setting to allow VC1 DirectPlay (default on; was on by default before)
+- Core: MDE: Fix DirectStreaming when media has no deep analysis by setting the maximum bitrate to unlimited in maximum quality mode
+- Core: Simplify video DirectStream codec decision handling
+- Core: Make sure our home window opens, exit if it doesn't in time; unify waiting for window functionality
+- Home: Add "Refresh Users" action to user dropdown to refresh available home users
+- Home: Reduce unnecessary section refreshes if the section hasn't changed
+- Playback: Fix PlayQueue crashing
+- Userselect: Remove legacy thread/cache handling leftovers
+- Userselect: Fix ACTION_PREVIOUS_MENU/ESC closing the addon instead of leaving the user selection
+- SeekDialog: Avoid accidental seeking when navigating through player buttons after closing player settings without changing anything
+- SeekDialog: Hide OSD fast after changing subtitle via settings
+- SeekDialog: Show episode year in player overlay if possible
+- SeekDialog: Widen episode/movie title line
+- SeekDialog: Autoscroll episode/movie title lines for too long titles
+- SeekDialog: Hide non-autoskipping marker into the OSD using NAV_BACK/PREVIOUS_MENU
+- SeekDialog: Apply positive marker endtime offset to manually skipping markers as well (unifying with the autoskip handling), to avoid re-showing the marker occasionally after seeking
+- Library: Show current total item count in title
+- Settings: Add description for Direct Stream
+        </news>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+        </assets>
+    </extension>
 </addon>
 
 <addon id="script.plexmod"
