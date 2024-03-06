@@ -216,7 +216,8 @@ class ServerListItem(kodigui.ManagedListItem):
             self.safeSetProperty('secure', isSecure and '1' or '')
             self.safeSetProperty('local', isLocal and '1' or '')
 
-        self.safeSetProperty('current', plexapp.SERVERMANAGER.selectedServer.uuid == self.uuid and '1' or '')
+        if plexapp.SERVERMANAGER.selectedServer:
+            self.safeSetProperty('current', plexapp.SERVERMANAGER.selectedServer.uuid == self.uuid and '1' or '')
         if name:
             self.safeSetLabel(name)
 

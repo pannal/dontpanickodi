@@ -43,6 +43,7 @@ class MyPlexAccount(object):
 
         self.isAdmin = False
         self.switchUser = False
+        self.forceResourceRefresh = False
 
         self.adminHasPlexPass = False
 
@@ -176,11 +177,14 @@ class MyPlexAccount(object):
             self.saveState()
             util.MANAGER.publish()
 
-            if oldId != self.ID or self.switchUser:
-                util.DEBUG_LOG("User changed, deferring refresh resources (force=False)")
+            if oldId != self.ID or (self.switchUser and not self.forceResourceRefresh):
+                util.DEBUG_LOG("User changed, deferring refresh resources (force=False, "
+                               "switchUser: {}, forceResourceRefresh: {})".format(self.switchUser,
+                                                                                  self.forceResourceRefresh))
             else:
                 util.DEBUG_LOG("User selected, refreshing resources (force=False)")
                 plexapp.refreshResources()
+                self.forceResourceRefresh = False
 
         elif response.getStatus() >= 400 and response.getStatus() < 500:
             # The user is specifically unauthorized, clear everything
@@ -239,9 +243,10 @@ class MyPlexAccount(object):
     def hasPlexPass(self):
         return self.isPlexPass or self.adminHasPlexPass
 
-    def validateToken(self, token, switchUser=False):
+    def validateToken(self, token, switch_user=False, force_resource_refresh=False):
         self.authToken = token
-        self.switchUser = switchUser
+        self.switchUser = switch_user
+        self.forceResourceRefresh = force_resource_refresh
 
         request = myplexrequest.MyPlexRequest("/users/sign_in.xml")
         context = request.createRequestContext("sign_in", callback.Callable(self.onAccountResponse),
@@ -339,7 +344,8 @@ class MyPlexAccount(object):
                 self.isAuthenticated = True
                 # validate the token (trigger change:user) on user change or channel startup
                 if userId != self.ID or not locks.LOCKS.isLocked("idleLock"):
-                    self.validateToken(data.attrib.get('authenticationToken'), True)
+                    self.validateToken(data.attrib.get('authenticationToken'), True,
+                                       force_resource_refresh=plexapp.SERVERMANAGER.reachabilityNeverTested)
                 return True
 
         return False

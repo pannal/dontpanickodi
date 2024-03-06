@@ -1,5 +1,6 @@
-[-0.7.6-]
+[-0.7.6-rev2 -]
 - Core: Avoid DNS rebind protection issues for plex.direct
+- Core: Firstrun: Refresh resources after signin and/or home user switch, otherwise the first time the addon's run the user sees no servers
 - Core: Support ipv6 plex.direct hosts when checking for locality/LAN
 - Core: Network: Massively speed up local connection checks
 - Core: Network: Skip local connection checks for plex.tv
@@ -24,6 +25,7 @@
 - SeekDialog: Autoscroll episode/movie title lines for too long titles
 - SeekDialog: Hide non-autoskipping marker into the OSD using NAV_BACK/PREVIOUS_MENU
 - SeekDialog: Apply positive marker endtime offset to manually skipping markers as well (unifying with the autoskip handling), to avoid re-showing the marker occasionally after seeking
+- SeekDialog: Fix final credits marker skipping wrongly on manual marker skip
 - Library: Show current total item count in title
 - Settings: Add description for Direct Stream
 

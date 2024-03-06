@@ -359,7 +359,7 @@ def init():
                 return False
 
             with CallbackEvent(plexapp.util.APP, 'account:response'):
-                plexapp.ACCOUNT.validateToken(token)
+                plexapp.ACCOUNT.validateToken(token, force_resource_refresh=True)
                 util.DEBUG_LOG('Waiting for account initialization...')
 
         # if not PLEX:

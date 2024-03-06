@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="script.plexmod"
        name="Plex"
-       version="0.7.6-rev1"
+       version="0.7.6-rev2"
        provider-name="pannal">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
@@ -33,6 +33,7 @@
         <source>https://github.com/pannal/plex-for-kodi</source>
         <platform>all</platform>
         <news>
+- Core: Firstrun: Refresh resources after signin and/or home user switch, otherwise the first time the addon's run the user sees no servers
 - Core: Avoid DNS rebind protection issues for plex.direct
 - Core: Support ipv6 plex.direct hosts when checking for locality/LAN
 - Core: Network: Massively speed up local connection checks
