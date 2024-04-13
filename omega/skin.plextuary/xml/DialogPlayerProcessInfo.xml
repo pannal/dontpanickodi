@@ -222,7 +222,25 @@
 					<label>$INFO[Player.Process(pixformat),[COLOR button_focus]$LOCALIZE[31140]:[/COLOR] ]</label>
 					<font>font14</font>
 					<shadowcolor>black</shadowcolor>
-					<visible>Player.HasVideo</visible>
+					<visible>Player.HasVideo + String.IsEmpty($INFO[Player.Process(amlogic.pixformat))</visible>
+				</control>
+				<control type="label">
+					<width>1600</width>
+					<height>50</height>
+					<aligny>bottom</aligny>
+					<label>$INFO[Player.Process(amlogic.pixformat),[COLOR button_focus]$LOCALIZE[31140]:[/COLOR] ]</label>
+					<font>font14</font>
+					<shadowcolor>black</shadowcolor>
+					<visible>Player.HasVideo + !String.IsEmpty($INFO[Player.Process(amlogic.pixformat))</visible>
+				</control>				
+				<control type="label">
+					<width>1600</width>
+					<height>50</height>
+					<aligny>bottom</aligny>
+					<label>$INFO[Player.Process(amlogic.eoft_gamut),[COLOR button_focus]EOTF &amp; Gamut:[/COLOR] ]</label>
+					<font>font14</font>
+					<shadowcolor>black</shadowcolor>
+					<visible>Player.HasVideo + !String.IsEmpty($INFO[Player.Process(amlogic.eoft_gamut))</visible>
 				</control>
 				<control type="label">
 					<width>1600</width>
@@ -275,7 +293,7 @@
 					<width>1600</width>
 					<height>50</height>
 					<aligny>bottom</aligny>
-					<label>$INFO[System.Memory(used.percent),[COLOR button_focus]$LOCALIZE[31030]:[/COLOR] ]</label>
+					<label>[COLOR button_focus]$LOCALIZE[22012]: [/COLOR]$INFO[system.memory(used),, / ]$INFO[system.memory(total),,  -  ]$INFO[system.memory(used.percent),,]</label>
 					<font>font14</font>
 					<shadowcolor>black</shadowcolor>
 					<visible>System.SupportsCPUUsage</visible>
@@ -285,6 +303,15 @@
 					<height>50</height>
 					<aligny>bottom</aligny>
 					<label>$INFO[System.CpuUsage,[COLOR button_focus]$LOCALIZE[31609]:[/COLOR] ]</label>
+					<font>font14</font>
+					<shadowcolor>black</shadowcolor>
+					<visible>System.SupportsCPUUsage</visible>
+				</control>
+				<control type="label">
+					<width>1600</width>
+					<height>50</height>
+					<aligny>bottom</aligny>
+					<label>$INFO[System.CpuTemperature,[COLOR button_focus]$LOCALIZE[22011][/COLOR] ]</label>
 					<font>font14</font>
 					<shadowcolor>black</shadowcolor>
 					<visible>System.SupportsCPUUsage</visible>
