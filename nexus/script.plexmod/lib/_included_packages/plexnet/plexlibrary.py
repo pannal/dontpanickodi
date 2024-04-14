@@ -524,9 +524,11 @@ class BaseHub(plexobjects.PlexObject):
                 (self.items[0].container.offset.asInt() + self.items[0].container.size.asInt() < totalSize) and '1' or ''
             )
 
-    def getCleanHubIdentifier(self):
+    def getCleanHubIdentifier(self, is_home=False):
         if not self._identifier:
             self._identifier = re.sub(r'\.\d+$', '', re.sub(r'\.\d+$', '', self.hubIdentifier))
+            if is_home and self._identifier == 'movie.recentlyreleased':
+                self._identifier = 'home.VIRTUAL.movies.recentlyreleased'
         return self._identifier
 
 

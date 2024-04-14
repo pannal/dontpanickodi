@@ -2,7 +2,6 @@ from __future__ import absolute_import
 import threading
 import time
 import os
-import tempfile
 import shutil
 import hashlib
 import requests
@@ -15,7 +14,7 @@ from . import busy
 
 from lib import util, colors
 from plexnet import plexapp, plexplayer, playqueue
-
+from plexnet import util as plexnetUtil
 
 class PhotoWindow(kodigui.BaseWindow):
     xmlFile = 'script-plex-photo.xml'
@@ -522,7 +521,16 @@ class PhotoWindow(kodigui.BaseWindow):
         if refreshQueue and self.playQueue:
             self.playQueue.refreshOnTimeline = True
 
-        plexapp.util.APP.nowplayingmanager.updatePlaybackState(self.timelineType, self.playerObject, state, time, self.playQueue)
+        data = plexnetUtil.AttributeDict({
+            "key": str(item.key),
+            "ratingKey": str(item.ratingKey),
+            "guid": str(item.guid),
+            "url": str(item.url),
+            "duration": item.duration.asInt(),
+            "containerKey": str(item.container.address)
+        })
+
+        plexapp.util.APP.nowplayingmanager.updatePlaybackState(self.timelineType, data, state, time, self.playQueue)
 
     def showOSD(self):
         self.osdTimer.reset(init=False)
