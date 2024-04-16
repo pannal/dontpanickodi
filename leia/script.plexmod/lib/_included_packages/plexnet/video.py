@@ -592,7 +592,7 @@ class Show(Video, media.RelatedMixin, SectionOnDeckMixin):
         path = '/library/metadata/%s/allLeaves' % self.ratingKey
         return plexobjects.findItem(self.server, path, title)
 
-    def all(self):
+    def all(self, *args, **kwargs):
         return self.episodes()
 
     def watched(self):
@@ -634,7 +634,7 @@ class Season(Video):
         path = self.key
         return plexobjects.findItem(self.server, path, title)
 
-    def all(self):
+    def all(self, *args, **kwargs):
         return self.episodes()
 
     def show(self):

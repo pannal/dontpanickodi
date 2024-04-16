@@ -12,7 +12,8 @@ class Photo(media.MediaItem):
         self.art = plexobjects.PlexValue('')
         media.MediaItem._setData(self, data)
 
-        if self.isFullObject():
+        # fallback; we might not be a full object but we _can_ have Media
+        if self.isFullObject() or data.find("Media") is not None:
             self.media = plexobjects.PlexMediaItemList(data, plexmedia.PlexMedia, media.Media.TYPE,
                                                        initpath=self.initpath, server=self.server, media=self)
 
@@ -42,11 +43,17 @@ class Photo(media.MediaItem):
     def isPhotoOrDirectoryItem(self):
         return True
 
+    def asTranscodedImageURL(self, w, h, **extras):
+        try:
+            return self.server.getImageTranscodeURL(self.media[0].parts[0].key, w, h, **extras)
+        except:
+            pass
+
 
 class PhotoDirectory(media.MediaItem):
     TYPE = 'photodirectory'
 
-    def all(self):
+    def all(self, *args, **kwargs):
         path = self.key
         return plexobjects.listItems(self.server, path)
 

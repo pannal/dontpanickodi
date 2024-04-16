@@ -34,7 +34,7 @@ class Library(plexobjects.PlexObject):
                 return item
         raise exceptions.NotFound('Invalid library section: %s' % title)
 
-    def all(self):
+    def all(self, *args, **kwargs):
         return plexobjects.listItems(self.server, '/library/all')
 
     def onDeck(self):

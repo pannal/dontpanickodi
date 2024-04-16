@@ -111,7 +111,8 @@ def _main():
                         elif result == 'cancel' and fromSwitch:
                             util.DEBUG_LOG('Main: User selection canceled, reusing previous user')
                             plexapp.ACCOUNT.isAuthenticated = True
-
+                        elif result == 'cancel':
+                            return
                         if not fromSwitch:
                             util.DEBUG_LOG('Main: User selected')
 

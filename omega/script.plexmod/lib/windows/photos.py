@@ -48,6 +48,7 @@ class PhotoWindow(kodigui.BaseWindow):
     def __init__(self, *args, **kwargs):
         kodigui.BaseWindow.__init__(self, *args, **kwargs)
         self.photo = kwargs.get('photo')
+        self.autoPlay = False
         self.playQueue = kwargs.get('play_queue')
         self.playerObject = None
         self.timelineType = 'photo'
@@ -85,6 +86,13 @@ class PhotoWindow(kodigui.BaseWindow):
         self.start()
         self.osdTimer = kodigui.PropertyTimer(self._winID, 4, 'OSD', '', init_value=False, callback=self.osdTimerCallback)
         self.imageControl = self.getControl(600)
+
+        if self.autoPlay:
+            self.play()
+
+    def doAutoPlay(self):
+        self.autoPlay = True
+        return True
 
     def osdTimerCallback(self):
         self.setFocusId(self.OVERLAY_BUTTON_ID)
@@ -220,7 +228,7 @@ class PhotoWindow(kodigui.BaseWindow):
             if busy.widthDialog(self.playQueue.waitForInitialization, None, delay=True):
                 util.DEBUG_LOG('playQueue initialized: {0}'.format(self.playQueue))
             else:
-                util.DEBUG_LOG('playQueue timed out wating for initialization')
+                util.DEBUG_LOG('playQueue timed out waiting for initialization')
 
         self.showPhoto()
 
