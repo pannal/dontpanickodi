@@ -180,8 +180,7 @@ class BaseWindow(xbmcgui.WindowXML, BaseFunctions):
 
     def updateBackgroundFrom(self, ds):
         if util.addonSettings.dynamicBackgrounds:
-            art = getattr(ds, "art")
-            return self.windowSetBackground(util.backgroundFromArt(art or ds, width=self.width,
+            return self.windowSetBackground(util.backgroundFromArt(ds.art, width=self.width,
                                                                    height=self.height))
 
     def windowSetBackground(self, value):

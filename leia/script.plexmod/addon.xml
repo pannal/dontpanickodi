@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="script.plexmod"
        name="Plex"
-       version="0.7.7-rev2"
+       version="0.7.7-rev3"
        provider-name="pannal">
     <requires>
         <import addon="xbmc.python" version="2.26.0"/>
@@ -35,7 +35,7 @@
         <news>
 - UserSelect: When not switching user (startup), close the addon on cancel actions
 - Libraries/Photos: Do autoplay when Play or Shuffle buttons are pressed in photo library view
-- Libraries/Photos: Fix wonky thumbnail display on photodirectories; support dynamic backgrounds for Photo items
+- Libraries/Photos: Fix wonky thumbnail display on photodirectories
 - SeekDialog: Fix final credits marker skipping wrongly on manual marker skip
 - SeekDialog: Fix several marker issues (over-jumping, invalid markers)
 - SeekDialog: Show stream transport type in video session info (smb, nfs, path mapped, http(s))
