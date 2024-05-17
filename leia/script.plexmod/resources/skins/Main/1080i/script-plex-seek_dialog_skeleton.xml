@@ -52,7 +52,7 @@
                 <posx>0</posx>
                 <posy>40</posy>
                 <control type="label">
-                    <visible>!String.IsEmpty(Window.Property(is.show))</visible>
+                    <visible>!String.IsEmpty(Window.Property(is.show)) + String.IsEmpty(Window.Property(hide.title))</visible>
                     <posx>60</posx>
                     <posy>0</posy>
                     <width>1720</width>
@@ -64,6 +64,20 @@
                     <scroll>true</scroll>
                     <scrollspeed>15</scrollspeed>
                     <label>[B]$INFO[VideoPlayer.TVShowTitle][/B]$INFO[VideoPlayer.Title, &#8226; ]$INFO[VideoPlayer.Season, &#8226; Season ]$INFO[VideoPlayer.Episode, Episode ]$INFO[Window.Property(ep.year), &#8226; ]</label>
+                </control>
+                <control type="label">
+                    <visible>!String.IsEmpty(Window.Property(is.show)) + !String.IsEmpty(Window.Property(hide.title))</visible>
+                    <posx>60</posx>
+                    <posy>0</posy>
+                    <width>1720</width>
+                    <height>60</height>
+                    <font>font13</font>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <scroll>true</scroll>
+                    <scrollspeed>15</scrollspeed>
+                    <label>[B]$INFO[VideoPlayer.TVShowTitle][/B]$INFO[VideoPlayer.Season, &#8226; Season ]$INFO[VideoPlayer.Episode, Episode ]$INFO[Window.Property(ep.year), &#8226; ]</label>
                 </control>
                 <control type="label">
                     <visible>String.IsEmpty(Window.Property(is.show))</visible>
@@ -631,6 +645,7 @@
                     <!-- FOCUSED LAYOUT CHAPTERS ####################################### -->
                     <focusedlayout width="218" condition="!String.IsEmpty(Window.Property(has.chapters))">
                         <control type="group">
+                            <animation effect="slide" time="100" start="0,0" end="0,-10" reversible="true">Focus</animation>
                             <control type="image">
                                 <posx>40</posx>
                                 <posy>0</posy>
@@ -648,7 +663,7 @@
                                 <height>100</height>
                                 <texture>$INFO[ListItem.Thumb]</texture>
                                 <aspectratio>scale</aspectratio>
-                                <colordiffuse>FFAAAAAA</colordiffuse>
+                                <colordiffuse>FF666666</colordiffuse>
                                 <visible>!Control.HasFocus(501)</visible>
                             </control>
                             <control type="image">
@@ -679,7 +694,7 @@
                                 <font>font10</font>
                                 <align>center</align>
                                 <aligny>center</aligny>
-                                <textcolor>FFAAAAAA</textcolor>
+                                <textcolor>FFDDDDDD</textcolor>
                                 <label>$INFO[ListItem.Label]</label>
                                 <visible>!Control.HasFocus(501)</visible>
                             </control>
