@@ -3,6 +3,7 @@
 	<zorder>3</zorder>
 	<controls>
 		<control type="group">
+			<visible>String.IsEmpty(Window.Property(no.image))</visible>
 			<depth>DepthMax</depth>
 			<top>85</top>
 			<right>0</right>
@@ -42,6 +43,46 @@
 				<left>151</left>
 				<top>68</top>
 				<width>450</width>
+				<height>60</height>
+				<font>font27_narrow</font>
+				<aligny>center</aligny>
+				<scrollout>false</scrollout>
+				<pauseatend>2000</pauseatend>
+			</control>
+		</control>
+		<control type="group">
+			<visible>!String.IsEmpty(Window.Property(no.image))</visible>
+			<depth>DepthMax</depth>
+			<top>85</top>
+			<right>0</right>
+			<width>640</width>
+			<include>OpenClose_Right</include>
+			<visible>String.IsEmpty(Window(Home).Property(script.cinemavision.running))</visible>
+			<control type="image">
+				<left>0</left>
+				<top>0</top>
+				<width>640</width>
+				<height>160</height>
+				<texture>dialogs/dialog-bg-nobo.png</texture>
+				<bordertexture border="21" infill="false">overlays/shadow.png</bordertexture>
+				<bordersize>20</bordersize>
+			</control>
+			<control type="fadelabel" id="1401">
+				<description>Line 1 Label</description>
+				<left>40</left>
+				<top>50</top>
+				<width>560</width>
+				<height>18</height>
+				<font>font37</font>
+				<aligny>center</aligny>
+				<scrollout>false</scrollout>
+				<pauseatend>2000</pauseatend>
+			</control>
+			<control type="fadelabel" id="1402">
+				<description>Line 2 Label</description>
+				<left>40</left>
+				<top>78</top>
+				<width>560</width>
 				<height>60</height>
 				<font>font27_narrow</font>
 				<aligny>center</aligny>
