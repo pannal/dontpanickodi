@@ -302,6 +302,12 @@
 					<onclick>Skin.SetNumeric(OSDAutoCloseTime)</onclick>
 					<enable>Skin.HasSetting(OSDAutoClose)</enable>
 				</control>
+				<control type="radiobutton" id="625">
+					<label>$LOCALIZE[32100]</label>
+					<include>DefaultSettingButton</include>
+					<selected>Skin.HasSetting(OSDBackgroundPause)</selected>
+					<onclick>Skin.ToggleSetting(OSDBackgroundPause)</onclick>
+				</control>
 			</control>
 			<control type="image">
 				<description>Dialog Header image</description>
