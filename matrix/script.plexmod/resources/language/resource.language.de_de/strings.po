@@ -2438,12 +2438,6 @@ msgctxt "#33033"
 msgid "When path mapping is active for a library, display an indicator."
 msgstr "Wenn eine Pfadzuordnung für eine Bibliothek aktiv ist, einen Indikator anzeigen."
 
-#:
-msgctxt "#33034"
-msgid "Library settings"
-msgstr "Bibliothek-Einstellungen"
-
-
 #: 
 msgctxt "#33035"
 msgid "Delete {}: {}?"
@@ -2473,3 +2467,576 @@ msgstr "Verschieben"
 msgctxt "#33040"
 msgid "Reset library order"
 msgstr "Ordnung der Bibliotheken zurücksetzen"
+
+#: 
+msgctxt "#33034"
+msgid "Library settings"
+msgstr "Bibliothek-Einstellungen"
+
+#: 
+msgctxt "#32357"
+msgid "By Title"
+msgstr "Nach Titel"
+
+#: 
+msgctxt "#32358"
+msgid "Title"
+msgstr "Titel"
+
+#: 
+msgctxt "#33041"
+msgid "Show hub: {}"
+msgstr "Hub anzeigen: {}"
+
+#: 
+msgctxt "#33042"
+msgid "Episode Date Added"
+msgstr "Episode zuletzt hinz."
+
+#: 
+msgctxt "#33001"
+msgid "Long-press (or context menu) on a library item or: Honor path_mapping.json in the addon_data/script.plexmod folder when DirectPlaying media. This can be used to stream using other techniques such as SMB/NFS/etc. instead of the default HTTP handler. path_mapping.example.json is included in the addon's main directory."
+msgstr "Lange-gedrückt-halten (oder Context-Menü) einer Bibliothek, oder: Nutze path_mapping.json im addon_data/script.plexmod-Ordner. Dies kann verwendet werden, um andere Dateizugriff-Technologien zu benutzen, wie z. B. SMB/NFS/usw., anstatt des HTTP-Handlers. path_mapping.example.json liegt im Hauptverzeichnis vom Addon."
+
+#: 
+msgctxt "#33043"
+msgid "Hubs round-robin"
+msgstr "Hubs-Rundlauf"
+
+#: 
+msgctxt "#33044"
+msgid "Allow round-robining in hubs"
+msgstr "Rundlauf für Hubs erlauben"
+
+#: 
+msgctxt "#33045"
+msgid "Behave like official Plex clients"
+msgstr "Verhalten wie Plex Clients"
+
+#: 
+msgctxt "#33046"
+msgid "Show OSD when pressing up/down without OSD instead of showing chapters."
+msgstr "Das OSD anzeigen wenn hoch/runter gedrückt wird, anstatt Kapitel zu wechseln."
+
+#: 
+msgctxt "#33046"
+msgid "When pressing up/down while the OSD isn't shown, show OSD instead of skipping chapters."
+msgstr "Das OSD anzeigen wenn ohne OSD hoch/runter gedrückt wird, anstatt Kapitel zu wechseln."
+
+#: 
+msgctxt "#32025"
+msgid "Direct Play"
+msgstr "Direkte Wiedergabe"
+
+#: 
+msgctxt "#32026"
+msgid "Direct Stream"
+msgstr "Direktes Streamen"
+
+#: 
+msgctxt "#32036"
+msgid "4K"
+msgstr "4K"
+
+#: 
+msgctxt "#32037"
+msgid "HEVC (h265)"
+msgstr "HEVC (H265)"
+
+#: 
+msgctxt "#32601"
+msgid "AV1"
+msgstr "AV1"
+
+#: 
+msgctxt "#32932"
+msgid "Subtitle quick-actions"
+msgstr "Untertitel-Schnellaktionen"
+
+#: 
+msgctxt "#32933"
+msgid "FFWD/RWD"
+msgstr "Vor-/Zurückspulen"
+
+#: 
+msgctxt "#32934"
+msgid "Repeat"
+msgstr "Wiederholen"
+
+#: 
+msgctxt "#32935"
+msgid "Shuffle"
+msgstr "Zufällige-Wiedergabe"
+
+#: 
+msgctxt "#32939"
+msgid "User-specific.\n"
+"Only applies to video player UI"
+msgstr "Benutzerspezifisch.\n"
+"Gilt nur für die Video-Abspieloberfläche"
+
+#: 
+msgctxt "#32977"
+msgid "VC1"
+msgstr "VC1"
+
+#: 
+msgctxt "#32983"
+msgid "Theme"
+msgstr "Aussehen"
+
+#: 
+msgctxt "#32984"
+msgid "Sets the theme. Currently only customizes all control buttons. ATTENTION: [I]Might[/I] need an addon restart.\n"
+"In order to customize this, copy one of the xml's in script.plexmod/resources/skins/Main/1080i/templates to addon_data/script.plexmod/templates/{templatename}_custom.xml and adjust it to your liking, then select \"Custom\" as your theme."
+msgstr "Bestimmt das Aussehen. Verändert aktuell alle Abspiel-Knöpfe. ACHTUNG: Ein Addon-Neustart [I]könnte[/I] notwendig sein.\n"
+"Um dies individuell anzupassen, kopiere eine der xml's aus script.plexmod/resources/skins/Main/1080i/templates nach addon_data/script.plexmod/templates/{templatename}_custom.xml und passe es nach Deinen Ansprüchen an; danach \"Individualisiert\" als Aussehen wählen."
+
+#: 
+msgctxt "#33007"
+msgid "Select in which cases to blur TV episode thumbnails, previews, redact summaries, hide episode titles and whether to blur chapter images. When the Addon Setting \"Use episode thumbnails in continue hub\" is enabled, blur them as well."
+msgstr "Wähle aus, in welchen Fällen Vorschaubilder von TV-Episoden verschleiert, Zusammenfassungen zensiert, Episodentitel versteckt und Kapitelbilder verschleiert werden sollen. Wenn die Addon-Einstellung \"Vorschaubild für Episoden im Fortsetzen-Hub verwenden\" aktiviert ist, diese ebenfalls verschleiern."
+
+#: 
+msgctxt "#33011"
+msgid "In progress"
+msgstr "Angefangen"
+
+#: 
+msgctxt "#33016"
+msgid "Allow TV spoilers for"
+msgstr "Erlaube TV-Spoiler für"
+
+#: 
+msgctxt "#33017"
+msgid "Overrides the above for specific genres. Default: Reality, Game Show, Documentary, Sport"
+msgstr "Überschreibt die vorherigen Einstellungen für bestimmte Genres. Standard: Reality, Game Show, Documentary, Sport"
+
+#: 
+msgctxt "#33022"
+msgid "Watched indicators"
+msgstr "Geschaut-Indikatoren"
+
+#: 
+msgctxt "#33023"
+msgid "Classic: Show orange triangle for unwatched items\n"
+"Modern: Show green checkmark for watched items\n"
+"Modern (2024): Show white checkmark for watched items\n"
+"(default: Modern (2024))"
+msgstr "Klassisch: Zeige oranges Dreieck für nicht geschaute Elemente\n"
+"Modern: Zeige grünen Haken für geschaute Elemente\n"
+"Modern (2024): Zeige weißen Haken für geschaute Elements\n"
+"(Standard: Modern (2024))"
+
+#: 
+msgctxt "#33024"
+msgid "Hide background in modern indicators"
+msgstr "Hintergrund moderner Intikatoren verstecken"
+
+#: 
+msgctxt "#33044"
+msgid "Allow round-robining in hubs. Attention: Loads a lot of items. Depending on the hub size, this can lead to crashes. Current limit: {}; can be adjusted in addon settings."
+msgstr "Rundlauf für Hubs erlauben. Achtung: Lädt sehr viele Items. Je nach Hubgröße kann dies zu Abstürzen führen. Aktuelles Limit: {}; kann in den Addon-Einstellungen angepasst werden."
+
+#: 
+msgctxt "#33046"
+msgid "When pressing up/down while the OSD isn't shown, show OSD instead of skipping chapters. Additionally, when pressing down while the OSD is shown, open the chapters (if available)."
+msgstr "Das OSD anzeigen wenn ohne OSD hoch/runter gedrückt wird, anstatt Kapitel zu wechseln. Darüberhinaus werden beim Runterdrücken während das OSD angezeigt wird, die Kapitel geöffnet (wenn vorhanden)."
+
+#: 
+msgctxt "#33047"
+msgid "Hubs round-robin item limit"
+msgstr "Hubs-Rundlauf Item Limit"
+
+#: 
+msgctxt "#33048"
+msgid "When hubs round-robin is enabled, only round-robin until this item limit. If the hub size exceeds this limit, the remaining items will be lazy loaded as usual. Tested minimum safe value on NVIDIA SHIELD 2019 is 1000. Default: 250"
+msgstr "Wenn Hubs-Rundlauf aktiviert ist, nur bis zu diesem Limit rundlaufen. Sollte der hub dieses Limit überschreiten, werden die übrigen Items nachgeladen. Minimal als sicher getesteter Wert auf der NVIDIA SHIELD 2019 ist 1000. Standard: 250"
+
+#: 
+msgctxt "#33049"
+msgid "Max retries"
+msgstr "Maximale Neuanfragen"
+
+#: 
+msgctxt "#33050"
+msgid "The maximum number of retries each connection should attempt. The default (1) helps with hibernation/wakeup issues. Set higher for bad connections, setting this to 0 was the old default before 0.7.9"
+msgstr "Die maximale Anzahl an Versuchen, die eine Verbindung unternehmen soll. Der Standard (1) hilft bei Ruhezustand/Aufwachen Probleme. Höher stellen bei schlechter Verbindung, 0 war der alte Standard vor 0.7.9"
+
+#: 
+msgctxt "#33051"
+msgid "Use CA certificate bundle"
+msgstr "CA-Zertifikat-Bundle benutzen"
+
+#: 
+msgctxt "#33052"
+msgid "Which CA certificate bundle to use for request HTTPS verification. Default is \"system\", which uses the system-provided certificate bundle. \"plex.direct\" uses an extremely small bundle provided with the addon, which only applies to plex.direct connections (any other connections will use the system bundle) and might slightly improve performance. \"custom\" allows for a certificate bundle in userdata/addon_data/script.plexmod/custom_bundle.crt"
+msgstr "Welches CA-Zertifikat-Bundle für HTTPS-Anfragen benutzt werden soll. Standard ist \"system\", welches das systemseitige Zertifikat-Bundle benutzt. \"plex.direct\" benutzt ein extrem kleines Bundle, bereitgestellt vom Addon, welches nur für plex.direct-Verbindungen angewandt wird (alle anderen Verbindungen benutzen das System-Bundle) und möglicherweise die Leistung verbessern könnte. \"custom\" erlaubt es ein benutzerdefiniertes Bundle in userdata/addon_data/script.plexmod/custom_bundle.crt abzulegen"
+
+#: 
+msgctxt "#33053"
+msgid "System"
+msgstr "System"
+
+#: 
+msgctxt "#33054"
+msgid "plex.direct (addon-supplied)"
+msgstr "plex.direct (bereitgestellt vom Addon)"
+
+#: 
+msgctxt "#33055"
+msgid "Custom"
+msgstr "Benutzerdefiniert"
+
+#: 
+msgctxt "#33056"
+msgid "None"
+msgstr "Keine"
+
+#: 
+msgctxt "#33057"
+msgid "Show buttons"
+msgstr "Knöpfe anzeigen"
+
+#: 
+msgctxt "#33058"
+msgid "Playback features"
+msgstr "Abspielfunktionen"
+
+#: 
+msgctxt "#33059"
+msgid "Additional codecs"
+msgstr "Weitere Codecs"
+
+#: 
+msgctxt "#33060"
+msgid "{feature_ds}: {desc_ds}\n"
+"{feature_4k}: {desc_4k}"
+msgstr "{feature_ds}: {desc_ds}\n"
+"{feature_4k}: {desc_4k}"
+
+#: 
+msgctxt "#33061"
+msgid "Enable certain codecs if your hardware supports them. Disable them to force transcoding."
+msgstr "Bestimmte Codecs erlauben, wenn die Hardware diese unterstützt. Deaktivierung erzwingt Transcodierung."
+
+#: 
+msgctxt "#33062"
+msgid "Compiling templates"
+msgstr "Kompiliere Templates"
+
+#: 
+msgctxt "#33063"
+msgid "Looking for custom templates"
+msgstr "Suche benutzerdef. Templates"
+
+#: 
+msgctxt "#33064"
+msgid "Rendering: {}"
+msgstr "Rendere: {}"
+
+#: 
+msgctxt "#33065"
+msgid "Complete"
+msgstr "Fertig"
+
+#: 
+msgctxt "#33066"
+msgid "Cache template files"
+msgstr "Templatedateien cachen"
+
+#: 
+msgctxt "#33067"
+msgid "Doesn't throw away the template source files after compiling them. Uses slightly more memory but increases the speed of theme-related changes."
+msgstr "Wirft die Templatequelle nicht weg, nachdem das Template kompiliert wurde. Benutzt minimal mehr Arbeitsspeicher, aber erhöht die Geschwindigkeit Aussehen-spezifischer Änderungen."
+
+#: 
+msgctxt "#33068"
+msgid "Always compile templates"
+msgstr "Templates immer kompilieren"
+
+#: 
+msgctxt "#33069"
+msgid "Recompiles all templates on every startup. Useful for template/theme development."
+msgstr "Rekompiliere alle Templates bei jedem Start. Nützlich für Template/Aussehen-Entwicklung."
+
+#: 
+msgctxt "#33070"
+msgid "Action on Wake event"
+msgstr "Aktion bei Wake-Ereignis"
+
+#: 
+msgctxt "#33071"
+msgid "Restart PM4K"
+msgstr "PM4K neustarten"
+
+#: 
+msgctxt "#33072"
+msgid "Wait for {}s"
+msgstr "Warten für {}s"
+
+#: 
+msgctxt "#33073"
+msgid "Wait after wakeup"
+msgstr "Warte nach Aufwachen"
+
+#: 
+msgctxt "#33074"
+msgid "Waiting {} second(s)"
+msgstr "Warte {} Sekunde(n)"
+
+#: 
+msgctxt "#33075"
+msgid "Do something after waking up. Waiting for a time until resuming normal execution helps with networks coming back up after sleep events. Default: 1 second (5 seconds, CoreELEC)"
+msgstr "Aktion ausführen nach dem Aufwachen. Warten, bis die normale Ausführung weiter geht, hilft beim Aufwachen von Netzwerken nach Sleep-Ereignissen. Standard: 1 Sekunde (5 Sekunden, CoreELEC)"
+
+#: 
+msgctxt "#33076"
+msgid "Modern (2024)"
+msgstr "Modern (2024)"
+
+#: 
+msgctxt "#33077"
+msgid "Scale modern indicators"
+msgstr "Moderne Indikatoren skalieren"
+
+#: 
+msgctxt "#33078"
+msgid "Scale the modern indicators based on the poster size used. Default: On (tiny: 0.75, small: 1.0, medium: 1.175, big: 1.3)"
+msgstr "Skaliere die modernen Geschaut-Indikatoren basierend auf der Postergröße. Standard: an (winzig: 0.75, klein: 1.0, mittel: 1.175, groß: 1.3)"
+
+#: 
+msgctxt "#33079"
+msgid "Hi-Res Music"
+msgstr "Hochauflös. Musik"
+
+#: 
+msgctxt "#33080"
+msgid "Allow DirectPlay of high resolution music (e.g. FLAC, >= 192 kHz)"
+msgstr "Direktes Abspielen von hochauflösender Musik erlauben (z.B. FLAC, >= 192 kHz)"
+
+#: 
+msgctxt "#33081"
+msgid "Blur chapter images"
+msgstr "Kapitelbilder verschleiern"
+
+#: 
+msgctxt "#33082"
+msgid "Scan Library Files"
+msgstr "Mediathek-Dateien einlesen"
+
+#: 
+msgctxt "#33083"
+msgid "Empty Trash"
+msgstr "Papierkorb leeren"
+
+#: 
+msgctxt "#33084"
+msgid "Analyze"
+msgstr "Analysieren"
+
+#: 
+msgctxt "#33085"
+msgid "Map key to home"
+msgstr "Taste zu Home zuordnen"
+
+#: 
+msgctxt "#33086"
+msgid "Press the key you want to map to go to home within {} seconds"
+msgstr "Drücke die Taste, die Du zuordnen willst, um sofort zu Home zu kommen binnen {} Sekunden"
+
+#: 
+msgctxt "#33087"
+msgid "Bind a key to immediately go to the Home view. Cancel using BACK/PREVIOUS_MENU. Clear bound key using the STOP button on the setting."
+msgstr "Wähle einen Knopf um sofort zur Home-Ansicht zu kommen. Abbrechen via BACK/PREVIOUS_MENU. Gebundene Taste mit dem STOP Knopf auf der Einstellung entbinden."
+
+#: 
+msgctxt "#33620"
+msgid "Plex server connect timeout"
+msgstr "Plex-Serververbindungs-Zeitlimit"
+
+#: 
+msgctxt "#33621"
+msgid "Sets the maximum amount of time to connect to a Plex Server in seconds. Default: 5"
+msgstr "Setzt das Zeitlimit um sich mit einem Plex-Server zu verbinden, in Sekunden. Voreinstellung: 5"
+
+#: 
+msgctxt "#32940"
+msgid "Video Player"
+msgstr "Video-Player"
+
+#: 
+msgctxt "#33050"
+msgid "The maximum number of retries each connection should attempt. The default (3) helps with hibernation/wakeup issues. Set higher for bad connections, setting this to 0 was the old default before 0.7.9"
+msgstr "Die maximale Anzahl an Versuchen, die eine Verbindung unternehmen soll. Der Standardwert (3) hilft bei Ruhezustand/Aufwachen Probleme. Höher stellen bei schlechter Verbindung, 0 war der alte Standard vor 0.7.9"
+
+#: 
+msgctxt "#33075"
+msgid "Do something after waking up. Waiting for a time until resuming normal execution helps with networks coming back up after sleep events. Default: 1 second (5 seconds, CoreELEC)."
+msgstr "Aktion ausführen nach dem Aufwachen. Warten, bis die normale Ausführung weiter geht, hilft beim Aufwachen von Netzwerken nach Sleep-Ereignissen. Standard: 1 Sekunde (5 Sekunden, CoreELEC)."
+
+#: 
+msgctxt "#33087"
+msgid "Bind a key to immediately go to the Home view. Cancel using BACK/PREVIOUS_MENU. Clear bound key using the STOP or CONTEXT_MENU (long press OK/Enter) button on the setting."
+msgstr "Wähle eine Taste, um sofort zur Home-Ansicht zu kommen. Abbrechen via BACK/PREVIOUS_MENU. Gebundene Taste mit dem STOP oder CONTEXT_MENU (OK/Enter lange gedrückt halten) Knopf auf der Einstellung entbinden."
+
+#: 
+msgctxt "#33088"
+msgid "Only applies to video player UI"
+msgstr "Gilt nur für die Video-Abspieloberfläche"
+
+#: 
+msgctxt "#33089"
+msgid "Automatic seek-back"
+msgstr "Automatisch zurückspringen"
+
+#: 
+msgctxt "#33090"
+msgid "If your audio doesn't resume as fast as the video, or you want to catch up after a longer pause, use this to seek back after resuming from pause to compensate for the delay. Default: Off"
+msgstr "Wenn der Ton nicht so schnell nach dem Fortsetzen wieder einsetzt, wie das Bild, oder Du aufholen möchtest, benutze dies um beim Fortsetzen nach dem Pausieren eine bestimmte Zeitspanne zurück zu springen. Standard: Aus"
+
+#: 
+msgctxt "#33091"
+msgid "{sec_or_ms} {unit_s_or_ms}"
+msgstr "{sec_or_ms} {unit_s_or_ms}"
+
+#: 
+msgctxt "#33092"
+msgid "Seek back on pause"
+msgstr "Zurückspringen bei Pause"
+
+#: 
+msgctxt "#33093"
+msgid "Seek back after"
+msgstr "Zurückspringen nach"
+
+#: 
+msgctxt "#33094"
+msgid "Only seek back after having paused at least a certain amount of seconds"
+msgstr "Nur zurückspringen nachdem wenigstens eine gewisse Zeit pausiert war"
+
+#: 
+msgctxt "#33095"
+msgid "Seek back on pause instead of on resume. When Transcoding you should enable this."
+msgstr "Zurückspringen beim Pausieren anstatt nach dem Fortsetzen. Beim Transkodieren sollte dies aktiviert sein."
+
+#: 
+msgctxt "#33096"
+msgid "Only with Direct Play"
+msgstr "Nur bei Direkter Wiedergabe"
+
+#: 
+msgctxt "#33097"
+msgid "Enable seek back ony when we're Direct Playing, not Transcoding."
+msgstr "Zurückspringen nur bei Direkter Wiedergabe, nicht beim Transkodieren."
+
+#: 
+msgctxt "#33098"
+msgid "Tickrate (Hz)"
+msgstr "Tick-Rate (Hz)"
+
+#: 
+msgctxt "#33099"
+msgid "Controls how often certain ticks are performed on GUI windows and the SeekDialog/VideoPlayer and how fast certain events are handled. Can be expensive when bigger than 1 Hz (once per second), can cause quirks when lower than 1 Hz (less than once per second). Depends on the hardware. Default: 1 Hz, Max: 10 Hz (every 100 ms), Sane highest and old default: 10 Hz (every 100 ms)"
+msgstr "Stellt ein, wie häufig in GUI-Fenstern und dem SeekDialog/VideoPlayer getickt wird und wie schnell bestimmte Events verarbeitet werden. Kann teuer werden, wenn größer als 1 Hz (einmal pro Sekunde), kann Macken verursachen, wenn kleiner als 1 Hz (seltener als einmal pro Sekunde). Hängt von der Hardware ab. Standard: 1 Hz, Max: 10 Hz (alle 100 ms), vernünftiger höchster Wert und alter Standard: 10 Hz (alle 100 ms)"
+
+#: 
+msgctxt "#33636"
+msgid "Plex server read timeout"
+msgstr "Plex-Server-Lesezeitlimit"
+
+#: 
+msgctxt "#33637"
+msgid "Sets the maximum amount of time to read from a Plex Server in seconds. Default: 10"
+msgstr "Setzt das Zeitlimit beim Lesen von einem Plex-Server, in Sekunden. Voreinstellung: 10"
+
+#: 
+msgctxt "#33638"
+msgid "Plex.tv connect timeout"
+msgstr "Plex.tv-Verbindungszeitlimit"
+
+#: 
+msgctxt "#33639"
+msgid "Plex.tv: Sets the maximum amount of time to connect to Plex.tv in seconds. Default: 5"
+msgstr "Plex.tv: Setzt das Zeitlimit um sich mit Plex.tv zu verbinden, in Sekunden. Voreinstellung: 5"
+
+#: 
+msgctxt "#33640"
+msgid "Plex.tv read timeout"
+msgstr "Plex.tv Lesezeitlimit"
+
+#: 
+msgctxt "#33641"
+msgid "Plex.tv: Sets the maximum amount of time to read from Plex.tv in seconds. Default: 20"
+msgstr "Plex.tv: Setzt das Zeitlimit beim Lesen von Plex.tv, in Sekunden. Voreinstellung: 20"
+
+#: 
+msgctxt "#33642"
+msgid "Dump config"
+msgstr "Konfiguration ausgeben"
+
+#: 
+msgctxt "#33643"
+msgid "Dumps all user settings into the log on startup, when DEBUG logging is enabled. Masks private information."
+msgstr "Schreibt alle Benutzereinstellungen in die Logdatei beim Start, wenn DEBUG-Logging aktiviert ist. Verschleiert private Informationen."
+
+#: 
+msgctxt "#33644"
+msgid "Tracks"
+msgstr "Tracks"
+
+#: 
+msgctxt "#33645"
+msgid "Ignore plex.direct DNS handling for remote hosts"
+msgstr "Entfernte plex.direct-Hosts nicht behandeln (DNS)"
+
+#: 
+msgctxt "#33646"
+msgid "Only handle plex.direct hosts when the server's attributes dnsRebindingProtection=1 and publicAddressMatches=1. Might not work in certain situations. Disable if you have connection issues."
+msgstr "Nur plex.direct Hosts behandeln, wenn die Attribute des Servers dnsRebindingProtection=1 und publicAddressMatches=1 entsprechen. Könnte in bestimmten Situationen nicht funktionieren. Deaktivieren, sollte es Verbindungsprobleme geben."
+
+#: 
+msgctxt "#33645"
+msgid "plex.direct: Honor plex.tv's dnsRebindingProtection flag (DNS)"
+msgstr "plex.direct: plex.tv's dnsRebindingProtection-Flag beachten (DNS)"
+
+#: 
+msgctxt "#33646"
+msgid "Only handle plex.direct hosts when the server's attributes dnsRebindingProtection=1. Might not work in certain situations. Disable if you have connection issues. Default: On"
+msgstr "Nur plex.direct Hosts behandeln, wenn das Attribut des Servers dnsRebindingProtection=1 entspricht. Könnte in bestimmten Situationen nicht funktionieren. Deaktivieren, sollte es Verbindungsprobleme geben. Standard: An"
+
+#: 
+msgctxt "#33647"
+msgid "plex.direct: Honor plex.tv's publicAddressMatches flag (DNS)"
+msgstr "plex.direct: plex.tv's publicAddressMatches-Flag beachten (DNS)"
+
+#: 
+msgctxt "#33648"
+msgid "Only handle plex.direct hosts when the server's attributes publicAddressMatches=1. Might not work in certain situations. Disable if you have connection issues. Default: On"
+msgstr "Nur plex.direct Hosts behandeln, wenn das Attribut des Servers publicAddressMatches=1 entspricht. Könnte in bestimmten Situationen nicht funktionieren. Deaktivieren, sollte es Verbindungsprobleme geben. Standard: An"
+
+#: 
+msgctxt "#33649"
+msgid "CoreELEC: Resume-fix wait for seek"
+msgstr "CoreELEC: Fortsetzen-Fix Sprungwartezeit"
+
+#: 
+msgctxt "#33650"
+msgid "This adjusts the delay between seek-tries on CoreELEC, which fixes resume not always working or double-seeking. When you have resume/double-seek issues, increase this. 100ms should be stable as well. Default: 200ms"
+msgstr "Dies passt die Wartezeit zwischen Sprungversuchen auf CoreELEC an, welches den Fehler behebt, dass das Fortsetzen manchmal nicht funktioniert, oder doppelt gesprungen wird. Solltest Du Fortsetzen-/Doppelsprungprobleme haben, diesen Wert erhöhen. 100ms sollten ebenfalls stabil sein. Standard: 200ms"
+
+#: 
+msgctxt "#32101"
+msgid "If enabled, when playback ends and there is a 'Next Up' item available, it will be automatically be played after a {} second delay."
+msgstr "Falls die Option aktiviert und ein weiterer Titel verfügbar ist, wird dieser {} Sekunden nach der aktuellen Wiedergabe gestartet."
+
+#: 
+msgctxt "#33651"
+msgid "Startup delay"
+msgstr "Start-Verzögerung"
+
+#: 
+msgctxt "#33652"
+msgid "Never show Post Play"
+msgstr "Niemals Post-Play-Fenster anzeigen"
+

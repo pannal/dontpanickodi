@@ -7,6 +7,7 @@ from plexnet import util as pnUtil
 from lib import util
 from lib.data_cache import dcm
 from lib.util import T
+from lib.genres import GENRES_TV_BY_SYN
 from . import busy
 from . import kodigui
 from . import optionsdialog
@@ -50,13 +51,14 @@ class SeasonsMixin:
                 watchedPerc += vPerc / season.leafCount.asFloat()
         return watchedPerc > 0 and math.ceil(watchedPerc) or 0
 
-    def fillSeasons(self, show, update=False, seasonsFilter=None, selectSeason=None):
+    def fillSeasons(self, show, update=False, seasonsFilter=None, selectSeason=None, do_focus=True):
         seasons = show.seasons()
         if not seasons or (seasonsFilter and not seasonsFilter(seasons)):
             return False
 
         items = []
         idx = 0
+        focus = None
         for season in seasons:
             if selectSeason and season == selectSeason:
                 continue
@@ -67,7 +69,8 @@ class SeasonsMixin:
                 mli.setProperty('thumb.fallback', 'script.plex/thumb_fallbacks/show.png')
                 mli.setProperty('unwatched.count', not season.isWatched and str(season.unViewedLeafCount) or '')
                 mli.setBoolProperty('watched', season.isFullyWatched)
-                if not season.isWatched:
+                if not season.isWatched and focus is None and season.index.asInt() > 0:
+                    focus = idx
                     mli.setProperty('progress', util.getProgressImage(None, self.getSeasonProgress(show, season)))
                 items.append(mli)
                 idx += 1
@@ -78,6 +81,9 @@ class SeasonsMixin:
         else:
             subItemListControl.reset()
             subItemListControl.addItems(items)
+
+        if focus is not None and do_focus:
+            subItemListControl.setSelectedItemByPos(focus)
 
         return True
 
@@ -103,7 +109,7 @@ class DeleteMediaMixin:
     @busy.dialog()
     def _delete(self, item, do_close=False):
         success = item.delete()
-        util.LOG('Media DELETE: {0} - {1}'.format(item, success and 'SUCCESS' or 'FAILED'))
+        util.LOG('Media DELETE: {0} - {1}', item, success and 'SUCCESS' or 'FAILED')
         if success and do_close:
             self.doClose()
         return success
@@ -146,15 +152,16 @@ class RatingsMixin:
 class SpoilersMixin(object):
     def __init__(self, *args, **kwargs):
         self._noSpoilers = None
-        self.spoilerSetting = "unwatched"
+        self.spoilerSetting = ["unwatched"]
         self.noTitles = False
         self.spoilersAllowedFor = True
-        self.storeSpoilerSettings()
+        self.cacheSpoilerSettings()
 
-    def storeSpoilerSettings(self):
-        self.spoilerSetting = util.getSetting('no_episode_spoilers2', "unwatched")
-        self.noTitles = util.getSetting('no_unwatched_episode_titles', False)
-        self.spoilersAllowedFor = util.getSetting('spoilers_allowed_genres', True)
+    def cacheSpoilerSettings(self):
+        self.spoilerSetting = util.getSetting('no_episode_spoilers3', ["unwatched"])
+        self.noTitles = 'no_unwatched_episode_titles' in self.spoilerSetting
+        self.spoilersAllowedFor = util.getSetting('spoilers_allowed_genres2', ["Reality", "Game Show", "Documentary",
+                                                                               "Sport"])
 
     @property
     def noSpoilers(self):
@@ -177,7 +184,8 @@ class SpoilersMixin(object):
         if item and item.type != "episode":
             return "off"
 
-        nope = self.spoilerSetting
+        nope = "funwatched" if "in_progress" in self.spoilerSetting else "unwatched" \
+            if "unwatched" in self.spoilerSetting else "off"
 
         if nope != "off" and self.spoilersAllowedFor:
             # instead of making possibly multiple separate API calls to find genres for episode's shows, try to get
@@ -195,7 +203,8 @@ class SpoilersMixin(object):
                 genres = show.genres()
 
             for g in genres:
-                if g.tag in util.SPOILER_ALLOWED_GENRES:
+                main_tag = GENRES_TV_BY_SYN.get(g.tag)
+                if main_tag and main_tag in self.spoilersAllowedFor:
                     nope = "off"
                     break
 
@@ -220,3 +229,14 @@ class SpoilersMixin(object):
         return (hide_spoilers if hide_spoilers is not None else
                 self.hideSpoilers(ep, fully_watched=fully_watched, watched=watched)) \
             and {"blur": util.addonSettings.episodeNoSpoilerBlur} or {}
+
+
+class PlaybackBtnMixin(object):
+    def __init__(self, *args, **kwargs):
+        self.playBtnClicked = False
+
+    def reset(self, *args, **kwargs):
+        self.playBtnClicked = False
+
+    def onReInit(self):
+        self.playBtnClicked = False

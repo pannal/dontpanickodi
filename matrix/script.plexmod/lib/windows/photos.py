@@ -227,7 +227,7 @@ class PhotoWindow(kodigui.BaseWindow):
 
             util.DEBUG_LOG('waiting for playQueue to initialize')
             if busy.widthDialog(self.playQueue.waitForInitialization, None, delay=True):
-                util.DEBUG_LOG('playQueue initialized: {0}'.format(self.playQueue))
+                util.DEBUG_LOG('playQueue initialized: {0}', self.playQueue)
             else:
                 util.DEBUG_LOG('playQueue timed out waiting for initialization')
 
@@ -267,7 +267,7 @@ class PhotoWindow(kodigui.BaseWindow):
             # bad temporary fix for videos in photo playqueues
             if photo.type != "photo":
                 self.next()
-                util.DEBUG_LOG("SKIPPING PHOTO: %s" % photo)
+                util.DEBUG_LOG("SKIPPING PHOTO: {}", photo)
                 return
 
             self.updatePqueueListSelection(photo)

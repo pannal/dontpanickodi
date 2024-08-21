@@ -136,6 +136,10 @@ class VideoSettingsDialog(kodigui.BaseDialog, util.CronReceiver):
         else:
             self.settingsList.replaceItems(items)
 
+        if self.nonPlayback:
+            # we don't have enough items for a scrollbar, increase width
+            self.settingsList.setWidth(1000)
+
         self.setFocusId(self.SETTINGS_LIST_ID)
 
     def getAudioAndSubtitleInfo(self):
@@ -321,7 +325,7 @@ def showAudioDialog(video, non_playback=False):
     if choice is None:
         return
 
-    video.selectStream(choice)
+    video.selectStream(choice, from_session=not non_playback)
 
 
 def showSubtitlesDialog(video, non_playback=False):
@@ -336,7 +340,7 @@ def showSubtitlesDialog(video, non_playback=False):
     if choice is None:
         return
 
-    video.selectStream(choice)
+    video.selectStream(choice, from_session=not non_playback)
     video.manually_selected_sub_stream = choice.id
 
 

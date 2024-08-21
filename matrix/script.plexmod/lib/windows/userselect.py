@@ -194,7 +194,7 @@ class UserSelectWindow(kodigui.BaseWindow):
     def userSelected(self, item, pin=None):
         user = item.dataSource
         # xbmc.sleep(500)
-        util.DEBUG_LOG('Home user selected: {0}'.format(user))
+        util.DEBUG_LOG('Home user selected: {0}', user)
 
         from lib import plex
         with plex.CallbackEvent(plexapp.util.APP, 'account:response') as e:

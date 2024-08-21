@@ -6,9 +6,11 @@ import traceback
 import requests
 import socket
 import urllib3
+import datetime
 from . import threadutils
 import six.moves.urllib.request, six.moves.urllib.parse, six.moves.urllib.error
 import mimetypes
+import functools
 from . import plexobjects
 from xml.etree import ElementTree
 
@@ -25,6 +27,9 @@ DEFAULT_TIMEOUT = asyncadapter.AsyncTimeout(util.TIMEOUT).setConnectTimeout(util
 
 RESOLVED_PD_HOSTS = {}
 
+CURRENT_PLEX_CRT_DATE = datetime.date(year=2025, month=9, day=15)
+TODAY = datetime.date.today()
+
 _getaddrinfo = socket.getaddrinfo
 
 
@@ -39,7 +44,7 @@ def pgetaddrinfo(host, port, *args, **kwargs):
         else:
             base = host.split(".", 1)[0]
             ip = RESOLVED_PD_HOSTS[host] = v6 and base.replace("-", ":") or base.replace("-", ".")
-            util.DEBUG_LOG("Dynamically resolving {} to {}".format(host, ip))
+            util.DEBUG_LOG("Dynamically resolving {} to {}", host, ip)
 
         fam = v6 and socket.AF_INET6 or socket.AF_INET
         stype = kwargs.get("type", kwargs.get("socktype", socket.SOCK_STREAM))
@@ -53,17 +58,17 @@ socket.getaddrinfo = pgetaddrinfo
 
 
 def GET(*args, **kwargs):
-    return requests.get(*args, headers=util.BASE_HEADERS.copy(), timeout=util.TIMEOUT, **kwargs)
+    return requests.get(*args, headers=util.BASE_HEADERS.copy(), timeout=DEFAULT_TIMEOUT, **kwargs)
 
 
 def POST(*args, **kwargs):
-    return requests.post(*args, headers=util.BASE_HEADERS.copy(), timeout=util.TIMEOUT, **kwargs)
+    return requests.post(*args, headers=util.BASE_HEADERS.copy(), timeout=DEFAULT_TIMEOUT, **kwargs)
 
 
 def Session():
     s = asyncadapter.Session()
+    s.request = functools.partial(s.request, timeout=DEFAULT_TIMEOUT)
     s.headers = util.BASE_HEADERS.copy()
-    s.timeout = util.TIMEOUT
 
     return s
 
@@ -81,7 +86,7 @@ class HttpRequest(object):
                  "thread", "__dict__")
     _cancel = False
 
-    def __init__(self, url, method=None, forceCertificate=False):
+    def __init__(self, url, method=None):
         self.server = None
         self.path = None
         self.hasParams = '?' in url
@@ -93,13 +98,18 @@ class HttpRequest(object):
         self.url = url
         self.thread = None
 
-        # Use our specific plex.direct CA cert if applicable to improve performance
-        # if forceCertificate or url[:5] == "https":  # TODO: ---------------------------------------------------------------------------------IMPLEMENT
-        #     certsPath = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'certs')
-        #     if "plex.direct" in url:
-        #         self.session.cert = os.path.join(certsPath, 'plex-bundle.crt')
-        #     else:
-        #         self.session.cert = os.path.join(certsPath, 'ca-bundle.crt')
+        # Use a specific CA cert bundle if applicable
+        if util.USE_CERT_BUNDLE != "system" and url[:5] == "https":
+            if util.USE_CERT_BUNDLE == "custom":
+                # noinspection PyTypeChecker
+                self.session.cert = os.path.join(util.translatePath(util.ADDON.getAddonInfo("profile")),
+                                                 "custom_bundle.crt")
+
+            elif util.USE_CERT_BUNDLE == "plex.direct" and "plex.direct" in url and TODAY <= CURRENT_PLEX_CRT_DATE:
+                self.session.cert = os.path.join(
+                    os.path.dirname(os.path.realpath(__file__)), 'certs', 'plex.direct.bundle.crt')
+            #else:
+            #    self.session.cert = os.path.join(certsPath, 'ca-bundle.crt')
 
     def removeAsPending(self):
         from . import plexapp
@@ -122,6 +132,8 @@ class HttpRequest(object):
                 res = self.session.delete(self.url, timeout=timeout, stream=True)
             elif self.method == 'HEAD':
                 res = self.session.head(self.url, timeout=timeout, stream=True)
+            elif self.method == 'OPTIONS':
+                res = self.session.options(self.url, timeout=timeout, stream=True)
             elif self.method == 'POST' or body is not None:
                 if not contentType:
                     self.session.headers["Content-Type"] = "application/x-www-form-urlencoded"
@@ -155,49 +167,49 @@ class HttpRequest(object):
 
         self.removeAsPending()
 
-    def getWithTimeout(self, seconds=DEFAULT_TIMEOUT):
-        return HttpObjectResponse(self.getPostWithTimeout(seconds), self.path, self.server)
+    def getWithTimeout(self, timeout=DEFAULT_TIMEOUT):
+        return HttpObjectResponse(self.getPostWithTimeout(timeout), self.path, self.server)
 
-    def postWithTimeout(self, seconds=DEFAULT_TIMEOUT, body=None):
+    def postWithTimeout(self, timeout=DEFAULT_TIMEOUT, body=None):
         self.method = 'POST'
-        return HttpObjectResponse(self.getPostWithTimeout(seconds, body), self.path, self.server)
+        return HttpObjectResponse(self.getPostWithTimeout(timeout, body), self.path, self.server)
 
-    def getToStringWithTimeout(self, seconds=DEFAULT_TIMEOUT):
-        res = self.getPostWithTimeout(seconds)
+    def getToStringWithTimeout(self, timeout=DEFAULT_TIMEOUT):
+        res = self.getPostWithTimeout(timeout)
         if not res:
             return ''
         return res.text.encode('utf8')
 
-    def postToStringWithTimeout(self, body=None, seconds=DEFAULT_TIMEOUT):
+    def postToStringWithTimeout(self, body=None, timeout=DEFAULT_TIMEOUT):
         self.method = 'POST'
-        res = self.getPostWithTimeout(seconds, body)
+        res = self.getPostWithTimeout(timeout, body)
         if not res:
             return ''
         return res.text.encode('utf8')
 
-    def getPostWithTimeout(self, seconds=DEFAULT_TIMEOUT, body=None):
+    def getPostWithTimeout(self, timeout=DEFAULT_TIMEOUT, body=None):
         if self._cancel:
             return
 
-        self.logRequest(body, seconds, False)
+        self.logRequest(body, timeout=timeout, _async=False)
         try:
             if self.method == 'PUT':
-                res = self.session.put(self.url, timeout=seconds, stream=True)
+                res = self.session.put(self.url, timeout=timeout, stream=True)
             elif self.method == 'DELETE':
-                res = self.session.delete(self.url, timeout=seconds, stream=True)
+                res = self.session.delete(self.url, timeout=timeout, stream=True)
             elif self.method == 'HEAD':
-                res = self.session.head(self.url, timeout=seconds, stream=True)
+                res = self.session.head(self.url, timeout=timeout, stream=True)
             elif self.method == 'POST' or body is not None:
-                res = self.session.post(self.url, data=body, timeout=seconds, stream=True)
+                res = self.session.post(self.url, data=body, timeout=timeout, stream=True)
             else:
-                res = self.session.get(self.url, timeout=seconds, stream=True)
+                res = self.session.get(self.url, timeout=timeout, stream=True)
 
             self.currentResponse = res
 
             if self._cancel:
                 return None
 
-            util.LOG("Got a {0} from {1}".format(res.status_code, util.cleanToken(self.url)))
+            util.LOG("Got a {0} from {1}", res.status_code, util.cleanToken(self.url))
             # self.event = msg
             return res
         except Exception as e:
@@ -351,7 +363,7 @@ def addRequestHeaders(transferObj, headers=None):
     if isinstance(headers, dict):
         for header in headers:
             transferObj.addHeader(header, headers[header])
-            util.DEBUG_LOG("Adding header to {0}: {1}: {2}".format(transferObj, header, headers[header]))
+            util.DEBUG_LOG("Adding header to {0}: {1}: {2}", transferObj, header, headers[header])
 
 
 def addUrlParam(url, param):

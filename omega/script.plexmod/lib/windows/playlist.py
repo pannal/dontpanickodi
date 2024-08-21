@@ -53,9 +53,9 @@ class ChunkRequestTask(backgroundthread.Task):
 
             self.WINDOW.chunkCallback(items, self.start)
         except AttributeError:
-            util.DEBUG_LOG('Playlist window closed, ignoring chunk at index {0}'.format(self.start))
+            util.DEBUG_LOG('Playlist window closed, ignoring chunk at index {0}', self.start)
         except plexnet.exceptions.BadRequest:
-            util.DEBUG_LOG('404 on playlist: {0}'.format(repr(self.WINDOW.playlist.title)))
+            util.DEBUG_LOG('404 on playlist: {0}', lambda: repr(self.WINDOW.playlist.title))
 
 
 class PlaylistWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
@@ -93,9 +93,13 @@ class PlaylistWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
     def onFirstInit(self):
         self.playlistListControl = kodigui.ManagedControlList(self, self.PLAYLIST_LIST_ID, 5)
         self.setProperties()
+        player.PLAYER.on('new.video', self.onNewVideo)
 
         self.fillPlaylist()
         self.setFocusId(self.PLAYLIST_LIST_ID)
+
+    def onReInit(self):
+        self.playlistListControl.setSelectedItemByDataSource(self.playlist.current())
 
     # def onAction(self, action):
     #     try:
@@ -106,7 +110,11 @@ class PlaylistWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
     #     except:
     #         util.ERROR()
 
-    #     kodigui.ControlledWindow.onAction(self, action)
+    #     self.defOnAction(action)
+
+    def onNewVideo(self, *args, **kwargs):
+        video = kwargs.get("video")
+        self.playlist.setCurrent(self.playlist.getPosFromItem(video))
 
     def onAction(self, action):
         try:
@@ -136,6 +144,7 @@ class PlaylistWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
             self.searchButtonClicked()
 
     def doClose(self):
+        player.PLAYER.off('new.video', self.onNewVideo)
         kodigui.ControlledWindow.doClose(self)
         self.tasks.cancel()
         ChunkRequestTask.reset()
@@ -317,6 +326,7 @@ class PlaylistWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
         mli.setProperty('track.duration', util.durationToShortText(episode.duration.asInt()))
         mli.setProperty('video', '1')
         mli.setProperty('watched', episode.isWatched and '1' or '')
+        mli.setProperty('unwatched', episode.isWatched and '' or '1')
 
     def createMovieListItem(self, mli, movie):
         mli.setLabel(movie.defaultTitle)
@@ -325,6 +335,7 @@ class PlaylistWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
         mli.setProperty('track.duration', util.durationToShortText(movie.duration.asInt()))
         mli.setProperty('video', '1')
         mli.setProperty('watched', movie.isWatched and '1' or '')
+        mli.setProperty('unwatched', movie.isWatched and '' or '1')
 
     @busy.dialog()
     def fillPlaylist(self):
@@ -343,6 +354,9 @@ class PlaylistWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
 
         self.playlistListControl.reset()
         self.playlistListControl.addItems(items)
+
+        self.playlist.setCurrent(self.playlist.getPosFromItem(self.playlist.userCurrent()))
+        self.playlistListControl.setSelectedItemByDataSource(self.playlist.current())
 
         if total <= min(PLAYLIST_INITIAL_SIZE, PLAYLIST_PAGE_SIZE):
             return

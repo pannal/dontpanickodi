@@ -19,6 +19,15 @@ METADATA_RELATED_OTHER = 12
 
 
 class MediaItem(plexobjects.PlexObject):
+    def __eq__(self, other):
+        return self.ratingKey == other.ratingKey
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def __hash__(self):
+        return hash(self.ratingKey)
+
     def getIdentifier(self):
         identifier = self.get('identifier') or None
 
@@ -66,7 +75,7 @@ class MediaItem(plexobjects.PlexObject):
             data = self.server.query('/library/metadata/{0}'.format(self.ratingKey))
         except exceptions.BadRequest:
             # item does not exist anymore
-            util.DEBUG_LOG("Item {} doesn't exist.".format(self.ratingKey))
+            util.DEBUG_LOG("Item {} doesn't exist.", self.ratingKey)
             return False
         return data is not None and data.attrib.get('size') != '0'
 
@@ -321,5 +330,5 @@ class RelatedMixin(object):
         try:
             return plexobjects.listItems(self.server, path, offset=offset, limit=limit, params={"count": _max})
         except exceptions.BadRequest:
-            util.DEBUG_LOG("Invalid related items response returned for %s" % self)
+            util.DEBUG_LOG("Invalid related items response returned for {}", self)
             return None

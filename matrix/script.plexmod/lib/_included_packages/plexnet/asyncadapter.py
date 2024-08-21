@@ -9,6 +9,7 @@ import six
 from requests.packages.urllib3 import HTTPConnectionPool, HTTPSConnectionPool
 from requests.packages.urllib3.connection import HTTPConnection
 from requests.packages.urllib3.poolmanager import PoolManager, proxy_from_url
+from requests.packages.urllib3.exceptions import ConnectTimeoutError
 try:
     from requests.packages.urllib3.connectionpool import VerifiedHTTPSConnection
 except ImportError:
@@ -32,16 +33,18 @@ WIN_EISCONN = 10056
 WIN_ENOTCONN = 10057
 WIN_EHOSTUNREACH = 10065
 
+MAX_RETRIES = 3
+
 
 def ABORT_FLAG_FUNCTION():
     return False
 
 
-class TimeoutException(Exception):
+class CanceledException(Exception):
     pass
 
 
-class CanceledException(Exception):
+class TimeoutException(ConnectTimeoutError):
     pass
 
 
@@ -87,7 +90,7 @@ class AsyncVerifiedHTTPSConnection(VerifiedHTTPSConnection):
 
     def _check_timeout(self):
         if time.time() > self.deadline:
-            raise TimeoutException('connection timed out')
+            raise ConnectTimeoutError('connection timed out')
 
     def create_connection(self, address, timeout=None, source_address=None):
         """Connect to *address* and return the socket object.
@@ -336,8 +339,8 @@ class AsyncHTTPAdapter(HTTPAdapter):
 class Session(requests.Session):
     def __init__(self, *args, **kwargs):
         requests.Session.__init__(self, *args, **kwargs)
-        self.mount('https://', AsyncHTTPAdapter())
-        self.mount('http://', AsyncHTTPAdapter())
+        self.mount('https://', AsyncHTTPAdapter(max_retries=MAX_RETRIES))
+        self.mount('http://', AsyncHTTPAdapter(max_retries=MAX_RETRIES))
 
     def cancel(self):
         for v in self.adapters.values():

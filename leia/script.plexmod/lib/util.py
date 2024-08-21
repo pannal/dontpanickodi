@@ -2,6 +2,7 @@
 from __future__ import absolute_import
 
 import gc
+import os
 import sys
 import re
 import binascii
@@ -11,25 +12,35 @@ import math
 import time
 import datetime
 import contextlib
+import subprocess
 import unicodedata
+import pprint
 
 import six.moves.urllib.request, six.moves.urllib.parse, six.moves.urllib.error
 import six
-import os
 import struct
 import requests
 
 import plexnet.util
 
 from .kodijsonrpc import rpc
+# noinspection PyUnresolvedReferences
 from kodi_six import xbmc
+# noinspection PyUnresolvedReferences
 from kodi_six import xbmcgui
+# noinspection PyUnresolvedReferences
 from kodi_six import xbmcaddon
+# noinspection PyUnresolvedReferences
 from kodi_six import xbmcvfs
 
 from . import colors
 # noinspection PyUnresolvedReferences
 from .exceptions import NoDataException
+from .logging import log, log_error
+# noinspection PyUnresolvedReferences
+from .i18n import T
+from . import aspectratio
+from .kodi_util import *
 from plexnet import signalsmixin
 
 DEBUG = True
@@ -39,47 +50,16 @@ ADDON = xbmcaddon.Addon()
 
 SETTINGS_LOCK = threading.Lock()
 
-_build = None
-# buildversion looks like: XX.X[-TAG] (a+.b+.c+) (.+); there are kodi builds that don't set the build version
-sys_ver = xbmc.getInfoLabel('System.BuildVersion')
-_ver = sys_ver
+SKIN_PLEXTUARY = xbmc.getSkinDir() == "skin.plextuary"
+FROM_KODI_REPOSITORY = ADDON.getAddonInfo('name') == "PM4K for Plex"
+PROFILE = translatePath(ADDON.getAddonInfo('profile'))
 
-try:
-    if ' ' in sys_ver and '(' in sys_ver:
-        _ver, _build = sys_ver.split()[:2]
 
-    _splitver = _ver.split(".")
-    KODI_VERSION_MAJOR, KODI_VERSION_MINOR = int(_splitver[0].split("-")[0].strip()), \
-                                             int(_splitver[1].split(" ")[0].split("-")[0].strip())
-except:
-    xbmc.log('script.plex: Couldn\'t determine Kodi version, assuming 19.4. Got: {}'.format(sys_ver))
-    # assume something "old"
-    KODI_VERSION_MAJOR = 19
-    KODI_VERSION_MINOR = 4
+DEF_THEME = "modern-colored"
+THEME_VERSION = 23
 
-_bmajor, _bminor, _bpatch = (KODI_VERSION_MAJOR, KODI_VERSION_MINOR, 0)
-parsedBuild = False
-if _build:
-    try:
-        _bmajor, _bminor, _bpatch = _build[1:-1].split(".")
-        parsedBuild = True
-    except:
-        pass
-if not parsedBuild:
-    xbmc.log('script.plex: Couldn\'t determine build version, falling back to Kodi version', xbmc.LOGINFO)
-
-# calculate a comparable build number
-KODI_BUILD_NUMBER = int("{0}{1:02d}{2:03d}".format(_bmajor, int(_bminor), int(_bpatch)))
 xbmc.log('script.plex: Kodi {0}.{1} (build {2})'.format(KODI_VERSION_MAJOR, KODI_VERSION_MINOR, KODI_BUILD_NUMBER),
          xbmc.LOGINFO)
-
-
-if KODI_VERSION_MAJOR > 18:
-    translatePath = xbmcvfs.translatePath
-else:
-    translatePath = xbmc.translatePath
-
-PROFILE = translatePath(ADDON.getAddonInfo('profile'))
 
 
 def getChannelMapping():
@@ -113,23 +93,43 @@ except:
     ACCEPT_LANGUAGE_CODE = 'en-US,en'
 
 
+try:
+    DISPLAY_RESOLUTION = [xbmcgui.getScreenWidth(), xbmcgui.getScreenHeight()]
+except:
+    log('Couldn\'t determine display resolution')
+    DISPLAY_RESOLUTION = [1920, 1080]
+
+
+CURRENT_AR = DISPLAY_RESOLUTION[0] / DISPLAY_RESOLUTION[1]
+
+# we currently only support vertical scaling for smaller ARs; change to != once we know how to scale horizontally
+NEEDS_SCALING = round(CURRENT_AR, 2) < round(1920 / 1080, 2)
+
+
 def getSetting(key, default=None):
     with SETTINGS_LOCK:
         setting = ADDON.getSetting(key)
-        return _processSetting(setting, default)
+        is_json = key in JSON_SETTINGS
+        return _processSetting(setting, default, is_json=is_json)
 
 
 def getUserSetting(key, default=None):
     if not plexnet.util.ACCOUNT:
         return default
 
+    is_json = key in JSON_SETTINGS
+
     key = '{}.{}'.format(key, plexnet.util.ACCOUNT.ID)
     with SETTINGS_LOCK:
         setting = ADDON.getSetting(key)
-        return _processSetting(setting, default)
+        return _processSetting(setting, default, is_json=is_json)
 
 
-def _processSetting(setting, default):
+JSON_SETTINGS = []
+USER_SETTINGS = []
+
+
+def _processSetting(setting, default, is_json=False):
     if not setting:
         return default
     if isinstance(default, bool):
@@ -138,13 +138,25 @@ def _processSetting(setting, default):
         return float(setting)
     elif isinstance(default, int):
         return int(float(setting or 0))
-    elif isinstance(default, list):
+    elif isinstance(default, list) and not is_json:
         if setting:
             return json.loads(binascii.unhexlify(setting))
         else:
             return default
 
     return setting
+
+
+HOME_BUTTON_MAPPED = None
+
+
+def homeButtonMapped(*args, **kwargs):
+    global HOME_BUTTON_MAPPED
+    data = getSetting('map_button_home', None)
+    HOME_BUTTON_MAPPED = data if data != "None" else None
+
+
+homeButtonMapped()
 
 
 class AddonSettings(object):
@@ -172,8 +184,11 @@ class AddonSettings(object):
         ("show_media_ends_info", True),
         ("show_media_ends_label", True),
         ("background_colour", None),
-        ("skip_intro_button_show_early_threshold1", 60),
-        ("requests_timeout", 5.0),
+        ("skip_intro_button_show_early_threshold1", 70),
+        ("requests_timeout_connect", 5.0),
+        ("requests_timeout_read", 10.0),
+        ("plextv_timeout_connect", 5.0),
+        ("plextv_timeout_read", 20.0),
         ("local_reach_timeout", 10),
         ("auto_skip_offset", 2.5),
         ("conn_check_timeout", 2.5),
@@ -197,6 +212,15 @@ class AddonSettings(object):
         ("ignore_docker_v4", True),
         ("cache_home_users", True),
         ("intro_marker_max_offset", 600),
+        ("hubs_rr_max", 250),
+        ("max_retries1", 3),
+        ("use_cert_bundle", "system"),
+        ("cache_templates", True),
+        ("always_compile_templates", False),
+        ("tickrate", 1.0),
+        ("honor_plextv_dnsrebind", True),
+        ("honor_plextv_pam", True),
+        ("coreelec_resume_seek_wait", 250),
     )
 
     def __init__(self):
@@ -209,35 +233,25 @@ class AddonSettings(object):
 
 addonSettings = AddonSettings()
 
-
-def LOG(msg, level=xbmc.LOGINFO):
-    xbmc.log('script.plex: {0}'.format(msg), level)
+DEBUG = addonSettings.debug
 
 
-def DEBUG_LOG(msg):
+def LOG(msg, *args, **kwargs):
+    return log(msg, *args, **kwargs)
+
+
+def DEBUG_LOG(msg, *args, **kwargs):
     if _SHUTDOWN:
         return
 
     if not addonSettings.debug and not xbmc.getCondVisibility('System.GetBool(debug.showloginfo)'):
         return
 
-    LOG(msg)
+    return log(msg, *args, **kwargs)
 
 
 def ERROR(txt='', hide_tb=False, notify=False, time_ms=3000):
-    short = str(sys.exc_info()[1])
-    if hide_tb:
-        xbmc.log('script.plex: ERROR: {0} - {1}'.format(txt, short), xbmc.LOGERROR)
-        return short
-
-    import traceback
-    tb = traceback.format_exc()
-    xbmc.log("_________________________________________________________________________________", xbmc.LOGERROR)
-    xbmc.log('script.plex: ERROR: ' + txt, xbmc.LOGERROR)
-    for l in tb.splitlines():
-        xbmc.log('    ' + l, xbmc.LOGERROR)
-    xbmc.log("_________________________________________________________________________________", xbmc.LOGERROR)
-    xbmc.log("`", xbmc.LOGERROR)
+    short = log_error(txt, hide_tb)
     if notify:
         showNotification('ERROR: {0}'.format(txt or short), time_ms=time_ms)
     return short
@@ -289,17 +303,21 @@ class UtilityMonitor(xbmc.Monitor, signalsmixin.SignalsMixin):
     def onNotification(self, sender, method, data):
         LOG("Notification: {} {} {}".format(sender, method, data))
         if sender == 'script.plexmod' and method.endswith('RESTORE'):
-            from .windows import kodigui
+            from .windows import kodigui, windowutils
+
+            def exit_mainloop():
+                LOG("Addon never properly started, can't reactivate")
+                windowutils.HOME.doClose()
+
             if not kodigui.BaseFunctions.lastWinID:
-                ERROR("Addon never properly started, can't reactivate")
-                setGlobalProperty('stop_running', '1')
+                exit_mainloop()
                 return
             if kodigui.BaseFunctions.lastWinID > 13000:
                 reInitAddon()
+                setGlobalProperty('is_active', '1')
                 xbmc.executebuiltin('ActivateWindow({0})'.format(kodigui.BaseFunctions.lastWinID))
             else:
-                ERROR("Addon never properly started, can't reactivate")
-                setGlobalProperty('stop_running', '1')
+                exit_mainloop()
                 return
 
         elif sender == "xbmc" and method == "System.OnSleep":
@@ -317,7 +335,7 @@ class UtilityMonitor(xbmc.Monitor, signalsmixin.SignalsMixin):
     def onScreensaverActivated(self):
         DEBUG_LOG("Monitor: OnScreensaverActivated")
         self.trigger('screensaver.activated')
-        if getSetting('player_stop_on_screensaver', True) and xbmc.Player().isPlayingVideo():
+        if getSetting('player_stop_on_screensaver', False) and xbmc.Player().isPlayingVideo():
             self.stopPlayback()
 
     def onScreensaverDeactivated(self):
@@ -340,10 +358,6 @@ class UtilityMonitor(xbmc.Monitor, signalsmixin.SignalsMixin):
 
 
 MONITOR = UtilityMonitor()
-
-
-def T(ID, eng=''):
-    return ADDON.getLocalizedString(ID)
 
 
 hasCustomBGColour = False
@@ -378,18 +392,6 @@ def _processSettingForWrite(value):
     elif isinstance(value, bool):
         value = value and 'true' or 'false'
     return str(value)
-
-
-def setGlobalProperty(key, val, base='script.plex.{0}'):
-    xbmcgui.Window(10000).setProperty(base.format(key), val)
-
-
-def setGlobalBoolProperty(key, boolean, base='script.plex.{0}'):
-    xbmcgui.Window(10000).setProperty(base.format(key), boolean and '1' or '')
-
-
-def getGlobalProperty(key):
-    return xbmc.getInfoLabel('Window(10000).Property(script.plex.{0})'.format(key))
 
 
 def showNotification(message, time_ms=3000, icon_path=None, header=ADDON.getAddonInfo('name')):
@@ -537,7 +539,28 @@ def scaleResolution(w, h, by=None):
     return w, h
 
 
-SPOILER_ALLOWED_GENRES = ("Reality", "Game Show", "Documentary", "Sport")
+def vscale(h, r=2):
+    if not NEEDS_SCALING:
+        return h
+    ratio = aspectratio.V_AR_RATIO
+    if ratio is None:
+        ratio = aspectratio.v_ar_ratio(DISPLAY_RESOLUTION[0], DISPLAY_RESOLUTION[1])
+    return round(ratio * h, r) if r > 0 else int(round(ratio * h, r))
+
+
+def vscalei(h):
+    return vscale(h, r=0)
+
+
+def vperc(height, perc=50, ref=1080, rel=50, r=2):
+    ret = perc * ref / 100.0 - height * rel / 100
+    if r > 0:
+        return round(ret, r)
+    return int(round(ret, r))
+
+
+def vperci(height, perc=50, ref=1080, rel=50):
+    return vperc(height, perc=perc, ref=ref, rel=rel, r=0)
 
 
 class TextBox:
@@ -656,7 +679,7 @@ class Cron(threading.Thread):
 
     def __enter__(self):
         self.start()
-        DEBUG_LOG('Cron started')
+        DEBUG_LOG('Cron started with interval: {}'.format(self.interval))
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
@@ -808,6 +831,8 @@ def getTimeFormat():
     # Kodi Omega on Android seems to have borked the regional format returned separately
     # (not happening on Windows at least). Format returned can be "%H:mm:ss", which is incompatible with strftime; fix.
     adjustedFmt = adjustedFmt.replace("mm", "%M").replace("ss", "%S").replace("xx", "%p")
+    if "%M" not in adjustedFmt and "M" in adjustedFmt:
+        adjustedFmt = adjustedFmt.replace("M", "%M")
     adjustedFmtKN = adjustedFmt.replace("%M", "mm").replace("%H", "hh").replace("%I", "h").replace("%S", "ss").\
         replace("%p", "xx").replace(nonPadIF, "h").replace(nonPadHF, "h")
 
@@ -816,77 +841,17 @@ def getTimeFormat():
 
 timeFormat, timeFormatKN, padHour = getTimeFormat()
 
-DEF_THEME = "modern-colored"
-THEME_VERSION = 3
 
-
-def applyTheme(theme=None):
-    """
-    Dynamically build script-plex-seek_dialog.xml by combining a player button template with
-    script-plex-seek_dialog_skeleton.xml
-    """
-    theme = theme or getSetting('theme', DEF_THEME)
-    skel = os.path.join(ADDON.getAddonInfo('path'), "resources", "skins", "Main", "1080i",
-                        "script-plex-seek_dialog_skeleton.xml")
-    if theme == "custom":
-        btnTheme = os.path.join(ADDON.getAddonInfo("profile"), "templates",
-                                "seek_dialog_buttons_custom.xml")
-        customSkel = os.path.join(ADDON.getAddonInfo("profile"), "templates",
-                                  "script-plex-seek_dialog_skeleton_custom.xml")
-        if xbmcvfs.exists(customSkel):
-            skel = customSkel
-    else:
-        btnTheme = os.path.join(ADDON.getAddonInfo('path'), "resources", "skins", "Main", "1080i", "templates",
-                                "seek_dialog_buttons_{}.xml".format(theme))
-
-    if not xbmcvfs.exists(btnTheme):
-        LOG("Theme {} doesn't exist, falling back to modern".format(theme))
-        setSetting('theme', DEF_THEME)
-        return applyTheme(DEF_THEME)
-
+def getShortDateFormat():
     try:
-        # read skeleton
-        f = xbmcvfs.File(skel)
-        skelData = f.read()
-        f.close()
+        return (rpc.Settings.GetSettingValue(setting="locale.shortdateformat")["value"]
+                .replace("DD", "%d").replace("MM", "%m").replace("YYYY", "%Y"))
     except:
-        ERROR("Couldn't find {}".format("script-plex-seek_dialog_skeleton.xml"))
-    else:
-        try:
-            # read button theme
-            f = xbmcvfs.File(btnTheme)
-            btnData = f.read()
-            f.close()
-        except:
-            ERROR("Couldn't find {}".format("seek_dialog_buttons_{}.xml".format(theme)))
-        else:
-            # combine both
-            finalXML = skelData.replace('<!-- BUTTON_INCLUDE -->', btnData)
-            try:
-                # write final file
-                f = xbmcvfs.File(os.path.join(ADDON.getAddonInfo('path'), "resources", "skins", "Main", "1080i",
-                                 "script-plex-seek_dialog.xml"), "w")
-                f.write(finalXML)
-                f.close()
-            except:
-                ERROR("Couldn't write script-plex-seek_dialog.xml")
-            else:
-                LOG('Using theme: {}'.format(theme))
+        DEBUG_LOG("Couldn't get locale.shortdateformat setting, falling back to MM/DD/YYYY")
+        return "%d/%m/%Y"
 
 
-# apply theme if version changed
-theme = getSetting('theme', DEF_THEME)
-curThemeVer = getSetting('theme_version', 0)
-if curThemeVer < THEME_VERSION:
-    setSetting('theme_version', THEME_VERSION)
-    # apply seekdialog button theme
-    applyTheme(theme)
-
-# apply theme if seek_dialog xml missing
-if not xbmcvfs.exists(os.path.join(ADDON.getAddonInfo('path'), "resources", "skins", "Main", "1080i",
-                                   "script-plex-seek_dialog.xml")):
-    applyTheme(theme)
-
+shortDF = getShortDateFormat()
 
 # get mounts
 KODI_SOURCES = []
@@ -927,6 +892,24 @@ def getPlatform():
     ]:
         if xbmc.getCondVisibility(key):
             return key.rsplit('.', 1)[-1]
+
+
+platform = getPlatform()
+
+
+def getCoreELEC():
+    try:
+        stdout = subprocess.check_output('lsb_release', shell=True).decode()
+        match = re.search(r'CoreELEC', stdout)
+        if match:
+            return True
+
+        return False
+    except:
+        return False
+
+
+isCoreELEC = getCoreELEC() if platform in ['Linux', 'RaspberryPi'] else False
 
 
 def getRunningAddons():
@@ -1028,17 +1011,73 @@ def getOpenSubtitlesHash(size, url):
 
     return format(hash_, "016x")
 
+SETTING_RE = re.compile(r'<setting id="(?P<name>.+?)"[^>]*?>', re.MULTILINE | re.DOTALL)
 
-def ensureHome():
-    if xbmcgui.getCurrentWindowId() != 10000:
-        LOG("Switching to home screen before starting addon")
-        xbmc.executebuiltin('ActivateWindow(home)')
-        ct = 0
-        while xbmcgui.getCurrentWindowId() != 10000 and ct <= 50:
-            xbmc.Monitor().waitForAbort(0.1)
-            ct += 1
-        if ct > 50:
-            DEBUG_LOG("Still active window: %s" % xbmcgui.getCurrentWindowId())
+
+def dumpSettings():
+    from .windows import settings
+    from collections import OrderedDict
+
+    sections = set(settings.Settings.SECTION_IDS) - {"about", "player_user"}
+
+    main_settings_dict = OrderedDict([(k,
+                                       OrderedDict([(s.ID, (s.get(as_code=True), s.default))
+                                                    for s in settings.Settings.SETTINGS[k][1]
+                                                    if not s.userAware])) for k in sections])
+    main_revmap = {k: i for i in sections for k in main_settings_dict[i].keys()}
+    adv_settings_dict = OrderedDict([(s, (getSetting(s, d), d)) for s, d in AddonSettings._proxiedSettings])
+
+    try:
+        f = xbmcvfs.File(os.path.join(translatePath(ADDON.getAddonInfo("profile")), "settings.xml"))
+        data = f.read()
+        all_settings = SETTING_RE.findall(data)
+        f.close()
+    except:
+        LOG('script.plex: No settings.xml found')
+        return
+
+    final = OrderedDict({"settings": OrderedDict((k, []) for k in sections), "addon_settings": [], "unspecified": []})
+
+    for s in all_settings[:]:
+        # get setting from main settings
+        sec = main_revmap.get(s)
+
+        if sec:
+            ms = main_settings_dict[sec][s]
+            try:
+                v = json.loads(ms[0], default=ms[0])
+            except:
+                v = ms[0]
+            final["settings"][sec].append({s: {"value": v, "default": ms[1], "changed": v != ms[1]}})
+            all_settings.remove(s)
+            continue
+        advs = adv_settings_dict.get(s)
+        if advs:
+            try:
+                v = json.loads(advs[0], default=advs[0])
+            except:
+                v = advs[0]
+            final["addon_settings"].append({s: {"value": v, "default": advs[1], "changed": v != advs[1]}})
+            all_settings.remove(s)
+            continue
+
+    remove_keys = ("xml_cache.mpaResources",)
+    for key in remove_keys:
+        all_settings.remove(key)
+
+    def decode(v):
+        try:
+            return json.loads(v)
+        except:
+            return v
+
+    final["unspecified"] += [{s: decode(getSetting(s))} for s in all_settings]
+    final = plexnet.util.cleanObjTokens(final,
+                                        mask_keys=("token", "authToken", "uuid", "name", "ID", "thumb", "email", "id",
+                                                   "title", "username", "address"),
+                                        dict_cls=OrderedDict)
+
+    DEBUG_LOG("Settings dump: {}", pprint.pformat(final, compact=True))
 
 
 def garbageCollect():

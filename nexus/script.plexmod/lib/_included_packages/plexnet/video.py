@@ -68,6 +68,9 @@ class Video(media.MediaItem, AudioCodecMixin):
     def __ne__(self, other):
         return not self.__eq__(other)
 
+    def __repr__(self):
+        return '<%s:%s>' % (self.__class__.__name__, self.ratingKey)
+
     @property
     def settings(self):
         if not self._settings:
@@ -134,8 +137,7 @@ class Video(media.MediaItem, AudioCodecMixin):
                                 if not possible_alt:
                                     possible_alt = alt_stream
                         if possible_alt:
-                            util.DEBUG_LOG("Selecting stream %s instead of %s" %
-                                           (possible_alt, stream))
+                            util.DEBUG_LOG("Selecting stream {} instead of {}", possible_alt, stream)
                             stream.setSelected(False)
                             possible_alt.setSelected(True)
                             self.current_subtitle_is_embedded = possible_alt.embedded
@@ -159,8 +161,9 @@ class Video(media.MediaItem, AudioCodecMixin):
         self.mediaChoice = mediachoice.MediaChoice(media, partIndex=partIndex)
 
     @forceMediaChoice
-    def selectStream(self, stream, _async=True):
-        self.mediaChoice.part.setSelectedStream(stream.streamType.asInt(), stream.id, _async)
+    def selectStream(self, stream, _async=True, from_session=False):
+        self.mediaChoice.part.setSelectedStream(stream.streamType.asInt(), stream.id, _async, from_session=from_session,
+                                                video=self)
         # Update any affected streams
         if stream.streamType.asInt() == plexstream.PlexStream.TYPE_AUDIO:
             for audioStream in self.audioStreams:
@@ -201,7 +204,7 @@ class Video(media.MediaItem, AudioCodecMixin):
                 else:
                     stream = self.subtitleStreams[-1]
 
-        util.DEBUG_LOG("Selecting subtitle stream: {} (was: {})".format(stream, cur))
+        util.DEBUG_LOG("Selecting subtitle stream: {} (was: {})", stream, cur)
         self.selectStream(stream)
         return stream
 

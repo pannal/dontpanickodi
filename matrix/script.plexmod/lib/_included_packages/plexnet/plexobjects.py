@@ -193,7 +193,7 @@ class PlexObject(Checks):
         try:
             setattr(self, attr, a)
         except AttributeError:
-            util.LOG('Failed to set attribute: {0} ({1})'.format(attr, self.__class__))
+            util.LOG('Failed to set attribute: {0} ({1})', attr, self.__class__)
 
         return a
 
@@ -256,7 +256,7 @@ class PlexObject(Checks):
         try:
             self._setData(data[0])
         except (IndexError, TypeError, AttributeError):
-            util.DEBUG_LOG('No data on reload: {0}'.format(self))
+            util.DEBUG_LOG('No data on reload: {0}', self)
             return self
 
         return self
@@ -437,7 +437,7 @@ class PlexContainer(PlexObject):
             self.address = address
 
         # TODO(schuyler): Do we need to make sure that we only hang onto the path here and not a full URL?
-        if not self.address.startswith("/") and "node.plexapp.com" not in self.address:
+        if not self.address.startswith("/") and not self.upNext.asBool() and "node.plexapp.com" not in self.address:
             util.FATAL("Container address is not an expected path: {0}".format(address))
 
     def getAbsolutePath(self, path):

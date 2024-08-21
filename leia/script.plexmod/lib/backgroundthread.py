@@ -117,7 +117,7 @@ class BackgroundWorker:
         if self._queue.empty():
             return
 
-        util.DEBUG_LOG('BGThreader: ({0}): Active'.format(self.name))
+        util.DEBUG_LOG('BGThreader: ({0}): Active', self.name)
         try:
             while not self.aborted():
                 self._task = self._queue.get_nowait()
@@ -125,7 +125,7 @@ class BackgroundWorker:
                 self._queue.task_done()
                 self._task = None
         except six.moves.queue.Empty:
-            util.DEBUG_LOG('BGThreader ({0}): Idle'.format(self.name))
+            util.DEBUG_LOG('BGThreader ({0}): Idle', self.name)
 
     def shutdown(self):
         self.abort()
@@ -134,18 +134,18 @@ class BackgroundWorker:
             self._task.cancel()
 
         if self._thread and self._thread.is_alive():
-            util.DEBUG_LOG('BGThreader: thread ({0}): Waiting...'.format(self.name))
+            util.DEBUG_LOG('BGThreader: thread ({0}): Waiting...', self.name)
             self._thread.join()
-            util.DEBUG_LOG('BGThreader: thread ({0}): Done'.format(self.name))
+            util.DEBUG_LOG('BGThreader: thread ({0}): Done', self.name)
 
     def working(self):
         return self._thread and self._thread.is_alive()
 
     def kill(self):
         if self._thread and self._thread.is_alive():
-            util.DEBUG_LOG('BGThreader: thread ({0}): Waiting...'.format(self.name))
+            util.DEBUG_LOG('BGThreader: thread ({0}): Waiting...', self.name)
             self._thread.join()
-            util.DEBUG_LOG('BGThreader: thread ({0}): Done'.format(self.name))
+            util.DEBUG_LOG('BGThreader: thread ({0}): Done', self.name)
 
 
 class BackgroundThreader:

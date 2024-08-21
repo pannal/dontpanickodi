@@ -35,7 +35,8 @@ class SignalsMixin(object):
                 if signalName in self._signals:
                     del self._signals[signalName]
             else:
-                self._signals[signalName].disconnect(callback)
+                if self.has_signal(signalName, callback):
+                    self._signals[signalName].disconnect(callback)
 
     def trigger(self, signalName, **kwargs):
         if not self._signals:

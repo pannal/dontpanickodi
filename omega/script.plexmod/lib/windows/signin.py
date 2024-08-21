@@ -83,6 +83,8 @@ class PreSignInWindow(kodigui.BaseWindow):
         if action == xbmcgui.ACTION_SELECT_ITEM:
             self.doSignin = True
             self.doClose()
+        elif action in (xbmcgui.ACTION_PREVIOUS_MENU, xbmcgui.ACTION_NAV_BACK):
+            self.doClose()
 
     def onClick(self, controlID):
         if controlID == self.SIGNIN_BUTTON_ID:

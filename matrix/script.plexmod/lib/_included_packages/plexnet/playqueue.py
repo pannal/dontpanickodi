@@ -52,7 +52,8 @@ class AudioUsage(object):
         return "You can skip {0} songs an hour per mix.".format(self.skipsPerHour)
 
     def log(self, prefix):
-        util.DEBUG_LOG("AudioUsage {0}: total skips={1}, allowed skips={2}".format(prefix, len(self.skips), self.skipsPerHour))
+        util.DEBUG_LOG("AudioUsage {0}: total skips={1}, allowed skips={2}", prefix, lambda: len(self.skips),
+                       self.skipsPerHour)
 
 
 class UsageFactory(object):
@@ -238,7 +239,7 @@ class PlayQueue(signalsmixin.SignalsMixin):
             time.sleep(0.1)
 
         if self.initialized:
-            util.DEBUG_LOG('PlayQueue initialized in {0:.2f} secs: {1}'.format(time.time() - start, self))
+            util.DEBUG_LOG('PlayQueue initialized in {0:.2f} secs: {1}', time.time() - start, self)
         else:
             util.DEBUG_LOG('PlayQueue failed to initialize')
 
@@ -375,7 +376,7 @@ class PlayQueue(signalsmixin.SignalsMixin):
         util.DEBUG_LOG('playQueue: Received response')
         self.responded = True
         if response.parseResponse():
-            util.DEBUG_LOG('playQueue: {0} items'.format(len(response.items)))
+            util.DEBUG_LOG('playQueue: {0} items', lambda: len(response.items))
             self.container = response.container
             # Handle an empty PQ if we have specified an pqEmptyCallable
             if self.options and self.options.pqEmptyCallable:
@@ -392,6 +393,8 @@ class PlayQueue(signalsmixin.SignalsMixin):
             self.version = response.container.playQueueVersion.asInt()
 
             itemsChanged = False
+            justAdded = False
+
             if len(response.items) == len(self._items):
                 for i in range(len(self._items)):
                     if self._items[i] != response.items[i]:
@@ -399,6 +402,9 @@ class PlayQueue(signalsmixin.SignalsMixin):
                         break
             else:
                 itemsChanged = True
+
+                if set(self._items).issubset(response.items):
+                    justAdded = set(response.items) - set(self._items)
 
             if itemsChanged:
                 self._items = response.items
@@ -472,7 +478,7 @@ class PlayQueue(signalsmixin.SignalsMixin):
             self.trigger("change")
 
             if itemsChanged:
-                self.trigger("items.changed")
+                self.trigger("items.changed", just_added=justAdded)
 
     def isWindowed(self):
         return (not self.isLocal() and (self.totalSize > self.windowSize or self.forcedWindow))

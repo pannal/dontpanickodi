@@ -6,7 +6,7 @@ from . import http
 from . import plexrequest
 from . import mediadecisionengine
 from . import serverdecision
-from lib.util import addonSettings, KODI_VERSION_MAJOR
+from lib.util import KODI_VERSION_MAJOR
 from lib.cache import CACHE_SIZE
 
 from six.moves import range
@@ -49,7 +49,7 @@ class PlexPlayer(BasePlayer):
             self.media = self.choice.media
 
     def terminate(self, code, reason):
-        util.LOG('TERMINATE PLAYER: ({0}, {1})'.format(code, reason))
+        util.LOG('TERMINATE PLAYER: ({0}, {1})', code, reason)
         # TODO: Handle this? ---------------------------------------------------------------------------------------------------------- TODO
 
     @property
@@ -65,12 +65,13 @@ class PlexPlayer(BasePlayer):
         # item.settings = self.item.settings
         oldChoice = self.choice
         self.init(item, True)
-        util.LOG("Replacing '{0}' with '{1}' and rebuilding.".format(oldChoice, self.choice))
+        util.LOG("Replacing '{0}' with '{1}' and rebuilding.", oldChoice, self.choice)
         self.build()
         self.decision = decision
 
     def build(self, forceTranscode=False):
-        if self.item.settings.getPreference("playback_directplay", True):
+        features = self.item.settings.getPlaybackFeatures()
+        if "playback_directplay" in features:
             directPlayPref = self.item.settings.getPreference("playback_directplay_force", False) and 'forced' or 'allow'
         else:
             directPlayPref = 'disabled'
@@ -80,7 +81,7 @@ class PlexPlayer(BasePlayer):
         else:
             directPlay = directPlayPref == "forced" and True or None
 
-        return self._build(directPlay, self.item.settings.getPreference("playback_remux", True))
+        return self._build(directPlay, "playback_remux" in features)
 
     def _build(self, directPlay=None, directStream=True, currentPartIndex=None):
         isForced = directPlay is not None
@@ -191,7 +192,7 @@ class PlexPlayer(BasePlayer):
 
         self.metadata = obj
 
-        util.LOG("Constructed video item for playback: {0}".format(util.cleanObjTokens(dict(obj))))
+        util.LOG("Constructed video item for playback: {0}", util.cleanObjTokens(dict(obj)))
 
         return self.metadata
 
@@ -238,19 +239,19 @@ class PlexPlayer(BasePlayer):
         if decisionPath:
             server = self.metadata.transcodeServer or self.item.getServer()
             request = plexrequest.PlexRequest(server, decisionPath)
-            response = request.getWithTimeout(10)
+            response = request.getWithTimeout(util.DEFAULT_TIMEOUT)
 
             if response.isSuccess() and response.container:
                 decision = serverdecision.ServerDecision(self, response, self)
 
                 if decision.isSuccess():
-                    util.LOG("MDE: Server was happy with client's original decision. {0}".format(decision))
+                    util.LOG("MDE: Server was happy with client's original decision. {0}", decision)
                     return self
                 elif decision.isDecision(True):
                     util.WARN_LOG("MDE: Server was unhappy with client's original decision. {0}".format(decision))
                     return decision.getDecision()
                 else:
-                    util.LOG("MDE: Server was unbiased about the decision. {0}".format(decision))
+                    util.LOG("MDE: Server was unbiased about the decision. {0}", decision)
 
                 # Check if the server has provided a new media item to use it. If
                 # there is no item, then we'll continue along as if there was no
@@ -349,6 +350,7 @@ class PlexPlayer(BasePlayer):
 
         obj.subtitleUrl = None
 
+        video_codecs = self.item.settings.getAdditionalCodecs()
         clampToOrig = self.item.settings.getPreference("audio_clamp_to_orig", True)
         useKodiAudio = self.item.settings.getPreference("audio_channels_kodi", False)
         AC3Cond = self.item.settings.getPreference("audio_force_ac3_cond", 'never')
@@ -357,7 +359,7 @@ class PlexPlayer(BasePlayer):
         forceAC3 = AC3Cond != 'never'
 
         ach = None
-        if AC3Cond in ('2', '5'):
+        if AC3Cond in ('2', '3', '5', '6'):
             ach = int(AC3Cond)
 
         # fixme: still necessary?
@@ -397,7 +399,7 @@ class PlexPlayer(BasePlayer):
                          "eia_708_embedded,dvb_subtitle" + (",webvtt" if KODI_VERSION_MAJOR > 19 else '')
 
 
-        util.LOG('MDE-prep: enabling codecs: {}'.format(audioCodecs))
+        util.LOG('MDE-prep: enabling codecs: {}', audioCodecs)
 
         # Allow virtually anything in Kodi playback.
 
@@ -484,7 +486,7 @@ class PlexPlayer(BasePlayer):
 
             # limit OPUS bitrate
             if hasAudioChoice and self.choice.audioStream.codec != "opus":
-                util.LOG('MDE-prep: limiting OPUS bitrate to {} kbit'.format(opusBitrate))
+                util.LOG('MDE-prep: limiting OPUS bitrate to {} kbit', opusBitrate)
                 builder.extras.append(
                     "add-limitation(scope=videoAudioCodec&scopeName=opus&type=upperBound&name=audio.bitrate&"
                     "value={}&isRequired=false)".format(opusBitrate)
@@ -497,7 +499,7 @@ class PlexPlayer(BasePlayer):
                 "add-limitation(scope=videoAudioCodec&scopeName=ac3&type=upperBound&name=audio.bitrate&value=640)"
             )
 
-        util.LOG('MDE-prep: limiting audio channels to {}'.format(maxAudioChannels))
+        util.LOG('MDE-prep: limiting audio channels to {}', maxAudioChannels)
         builder.extras.append(
             "add-limitation(scope=videoAudioCodec&scopeName=*&type=upperBound&"
             "name=audio.channels&value={})".format(maxAudioChannels)
@@ -510,7 +512,7 @@ class PlexPlayer(BasePlayer):
                 "name=audio.samplingRate&value=22050&isRequired=false)")
 
         # HEVC
-        if self.item.settings.getPreference("allow_hevc", True):
+        if "allow_hevc" in video_codecs:
             builder.extras.append(
                 "append-transcode-target-codec(type=videoProfile&context=streaming&container=mkv&"
                 "protocol=http&videoCodec=hevc)")
@@ -526,7 +528,7 @@ class PlexPlayer(BasePlayer):
             #     "add-direct-play-profile(type=videoProfile&videoCodec=vp9&container=*&audioCodec=*)")
 
         # AV1
-        if self.item.settings.getPreference("allow_av1", False):
+        if "allow_av1" in video_codecs:
             builder.extras.append(
                 "append-transcode-target-codec(type=videoProfile&context=streaming&container=mkv&"
                 "protocol=http&videoCodec=av1)")
@@ -534,7 +536,7 @@ class PlexPlayer(BasePlayer):
             #     "add-direct-play-profile(type=videoProfile&videoCodec=av1&container=*&audioCodec=*)")
 
         # VC1
-        if self.item.settings.getPreference("allow_vc1", True):
+        if "allow_vc1" in video_codecs:
             builder.extras.append(
                 "append-transcode-target-codec(type=videoProfile&context=streaming&container=mkv&"
                 "protocol=http&videoCodec=vc1)")
@@ -586,7 +588,7 @@ class PlexPlayer(BasePlayer):
         oldPart.nextPart = None
         self.metadata = newPart
 
-        util.LOG("Next part set for playback: {0}".format(self.metadata))
+        util.LOG("Next part set for playback: {0}", self.metadata)
 
     def getBifUrl(self, offset=0):
         server = self.item.getServer()
@@ -721,7 +723,7 @@ class PlexAudioPlayer(BasePlayer):
         else:
             obj = self.buildTranscode(item, choice, obj)
 
-        util.LOG("Constructed audio item for playback: {0}".format(util.cleanObjTokens(dict(obj))))
+        util.LOG("Constructed audio item for playback: {0}", util.cleanObjTokens(dict(obj)))
 
         return obj
 
@@ -736,11 +738,18 @@ class PlexAudioPlayer(BasePlayer):
         obj.transcodeEndpoint = "/music/:/transcode/universal/start.m3u8"
 
         builder = http.HttpRequest(transcodeServer.buildUrl(obj.transcodeEndpoint, True))
-        # builder.addParam("protocol", "http")
+        builder.addParam("protocol", "http")
         builder.addParam("path", item.getAbsolutePath("key"))
         builder.addParam("session", item.getGlobal("clientIdentifier"))
         builder.addParam("directPlay", "0")
         builder.addParam("directStream", "0")
+
+        # this works, but currently shows "Direct Play" in Plex Web, even though it's clearly transcoding
+        builder.addParam("X-Plex-Platform", "Generic")
+        builder.extras = ["add-transcode-target(type=musicProfile&audioCodec=mp3&container=mp3&"
+                          "context=streaming&protocol=http)"]
+
+        builder.addParam("X-Plex-Client-Profile-Extra", '+'.join(builder.extras))
 
         obj.url = builder.getUrl()
 
@@ -796,7 +805,8 @@ class PlexPhotoPlayer(object):
             obj.url = server.buildUrl(path, True)
             obj.enableBlur = server.supportsPhotoTranscoding
 
-            util.DEBUG_LOG("Constructed photo item for playback: {0}".format(util.cleanObjTokens(dict(obj))))
+            util.DEBUG_LOG("Constructed photo item for playback: {0}",
+                           lambda: util.cleanObjTokens(dict(obj)))
 
             self.metadata = obj
 

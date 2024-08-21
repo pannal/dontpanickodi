@@ -18,7 +18,7 @@ from . import playersettings
 from . import search
 from . import videoplayer
 from . import windowutils
-from .mixins import RatingsMixin
+from .mixins import RatingsMixin, PlaybackBtnMixin
 
 VIDEO_RELOAD_KW = dict(includeExtras=1, includeExtrasCount=10, includeChapters=1, includeReviews=1)
 
@@ -28,7 +28,7 @@ class RelatedPaginator(pagination.BaseRelatedPaginator):
         return self.parentWindow.video.getRelated(offset=offset, limit=amount)
 
 
-class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RatingsMixin):
+class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RatingsMixin, PlaybackBtnMixin):
     xmlFile = 'script-plex-pre_play.xml'
     path = util.ADDON.getAddonInfo('path')
     theme = 'Main'
@@ -64,6 +64,7 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RatingsMixi
 
     def __init__(self, *args, **kwargs):
         kodigui.ControlledWindow.__init__(self, *args, **kwargs)
+        PlaybackBtnMixin.__init__(self)
         self.video = kwargs.get('video')
         self.parentList = kwargs.get('parent_list')
         self.videos = None
@@ -95,6 +96,7 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RatingsMixi
 
     @busy.dialog()
     def onReInit(self):
+        PlaybackBtnMixin.onReInit(self)
         self.initialized = False
         if util.getSetting("slow_connection", False):
             self.progressImageControl.setWidth(1)
@@ -321,7 +323,7 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RatingsMixi
     @busy.dialog()
     def _delete(self):
         success = self.video.delete()
-        util.LOG('Media DELETE: {0} - {1}'.format(self.video, success and 'SUCCESS' or 'FAILED'))
+        util.LOG('Media DELETE: {0} - {1}', self.video, success and 'SUCCESS' or 'FAILED')
         return success
 
     def roleClicked(self):
@@ -443,12 +445,22 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RatingsMixi
         if xbmc.getCondVisibility('Integer.IsGreater(Window.Property(hub.focus),2) + Control.IsVisible(502)'):
             y -= 500
 
-        focus = int(xbmc.getInfoLabel('Container(400).Position'))
+        tries = 0
+        focus = xbmc.getInfoLabel('Container(400).Position')
+        while tries < 2 and focus == '':
+            focus = xbmc.getInfoLabel('Container(400).Position')
+            xbmc.sleep(250)
+            tries += 1
+
+        focus = int(focus)
 
         x = ((focus + 1) * 304) - 100
         return x, y
 
     def playVideo(self, from_auto_play=False):
+        if self.playBtnClicked:
+            return
+
         if not self.video.available():
             util.messageDialog(T(32312, 'Unavailable'), T(32313, 'This item is currently unavailable.'))
             return
@@ -473,6 +485,9 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RatingsMixi
             if choice['key'] == 'resume':
                 resume = True
 
+        if not from_auto_play:
+            self.playBtnClicked = True
+
         self.processCommand(videoplayer.play(video=self.video, resume=resume))
         return True
 
@@ -496,7 +511,7 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RatingsMixi
     def setup(self):
         self.focusPlayButton()
 
-        util.DEBUG_LOG('PrePlay: Showing video info: {0}'.format(self.video))
+        util.DEBUG_LOG('PrePlay: Showing video info: {0}', self.video)
         if self.video.type == 'episode':
             self.setProperty('preview.yes', '1')
         elif self.video.type == 'movie':

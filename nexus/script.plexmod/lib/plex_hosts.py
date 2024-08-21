@@ -54,12 +54,12 @@ class PlexHostsManager(object):
             ip = parsePlexDirectHost(parsed.hostname)
             # ignore docker V4 hosts
             if util.addonSettings.ignoreDockerV4 and ":" not in ip and IPv4Address(text_type(ip)) in DOCKER_NETWORK:
-                util.DEBUG_LOG("Ignoring plex.direct local Docker IPv4 address: {}".format(source, parsed.hostname))
+                util.DEBUG_LOG("Ignoring plex.direct local {} Docker IPv4 address: {}", source, parsed.hostname)
                 continue
 
             if parsed.hostname not in self._hosts:
                 self._hosts[parsed.hostname] = plexnet.http.RESOLVED_PD_HOSTS.get(parsed.hostname, ip)
-                util.LOG("Found new unmapped {} plex.direct host: {}".format(source, parsed.hostname))
+                util.LOG("Found new unmapped {} plex.direct host: {}", source, parsed.hostname)
 
     @property
     def differs(self):
@@ -84,7 +84,7 @@ class PlexHostsManager(object):
             if hosts:
                 self._hosts = dict(hosts)
                 self._orig_hosts = dict(hosts)
-                util.DEBUG_LOG("Found {} hosts in advancedsettings.xml".format(len(self._hosts)))
+                util.DEBUG_LOG("Found {} hosts in advancedsettings.xml", lambda: len(self._hosts))
 
     def write(self, hosts=None):
         self._hosts = hosts or self._hosts

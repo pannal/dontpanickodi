@@ -51,7 +51,7 @@ class OptionsDialog(kodigui.BaseDialog):
             if res:
                 return
 
-        return kodigui.BaseDialog.onAction(self, action)
+        kodigui.BaseDialog.onAction(self, action)
 
     def onClick(self, controlID):
         if controlID in self.BUTTON_IDS:

@@ -1934,11 +1934,6 @@ msgid "Show prev/next button"
 msgstr "Mostra il pulsante prev/next"
 
 #: 
-msgctxt "#32938"
-msgid "Only for Episodes"
-msgstr "Solo per gli episodi"
-
-#: 
 msgctxt "#32939"
 msgid "Only applies to video player UI"
 msgstr "Si applica solo all'interfaccia del Player"
@@ -2355,4 +2350,670 @@ msgstr "S{}"
 msgctxt "#32311"
 msgid "E{}"
 msgstr "E{}"
+
+#: 
+msgctxt "#32938"
+msgid "Only for Episodes/Playlists"
+msgstr ""
+
+#: 
+msgctxt "#33018"
+msgid "Cache Plex Home users"
+msgstr ""
+
+#: 
+msgctxt "#33019"
+msgid "Visit media item"
+msgstr ""
+
+#: 
+msgctxt "#33020"
+msgid "Play"
+msgstr ""
+
+#: 
+msgctxt "#33021"
+msgid "Choose action"
+msgstr ""
+
+#: 
+msgctxt "#33022"
+msgid "Use modern inverted watched states"
+msgstr ""
+
+#: 
+msgctxt "#33023"
+msgid "Instead of marking unwatched items, mark watched items with a checkmark (modern clients; default: off)"
+msgstr ""
+
+#: 
+msgctxt "#33024"
+msgid "Hide black backdrop in inverted watched states"
+msgstr ""
+
+#: 
+msgctxt "#33025"
+msgid "When the above is enabled, hide the black backdrop of the watched state."
+msgstr ""
+
+#: 
+msgctxt "#33026"
+msgid "Map path: {}"
+msgstr ""
+
+#: 
+msgctxt "#33027"
+msgid "Remove mapping: {}"
+msgstr ""
+
+#: 
+msgctxt "#33028"
+msgid "Hide library"
+msgstr ""
+
+#: 
+msgctxt "#33029"
+msgid "Show library: {}"
+msgstr ""
+
+#: 
+msgctxt "#33030"
+msgid "Choose action for: {}"
+msgstr ""
+
+#: 
+msgctxt "#33031"
+msgid "Select Kodi source for {}"
+msgstr ""
+
+#: 
+msgctxt "#33032"
+msgid "Show path mapping indicators"
+msgstr ""
+
+#: 
+msgctxt "#33033"
+msgid "When path mapping is active for a library, display an indicator."
+msgstr ""
+
+#: 
+msgctxt "#33035"
+msgid "Delete {}: {}?"
+msgstr ""
+
+#: 
+msgctxt "#33036"
+msgid "Delete episode S{0:02d}E{1:02d} from {2}?"
+msgstr ""
+
+#: 
+msgctxt "#33037"
+msgid "Maximum intro offset to consider"
+msgstr ""
+
+#: 
+msgctxt "#33038"
+msgid "When encountering an intro marker with a start time offset greater than this, ignore it (default: 600s/10m)"
+msgstr ""
+
+#: 
+msgctxt "#33039"
+msgid "Move"
+msgstr ""
+
+#: 
+msgctxt "#33040"
+msgid "Reset library order"
+msgstr ""
+
+#: 
+msgctxt "#33034"
+msgid "Library settings"
+msgstr ""
+
+#: 
+msgctxt "#32357"
+msgid "By Title"
+msgstr ""
+
+#: 
+msgctxt "#32358"
+msgid "Title"
+msgstr ""
+
+#: 
+msgctxt "#33041"
+msgid "Show hub: {}"
+msgstr ""
+
+#: 
+msgctxt "#33042"
+msgid "Episode Date Added"
+msgstr ""
+
+#: 
+msgctxt "#33001"
+msgid "Long-press (or context menu) on a library item or: Honor path_mapping.json in the addon_data/script.plexmod folder when DirectPlaying media. This can be used to stream using other techniques such as SMB/NFS/etc. instead of the default HTTP handler. path_mapping.example.json is included in the addon's main directory."
+msgstr ""
+
+#: 
+msgctxt "#33043"
+msgid "Hubs round-robin"
+msgstr ""
+
+#: 
+msgctxt "#33044"
+msgid "Allow round-robining in hubs"
+msgstr ""
+
+#: 
+msgctxt "#33045"
+msgid "Behave like official Plex clients"
+msgstr ""
+
+#: 
+msgctxt "#33046"
+msgid "Show OSD when pressing up/down without OSD instead of showing chapters."
+msgstr ""
+
+#: 
+msgctxt "#33046"
+msgid "When pressing up/down while the OSD isn't shown, show OSD instead of skipping chapters."
+msgstr ""
+
+#: 
+msgctxt "#32025"
+msgid "Direct Play"
+msgstr ""
+
+#: 
+msgctxt "#32026"
+msgid "Direct Stream"
+msgstr ""
+
+#: 
+msgctxt "#32036"
+msgid "4K"
+msgstr ""
+
+#: 
+msgctxt "#32037"
+msgid "HEVC (h265)"
+msgstr ""
+
+#: 
+msgctxt "#32601"
+msgid "AV1"
+msgstr ""
+
+#: 
+msgctxt "#32932"
+msgid "Subtitle quick-actions"
+msgstr ""
+
+#: 
+msgctxt "#32933"
+msgid "FFWD/RWD"
+msgstr ""
+
+#: 
+msgctxt "#32934"
+msgid "Repeat"
+msgstr ""
+
+#: 
+msgctxt "#32935"
+msgid "Shuffle"
+msgstr ""
+
+#: 
+msgctxt "#32939"
+msgid "User-specific.\n"
+"Only applies to video player UI"
+msgstr ""
+
+#: 
+msgctxt "#32977"
+msgid "VC1"
+msgstr ""
+
+#: 
+msgctxt "#32983"
+msgid "Theme"
+msgstr ""
+
+#: 
+msgctxt "#32984"
+msgid "Sets the theme. Currently only customizes all control buttons. ATTENTION: [I]Might[/I] need an addon restart.\n"
+"In order to customize this, copy one of the xml's in script.plexmod/resources/skins/Main/1080i/templates to addon_data/script.plexmod/templates/{templatename}_custom.xml and adjust it to your liking, then select \"Custom\" as your theme."
+msgstr ""
+
+#: 
+msgctxt "#33007"
+msgid "Select in which cases to blur TV episode thumbnails, previews, redact summaries, hide episode titles and whether to blur chapter images. When the Addon Setting \"Use episode thumbnails in continue hub\" is enabled, blur them as well."
+msgstr ""
+
+#: 
+msgctxt "#33011"
+msgid "In progress"
+msgstr ""
+
+#: 
+msgctxt "#33016"
+msgid "Allow TV spoilers for"
+msgstr ""
+
+#: 
+msgctxt "#33017"
+msgid "Overrides the above for specific genres. Default: Reality, Game Show, Documentary, Sport"
+msgstr ""
+
+#: 
+msgctxt "#33022"
+msgid "Watched indicators"
+msgstr ""
+
+#: 
+msgctxt "#33023"
+msgid "Classic: Show orange triangle for unwatched items\n"
+"Modern: Show green checkmark for watched items\n"
+"Modern (2024): Show white checkmark for watched items\n"
+"(default: Modern (2024))"
+msgstr ""
+
+#: 
+msgctxt "#33024"
+msgid "Hide background in modern indicators"
+msgstr ""
+
+#: 
+msgctxt "#33044"
+msgid "Allow round-robining in hubs. Attention: Loads a lot of items. Depending on the hub size, this can lead to crashes. Current limit: {}; can be adjusted in addon settings."
+msgstr ""
+
+#: 
+msgctxt "#33046"
+msgid "When pressing up/down while the OSD isn't shown, show OSD instead of skipping chapters. Additionally, when pressing down while the OSD is shown, open the chapters (if available)."
+msgstr ""
+
+#: 
+msgctxt "#33047"
+msgid "Hubs round-robin item limit"
+msgstr ""
+
+#: 
+msgctxt "#33048"
+msgid "When hubs round-robin is enabled, only round-robin until this item limit. If the hub size exceeds this limit, the remaining items will be lazy loaded as usual. Tested minimum safe value on NVIDIA SHIELD 2019 is 1000. Default: 250"
+msgstr ""
+
+#: 
+msgctxt "#33049"
+msgid "Max retries"
+msgstr ""
+
+#: 
+msgctxt "#33050"
+msgid "The maximum number of retries each connection should attempt. The default (1) helps with hibernation/wakeup issues. Set higher for bad connections, setting this to 0 was the old default before 0.7.9"
+msgstr ""
+
+#: 
+msgctxt "#33051"
+msgid "Use CA certificate bundle"
+msgstr ""
+
+#: 
+msgctxt "#33052"
+msgid "Which CA certificate bundle to use for request HTTPS verification. Default is \"system\", which uses the system-provided certificate bundle. \"plex.direct\" uses an extremely small bundle provided with the addon, which only applies to plex.direct connections (any other connections will use the system bundle) and might slightly improve performance. \"custom\" allows for a certificate bundle in userdata/addon_data/script.plexmod/custom_bundle.crt"
+msgstr ""
+
+#: 
+msgctxt "#33053"
+msgid "System"
+msgstr ""
+
+#: 
+msgctxt "#33054"
+msgid "plex.direct (addon-supplied)"
+msgstr ""
+
+#: 
+msgctxt "#33055"
+msgid "Custom"
+msgstr ""
+
+#: 
+msgctxt "#33056"
+msgid "None"
+msgstr ""
+
+#: 
+msgctxt "#33057"
+msgid "Show buttons"
+msgstr ""
+
+#: 
+msgctxt "#33058"
+msgid "Playback features"
+msgstr ""
+
+#: 
+msgctxt "#33059"
+msgid "Additional codecs"
+msgstr ""
+
+#: 
+msgctxt "#33060"
+msgid "{feature_ds}: {desc_ds}\n"
+"{feature_4k}: {desc_4k}"
+msgstr ""
+
+#: 
+msgctxt "#33061"
+msgid "Enable certain codecs if your hardware supports them. Disable them to force transcoding."
+msgstr ""
+
+#: 
+msgctxt "#33062"
+msgid "Compiling templates"
+msgstr ""
+
+#: 
+msgctxt "#33063"
+msgid "Looking for custom templates"
+msgstr ""
+
+#: 
+msgctxt "#33064"
+msgid "Rendering: {}"
+msgstr ""
+
+#: 
+msgctxt "#33065"
+msgid "Complete"
+msgstr ""
+
+#: 
+msgctxt "#33066"
+msgid "Cache template files"
+msgstr ""
+
+#: 
+msgctxt "#33067"
+msgid "Doesn't throw away the template source files after compiling them. Uses slightly more memory but increases the speed of theme-related changes."
+msgstr ""
+
+#: 
+msgctxt "#33068"
+msgid "Always compile templates"
+msgstr ""
+
+#: 
+msgctxt "#33069"
+msgid "Recompiles all templates on every startup. Useful for template/theme development."
+msgstr ""
+
+#: 
+msgctxt "#33070"
+msgid "Action on Wake event"
+msgstr ""
+
+#: 
+msgctxt "#33071"
+msgid "Restart PM4K"
+msgstr ""
+
+#: 
+msgctxt "#33072"
+msgid "Wait for {}s"
+msgstr ""
+
+#: 
+msgctxt "#33073"
+msgid "Wait after wakeup"
+msgstr ""
+
+#: 
+msgctxt "#33074"
+msgid "Waiting {} second(s)"
+msgstr ""
+
+#: 
+msgctxt "#33075"
+msgid "Do something after waking up. Waiting for a time until resuming normal execution helps with networks coming back up after sleep events. Default: 1 second (5 seconds, CoreELEC)"
+msgstr ""
+
+#: 
+msgctxt "#33076"
+msgid "Modern (2024)"
+msgstr ""
+
+#: 
+msgctxt "#33077"
+msgid "Scale modern indicators"
+msgstr ""
+
+#: 
+msgctxt "#33078"
+msgid "Scale the modern indicators based on the poster size used. Default: On (tiny: 0.75, small: 1.0, medium: 1.175, big: 1.3)"
+msgstr ""
+
+#: 
+msgctxt "#33079"
+msgid "Hi-Res Music"
+msgstr ""
+
+#: 
+msgctxt "#33080"
+msgid "Allow DirectPlay of high resolution music (e.g. FLAC, >= 192 kHz)"
+msgstr ""
+
+#: 
+msgctxt "#33081"
+msgid "Blur chapter images"
+msgstr ""
+
+#: 
+msgctxt "#33082"
+msgid "Scan Library Files"
+msgstr ""
+
+#: 
+msgctxt "#33083"
+msgid "Empty Trash"
+msgstr ""
+
+#: 
+msgctxt "#33084"
+msgid "Analyze"
+msgstr ""
+
+#: 
+msgctxt "#33085"
+msgid "Map key to home"
+msgstr ""
+
+#: 
+msgctxt "#33086"
+msgid "Press the key you want to map to go to home within {} seconds"
+msgstr ""
+
+#: 
+msgctxt "#33087"
+msgid "Bind a key to immediately go to the Home view. Cancel using BACK/PREVIOUS_MENU. Clear bound key using the STOP button on the setting."
+msgstr ""
+
+#: 
+msgctxt "#33620"
+msgid "Plex server connect timeout"
+msgstr ""
+
+#: 
+msgctxt "#33621"
+msgid "Sets the maximum amount of time to connect to a Plex Server in seconds. Default: 5"
+msgstr ""
+
+#: 
+msgctxt "#32940"
+msgid "Video Player"
+msgstr ""
+
+#: 
+msgctxt "#33050"
+msgid "The maximum number of retries each connection should attempt. The default (3) helps with hibernation/wakeup issues. Set higher for bad connections, setting this to 0 was the old default before 0.7.9"
+msgstr ""
+
+#: 
+msgctxt "#33075"
+msgid "Do something after waking up. Waiting for a time until resuming normal execution helps with networks coming back up after sleep events. Default: 1 second (5 seconds, CoreELEC)."
+msgstr ""
+
+#: 
+msgctxt "#33087"
+msgid "Bind a key to immediately go to the Home view. Cancel using BACK/PREVIOUS_MENU. Clear bound key using the STOP or CONTEXT_MENU (long press OK/Enter) button on the setting."
+msgstr ""
+
+#: 
+msgctxt "#33088"
+msgid "Only applies to video player UI"
+msgstr ""
+
+#: 
+msgctxt "#33089"
+msgid "Automatic seek-back"
+msgstr ""
+
+#: 
+msgctxt "#33090"
+msgid "If your audio doesn't resume as fast as the video, or you want to catch up after a longer pause, use this to seek back after resuming from pause to compensate for the delay. Default: Off"
+msgstr ""
+
+#: 
+msgctxt "#33091"
+msgid "{sec_or_ms} {unit_s_or_ms}"
+msgstr ""
+
+#: 
+msgctxt "#33092"
+msgid "Seek back on pause"
+msgstr ""
+
+#: 
+msgctxt "#33093"
+msgid "Seek back after"
+msgstr ""
+
+#: 
+msgctxt "#33094"
+msgid "Only seek back after having paused at least a certain amount of seconds"
+msgstr ""
+
+#: 
+msgctxt "#33095"
+msgid "Seek back on pause instead of on resume. When Transcoding you should enable this."
+msgstr ""
+
+#: 
+msgctxt "#33096"
+msgid "Only with Direct Play"
+msgstr ""
+
+#: 
+msgctxt "#33097"
+msgid "Enable seek back ony when we're Direct Playing, not Transcoding."
+msgstr ""
+
+#: 
+msgctxt "#33098"
+msgid "Tickrate (Hz)"
+msgstr ""
+
+#: 
+msgctxt "#33099"
+msgid "Controls how often certain ticks are performed on GUI windows and the SeekDialog/VideoPlayer and how fast certain events are handled. Can be expensive when bigger than 1 Hz (once per second), can cause quirks when lower than 1 Hz (less than once per second). Depends on the hardware. Default: 1 Hz, Max: 10 Hz (every 100 ms), Sane highest and old default: 10 Hz (every 100 ms)"
+msgstr ""
+
+#: 
+msgctxt "#33636"
+msgid "Plex server read timeout"
+msgstr ""
+
+#: 
+msgctxt "#33637"
+msgid "Sets the maximum amount of time to read from a Plex Server in seconds. Default: 10"
+msgstr ""
+
+#: 
+msgctxt "#33638"
+msgid "Plex.tv connect timeout"
+msgstr ""
+
+#: 
+msgctxt "#33639"
+msgid "Plex.tv: Sets the maximum amount of time to connect to Plex.tv in seconds. Default: 5"
+msgstr ""
+
+#: 
+msgctxt "#33640"
+msgid "Plex.tv read timeout"
+msgstr ""
+
+#: 
+msgctxt "#33641"
+msgid "Plex.tv: Sets the maximum amount of time to read from Plex.tv in seconds. Default: 20"
+msgstr ""
+
+#: 
+msgctxt "#33642"
+msgid "Dump config"
+msgstr ""
+
+#: 
+msgctxt "#33643"
+msgid "Dumps all user settings into the log on startup, when DEBUG logging is enabled. Masks private information."
+msgstr ""
+
+#: 
+msgctxt "#33644"
+msgid "Tracks"
+msgstr ""
+
+#: 
+msgctxt "#33645"
+msgid "Ignore plex.direct DNS handling for remote hosts"
+msgstr ""
+
+#: 
+msgctxt "#33646"
+msgid "Only handle plex.direct hosts when the server's attributes dnsRebindingProtection=1 and publicAddressMatches=1. Might not work in certain situations. Disable if you have connection issues."
+msgstr ""
+
+#: 
+msgctxt "#33645"
+msgid "plex.direct: Honor plex.tv's dnsRebindingProtection flag (DNS)"
+msgstr ""
+
+#: 
+msgctxt "#33646"
+msgid "Only handle plex.direct hosts when the server's attributes dnsRebindingProtection=1. Might not work in certain situations. Disable if you have connection issues. Default: On"
+msgstr ""
+
+#: 
+msgctxt "#33647"
+msgid "plex.direct: Honor plex.tv's publicAddressMatches flag (DNS)"
+msgstr ""
+
+#: 
+msgctxt "#33648"
+msgid "Only handle plex.direct hosts when the server's attributes publicAddressMatches=1. Might not work in certain situations. Disable if you have connection issues. Default: On"
+msgstr ""
+
+#: 
+msgctxt "#33649"
+msgid "CoreELEC: Resume-fix wait for seek"
+msgstr ""
+
+#: 
+msgctxt "#33650"
+msgid "This adjusts the delay between seek-tries on CoreELEC, which fixes resume not always working or double-seeking. When you have resume/double-seek issues, increase this. 100ms should be stable as well. Default: 200ms"
+msgstr ""
 

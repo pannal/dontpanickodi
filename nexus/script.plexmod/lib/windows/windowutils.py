@@ -12,12 +12,15 @@ class UtilMixin():
     def __init__(self):
         self.exitCommand = None
 
-    def goHome(self, section=None):
-        HOME.show()
+    def goHome(self, section=None, with_root=False):
+        HOME.go_root = with_root
+
         if section:
             self.closeWithCommand('HOME:{0}'.format(section))
         else:
             self.closeWithCommand('HOME')
+
+        HOME.show()
 
     def openItem(self, obj):
         self.processCommand(opener.open(obj))
@@ -89,8 +92,6 @@ class UtilMixin():
 def shutdownHome():
     global HOME
     if HOME:
-        HOME._shuttingDown = True
         HOME.shutdown()
     del HOME
     HOME = None
-    HOME

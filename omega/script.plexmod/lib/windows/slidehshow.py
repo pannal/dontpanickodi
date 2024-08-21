@@ -66,7 +66,7 @@ class Slideshow(kodigui.BaseWindow, util.CronReceiver):
             if nextIndex >= len(self.images):
                 if self.selectedServer != None:
                     self.images = self.selectedServer.library.randomArts();
-                    util.DEBUG_LOG('[SS] Fetched {0} items'.format(len(self.images)))
+                    util.DEBUG_LOG('[SS] Fetched {0} items', lambda: len(self.images))
                     nextIndex = 0
 
             if len(self.images) == 0:

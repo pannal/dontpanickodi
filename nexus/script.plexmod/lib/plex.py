@@ -129,6 +129,15 @@ class PlexInterface(plexapp.AppInterface):
         else:
             return util.getSetting(pref, default)
 
+    def getPlaybackFeatures(self):
+        return self.getPreference("playback_features",
+                                  ["playback_directplay",
+                                   "playback_remux",
+                                   "allow_4k"])
+
+    def getAdditionalCodecs(self):
+        return self.getPreference("allowed_codecs", ["allow_hevc", "allow_vc1"])
+
     def getManualConnections(self):
         conns = []
         for i in range(2):
@@ -165,14 +174,16 @@ class PlexInterface(plexapp.AppInterface):
 
     def getGlobal(self, glbl, default=None):
         if glbl == 'transcodeVideoResolutions':
-            maxres = self.getPreference('allow_4k', True) and plexapp.Res((3840, 2160)) or plexapp.Res((1920, 1080))
+            allow_4k = "allow_4k" in self.getPlaybackFeatures()
+            maxres = allow_4k and plexapp.Res((3840, 2160)) or plexapp.Res((1920, 1080))
             self._globals['transcodeVideoResolutions'][-5:] = [maxres] * 5
         elif glbl == 'audioChannels':
             try:
                 self._globals['audioChannels'] = \
                     util.CHANNELMAPPING[util.rpc.Settings.GetSettingValue(setting='audiooutput.channels').get('value')]
             except:
-                util.DEBUG_LOG("Limiting audio channel definition to 2.0 due to error: %s" % traceback.format_exc())
+                util.DEBUG_LOG("Limiting audio channel definition to 2.0 due to error: {}",
+                               lambda: traceback.format_exc())
                 self._globals['audioChannels'] = "2.0"
 
         return self._globals.get(glbl, default)
@@ -180,17 +191,17 @@ class PlexInterface(plexapp.AppInterface):
     def getCapabilities(self):
         return ''
 
-    def LOG(self, msg):
-        util.DEBUG_LOG('API: {0}'.format(msg))
+    def LOG(self, msg, *args, **kwargs):
+        util.DEBUG_LOG('API: {0}'.format(msg), *args, **kwargs)
 
-    def DEBUG_LOG(self, msg):
-        self.LOG('DEBUG: {0}'.format(msg))
+    def DEBUG_LOG(self, msg, *args, **kwargs):
+        self.LOG('DEBUG: {0}'.format(msg), *args, **kwargs)
 
-    def WARN_LOG(self, msg):
-        self.LOG('WARNING: {0}'.format(msg))
+    def WARN_LOG(self, msg, *args, **kwargs):
+        self.LOG('WARNING: {0}'.format(msg), *args, **kwargs)
 
-    def ERROR_LOG(self, msg):
-        self.LOG('ERROR: {0}'.format(msg))
+    def ERROR_LOG(self, msg, *args, **kwargs):
+        self.LOG('ERROR: {0}'.format(msg), *args, **kwargs)
 
     def ERROR(self, msg=None, err=None):
         if err:
@@ -237,7 +248,7 @@ class PlexInterface(plexapp.AppInterface):
         qualityIndex = self.getQualityIndex(quality_type)
 
         if qualityIndex >= 9:
-            if self.getPreference('allow_4k', True):
+            if "allow_4k" in self.getPlaybackFeatures():
                 return allow4k and 2160 or 1088
             else:
                 return 1088
@@ -291,16 +302,30 @@ plexapp.util.CHECK_LOCAL = util.getSetting('smart_discover_local', True)
 plexapp.util.LOCAL_OVER_SECURE = util.getSetting('prefer_local', False)
 
 # set requests timeout
-TIMEOUT = float(util.addonSettings.requestsTimeout)
+TIMEOUT_READ = float(util.addonSettings.requestsTimeoutRead)
+TIMEOUT_CONNECT = float(util.addonSettings.requestsTimeoutConnect)
+PLEXTV_TIMEOUT_READ = float(util.addonSettings.plextvTimeoutRead)
+PLEXTV_TIMEOUT_CONNECT = float(util.addonSettings.plextvTimeoutConnect)
 CONNCHECK_TIMEOUT = float(util.addonSettings.connCheckTimeout)
-plexapp.util.TIMEOUT = TIMEOUT
-plexapp.util.CONN_CHECK_TIMEOUT = asyncadapter.AsyncTimeout(CONNCHECK_TIMEOUT).setConnectTimeout(CONNCHECK_TIMEOUT)
+plexapp.util.TIMEOUT = TIMEOUT_READ
+plexapp.util.TIMEOUT_CONNECT = TIMEOUT_CONNECT
+plexapp.util.PLEXTV_TIMEOUT_READ = PLEXTV_TIMEOUT_READ
+plexapp.util.PLEXTV_TIMEOUT_CONNECT = PLEXTV_TIMEOUT_CONNECT
+plexapp.util.PLEXTV_TIMEOUT = asyncadapter.AsyncTimeout(PLEXTV_TIMEOUT_READ).setConnectTimeout(PLEXTV_TIMEOUT_CONNECT)
+plexapp.util.CONN_CHECK_TIMEOUT = asyncadapter.AsyncTimeout(TIMEOUT_READ).setConnectTimeout(CONNCHECK_TIMEOUT)
 plexapp.util.LAN_REACHABILITY_TIMEOUT = util.addonSettings.localReachTimeout / 1000.0
-pnhttp.DEFAULT_TIMEOUT = asyncadapter.AsyncTimeout(TIMEOUT).setConnectTimeout(TIMEOUT)
+plexapp.util.DEFAULT_TIMEOUT = asyncadapter.AsyncTimeout(TIMEOUT_READ).setConnectTimeout(TIMEOUT_CONNECT)
+pnhttp.DEFAULT_TIMEOUT = plexapp.util.DEFAULT_TIMEOUT
+asyncadapter.DEFAULT_TIMEOUT = pnhttp.DEFAULT_TIMEOUT
 asyncadapter.DEFAULT_TIMEOUT = pnhttp.DEFAULT_TIMEOUT
 plexapp.util.ACCEPT_LANGUAGE = util.ACCEPT_LANGUAGE_CODE
 plexapp.setUserAgent(defaultUserAgent())
 plexnet_util.BASE_HEADERS = plexnet_util.getPlexHeaders()
+asyncadapter.MAX_RETRIES = int(util.addonSettings.maxRetries1)
+if util.addonSettings.useCertBundle != "system":
+    util.LOG("Using certificate bundle: {}".format(util.addonSettings.useCertBundle))
+    plexnet_util.USE_CERT_BUNDLE = util.addonSettings.useCertBundle
+plexnet_util.translatePath = util.translatePath
 
 
 class CallbackEvent(plexapp.util.CompatEvent):
@@ -310,6 +335,7 @@ class CallbackEvent(plexapp.util.CompatEvent):
         self.context = context
         self.signal = signal
         self.timeout = timeout
+        self.timed_out = False
         self.context.on(self.signal, self.set)
 
     def __enter__(self):
@@ -326,13 +352,14 @@ class CallbackEvent(plexapp.util.CompatEvent):
 
     def wait(self):
         if not plexnet_util.Event.wait(self, self.timeout):
-            util.DEBUG_LOG('{0}: TIMED-OUT'.format(self))
+            util.DEBUG_LOG('{0}: TIMED-OUT', self)
+            self.timed_out = True
         self.close()
 
     def triggeredOrTimedOut(self, timeout=None):
         try:
             if time.time() - self.start > self.timeout:
-                util.DEBUG_LOG('{0}: TIMED-OUT'.format(self))
+                util.DEBUG_LOG('{0}: TIMED-OUT', self)
                 return True
 
             if timeout:
@@ -348,11 +375,20 @@ class CallbackEvent(plexapp.util.CompatEvent):
 def init():
     util.DEBUG_LOG('Initializing...')
 
-    with CallbackEvent(plexapp.util.APP, 'init'):
-        util.DEBUG_LOG('Waiting for plexapp initialization...')
-        plexapp.init()
+    timed_out = False
+    retries = 0
+    while retries == 0 or (retries < asyncadapter.MAX_RETRIES and timed_out):
+        with CallbackEvent(plexapp.util.APP, 'init', timeout=plexapp.util.PLEXTV_TIMEOUT_READ) as cb:
+            util.DEBUG_LOG('Waiting for plexapp initialization... {}'.format(retries+1))
+            plexapp.init()
 
-    util.DEBUG_LOG('Account initialized: {}'.format(plexapp.ACCOUNT.ID))
+        timed_out = cb.timed_out
+        retries += 1
+        if timed_out:
+            util.DEBUG_LOG("plexapp initialization timed out, trying again")
+
+    if not timed_out:
+        util.DEBUG_LOG('Account initialized: {}', plexapp.ACCOUNT.ID)
 
     retry = True
 
@@ -375,7 +411,7 @@ def init():
         #     util.DEBUG_LOG('SIGN IN: Failed to connect to any servers')
         #     return False
 
-        # util.DEBUG_LOG('SIGN IN: Connected to server: {0} - {1}'.format(PLEX.friendlyName, PLEX.baseuri))
+        # util.DEBUG_LOG('SIGN IN: Connected to server: {0} - {1}', PLEX.friendlyName, PLEX.baseuri)
         success = requirePlexPass()
         if success == 'RETRY':
             retry = True

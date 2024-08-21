@@ -382,10 +382,10 @@ class SearchDialog(kodigui.BaseDialog, windowutils.UtilMixin):
             self.setProperty('no.results', '1')
 
     def showHub(self, hub, idx):
-        util.DEBUG_LOG('Showing search hub: {0} at {1}'.format(hub.type, idx))
+        util.DEBUG_LOG('Showing search hub: {0} at {1}', hub.type, idx)
         info = self.HUBMAP.get(hub.type)
         if not info:
-            util.DEBUG_LOG('Unhandled hub type: {0}'.format(hub.type))
+            util.DEBUG_LOG('Unhandled hub type: {0}', hub.type)
             return
 
         itemListControl = self.hubControls[idx][info['type']]

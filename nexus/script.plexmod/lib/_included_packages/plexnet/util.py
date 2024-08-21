@@ -2,8 +2,6 @@
 
 from __future__ import absolute_import
 
-from copy import copy
-
 from . import simpleobjects
 import re
 import sys
@@ -12,6 +10,8 @@ import platform
 import uuid
 import threading
 import six
+import math
+from copy import copy
 from kodi_six import xbmcaddon
 
 from . import verlib
@@ -22,10 +22,17 @@ if six.PY2:
 else:
     Event = threading.Event
 
+try:
+    from collections.abc import Iterable
+except ImportError:
+    from collections import Iterable
+
 BASE_HEADERS = ''
 
 # to maintain py2 compatibility, duplicate ADDON from lib.util to avoid circular import
 ADDON = xbmcaddon.Addon()
+
+translatePath = None
 
 
 def resetBaseHeaders():
@@ -47,7 +54,12 @@ def resetBaseHeaders():
 PROJECT = 'PlexNet'                                 # name provided to plex server
 VERSION = '0.0.0a1'                                 # version of this api
 TIMEOUT = 10                                        # request timeout
-LONG_TIMEOUT = 20                                   # s
+TIMEOUT_CONNECT = 5                                 # connect timeout
+DEFAULT_TIMEOUT = 10
+LONG_TIMEOUT = 20
+PLEXTV_TIMEOUT = None                               # set me later
+PLEXTV_TIMEOUT_READ = 20                                   # s
+PLEXTV_TIMEOUT_CONNECT = 5
 CONN_CHECK_TIMEOUT = 2.5                            # s
 LAN_REACHABILITY_TIMEOUT = 0.01                     # s
 CHECK_LOCAL = False
@@ -63,6 +75,8 @@ X_PLEX_PLATFORM_VERSION = platform.uname()[2]  # Operating system version, eg 4.
 X_PLEX_PRODUCT = PROJECT                       # Plex application name, eg Laika, Plex Media Server, Media Link
 X_PLEX_VERSION = VERSION                       # Plex application version number
 USER_AGENT = '{0}/{1}'.format(PROJECT, VERSION)
+
+USE_CERT_BUNDLE = False
 
 INTERFACE = None
 TIMER = None
@@ -110,20 +124,20 @@ def setApp(app):
     APP = app
 
 
-def LOG(msg):
-    INTERFACE.LOG(msg)
+def LOG(msg, *args, **kwargs):
+    INTERFACE.LOG(msg, *args, **kwargs)
 
 
-def DEBUG_LOG(msg):
-    INTERFACE.DEBUG_LOG(msg)
+def DEBUG_LOG(msg, *args, **kwargs):
+    INTERFACE.DEBUG_LOG(msg, *args, **kwargs)
 
 
-def ERROR_LOG(msg):
-    INTERFACE.ERROR_LOG(msg)
+def ERROR_LOG(msg, *args, **kwargs):
+    INTERFACE.ERROR_LOG(msg, *args, **kwargs)
 
 
-def WARN_LOG(msg):
-    INTERFACE.WARN_LOG(msg)
+def WARN_LOG(msg, *args, **kwargs):
+    INTERFACE.WARN_LOG(msg, *args, **kwargs)
 
 
 def ERROR(msg=None, err=None):
@@ -164,24 +178,50 @@ def cleanToken(url):
     return re.sub(r'X-Plex-Token=[^&]+', 'X-Plex-Token=****', url)
 
 
-def cleanObjTokens(dorig, flistkeys=("streamUrls", "streams",), fstrkeys=("url", "token")):
-    d = {}
+def mask(v):
+    vlen = len(v)
+    return (v[:int(math.floor(vlen / 2))] + int(math.ceil(vlen / 2)) * "*") if vlen > 4 else "****"
+
+
+def cleanObjTokens(dorig,
+                   flistkeys=("streamUrls", "streams",),
+                   mask_keys=("token", "authToken"),
+                   dict_cls=dict):
     dcopy = copy(dorig)
+    if not isinstance(dcopy, dict):
+        if isinstance(dcopy, Iterable) and not isinstance(dcopy, six.string_types):
+            return [cleanObjTokens(a, flistkeys=flistkeys, mask_keys=mask_keys) for a in dcopy]
+        elif isinstance(dcopy, six.string_types):
+            return cleanToken(dcopy)
+        return dcopy
 
-    # filter lists
-    for k in flistkeys:
-        if k not in dcopy:
-            continue
-        d[k] = list(map(lambda x: cleanObjTokens(x) if isinstance(x, dict) else cleanToken(x), dcopy[k][:]))
+    d = dict_cls()
+    for k, v in dcopy.items():
+        if isinstance(v, six.string_types):
+            if v:
+                d[k] = mask(v) if k in mask_keys else cleanToken(v)
+                continue
+            d[k] = v
 
-    # filter strings
-    for k in fstrkeys:
-        if k not in dcopy:
-            continue
-        d[k] = "****" if k == "token" else cleanToken(dcopy[k])
+        elif isinstance(v, dict):
+            d[k] = cleanObjTokens(v, flistkeys=flistkeys, mask_keys=mask_keys)
 
-    dcopy.update(d)
-    return dcopy
+        elif isinstance(v, Iterable):
+            fv = []
+            for iv in v:
+                if isinstance(iv, six.string_types):
+                    if k in flistkeys:
+                        fv.append(cleanToken(iv))
+                        continue
+                    fv.append(iv)
+                else:
+                    fv.append(cleanObjTokens(iv, flistkeys=flistkeys, mask_keys=mask_keys))
+            d[k] = fv
+
+        else:
+            d[k] = v
+
+    return d
 
 
 def now(local=False):

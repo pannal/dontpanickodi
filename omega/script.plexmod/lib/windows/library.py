@@ -27,6 +27,8 @@ from . import preplay
 from . import search
 from . import subitems
 from . import windowutils
+from . import mixins
+from .mixins import PlaybackBtnMixin
 
 KEYS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
@@ -106,11 +108,12 @@ TYPE_PLURAL = {
     'episode': T(32458, 'Episodes'),
     'collection': T(32490, 'Collections'),
     'folder': T(32491, 'Folders'),
+    'track': T(33644, 'Tracks'),
 }
 
 SORT_KEYS = {
     'movie': {
-        'titleSort': {'title': T(32357, 'By Name'), 'display': T(32358, 'Name'), 'defSortDesc': False},
+        'titleSort': {'title': T(32357, 'By Title'), 'display': T(32358, 'Title'), 'defSortDesc': False},
         'addedAt': {'title': T(32351, 'By Date Added'), 'display': T(32352, 'Date Added'), 'defSortDesc': True},
         'originallyAvailableAt': {'title': T(32353, 'By Release Date'), 'display': T(32354, 'Release Date'),
                                   'defSortDesc': True},
@@ -128,8 +131,10 @@ SORT_KEYS = {
         'viewCount': {'title': T(32371, 'By Play Count'), 'display': T(32372, 'Play Count'), 'defSortDesc': True}
     },
     'show': {
-        'titleSort': {'title': T(32357, 'By Name'), 'display': T(32358, 'Name'), 'defSortDesc': False},
+        'titleSort': {'title': T(32357, 'By Title'), 'display': T(32358, 'Title'), 'defSortDesc': False},
+        'year': {'title': T(32377, "Year"), 'display': T(32377, "Year"), 'defSortDesc': True},
         'show.titleSort': {'title': T(32457, 'By Show'), 'display': T(32456, 'Show'), 'defSortDesc': False},
+        'episode.addedAt': {'title': T(33042, 'Episode Date Added'), 'display': T(33042, 'Episode Date Added'), 'defSortDesc': True},
         'originallyAvailableAt': {'title': T(32365, 'By First Aired'), 'display': T(32366, 'First Aired'),
                                   'defSortDesc': False},
         'unviewedLeafCount': {'title': T(32367, 'By Unplayed'), 'display': T(32368, 'Unplayed'), 'defSortDesc': True},
@@ -142,12 +147,18 @@ SORT_KEYS = {
                           'defSortDesc': True},
     },
     'artist': {
-        'titleSort': {'title': T(32357, 'By Name'), 'display': T(32358, 'Name'), 'defSortDesc': False},
+        'titleSort': {'title': T(32357, 'By Title'), 'display': T(32358, 'Title'), 'defSortDesc': False},
         'artist.titleSort': {'title': T(32463, 'By Artist'), 'display': T(32462, 'Artist'), 'defSortDesc': False},
         'lastViewedAt': {'title': T(32369, 'By Date Played'), 'display': T(32370, 'Date Played'), 'defSortDesc': False},
     },
+    'track': {
+        'titleSort': {'title': T(32357, 'By Title'), 'display': T(32358, 'Title'), 'defSortDesc': False},
+        'artist.titleSort': {'title': T(32463, 'By Artist'), 'display': T(32462, 'Artist'), 'defSortDesc': False},
+        'lastViewedAt': {'title': T(32369, 'By Date Played'), 'display': T(32370, 'Date Played'), 'defSortDesc': False},
+        'viewCount': {'title': T(32371, 'By Play Count'), 'display': T(32372, 'Play Count'), 'defSortDesc': True}
+    },
     'photo': {
-        'titleSort': {'title': T(32357, 'By Name'), 'display': T(32358, 'Name'), 'defSortDesc': False},
+        'titleSort': {'title': T(32357, 'By Title'), 'display': T(32358, 'Title'), 'defSortDesc': False},
         'originallyAvailableAt': {'title': T(32373, 'By Date Taken'), 'display': T(32374, 'Date Taken'),
                                   'defSortDesc': True}
     },
@@ -192,6 +203,8 @@ class ChunkRequestTask(backgroundthread.Task):
                 type_ = 9
             elif ITEM_TYPE == 'collection':
                 type_ = 18
+            elif ITEM_TYPE == 'track':
+                type_ = 10
 
             if ITEM_TYPE == 'folder':
                 items = self.section.folder(self.start, self.size, self.subDir)
@@ -202,7 +215,7 @@ class ChunkRequestTask(backgroundthread.Task):
                 return
             self.callback(items, self.start)
         except plexnet.exceptions.BadRequest:
-            util.DEBUG_LOG('404 on section: {0}'.format(repr(self.section.title)))
+            util.DEBUG_LOG('404 on section: {0}', repr(self.section.title))
 
 
 class PhotoPropertiesTask(backgroundthread.Task):
@@ -219,7 +232,7 @@ class PhotoPropertiesTask(backgroundthread.Task):
             self.photo.reload()
             self.callback(self.photo)
         except plexnet.exceptions.BadRequest:
-            util.DEBUG_LOG('404 on photo reload: {0}'.format(self.photo))
+            util.DEBUG_LOG('404 on photo reload: {0}', self.photo)
 
 
 class LibrarySettings(object):
@@ -297,7 +310,7 @@ class LibrarySettings(object):
         self._saveSettings()
 
 
-class LibraryWindow(kodigui.MultiWindow, windowutils.UtilMixin):
+class LibraryWindow(mixins.PlaybackBtnMixin, kodigui.MultiWindow, windowutils.UtilMixin):
     bgXML = 'script-plex-blank.xml'
     path = util.ADDON.getAddonInfo('path')
     theme = 'Main'
@@ -309,6 +322,7 @@ class LibraryWindow(kodigui.MultiWindow, windowutils.UtilMixin):
     CHUNK_OVERCOMMIT = 6
 
     def __init__(self, *args, **kwargs):
+        PlaybackBtnMixin.__init__(self)
         kodigui.MultiWindow.__init__(self, *args, **kwargs)
         windowutils.UtilMixin.__init__(self)
         self.section = kwargs.get('section')
@@ -339,6 +353,7 @@ class LibraryWindow(kodigui.MultiWindow, windowutils.UtilMixin):
         self.lock = threading.Lock()
 
     def reset(self):
+        PlaybackBtnMixin.reset(self)
         util.setGlobalProperty('sort', '')
         self.filterUnwatched = self.librarySettings.getSetting('filter.unwatched', False)
         self.sort = self.librarySettings.getSetting('sort', 'titleSort')
@@ -544,6 +559,10 @@ class LibraryWindow(kodigui.MultiWindow, windowutils.UtilMixin):
         util.setGlobalProperty('key', li.dataSource)
 
     def playButtonClicked(self, shuffle=False):
+        if self.playBtnClicked:
+            return
+
+        self.playBtnClicked = True
         filter_ = self.getFilterOpts()
         sort = self.getSortOpts()
         args = {}
@@ -599,7 +618,7 @@ class LibraryWindow(kodigui.MultiWindow, windowutils.UtilMixin):
             for t in ('movie', 'collection', 'folder'):
                 options.append({'type': t, 'display': TYPE_PLURAL.get(t, t)})
         elif self.section.TYPE == 'artist':
-            for t in ('artist', 'album', 'collection'):
+            for t in ('artist', 'album', 'collection', 'track'):
                 options.append({'type': t, 'display': TYPE_PLURAL.get(t, t)})
         else:
             return
@@ -666,16 +685,19 @@ class LibraryWindow(kodigui.MultiWindow, windowutils.UtilMixin):
                 defSortByOption[stype] = option.get('defSortDesc')
                 options.append(option)
         elif self.section.TYPE == 'show':
-            searchTypes = ['titleSort', 'addedAt', 'lastViewedAt', 'originallyAvailableAt', 'rating',
-                           'audienceRating', 'userRating', 'contentRating', 'unviewedLeafCount']
+            searchTypes = ['titleSort', 'year', 'originallyAvailableAt', 'rating', 'audienceRating', 'userRating',
+                           'contentRating', 'unviewedLeafCount', 'episode.addedAt',
+                           'addedAt', 'lastViewedAt']
             if ITEM_TYPE == 'episode':
-                searchTypes = ['titleSort', 'show.titleSort', 'addedAt', 'originallyAvailableAt', 'lastViewedAt', 'rating',
-                               'audienceRating', 'userRating']
+                searchTypes = ['titleSort', 'show.titleSort', 'addedAt', 'originallyAvailableAt', 'lastViewedAt',
+                               'rating', 'audienceRating', 'userRating']
             elif ITEM_TYPE == 'collection':
                 searchTypes = ['titleSort', 'addedAt']
 
             for stype in searchTypes:
-                option = SORT_KEYS['show'].get(stype, SORT_KEYS['movie'].get(stype)).copy()
+                option = SORT_KEYS['show'].get(stype, SORT_KEYS['movie'].get(stype, {})).copy()
+                if not option:
+                    continue
                 option['type'] = stype
                 option['indicator'] = self.sort == stype and ind or ''
                 defSortByOption[stype] = option.get('defSortDesc')
@@ -686,6 +708,8 @@ class LibraryWindow(kodigui.MultiWindow, windowutils.UtilMixin):
                 searchTypes = ['titleSort', 'artist.titleSort', 'addedAt', 'lastViewedAt', 'viewCount', 'originallyAvailableAt', 'rating']
             elif ITEM_TYPE == 'collection':
                 searchTypes = ['titleSort', 'addedAt']
+            elif ITEM_TYPE == 'track':
+                searchTypes = ['titleSort', 'addedAt', 'lastViewedAt', 'viewCount']
 
             for stype in searchTypes:
                 option = SORT_KEYS['artist'].get(stype, SORT_KEYS['movie'].get(stype)).copy()
@@ -785,7 +809,8 @@ class LibraryWindow(kodigui.MultiWindow, windowutils.UtilMixin):
         self.showPanelControl.selectItem(0)
         self.setFocusId(self.POSTERS_PANEL_ID)
         self.backgroundSet = False
-        self.setBackground([item.dataSource for item in self.showPanelControl], 0, randomize=not util.addonSettings.dynamicBackgrounds)
+        self.setBackground([item.dataSource for item in self.showPanelControl], 0,
+                           randomize=not util.addonSettings.dynamicBackgrounds)
 
     def subOptionCallback(self, option):
         check = 'script.plex/home/device/check.png'
@@ -962,6 +987,9 @@ class LibraryWindow(kodigui.MultiWindow, windowutils.UtilMixin):
         elif self.section.TYPE in ('photo', 'photodirectory'):
             self.showPhoto(mli.dataSource)
 
+        if self._closeSignalled:
+            return
+
         if not mli:
             return
 
@@ -1010,7 +1038,7 @@ class LibraryWindow(kodigui.MultiWindow, windowutils.UtilMixin):
 
         for task in self.tasks:
             if task.contains(mli.pos()):
-                util.DEBUG_LOG('Moving task to front: {0}'.format(task))
+                util.DEBUG_LOG('Moving task to front: {0}', task)
                 backgroundthread.BGThreader.moveToFront(task)
                 break
 
@@ -1072,6 +1100,8 @@ class LibraryWindow(kodigui.MultiWindow, windowutils.UtilMixin):
             type_ = 9
         elif ITEM_TYPE == 'collection':
             type_ = 18
+        elif ITEM_TYPE == 'track':
+            type_ = 10
 
         idx = 0
         fallback = 'script.plex/thumb_fallbacks/{0}.png'.format(TYPE_KEYS.get(self.section.type, TYPE_KEYS['movie'])['fallback'])
@@ -1364,7 +1394,10 @@ class LibraryWindow(kodigui.MultiWindow, windowutils.UtilMixin):
                     mli = self.showPanelControl[pos]
                     if obj:
                         mli.setProperty('index', str(pos))
-                        mli.setLabel(obj.defaultTitle or '')
+                        if obj.TYPE == 'track':
+                            mli.setLabel("{} - {}: {}".format(obj.grandparentTitle, obj.parentTitle, obj.title))
+                        else:
+                            mli.setLabel(obj.defaultTitle or '')
 
                         if obj.TYPE == 'collection':
                             colArtDim = TYPE_KEYS.get('collection').get('art_dim', (256, 256))
@@ -1414,7 +1447,7 @@ class LibraryWindow(kodigui.MultiWindow, windowutils.UtilMixin):
 
         # Check if the chunk has already been requested, if not then go fetch the data
         if startChunkPosition not in self.alreadyFetchedChunkList:
-            util.DEBUG_LOG('Position {0} so requesting chunk {1}'.format(start, startChunkPosition))
+            util.DEBUG_LOG('Position {0} so requesting chunk {1}', start, startChunkPosition)
             # Keep track of the chunks we've already fetched by storing the chunk's starting position
             self.alreadyFetchedChunkList.add(startChunkPosition)
             task = ChunkRequestTask().setup(self.section, startChunkPosition, self.CHUNK_SIZE,

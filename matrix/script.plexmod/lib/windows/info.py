@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 
 import os
+import datetime
 
 from plexnet.video import Episode, Movie, Clip
 
@@ -88,6 +89,8 @@ class InfoWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
                     addMedia.append("{}\n".format(s))
                 if pmFolder:
                     addMedia.append("Mapped via: {}\n".format(pmFolder))
+                addMedia.append("Added: {}\n".format(datetime.datetime.fromtimestamp(
+                    self.video.addedAt.asFloat()).strftime("{} {}".format(util.shortDF, util.timeFormat))))
                 addMedia.append("Duration: {}, Size: {}\n".format(util.durationToShortText(int(part.duration)),
                                                                   util.simpleSize(int(part.size))))
 

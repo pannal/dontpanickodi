@@ -30,13 +30,13 @@ class MyPlexManager(object):
         util.APP.startRequest(request, context, "_method=PUT")
 
     def refreshResources(self, force=False):
-        util.LOG('MyPlexManager().refreshResources() - Force: {}'.format(force))
+        util.LOG('MyPlexManager().refreshResources() - Force: {}', force)
         if force:
             plexapp.SERVERMANAGER.resetLastTest()
 
         request = myplexrequest.MyPlexRequest("/pms/resources")
         context = request.createRequestContext("resources", callback.Callable(self.onResourcesResponse),
-                                               timeout=util.LONG_TIMEOUT)
+                                               timeout=util.PLEXTV_TIMEOUT)
 
         if plexapp.ACCOUNT.isSecure:
             request.addParam("includeHttps", "1")
@@ -58,7 +58,6 @@ class MyPlexManager(object):
             response.parseFakeXMLResponse(data)
             util.DEBUG_LOG("Using cached resources")
 
-        hosts = []
         if response.container:
             for resource in response.container:
                 util.DEBUG_LOG(
@@ -72,17 +71,16 @@ class MyPlexManager(object):
                 )
 
                 for conn in resource.connections:
-                    util.DEBUG_LOG('  {0}'.format(conn))
-                    hosts.append(conn.address)
+                    util.DEBUG_LOG('  {0}', conn)
 
                 if 'server' in resource.provides:
                     server = plexserver.createPlexServerForResource(resource)
-                    util.DEBUG_LOG('  {0}'.format(server))
+                    util.DEBUG_LOG('  {0}', server)
                     servers.append(server)
 
             self.gotResources = True
         plexapp.SERVERMANAGER.updateFromConnectionType(servers, plexconnection.PlexConnection.SOURCE_MYPLEX)
-        util.APP.trigger("loaded:myplex_servers", hosts=hosts, source="myplex")
+        util.APP.trigger("loaded:myplex_servers", servers=servers, source="myplex")
 
 
 MANAGER = MyPlexManager()

@@ -76,11 +76,20 @@ class MusicPlayerWindow(currentplaylist.CurrentPlaylistWindow):
         self.commonDeinit()
         kodigui.ControlledWindow.doClose(self)
 
+    def processCommand(self, command):
+        if command == "STOP":
+            self.doClose()
+            return
+        super(MusicPlayerWindow, self).processCommand(command)
+
     def onAction(self, action):
         if self.ignoreStopCommands and action in (xbmcgui.ACTION_PREVIOUS_MENU,
-                                                  xbmcgui.ACTION_NAV_BACK,
-                                                  xbmcgui.ACTION_STOP):
-            return
+                                                  xbmcgui.ACTION_NAV_BACK):
+            if not self.is_current_window:
+                return
+        elif not self.ignoreStopCommands:
+            if not self.is_current_window and action != xbmcgui.ACTION_STOP:
+                return
         try:
             if action == xbmcgui.ACTION_STOP:
                 self.stopButtonClicked()

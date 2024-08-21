@@ -6,6 +6,7 @@ from plexnet import playlist
 
 from lib import util
 from lib.util import T
+from lib import player
 from . import busy
 from . import dropdown
 from . import kodigui
@@ -45,20 +46,40 @@ class AlbumWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
         self.parentList = kwargs.get('parentList')
         self.albums = None
         self.exitCommand = None
+        self.lastPlayingRK = None
 
     def onFirstInit(self):
         self.trackListControl = kodigui.ManagedControlList(self, self.TRACKS_LIST_ID, 5)
 
         self.setup()
         self.setFocusId(self.TRACKS_LIST_ID)
+        player.PLAYER.on('started.audio', self.onPlayingTrackChanged)
         try:
             self.checkForHeaderFocus(xbmcgui.ACTION_MOVE_DOWN)
         except AttributeError:
             raise util.NoDataException
 
+    def onReInit(self):
+        if self.lastPlayingRK:
+            self.selectTrack(self.lastPlayingRK)
+
+    def onPlayingTrackChanged(self, *args, **kwargs):
+        self.lastPlayingRK = util.getGlobalProperty("track.ID")
+
     def setup(self):
         self.updateProperties()
         self.fillTracks()
+
+    def doClose(self):
+        player.PLAYER.off('started.audio', self.onPlayingTrackChanged)
+        kodigui.ControlledWindow.doClose(self)
+
+    def selectTrack(self, ratingKey):
+        if not ratingKey:
+            return
+        for mli in self.trackListControl:
+            if mli.dataSource.ratingKey == ratingKey:
+                self.trackListControl.setSelectedItem(mli)
 
     def onAction(self, action):
         controlID = self.getFocusId()

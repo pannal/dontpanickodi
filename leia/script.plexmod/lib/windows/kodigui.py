@@ -7,11 +7,12 @@ import traceback
 
 from kodi_six import xbmc
 from kodi_six import xbmcgui
-from plexnet import util as pnUtil
 from six.moves import range
 from six.moves import zip
 
 from .. import util
+
+from plexnet import plexapp
 
 MONITOR = None
 
@@ -103,12 +104,62 @@ LAST_BG_URL = None
 BG_NA = "script.plex/home/background-fallback_black.png"
 
 
-class BaseWindow(xbmcgui.WindowXML, BaseFunctions):
-    __slots__ = ("_closing", "_winID", "started", "finishedInit", "dialogProps", "isOpen")
+class XMLBase(object):
+    def onInit(self, count=0):
+        try:
+            self.getControl(666)
+        except RuntimeError as e:
+            if e.args and "Non-Existent Control" in e.args[0]:
+                if count == 0:
+                    # retry once
+                    xbmc.sleep(250)
+                    return self.onInit(count=1)
+
+                util.ERROR("Possibly broken XML file: {}, triggering recompilation.".format(self.xmlFile))
+                util.showNotification("Recompiling templates", time_ms=1000,
+                                      header="Possibly broken XML file(s)")
+                xbmc.sleep(1000)
+
+                if self.__class__.__name__ == "HomeWindow":
+                    try:
+                        self._errored = True
+                        self.closeWRecompileTpls()
+                    finally:
+                        return
+                elif self.__class__.__name__ == "BackgroundWindow":
+                    try:
+                        self._errored = True
+                        self.doClose()
+                    finally:
+                        return
+
+                try:
+                    self._errored = True
+                    self.doClose()
+                finally:
+                    from . import windowutils
+                    windowutils.HOME.closeWRecompileTpls()
+                    return
+            raise
+        self._onInit()
+
+    def goHomeAction(self, action):
+        if (util.HOME_BUTTON_MAPPED is not None
+                and action.getButtonCode() == int(util.HOME_BUTTON_MAPPED) and hasattr(self, "goHome")):
+            self.goHome(with_root=True)
+            return True
+        return
+
+
+class BaseWindow(XMLBase, xbmcgui.WindowXML, BaseFunctions):
+    __slots__ = ("_closing", "_winID", "started", "finishedInit", "dialogProps", "isOpen", "_errored",
+                 "_closeSignalled")
 
     def __init__(self, *args, **kwargs):
         BaseFunctions.__init__(self)
         self._closing = False
+        self._errored = False
+        self._closeSignalled = False
         self._winID = None
         self.started = False
         self.finishedInit = False
@@ -117,10 +168,13 @@ class BaseWindow(xbmcgui.WindowXML, BaseFunctions):
         carryProps = kwargs.get("window_props", None)
         if carryProps:
             self.setProperties(list(carryProps.keys()), list(carryProps.values()))
-        self.setBoolProperty('use_alt_watched', util.getSetting('use_alt_watched', True))
-        self.setBoolProperty('hide_aw_bg', util.getSetting('hide_aw_bg', False))
+        self.setBoolProperty('is_plextuary', util.SKIN_PLEXTUARY)
 
-    def onInit(self):
+    def onCloseSignal(self, *args, **kwargs):
+        self._closeSignalled = True
+        self.doClose()
+
+    def _onInit(self):
         global LAST_BG_URL
         self._winID = xbmcgui.getCurrentWindowId()
         BaseFunctions.lastWinID = self._winID
@@ -139,22 +193,32 @@ class BaseWindow(xbmcgui.WindowXML, BaseFunctions):
             self.setProperty('background_colour_opaque', "0xff111111")
 
         self.setBoolProperty('use_bg_fallback', util.addonSettings.useBgFallback)
+        self.setBoolProperty('dynamic_backgrounds', util.addonSettings.dynamicBackgrounds)
 
         try:
             if self.started:
-                self.onReInit()
+                if hasattr(self, "onReInit"):
+                    self.onReInit()
             else:
                 self.started = True
                 if LAST_BG_URL:
                     self.windowSetBackground(LAST_BG_URL)
-                self.onFirstInit()
+
+                if self.__class__.__name__ not in ("HomeWindow", "BackgroundWindow"):
+                    plexapp.util.APP.on('close.windows', self.onCloseSignal)
+
+                if hasattr(self, "onFirstInit"):
+                    self.onFirstInit()
                 self.finishedInit = True
+
         except util.NoDataException:
             self.exitCommand = "NODATA"
             self.doClose()
 
-    def onFirstInit(self):
-        pass
+    def onAction(self, action):
+        if XMLBase.goHomeAction(self, action):
+            return
+        xbmcgui.WindowXML.onAction(self, action)
 
     def onReInit(self):
         pass
@@ -165,11 +229,11 @@ class BaseWindow(xbmcgui.WindowXML, BaseFunctions):
                (base_win_id and xbmcgui.getCurrentWindowId() <= base_win_id)) \
                 and not util.MONITOR.waitForAbort(1) and tries < 120:
             if tries == 0:
-                util.LOG("Couldn't open window {}, other dialog open? Retrying for 120s.".format(self))
+                util.LOG("Couldn't open window {}, other dialog open? Retrying for 120s.", self)
             self.show()
             tries += 1
 
-        util.DEBUG_LOG("Window {} opened: {}".format(self, self.isOpen))
+        util.DEBUG_LOG("Window {} opened: {}", self, self.isOpen)
 
         return self.isOpen
 
@@ -185,6 +249,10 @@ class BaseWindow(xbmcgui.WindowXML, BaseFunctions):
             xbmcgui.WindowXML.setProperty(self, key, value)
         except RuntimeError:
             xbmc.log('kodigui.BaseWindow.setProperty: Missing window', xbmc.LOGDEBUG)
+
+    def setCondFocusId(self, focus):
+        if self.getFocusId() != focus:
+            self.setFocusId(focus)
 
     def updateBackgroundFrom(self, ds):
         if util.addonSettings.dynamicBackgrounds:
@@ -220,6 +288,7 @@ class BaseWindow(xbmcgui.WindowXML, BaseFunctions):
         return value
 
     def doClose(self):
+        plexapp.util.APP.off('close.windows', self.onCloseSignal)
         if not self.isOpen:
             return
         self._closing = True
@@ -232,33 +301,52 @@ class BaseWindow(xbmcgui.WindowXML, BaseFunctions):
         xbmcgui.WindowXML.show(self)
         self.isOpen = xbmcgui.getCurrentWindowId() >= 13000
 
+    @property
+    def is_active(self):
+        return self._winID and BaseFunctions.lastWinID == self._winID
+
+    @property
+    def is_current_window(self):
+        return self._winID and xbmcgui.getCurrentWindowId() == self._winID
+
     def onClosed(self):
         pass
 
 
-class BaseDialog(xbmcgui.WindowXMLDialog, BaseFunctions):
-    __slots__ = ("_closing", "_winID", "started", "isOpen")
+class BaseDialog(XMLBase, xbmcgui.WindowXMLDialog, BaseFunctions):
+    __slots__ = ("_closing", "_winID", "started", "isOpen", "_errored", "_closeSignalled")
 
     def __init__(self, *args, **kwargs):
         BaseFunctions.__init__(self)
         self._closing = False
+        self._errored = False
+        self._closeSignalled = False
         self._winID = ''
         self.started = False
 
         carryProps = kwargs.get("dialog_props", None)
         if carryProps:
             self.setProperties(list(carryProps.keys()), list(carryProps.values()))
-        self.setBoolProperty('use_alt_watched', util.getSetting('use_alt_watched', True))
-        self.setBoolProperty('hide_aw_bg', util.getSetting('hide_aw_bg', False))
+        self.setBoolProperty('is_plextuary', util.SKIN_PLEXTUARY)
 
-    def onInit(self):
+    def onCloseSignal(self, *args, **kwargs):
+        self._closeSignalled = True
+        self.doClose()
+
+    def _onInit(self):
         self._winID = xbmcgui.getCurrentWindowDialogId()
         BaseFunctions.lastDialogID = self._winID
         if self.started:
             self.onReInit()
         else:
             self.started = True
+            plexapp.util.APP.on('close.dialogs', self.onCloseSignal)
             self.onFirstInit()
+
+    def onAction(self, action):
+        if XMLBase.goHomeAction(self, action):
+            return
+        xbmcgui.WindowXMLDialog.onAction(self, action)
 
     def onFirstInit(self):
         pass
@@ -280,6 +368,7 @@ class BaseDialog(xbmcgui.WindowXMLDialog, BaseFunctions):
             xbmc.log('kodigui.BaseDialog.setProperty: Missing window', xbmc.LOGDEBUG)
 
     def doClose(self):
+        plexapp.util.APP.off('close.dialogs', self.onCloseSignal)
         self._closing = True
         self.close()
         self.isOpen = False
@@ -358,11 +447,6 @@ class ManagedListItem(object):
     __slots__ = ("_listItem", "dataSource", "properties", "label", "label2", "iconImage", "thumbnailImage", "path",
                  "_ID", "_manager", "_valid")
 
-    PROPS = {
-        'use_alt_watched': util.getSetting('use_alt_watched', True) and '1' or '',
-        'hide_aw_bg': util.getSetting('hide_aw_bg', False) and '1' or ''
-    }
-
     def __init__(self, label='', label2='', iconImage='', thumbnailImage='', path='', data_source=None,
                  properties=None):
         self._listItem = xbmcgui.ListItem(label, label2, path=path)
@@ -377,8 +461,6 @@ class ManagedListItem(object):
         self._ID = None
         self._manager = None
         self._valid = True
-        for k, v in self.PROPS.items():
-            self.setProperty(k, v)
 
         if properties:
             for k, v in properties.items():
@@ -523,15 +605,6 @@ class ManagedListItem(object):
         pass
 
 
-def watchMarkerSettingsChanged(*args, **kwargs):
-    ManagedListItem.PROPS['use_alt_watched'] = util.getSetting('use_alt_watched', True) and '1' or ''
-    ManagedListItem.PROPS['hide_aw_bg'] = util.getSetting('hide_aw_bg', False) and '1' or ''
-
-
-pnUtil.APP.on('change:use_alt_watched', watchMarkerSettingsChanged)
-pnUtil.APP.on('change:hide_aw_bg', watchMarkerSettingsChanged)
-
-
 class ManagedControlList(object):
     __slots__ = ("controlID", "control", "items", "_sortKey", "_idCounter", "_maxViewIndex", "_properties",
                  "dataSource")
@@ -561,6 +634,12 @@ class ManagedControlList(object):
 
     def __len__(self):
         return self.size()
+
+    def prev(self):
+        pos = self.getSelectedPos()-1
+        if self.positionIsValid(pos):
+            return pos
+        return 0
 
     def _updateItems(self, bottom=None, top=None):
         if bottom is None:
@@ -680,6 +759,10 @@ class ManagedControlList(object):
             return None
         return pos
 
+    def getItemByPos(self, pos):
+        if self.positionIsValid(pos):
+            return self.getListItem(pos)
+
     def setSelectedItemByPos(self, pos):
         if self.positionIsValid(pos):
             self.control.selectItem(pos)
@@ -688,6 +771,9 @@ class ManagedControlList(object):
         pos = self.getManagedItemPosition(item)
         if self.positionIsValid(pos):
             self.control.selectItem(pos)
+
+    def setSelectedItemByDataSource(self, data_source):
+        self.setSelectedItem(self.getListItemByDataSource(data_source))
 
     def removeItem(self, index):
         old = self.items.pop(index)
@@ -859,7 +945,8 @@ class _MWBackground(ControlledWindow):
 
 
 class MultiWindow(object):
-    __slots__ = ("_windows", "_next", "_properties", "_current", "_allClosed", "exitCommand", "_currentOnAction")
+    __slots__ = ("_windows", "_next", "_properties", "_current", "_allClosed", "exitCommand", "_currentOnAction",
+                 "_closeSignalled")
 
     def __init__(self, windows=None, default_window=None, **kwargs):
         self._windows = windows
@@ -867,10 +954,15 @@ class MultiWindow(object):
         self._properties = {}
         self._current = None
         self._allClosed = False
+        self._closeSignalled = False
         self.exitCommand = None
 
     def __getattr__(self, name):
         return getattr(self._current, name)
+
+    def onCloseSignal(self, *args, **kwargs):
+        self._closeSignalled = True
+        self.doClose()
 
     def setWindows(self, windows):
         self._windows = windows
@@ -942,9 +1034,12 @@ class MultiWindow(object):
     def _onFirstInit(self):
         for k, v in self._properties.items():
             self._current.setProperty(k, v)
+
+        plexapp.util.APP.on('close.windows', self.onCloseSignal)
         self.onFirstInit()
 
     def doClose(self):
+        plexapp.util.APP.off('close.windows', self.onCloseSignal)
         self._allClosed = True
         self._current.doClose()
 
@@ -1171,7 +1266,7 @@ class PropertyTimer():
 class WindowProperty():
     __slots__ = ("win", "prop", "val", "end", "old")
 
-    def __init__(self, win, prop, val='1', end=None):
+    def __init__(self, win, prop, val='1', end=''):
         self.win = win
         self.prop = prop
         self.val = val
@@ -1189,17 +1284,15 @@ class WindowProperty():
 class GlobalProperty():
     __slots__ = ("_addonID", "prop", "val", "end", "old")
 
-    def __init__(self, prop, val='1', end=None):
-        from kodi_six import xbmcaddon
-        self._addonID = xbmcaddon.Addon().getAddonInfo('id')
+    def __init__(self, prop, val='1', end=''):
         self.prop = prop
         self.val = val
         self.end = end
-        self.old = xbmc.getInfoLabel('Window(10000).Property({0}}.{1})'.format(self._addonID, prop))
+        self.old = xbmc.getInfoLabel('Window(10000).Property(script.plex.{})'.format(prop))
 
     def __enter__(self):
-        xbmcgui.Window(10000).setProperty('{0}.{1}'.format(self._addonID, self.prop), self.val)
+        xbmcgui.Window(10000).setProperty('script.plex.{}'.format(self.prop), self.val)
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
-        xbmcgui.Window(10000).setProperty('{0}.{1}'.format(self._addonID, self.prop), self.end or self.old)
+        xbmcgui.Window(10000).setProperty('script.plex.{}'.format(self.prop), self.end or self.old)

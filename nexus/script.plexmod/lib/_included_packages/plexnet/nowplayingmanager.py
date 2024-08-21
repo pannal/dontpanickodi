@@ -85,17 +85,37 @@ class NowPlayingManager(object):
         for timelineType in self.TIMELINE_TYPES:
             self.timelines[timelineType] = TimelineData(timelineType)
 
-    def updatePlaybackState(self, timelineType, itemData, state, t, playQueue=None, duration=0, force=False):
+    def updatePlaybackState(self, timelineType, itemData, state, t, playQueue=None, duration=0, force=False,
+                            force_time=False):
         timeline = self.timelines[timelineType]
-        timeline.state = state
         timeline.itemData = itemData
         timeline.playQueue = playQueue
-        timeline.attrs["time"] = str(t)
+        old_time = timeline.attrs.get("time")
+        time_updated = False
+        if state != "stopped" or force_time:
+            timeline.attrs["time"] = str(t)
+            time_updated = True
+        elif old_time:
+            if timeline.state != "stopped":
+                # use old timeline state's time for stopped states
+                util.DEBUG_LOG("Using previous timeline state as we're stopped now: {}", old_time)
+            else:
+                util.DEBUG_LOG("Possibly using bad time for timeline state as we're stopped now but can't find a "
+                               "non-stopped time: {}", old_time)
+
+            # reuse old timestamp
+            t = int(timeline.attrs["time"])
+        else:
+            util.DEBUG_LOG("Possibly using bad time for timeline state as we're stopped now but never seen a good time")
+            timeline.attrs["time"] = str(t)
+            time_updated = True
+        timeline.state = state
         timeline.duration = duration
 
         # self.sendTimelineToAll()
 
         self.sendTimelineToServer(timelineType, timeline, t, force=force)
+        return time_updated
 
     def sendTimelineToServer(self, timelineType, timeline, t, force=False):
         server = util.APP.serverManager.selectedServer

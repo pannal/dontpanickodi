@@ -8,7 +8,7 @@ from kodi_six import xbmcvfs
 from plexnet import plexapp
 
 from lib.kodijsonrpc import rpc
-from lib.util import ADDON, translatePath, KODI_BUILD_NUMBER, DEBUG_LOG, LOG, ERROR
+from lib.util import ADDON, translatePath, KODI_BUILD_NUMBER, DEBUG_LOG, LOG, FROM_KODI_REPOSITORY
 from lib.advancedsettings import adv
 
 
@@ -100,6 +100,10 @@ class KodiCacheManager(object):
         #    self._cleanData = data
 
     def write(self, memorySize=None, readFactor=None):
+        # never write to advancedSettings when we're installed from the Kodi repository and don't have the modern API
+        if FROM_KODI_REPOSITORY and not self.useModernAPI:
+            return
+
         memorySize = self.memorySize = memorySize if memorySize is not None else self.memorySize
         readFactor = self.readFactor = readFactor if readFactor is not None else self.readFactor
 
