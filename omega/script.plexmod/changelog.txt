@@ -1,4 +1,10 @@
-[-0.7.9-]
+[-0.7.9-rev2-]
+- Login/Pinlogin/Prelogin: Fix black screen
+- i18n: Fix duplicate translations (de_de, es_es, zh_cn)
+- Home: Fix hubs not translated
+- Home: Fix double refocus; add logging
+- i18n: Fix bad escapes in translations, update forgotten description
+
 - Episodes: After fully watching the last episode of a season, select the next unwatched episode of the next season, automatically, after returning to the episodes view
 - Episodes: Carry progress data as long as we're visiting (nested) episodes views
 - Episodes: Clear progress data after filling episodes when opened without nesting (episodes or postplay)

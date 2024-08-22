@@ -253,6 +253,9 @@ def getPlexHeaders():
             "X-Plex-Device": INTERFACE.getGlobal("device"),
             "X-Plex-Model": INTERFACE.getGlobal("model"),
             "X-Plex-Device-Name": INTERFACE.getGlobal("friendlyName"),
+            'Accept-Encoding': 'gzip,deflate',
+            'Accept-Language': ACCEPT_LANGUAGE,
+            'User-Agent': '{0}/{1}'.format("PM4K", ADDON.getAddonInfo('version'))
             }
 
 

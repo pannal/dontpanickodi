@@ -1219,7 +1219,7 @@ msgid "Show intro skip button early"
 msgstr ""
 
 msgctxt "#33506"
-msgid "Show the intro skip button from the start of a video with an intro marker. The auto-skipping setting applies. Doesn\'t override enabled binge mode.\nCan be disabled/enabled per TV show."
+msgid "Show the intro skip button from the start of a video with an intro marker. The auto-skipping setting applies. Doesn't override enabled binge mode.\nCan be disabled/enabled per TV show."
 msgstr ""
 
 msgctxt "#33507"
@@ -1315,7 +1315,7 @@ msgid "TV binge-viewing mode"
 msgstr ""
 
 msgctxt "#33619"
-msgid "Automatically skips episode intros, credits and tries to skip episode recaps. Doesn\'t skip the intro of the first episode of a season and doesn't skip the final credits of a show.\n\nCan be disabled/enabled per TV show.\nOverrides any setting below."
+msgid "Automatically skips episode intros, credits and tries to skip episode recaps. Doesn't skip the intro of the first episode of a season and doesn't skip the final credits of a show.\n\nCan be disabled/enabled per TV show.\nOverrides any setting below."
 msgstr ""
 
 msgctxt "#33620"

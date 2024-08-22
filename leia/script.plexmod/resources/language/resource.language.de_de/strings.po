@@ -109,13 +109,13 @@ msgstr "Debug-Protokollierung"
 
 #: 
 msgctxt "#32025"
-msgid "Allow Direct Play"
-msgstr "Direkte Wiedergabe erlauben"
+msgid "Direct Play"
+msgstr "Direkte Wiedergabe"
 
-#: 
+#:
 msgctxt "#32026"
-msgid "Allow Direct Stream"
-msgstr "Direktes Streamen erlauben"
+msgid "Direct Stream"
+msgstr "Direktes Streamen"
 
 #: 
 msgctxt "#32027"
@@ -159,13 +159,13 @@ msgstr "Immer"
 
 #: 
 msgctxt "#32036"
-msgid "Allow 4K"
-msgstr "4K erlauben"
+msgid "4K"
+msgstr "4K"
 
-#: 
+#:
 msgctxt "#32037"
-msgid "Allow HEVC (h265)"
-msgstr "HEVC erlauben (H265)"
+msgid "HEVC (h265)"
+msgstr "HEVC (H265)"
 
 #: 
 msgctxt "#32038"
@@ -294,8 +294,8 @@ msgstr "Benutzerauswahl und Pin-Eingabe beim Start überspringen."
 
 #: 
 msgctxt "#32101"
-msgid "If enabled, when playback ends and there is a 'Next Up' item available, it will be automatically be played after a 15 second delay."
-msgstr "Falls die Option aktiviert und ein weiterer Titel verfügbar ist, wird dieser 15 Sekunden nach der aktuellen Wiedergabe gestartet."
+msgid "If enabled, when playback ends and there is a 'Next Up' item available, it will be automatically be played after a {} second delay."
+msgstr "Falls die Option aktiviert und ein weiterer Titel verfügbar ist, wird dieser {} Sekunden nach der aktuellen Wiedergabe gestartet."
 
 #: 
 msgctxt "#32102"
@@ -639,13 +639,13 @@ msgstr "Gesehen am"
 
 #: 
 msgctxt "#32357"
-msgid "By Name"
-msgstr "Nach Name"
+msgid "By Title"
+msgstr "Nach Titel"
 
-#: 
+#:
 msgctxt "#32358"
-msgid "Name"
-msgstr "Name"
+msgid "Title"
+msgstr "Titel"
 
 #: 
 msgctxt "#32359"
@@ -1351,8 +1351,8 @@ msgstr "Endet um"
 
 #: 
 msgctxt "#32601"
-msgid "Allow AV1"
-msgstr "AV1 zulassen"
+msgid "AV1"
+msgstr "AV1"
 
 #: 
 msgctxt "#32602"
@@ -1500,7 +1500,7 @@ msgstr "'Intro überspringen' früher anzeigen"
 
 #: 
 msgctxt "#33506"
-msgid "Show the intro skip button from the start of a video with an intro marker. The auto-skipping setting applies. Doesn\\'t override enabled binge mode.\n"
+msgid "Show the intro skip button from the start of a video with an intro marker. The auto-skipping setting applies. Doesn't override enabled binge mode.\n"
 "Can be disabled/enabled per TV show."
 msgstr "Zeige den 'Intro überspringen'-Knopf von Anfang an. Die 'Automatisch überspringen'-Einstellung wird weiterhin angewandt. Überschreibt aktivierten Binge-Modus nicht.\n"
 "Kann pro Serie aktiviert/deaktiviert werden."
@@ -1622,7 +1622,7 @@ msgstr "TV-Binge-Viewing-Modus"
 
 #: 
 msgctxt "#33619"
-msgid "Automatically skips episode intros, credits and tries to skip episode recaps. Doesn\\'t skip the intro of the first episode of a season and doesn't skip the final credits of a show.\n"
+msgid "Automatically skips episode intros, credits and tries to skip episode recaps. Doesn't skip the intro of the first episode of a season and doesn't skip the final credits of a show.\n"
 "\n"
 "Can be disabled/enabled per TV show.\n"
 "Overrides any setting below."
@@ -1633,13 +1633,13 @@ msgstr "Überspringt automatisch Intros und Abspänne von Episoden und versucht 
 
 #: 
 msgctxt "#33620"
-msgid "Plex requests timeout (seconds)"
-msgstr "Plex-HTTP-Zeitlimit (Sekunden)"
+msgid "Plex server connect timeout"
+msgstr "Plex-Serververbindungs-Zeitlimit"
 
 #: 
 msgctxt "#33621"
-msgid "Set the (async and connection) timeout value of the Python requests library in seconds. Default: 5"
-msgstr "Setzt das Zeitlimit für die Python-Requests-Bibliothek bei asynchronen Verbindungen und Verbindungsanfragen. Default: 5"
+msgid "Sets the maximum amount of time to connect to a Plex Server in seconds. Default: 5"
+msgstr "Setzt das Zeitlimit um sich mit einem Plex-Server zu verbinden, in Sekunden. Voreinstellung: 5"
 
 #: 
 msgctxt "#33622"
@@ -1907,23 +1907,23 @@ msgstr "Audio/Untertitel"
 
 #: 
 msgctxt "#32932"
-msgid "Show subtitle quick-actions button"
-msgstr "Zeige Untertitel-Schnellaktionen-Knopf"
+msgid "Subtitle quick-actions"
+msgstr "Untertitel-Schnellaktionen"
 
-#: 
+#:
 msgctxt "#32933"
-msgid "Show FFWD/RWD buttons"
-msgstr "Zeige Vor-/Zurückspulen-Knopf"
+msgid "FFWD/RWD"
+msgstr "Vor-/Zurückspulen"
 
-#: 
+#:
 msgctxt "#32934"
-msgid "Show repeat button"
-msgstr "Zeige Wiederholen-Knopf"
+msgid "Repeat"
+msgstr "Wiederholen"
 
-#: 
+#:
 msgctxt "#32935"
-msgid "Show shuffle button"
-msgstr "Zeige Zufällige-Wiedergabe-Knopf"
+msgid "Shuffle"
+msgstr "Zufällige-Wiedergabe"
 
 #: 
 msgctxt "#32936"
@@ -1937,13 +1937,15 @@ msgstr "Zeige Vorheriger/Nächster-Knopf"
 
 #: 
 msgctxt "#32939"
-msgid "Only applies to video player UI"
-msgstr "Gilt nur für die Video-Abspieloberfläche"
+msgid "User-specific.\n"
+"Only applies to video player UI"
+msgstr "Benutzerspezifisch.\n"
+"Gilt nur für die Video-Abspieloberfläche"
 
 #: 
 msgctxt "#32940"
-msgid "Player UI"
-msgstr "Abspieloberfläche"
+msgid "Video Player"
+msgstr "Video-Player"
 
 #: 
 msgctxt "#32941"
@@ -2128,8 +2130,8 @@ msgstr "Adaptiv"
 
 #: 
 msgctxt "#32977"
-msgid "Allow VC1"
-msgstr "VC1 zulassen"
+msgid "VC1"
+msgstr "VC1"
 
 #: 
 msgctxt "#32978"
@@ -2158,15 +2160,15 @@ msgstr "Je nachdem, wie viele Kerne Deine CPU hat und wie viel sie verarbeiten k
 
 #: 
 msgctxt "#32983"
-msgid "Player Theme"
-msgstr "Player-Theme"
+msgid "Theme"
+msgstr "Aussehen"
 
-#: 
+#:
 msgctxt "#32984"
-msgid "Sets the player theme. Currently only customizes the playback control buttons. ATTENTION: [I]Might[/I] need an addon restart.\n"
-"In order to customize this, copy one of the xml's in script.plexmod/resources/skins/Main/1080i/templates to addon_data/script.plexmod/templates/seek_dialog_buttons_custom.xml and adjust it to your liking, then select \"Custom\" as your theme."
-msgstr "Wählt das Theme des Players. Verändert aktuell nur die Abspiel-Knöpfe. ACHTUNG: Ein Addon-Neustart [I]könnte[/I] notwendig sein.\n"
-"Um dies individuell anzupassen, kopiere eine der xml's aus script.plexmod/resources/skins/Main/1080i/templates nach addon_data/script.plexmod/templates/seek_dialog_buttons_custom.xml und passe es nach Deinen Ansprüchen an; danach \"Individualisiert\" als Theme wählen."
+msgid "Sets the theme. Currently only customizes all control buttons. ATTENTION: [I]Might[/I] need an addon restart.\n"
+"In order to customize this, copy one of the xml's in script.plexmod/resources/skins/Main/1080i/templates to addon_data/script.plexmod/templates/{templatename}_custom.xml and adjust it to your liking, then select \"Custom\" as your theme."
+msgstr "Bestimmt das Aussehen. Verändert aktuell alle Abspiel-Knöpfe. ACHTUNG: Ein Addon-Neustart [I]könnte[/I] notwendig sein.\n"
+"Um dies individuell anzupassen, kopiere eine der xml's aus script.plexmod/resources/skins/Main/1080i/templates nach addon_data/script.plexmod/templates/{templatename}_custom.xml und passe es nach Deinen Ansprüchen an; danach \"Individualisiert\" als Aussehen wählen."
 
 #: 
 msgctxt "#32985"
@@ -2250,8 +2252,8 @@ msgstr "Path-Mapping aktivieren"
 
 #: 
 msgctxt "#33001"
-msgid "Honor path_mapping.json in the addon_data/script.plexmod folder when DirectPlaying media. This can be used to stream using other techniques such as SMB/NFS/etc. instead of the default HTTP handler. path_mapping.example.json is included in the addon's main directory."
-msgstr "Bei DirectPlay von Videos, nutze path_mapping.json im addon_data/script.plexmod-Ordner. Dies kann verwendet werden, um andere Dateizugriff-Technologien zu benutzen, wie z. B. SMB/NFS/usw., anstatt des HTTP-Handlers. path_mapping.example.json liegt im Hauptverzeichnis vom Addon."
+msgid "Long-press (or context menu) on a library item or: Honor path_mapping.json in the addon_data/script.plexmod folder when DirectPlaying media. This can be used to stream using other techniques such as SMB/NFS/etc. instead of the default HTTP handler. path_mapping.example.json is included in the addon's main directory."
+msgstr "Lange-gedrückt-halten (oder Context-Menü) einer Bibliothek, oder: Nutze path_mapping.json im addon_data/script.plexmod-Ordner. Dies kann verwendet werden, um andere Dateizugriff-Technologien zu benutzen, wie z. B. SMB/NFS/usw., anstatt des HTTP-Handlers. path_mapping.example.json liegt im Hauptverzeichnis vom Addon."
 
 #: 
 msgctxt "#33002"
@@ -2280,8 +2282,8 @@ msgstr "Keine TV-Spoiler"
 
 #: 
 msgctxt "#33007"
-msgid "When visiting an episode/season view, blur unwatched/unwatched+in-progress episode thumbnails, previews and redact summaries. When the Addon Setting \"Use episode thumbnails in continue hub\" is enabled, blur them as well."
-msgstr "In der Episoden-/Staffelansicht Vorschaubilder nicht geschauter oder angefangener Episoden verschleiern und Zusammenfassungen zensieren. Wenn die Addon-Einstellung \"Vorschaubild für Episoden im Fortsetzen-Hub verwenden\" aktiviert ist, diese ebenfalls verschleiern."
+msgid "Select in which cases to blur TV episode thumbnails, previews, redact summaries, hide episode titles and whether to blur chapter images. When the Addon Setting \"Use episode thumbnails in continue hub\" is enabled, blur them as well."
+msgstr "Wähle aus, in welchen Fällen Vorschaubilder von TV-Episoden verschleiert, Zusammenfassungen zensiert, Episodentitel versteckt und Kapitelbilder verschleiert werden sollen. Wenn die Addon-Einstellung \"Vorschaubild für Episoden im Fortsetzen-Hub verwenden\" aktiviert ist, diese ebenfalls verschleiern."
 
 #: 
 msgctxt "#33008"
@@ -2300,8 +2302,8 @@ msgstr "Nicht geschaut"
 
 #: 
 msgctxt "#33011"
-msgid "Unwatched/in progress"
-msgstr "Nicht geschaut/Angefangen"
+msgid "In progress"
+msgstr "Angefangen"
 
 #: 
 msgctxt "#33012"
@@ -2325,13 +2327,13 @@ msgstr "Wenn das plex.direct-Host-Mapping überprüft wird, lokale Docker-IPv4-A
 
 #: 
 msgctxt "#33016"
-msgid "Allow TV spoilers for specific genres"
-msgstr "Erlaube TV-Spoiler für bestimmte Genres"
+msgid "Allow TV spoilers for"
+msgstr "Erlaube TV-Spoiler für"
 
 #: 
 msgctxt "#33017"
-msgid "Overrides the above for: {}"
-msgstr "Überschreibt die vorherigen Einstellungen für: {}"
+msgid "Overrides the above for specific genres. Default: Reality, Game Show, Documentary, Sport"
+msgstr "Überschreibt die vorherigen Einstellungen für bestimmte Genres. Standard: Reality, Game Show, Documentary, Sport"
 
 #: 
 msgctxt "#32303"
@@ -2380,18 +2382,24 @@ msgstr "Aktion wählen"
 
 #: 
 msgctxt "#33022"
-msgid "Use modern inverted watched states"
-msgstr "Modernen, invertierten Geschaut-Status benutzen"
+msgid "Watched indicators"
+msgstr "Geschaut-Indikatoren"
 
-#: 
+#:
 msgctxt "#33023"
-msgid "Instead of marking unwatched items, mark watched items with a checkmark (modern clients; default: off)"
-msgstr "Anstatt nicht geschaute Elemente zu markieren, geschaute Elemente mit einem Haken markieren (moderne Clients; standard: aus)"
+msgid "Classic: Show orange triangle for unwatched items\n"
+"Modern: Show green checkmark for watched items\n"
+"Modern (2024): Show white checkmark for watched items\n"
+"(default: Modern (2024))"
+msgstr "Klassisch: Zeige oranges Dreieck für nicht geschaute Elemente\n"
+"Modern: Zeige grünen Haken für geschaute Elemente\n"
+"Modern (2024): Zeige weißen Haken für geschaute Elements\n"
+"(Standard: Modern (2024))"
 
-#: 
+#:
 msgctxt "#33024"
-msgid "Hide black backdrop in inverted watched states"
-msgstr "Kein Hintergrund beim invertierten Geschaut-Status"
+msgid "Hide background in modern indicators"
+msgstr "Hintergrund moderner Intikatoren verstecken"
 
 #: 
 msgctxt "#33025"
@@ -2474,16 +2482,6 @@ msgid "Library settings"
 msgstr "Bibliothek-Einstellungen"
 
 #: 
-msgctxt "#32357"
-msgid "By Title"
-msgstr "Nach Titel"
-
-#: 
-msgctxt "#32358"
-msgid "Title"
-msgstr "Titel"
-
-#: 
 msgctxt "#33041"
 msgid "Show hub: {}"
 msgstr "Hub anzeigen: {}"
@@ -2494,149 +2492,19 @@ msgid "Episode Date Added"
 msgstr "Episode zuletzt hinz."
 
 #: 
-msgctxt "#33001"
-msgid "Long-press (or context menu) on a library item or: Honor path_mapping.json in the addon_data/script.plexmod folder when DirectPlaying media. This can be used to stream using other techniques such as SMB/NFS/etc. instead of the default HTTP handler. path_mapping.example.json is included in the addon's main directory."
-msgstr "Lange-gedrückt-halten (oder Context-Menü) einer Bibliothek, oder: Nutze path_mapping.json im addon_data/script.plexmod-Ordner. Dies kann verwendet werden, um andere Dateizugriff-Technologien zu benutzen, wie z. B. SMB/NFS/usw., anstatt des HTTP-Handlers. path_mapping.example.json liegt im Hauptverzeichnis vom Addon."
-
-#: 
 msgctxt "#33043"
 msgid "Hubs round-robin"
 msgstr "Hubs-Rundlauf"
 
 #: 
 msgctxt "#33044"
-msgid "Allow round-robining in hubs"
-msgstr "Rundlauf für Hubs erlauben"
+msgid "Allow round-robining in hubs. Attention: Loads a lot of items. Depending on the hub size, this can lead to crashes. Current limit: {}; can be adjusted in addon settings."
+msgstr "Rundlauf für Hubs erlauben. Achtung: Lädt sehr viele Items. Je nach Hubgröße kann dies zu Abstürzen führen. Aktuelles Limit: {}; kann in den Addon-Einstellungen angepasst werden."
 
 #: 
 msgctxt "#33045"
 msgid "Behave like official Plex clients"
 msgstr "Verhalten wie Plex Clients"
-
-#: 
-msgctxt "#33046"
-msgid "Show OSD when pressing up/down without OSD instead of showing chapters."
-msgstr "Das OSD anzeigen wenn hoch/runter gedrückt wird, anstatt Kapitel zu wechseln."
-
-#: 
-msgctxt "#33046"
-msgid "When pressing up/down while the OSD isn't shown, show OSD instead of skipping chapters."
-msgstr "Das OSD anzeigen wenn ohne OSD hoch/runter gedrückt wird, anstatt Kapitel zu wechseln."
-
-#: 
-msgctxt "#32025"
-msgid "Direct Play"
-msgstr "Direkte Wiedergabe"
-
-#: 
-msgctxt "#32026"
-msgid "Direct Stream"
-msgstr "Direktes Streamen"
-
-#: 
-msgctxt "#32036"
-msgid "4K"
-msgstr "4K"
-
-#: 
-msgctxt "#32037"
-msgid "HEVC (h265)"
-msgstr "HEVC (H265)"
-
-#: 
-msgctxt "#32601"
-msgid "AV1"
-msgstr "AV1"
-
-#: 
-msgctxt "#32932"
-msgid "Subtitle quick-actions"
-msgstr "Untertitel-Schnellaktionen"
-
-#: 
-msgctxt "#32933"
-msgid "FFWD/RWD"
-msgstr "Vor-/Zurückspulen"
-
-#: 
-msgctxt "#32934"
-msgid "Repeat"
-msgstr "Wiederholen"
-
-#: 
-msgctxt "#32935"
-msgid "Shuffle"
-msgstr "Zufällige-Wiedergabe"
-
-#: 
-msgctxt "#32939"
-msgid "User-specific.\n"
-"Only applies to video player UI"
-msgstr "Benutzerspezifisch.\n"
-"Gilt nur für die Video-Abspieloberfläche"
-
-#: 
-msgctxt "#32977"
-msgid "VC1"
-msgstr "VC1"
-
-#: 
-msgctxt "#32983"
-msgid "Theme"
-msgstr "Aussehen"
-
-#: 
-msgctxt "#32984"
-msgid "Sets the theme. Currently only customizes all control buttons. ATTENTION: [I]Might[/I] need an addon restart.\n"
-"In order to customize this, copy one of the xml's in script.plexmod/resources/skins/Main/1080i/templates to addon_data/script.plexmod/templates/{templatename}_custom.xml and adjust it to your liking, then select \"Custom\" as your theme."
-msgstr "Bestimmt das Aussehen. Verändert aktuell alle Abspiel-Knöpfe. ACHTUNG: Ein Addon-Neustart [I]könnte[/I] notwendig sein.\n"
-"Um dies individuell anzupassen, kopiere eine der xml's aus script.plexmod/resources/skins/Main/1080i/templates nach addon_data/script.plexmod/templates/{templatename}_custom.xml und passe es nach Deinen Ansprüchen an; danach \"Individualisiert\" als Aussehen wählen."
-
-#: 
-msgctxt "#33007"
-msgid "Select in which cases to blur TV episode thumbnails, previews, redact summaries, hide episode titles and whether to blur chapter images. When the Addon Setting \"Use episode thumbnails in continue hub\" is enabled, blur them as well."
-msgstr "Wähle aus, in welchen Fällen Vorschaubilder von TV-Episoden verschleiert, Zusammenfassungen zensiert, Episodentitel versteckt und Kapitelbilder verschleiert werden sollen. Wenn die Addon-Einstellung \"Vorschaubild für Episoden im Fortsetzen-Hub verwenden\" aktiviert ist, diese ebenfalls verschleiern."
-
-#: 
-msgctxt "#33011"
-msgid "In progress"
-msgstr "Angefangen"
-
-#: 
-msgctxt "#33016"
-msgid "Allow TV spoilers for"
-msgstr "Erlaube TV-Spoiler für"
-
-#: 
-msgctxt "#33017"
-msgid "Overrides the above for specific genres. Default: Reality, Game Show, Documentary, Sport"
-msgstr "Überschreibt die vorherigen Einstellungen für bestimmte Genres. Standard: Reality, Game Show, Documentary, Sport"
-
-#: 
-msgctxt "#33022"
-msgid "Watched indicators"
-msgstr "Geschaut-Indikatoren"
-
-#: 
-msgctxt "#33023"
-msgid "Classic: Show orange triangle for unwatched items\n"
-"Modern: Show green checkmark for watched items\n"
-"Modern (2024): Show white checkmark for watched items\n"
-"(default: Modern (2024))"
-msgstr "Klassisch: Zeige oranges Dreieck für nicht geschaute Elemente\n"
-"Modern: Zeige grünen Haken für geschaute Elemente\n"
-"Modern (2024): Zeige weißen Haken für geschaute Elements\n"
-"(Standard: Modern (2024))"
-
-#: 
-msgctxt "#33024"
-msgid "Hide background in modern indicators"
-msgstr "Hintergrund moderner Intikatoren verstecken"
-
-#: 
-msgctxt "#33044"
-msgid "Allow round-robining in hubs. Attention: Loads a lot of items. Depending on the hub size, this can lead to crashes. Current limit: {}; can be adjusted in addon settings."
-msgstr "Rundlauf für Hubs erlauben. Achtung: Lädt sehr viele Items. Je nach Hubgröße kann dies zu Abstürzen führen. Aktuelles Limit: {}; kann in den Addon-Einstellungen angepasst werden."
 
 #: 
 msgctxt "#33046"
@@ -2660,8 +2528,8 @@ msgstr "Maximale Neuanfragen"
 
 #: 
 msgctxt "#33050"
-msgid "The maximum number of retries each connection should attempt. The default (1) helps with hibernation/wakeup issues. Set higher for bad connections, setting this to 0 was the old default before 0.7.9"
-msgstr "Die maximale Anzahl an Versuchen, die eine Verbindung unternehmen soll. Der Standard (1) hilft bei Ruhezustand/Aufwachen Probleme. Höher stellen bei schlechter Verbindung, 0 war der alte Standard vor 0.7.9"
+msgid "The maximum number of retries each connection should attempt. The default (3) helps with hibernation/wakeup issues. Set higher for bad connections, setting this to 0 was the old default before 0.7.9"
+msgstr "Die maximale Anzahl an Versuchen, die eine Verbindung unternehmen soll. Der Standardwert (3) hilft bei Ruhezustand/Aufwachen Probleme. Höher stellen bei schlechter Verbindung, 0 war der alte Standard vor 0.7.9"
 
 #: 
 msgctxt "#33051"
@@ -2787,8 +2655,8 @@ msgstr "Warte {} Sekunde(n)"
 
 #: 
 msgctxt "#33075"
-msgid "Do something after waking up. Waiting for a time until resuming normal execution helps with networks coming back up after sleep events. Default: 1 second (5 seconds, CoreELEC)"
-msgstr "Aktion ausführen nach dem Aufwachen. Warten, bis die normale Ausführung weiter geht, hilft beim Aufwachen von Netzwerken nach Sleep-Ereignissen. Standard: 1 Sekunde (5 Sekunden, CoreELEC)"
+msgid "Do something after waking up. Waiting for a time until resuming normal execution helps with networks coming back up after sleep events. Default: 1 second (5 seconds, CoreELEC)."
+msgstr "Aktion ausführen nach dem Aufwachen. Warten, bis die normale Ausführung weiter geht, hilft beim Aufwachen von Netzwerken nach Sleep-Ereignissen. Standard: 1 Sekunde (5 Sekunden, CoreELEC)."
 
 #: 
 msgctxt "#33076"
@@ -2844,36 +2712,6 @@ msgstr "Taste zu Home zuordnen"
 msgctxt "#33086"
 msgid "Press the key you want to map to go to home within {} seconds"
 msgstr "Drücke die Taste, die Du zuordnen willst, um sofort zu Home zu kommen binnen {} Sekunden"
-
-#: 
-msgctxt "#33087"
-msgid "Bind a key to immediately go to the Home view. Cancel using BACK/PREVIOUS_MENU. Clear bound key using the STOP button on the setting."
-msgstr "Wähle einen Knopf um sofort zur Home-Ansicht zu kommen. Abbrechen via BACK/PREVIOUS_MENU. Gebundene Taste mit dem STOP Knopf auf der Einstellung entbinden."
-
-#: 
-msgctxt "#33620"
-msgid "Plex server connect timeout"
-msgstr "Plex-Serververbindungs-Zeitlimit"
-
-#: 
-msgctxt "#33621"
-msgid "Sets the maximum amount of time to connect to a Plex Server in seconds. Default: 5"
-msgstr "Setzt das Zeitlimit um sich mit einem Plex-Server zu verbinden, in Sekunden. Voreinstellung: 5"
-
-#: 
-msgctxt "#32940"
-msgid "Video Player"
-msgstr "Video-Player"
-
-#: 
-msgctxt "#33050"
-msgid "The maximum number of retries each connection should attempt. The default (3) helps with hibernation/wakeup issues. Set higher for bad connections, setting this to 0 was the old default before 0.7.9"
-msgstr "Die maximale Anzahl an Versuchen, die eine Verbindung unternehmen soll. Der Standardwert (3) hilft bei Ruhezustand/Aufwachen Probleme. Höher stellen bei schlechter Verbindung, 0 war der alte Standard vor 0.7.9"
-
-#: 
-msgctxt "#33075"
-msgid "Do something after waking up. Waiting for a time until resuming normal execution helps with networks coming back up after sleep events. Default: 1 second (5 seconds, CoreELEC)."
-msgstr "Aktion ausführen nach dem Aufwachen. Warten, bis die normale Ausführung weiter geht, hilft beim Aufwachen von Netzwerken nach Sleep-Ereignissen. Standard: 1 Sekunde (5 Sekunden, CoreELEC)."
 
 #: 
 msgctxt "#33087"
@@ -2987,16 +2825,6 @@ msgstr "Tracks"
 
 #: 
 msgctxt "#33645"
-msgid "Ignore plex.direct DNS handling for remote hosts"
-msgstr "Entfernte plex.direct-Hosts nicht behandeln (DNS)"
-
-#: 
-msgctxt "#33646"
-msgid "Only handle plex.direct hosts when the server's attributes dnsRebindingProtection=1 and publicAddressMatches=1. Might not work in certain situations. Disable if you have connection issues."
-msgstr "Nur plex.direct Hosts behandeln, wenn die Attribute des Servers dnsRebindingProtection=1 und publicAddressMatches=1 entsprechen. Könnte in bestimmten Situationen nicht funktionieren. Deaktivieren, sollte es Verbindungsprobleme geben."
-
-#: 
-msgctxt "#33645"
 msgid "plex.direct: Honor plex.tv's dnsRebindingProtection flag (DNS)"
 msgstr "plex.direct: plex.tv's dnsRebindingProtection-Flag beachten (DNS)"
 
@@ -3024,11 +2852,6 @@ msgstr "CoreELEC: Fortsetzen-Fix Sprungwartezeit"
 msgctxt "#33650"
 msgid "This adjusts the delay between seek-tries on CoreELEC, which fixes resume not always working or double-seeking. When you have resume/double-seek issues, increase this. 100ms should be stable as well. Default: 200ms"
 msgstr "Dies passt die Wartezeit zwischen Sprungversuchen auf CoreELEC an, welches den Fehler behebt, dass das Fortsetzen manchmal nicht funktioniert, oder doppelt gesprungen wird. Solltest Du Fortsetzen-/Doppelsprungprobleme haben, diesen Wert erhöhen. 100ms sollten ebenfalls stabil sein. Standard: 200ms"
-
-#: 
-msgctxt "#32101"
-msgid "If enabled, when playback ends and there is a 'Next Up' item available, it will be automatically be played after a {} second delay."
-msgstr "Falls die Option aktiviert und ein weiterer Titel verfügbar ist, wird dieser {} Sekunden nach der aktuellen Wiedergabe gestartet."
 
 #: 
 msgctxt "#33651"

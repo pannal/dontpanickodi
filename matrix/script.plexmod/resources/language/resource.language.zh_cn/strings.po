@@ -109,13 +109,13 @@ msgstr "调试日志"
 
 #: 
 msgctxt "#32025"
-msgid "Allow Direct Play"
-msgstr "允许直接播放"
+msgid "Direct Play"
+msgstr "直接播放"
 
-#: 
+#:
 msgctxt "#32026"
-msgid "Allow Direct Stream"
-msgstr "允许直连串流"
+msgid "Direct Stream"
+msgstr "直接串流"
 
 #: 
 msgctxt "#32027"
@@ -156,16 +156,6 @@ msgstr "在同一网络"
 msgctxt "#32035"
 msgid "Always"
 msgstr "总是"
-
-#: 
-msgctxt "#32036"
-msgid "Allow 4K"
-msgstr "允许 4K"
-
-#: 
-msgctxt "#32037"
-msgid "Allow HEVC (h265)"
-msgstr "允许 HEVC（h265）"
 
 #: 
 msgctxt "#32038"
@@ -294,8 +284,8 @@ msgstr "在启动时跳过用户选择和 PIN 码输入。"
 
 #: 
 msgctxt "#32101"
-msgid "If enabled, when playback ends and there is a 'Next Up' item available, it will be automatically be played after a 15 second delay."
-msgstr "如果启用，在播放结束且有 '下一个' 项目可用时，将在 15 秒延迟后自动播放该项目。"
+msgid "If enabled, when playback ends and there is a 'Next Up' item available, it will be automatically be played after a {} second delay."
+msgstr "如果启用，当播放结束且有 “下一个” 项目可用时，它将在 {} 秒延迟后自动播放。"
 
 #: 
 msgctxt "#32102"
@@ -637,15 +627,15 @@ msgctxt "#32356"
 msgid "Date Viewed"
 msgstr "观看日期"
 
-#: 
+#:
 msgctxt "#32357"
-msgid "By Name"
-msgstr "按名称排序"
+msgid "By Title"
+msgstr "按标题"
 
 #: 
 msgctxt "#32358"
-msgid "Name"
-msgstr "名称"
+msgid "Title"
+msgstr "标题"
 
 #: 
 msgctxt "#32359"
@@ -1348,11 +1338,6 @@ msgid "Ends at"
 msgstr "结束时间"
 
 #: 
-msgctxt "#32601"
-msgid "Allow AV1"
-msgstr "允许 AV1"
-
-#: 
 msgctxt "#32602"
 msgid "Enable this if your hardware can handle AV1. Disable it to force transcoding."
 msgstr "如果你的硬件可以处理 AV1，请启用此选项。禁用会强制转码。"
@@ -1498,7 +1483,7 @@ msgstr "提前显示跳过片头按钮"
 
 #: 
 msgctxt "#33506"
-msgid "Show the intro skip button from the start of a video with an intro marker. The auto-skipping setting applies. Doesn\\'t override enabled binge mode.\n"
+msgid "Show the intro skip button from the start of a video with an intro marker. The auto-skipping setting applies. Doesn't override enabled binge mode.\n"
 "Can be disabled/enabled per TV show."
 msgstr "在有跳过片头标记的视频开始时显示跳过片头按钮。适用于自动跳过。不会覆盖启用的追剧模式。\n"
 "可以单独为每个电视节目禁用/启用。"
@@ -1620,7 +1605,7 @@ msgstr "追剧模式"
 
 #: 
 msgctxt "#33619"
-msgid "Automatically skips episode intros, credits and tries to skip episode recaps. Doesn\\'t skip the intro of the first episode of a season and doesn't skip the final credits of a show.\n"
+msgid "Automatically skips episode intros, credits and tries to skip episode recaps. Doesn't skip the intro of the first episode of a season and doesn't skip the final credits of a show.\n"
 "\n"
 "Can be disabled/enabled per TV show.\n"
 "Overrides any setting below."
@@ -1631,13 +1616,13 @@ msgstr "自动跳过片头、片尾，并尝试跳过剧集回顾。不跳过每
 
 #: 
 msgctxt "#33620"
-msgid "Plex requests timeout (seconds)"
-msgstr "Plex 请求超时时间（秒）"
+msgid "Plex server connect timeout"
+msgstr "Plex 服务器连接超时"
 
 #: 
 msgctxt "#33621"
-msgid "Set the (async and connection) timeout value of the Python requests library in seconds. Default: 5"
-msgstr "设置 Python requests 库的（异步和连接）超时时间，以秒为单位。默认值：5"
+msgid "Sets the maximum amount of time to connect to a Plex Server in seconds. Default: 5"
+msgstr "设置尝试连接 Plex 服务器的最长时间（以秒为单位）。默认：5"
 
 #: 
 msgctxt "#33622"
@@ -1905,23 +1890,23 @@ msgstr "音频/字幕"
 
 #: 
 msgctxt "#32932"
-msgid "Show subtitle quick-actions button"
-msgstr "显示字幕快捷操作按钮"
+msgid "Subtitle quick-actions"
+msgstr "字幕快捷操作"
 
-#: 
+#:
 msgctxt "#32933"
-msgid "Show FFWD/RWD buttons"
-msgstr "显示快进/快退按钮"
+msgid "FFWD/RWD"
+msgstr "快进/快退"
 
-#: 
+#:
 msgctxt "#32934"
-msgid "Show repeat button"
-msgstr "显示循环按钮"
+msgid "Repeat"
+msgstr "循环播放"
 
-#: 
+#:
 msgctxt "#32935"
-msgid "Show shuffle button"
-msgstr "显示随机按钮"
+msgid "Shuffle"
+msgstr "随机播放"
 
 #: 
 msgctxt "#32936"
@@ -1935,13 +1920,13 @@ msgstr "显示上一个/下一个按钮"
 
 #: 
 msgctxt "#32939"
-msgid "Only applies to video player UI"
-msgstr "仅适用于视频播放器界面"
+msgid "User-specific.\nOnly applies to video player UI"
+msgstr "用户自定义。\n仅适用于视频播放器界面"
 
 #: 
 msgctxt "#32940"
-msgid "Player UI"
-msgstr "播放器界面"
+msgid "Video Player"
+msgstr "视频播放器"
 
 #: 
 msgctxt "#32941"
@@ -2126,8 +2111,8 @@ msgstr "自适应"
 
 #: 
 msgctxt "#32977"
-msgid "Allow VC1"
-msgstr "允许 VC1"
+msgid "VC1"
+msgstr "VC1"
 
 #: 
 msgctxt "#32978"
@@ -2156,15 +2141,15 @@ msgstr "根据您的 CPU 核心数及其处理能力，增加此值可能会改�
 
 #: 
 msgctxt "#32983"
-msgid "Player Theme"
-msgstr "播放器主题"
+msgid "Theme"
+msgstr "主题"
 
 #: 
 msgctxt "#32984"
-msgid "Sets the player theme. Currently only customizes the playback control buttons. ATTENTION: [I]Might[/I] need an addon restart.\n"
-"In order to customize this, copy one of the xml's in script.plexmod/resources/skins/Main/1080i/templates to addon_data/script.plexmod/templates/seek_dialog_buttons_custom.xml and adjust it to your liking, then select \"Custom\" as your theme."
-msgstr "设置播放器主题。目前仅支持自定义播放控制按钮。注意：[I]可能[/I]需要重启插件。\n"
-"要自定义此项，请将 script.plexmod/resources/skins/Main/1080i/templates 中的一个 xml 文件复制到 addon_data/script.plexmod/templates/seek_dialog_buttons_custom.xml，并根据您的喜好进行调整，然后选择 “自定义” 作为主题。"
+msgid "Sets the theme. Currently only customizes all control buttons. ATTENTION: [I]Might[/I] need an addon restart.\n"
+"In order to customize this, copy one of the xml's in script.plexmod/resources/skins/Main/1080i/templates to addon_data/script.plexmod/templates/{templatename}_custom.xml and adjust it to your liking, then select \"Custom\" as your theme."
+msgstr "设置主题。目前仅支持自定义控制按钮。注意：[I]可能[/I]需要重启插件。\n"
+"要自定义此项，请将 script.plexmod/resources/skins/Main/1080i/templates 中的一个 XML 文件复制到 addon_data/script.plexmod/templates/{templatename}_custom.xml 并根据您的喜好进行调整，然后选择 “自定义” 作为主题。"
 
 #: 
 msgctxt "#32985"
@@ -2248,8 +2233,8 @@ msgstr "启用路径映射"
 
 #: 
 msgctxt "#33001"
-msgid "Honor path_mapping.json in the addon_data/script.plexmod folder when DirectPlaying media. This can be used to stream using other techniques such as SMB/NFS/etc. instead of the default HTTP handler. path_mapping.example.json is included in the addon's main directory."
-msgstr "在直接播放媒体时，遵循 addon_data/script.plexmod 文件夹中的 path_mapping.json。这可以用其他技术（如 SMB/NFS 等）代替默认的 HTTP 处理程序进行流式传输。path_mapping.example.json 包含在插件的主目录中。"
+msgid "Long-press (or context menu) on a library item or: Honor path_mapping.json in the addon_data/script.plexmod folder when DirectPlaying media. This can be used to stream using other techniques such as SMB/NFS/etc. instead of the default HTTP handler. path_mapping.example.json is included in the addon's main directory."
+msgstr "长按（或右键菜单）库项目或：在 DirectPlaying 媒体时遵循 addon_data/script.plexmod 文件夹中的 path_mapping.json。这可以用于使用 SMB/NFS 等其他技术进行流式传输，而不是默认的 HTTP 处理程序。path_mapping.example.json 包含在插件的主目录中。"
 
 #: 
 msgctxt "#33002"
@@ -2278,8 +2263,8 @@ msgstr "无剧透"
 
 #: 
 msgctxt "#33007"
-msgid "When visiting an episode/season view, blur unwatched/unwatched+in-progress episode thumbnails, previews and redact summaries. When the Addon Setting \"Use episode thumbnails in continue hub\" is enabled, blur them as well."
-msgstr "在查看剧集/季时，模糊未观看/未观看+观看中的剧集的缩略图、回顾和简介。即使在插件设置种启用了 “在继续观看使用剧集缩略图”，也会模糊它们。"
+msgid "Select in which cases to blur TV episode thumbnails, previews, redact summaries, hide episode titles and whether to blur chapter images. When the Addon Setting \"Use episode thumbnails in continue hub\" is enabled, blur them as well."
+msgstr "选择在哪些情况下模糊电视节目的剧集缩略图、预览、简介、隐藏剧集标题以及是否模糊章节图像。即使在插件设置种启用了 “在继续观看使用剧集缩略图”，也会模糊它们。"
 
 #: 
 msgctxt "#33008"
@@ -2298,8 +2283,8 @@ msgstr "未观看"
 
 #: 
 msgctxt "#33011"
-msgid "Unwatched/in progress"
-msgstr "未观看/观看中"
+msgid "In progress"
+msgstr "观看中"
 
 #: 
 msgctxt "#33012"
@@ -2323,13 +2308,13 @@ msgstr "在检查 plex.direct 主机映射时，忽略本地 Docker IPv4 地址�
 
 #: 
 msgctxt "#33016"
-msgid "Allow TV spoilers for specific genres"
-msgstr "允许特定类型的剧透"
+msgid "Allow TV spoilers for"
+msgstr "允许剧透"
 
 #: 
 msgctxt "#33017"
-msgid "Overrides the above for: {}"
-msgstr "覆盖以上内容：{}"
+msgid "Overrides the above for specific genres. Default: Reality, Game Show, Documentary, Sport"
+msgstr "为指定类型的电视节目应用上述设置。默认：真人秀、游戏、纪录片、体育"
 
 #: 
 msgctxt "#32303"
@@ -2378,18 +2363,24 @@ msgstr "选择操作"
 
 #: 
 msgctxt "#33022"
-msgid "Use modern inverted watched states"
-msgstr "使用经典观看状态角标"
+msgid "Watched indicators"
+msgstr "观看状态角标"
 
 #: 
 msgctxt "#33023"
-msgid "Instead of marking unwatched items, mark watched items with a checkmark (modern clients; default: off)"
-msgstr "为已观看的项目添加角标，而不是未观看的项目（现代客户端；默认：关闭）"
+msgid "Classic: Show orange triangle for unwatched items\n"
+"Modern: Show green checkmark for watched items\n"
+"Modern (2024): Show white checkmark for watched items\n"
+"(default: Modern (2024))"
+msgstr "经典：为未观看的项目显示橙色三角形角标\n"
+"现代：为已观看的项目显示绿色对钩角标\n"
+"现代（2024）：为已观看的项目显示白色对钩角标\n"
+"（默认：现代（2024））"
 
 #: 
 msgctxt "#33024"
-msgid "Hide black backdrop in inverted watched states"
-msgstr "为旧版观看状态角标隐藏黑色背景"
+msgid "Hide background in modern indicators"
+msgstr "为现代角标隐藏背景"
 
 #: 
 msgctxt "#33025"
@@ -2472,16 +2463,6 @@ msgid "Library settings"
 msgstr "资料库设置"
 
 #: 
-msgctxt "#32357"
-msgid "By Title"
-msgstr "按标题"
-
-#: 
-msgctxt "#32358"
-msgid "Title"
-msgstr "标题"
-
-#: 
 msgctxt "#33041"
 msgid "Show hub: {}"
 msgstr "显示内容版块：{}"
@@ -2492,19 +2473,14 @@ msgid "Episode Date Added"
 msgstr "剧集添加日期"
 
 #: 
-msgctxt "#33001"
-msgid "Long-press (or context menu) on a library item or: Honor path_mapping.json in the addon_data/script.plexmod folder when DirectPlaying media. This can be used to stream using other techniques such as SMB/NFS/etc. instead of the default HTTP handler. path_mapping.example.json is included in the addon's main directory."
-msgstr "长按（或右键菜单）库项目或：在 DirectPlaying 媒体时遵循 addon_data/script.plexmod 文件夹中的 path_mapping.json。这可以用于使用 SMB/NFS 等其他技术进行流式传输，而不是默认的 HTTP 处理程序。path_mapping.example.json 包含在插件的主目录中。"
-
-#: 
 msgctxt "#33043"
 msgid "Hubs round-robin"
 msgstr "内容版块循环"
 
 #: 
 msgctxt "#33044"
-msgid "Allow round-robining in hubs"
-msgstr "允许内容版块循环显示项目"
+msgid "Allow round-robining in hubs. Attention: Loads a lot of items. Depending on the hub size, this can lead to crashes. Current limit: {}; can be adjusted in addon settings."
+msgstr "允许内容版块循环显示项目。注意：会加载大量项目。根据版块内容的多少，有可能导致崩溃。当前限制：{}；可以在插件设置中进行调整。"
 
 #: 
 msgctxt "#33045"
@@ -2513,133 +2489,23 @@ msgstr "遵循 Plex 官方客户端"
 
 #: 
 msgctxt "#33046"
-msgid "Show OSD when pressing up/down without OSD instead of showing chapters."
-msgstr "按上下键时显示屏幕菜单，而不是显示章节。"
+msgid "When pressing up/down while the OSD isn't shown, show OSD instead of skipping chapters. Additionally, when pressing down while the OSD is shown, open the chapters (if available)."
+msgstr "在未显示屏幕菜单时，按上下键显示屏幕菜单而不是章节。同时，在显示屏幕菜单时，按下键打开章节（如果有）。"
 
-#: 
-msgctxt "#33046"
-msgid "When pressing up/down while the OSD isn't shown, show OSD instead of skipping chapters."
-msgstr "在未显示屏幕菜单时按上下键，显示屏幕菜单而不是章节。"
-
-#: 
-msgctxt "#32025"
-msgid "Direct Play"
-msgstr "直接播放"
-
-#: 
-msgctxt "#32026"
-msgid "Direct Stream"
-msgstr "直接串流"
-
-#: 
+#:
 msgctxt "#32036"
 msgid "4K"
 msgstr "4K"
 
-#: 
+#:
 msgctxt "#32037"
 msgid "HEVC (h265)"
 msgstr "HEVC (h265)"
 
-#: 
+#:
 msgctxt "#32601"
 msgid "AV1"
 msgstr "AV1"
-
-#: 
-msgctxt "#32932"
-msgid "Subtitle quick-actions"
-msgstr "字幕快捷操作"
-
-#: 
-msgctxt "#32933"
-msgid "FFWD/RWD"
-msgstr "快进/快退"
-
-#: 
-msgctxt "#32934"
-msgid "Repeat"
-msgstr "循环播放"
-
-#: 
-msgctxt "#32935"
-msgid "Shuffle"
-msgstr "随机播放"
-
-#: 
-msgctxt "#32939"
-msgid "User-specific.\n"
-"Only applies to video player UI"
-msgstr "用户自定义。\n"
-"仅适用于视频播放器界面"
-
-#: 
-msgctxt "#32977"
-msgid "VC1"
-msgstr "VC1"
-
-#: 
-msgctxt "#32983"
-msgid "Theme"
-msgstr "主题"
-
-#: 
-msgctxt "#32984"
-msgid "Sets the theme. Currently only customizes all control buttons. ATTENTION: [I]Might[/I] need an addon restart.\n"
-"In order to customize this, copy one of the xml's in script.plexmod/resources/skins/Main/1080i/templates to addon_data/script.plexmod/templates/{templatename}_custom.xml and adjust it to your liking, then select \"Custom\" as your theme."
-msgstr "设置主题。目前仅支持自定义控制按钮。注意：[I]可能[/I]需要重启插件。\n"
-"要自定义此项，请将 script.plexmod/resources/skins/Main/1080i/templates 中的一个 XML 文件复制到 addon_data/script.plexmod/templates/{templatename}_custom.xml 并根据您的喜好进行调整，然后选择 “自定义” 作为主题。"
-
-#: 
-msgctxt "#33007"
-msgid "Select in which cases to blur TV episode thumbnails, previews, redact summaries, hide episode titles and whether to blur chapter images. When the Addon Setting \"Use episode thumbnails in continue hub\" is enabled, blur them as well."
-msgstr "选择在哪些情况下模糊电视节目的剧集缩略图、预览、简介、隐藏剧集标题以及是否模糊章节图像。即使在插件设置种启用了 “在继续观看使用剧集缩略图”，也会模糊它们。"
-
-#: 
-msgctxt "#33011"
-msgid "In progress"
-msgstr "观看中"
-
-#: 
-msgctxt "#33016"
-msgid "Allow TV spoilers for"
-msgstr "允许剧透"
-
-#: 
-msgctxt "#33017"
-msgid "Overrides the above for specific genres. Default: Reality, Game Show, Documentary, Sport"
-msgstr "为指定类型的电视节目应用上述设置。默认：真人秀、游戏、纪录片、体育"
-
-#: 
-msgctxt "#33022"
-msgid "Watched indicators"
-msgstr "观看状态角标"
-
-#: 
-msgctxt "#33023"
-msgid "Classic: Show orange triangle for unwatched items\n"
-"Modern: Show green checkmark for watched items\n"
-"Modern (2024): Show white checkmark for watched items\n"
-"(default: Modern (2024))"
-msgstr "经典：为未观看的项目显示橙色三角形角标\n"
-"现代：为已观看的项目显示绿色对钩角标\n"
-"现代（2024）：为已观看的项目显示白色对钩角标\n"
-"（默认：现代（2024））"
-
-#: 
-msgctxt "#33024"
-msgid "Hide background in modern indicators"
-msgstr "为现代角标隐藏背景"
-
-#: 
-msgctxt "#33044"
-msgid "Allow round-robining in hubs. Attention: Loads a lot of items. Depending on the hub size, this can lead to crashes. Current limit: {}; can be adjusted in addon settings."
-msgstr "允许内容版块循环显示项目。注意：会加载大量项目。根据版块内容的多少，有可能导致崩溃。当前限制：{}；可以在插件设置中进行调整。"
-
-#: 
-msgctxt "#33046"
-msgid "When pressing up/down while the OSD isn't shown, show OSD instead of skipping chapters. Additionally, when pressing down while the OSD is shown, open the chapters (if available)."
-msgstr "在未显示屏幕菜单时，按上下键显示屏幕菜单而不是章节。同时，在显示屏幕菜单时，按下键打开章节（如果有）。"
 
 #: 
 msgctxt "#33047"
@@ -2658,8 +2524,8 @@ msgstr "最大重试次数"
 
 #: 
 msgctxt "#33050"
-msgid "The maximum number of retries each connection should attempt. The default (1) helps with hibernation/wakeup issues. Set higher for bad connections, setting this to 0 was the old default before 0.7.9"
-msgstr "每次连接可尝试的最大重试次数。默认值（1）有助于解决休眠/唤醒问题。若连接情况不佳，可以设置的大一些。版本 0.7.9 之前的默认值为 0"
+msgid "The maximum number of retries each connection should attempt. The default (3) helps with hibernation/wakeup issues. Set higher for bad connections, setting this to 0 was the old default before 0.7.9"
+msgstr "每次连接可尝试的最大重试次数。默认值（3）有助于解决休眠/唤醒问题。若连接情况不佳，可以设置的大一些。版本 0.7.9 之前的默认值为 0"
 
 #: 
 msgctxt "#33051"
@@ -2785,7 +2651,7 @@ msgstr "等待 {} 秒"
 
 #: 
 msgctxt "#33075"
-msgid "Do something after waking up. Waiting for a time until resuming normal execution helps with networks coming back up after sleep events. Default: 1 second (5 seconds, CoreELEC)"
+msgid "Do something after waking up. Waiting for a time until resuming normal execution helps with networks coming back up after sleep events. Default: 1 second (5 seconds, CoreELEC)."
 msgstr "唤醒后执行一些操作。等待一段时间后恢复正常操作有助于网络在休眠事件后恢复。默认：1 秒（5 秒，CoreELEC）"
 
 #: 
@@ -2842,36 +2708,6 @@ msgstr "映射前往主页的按键"
 msgctxt "#33086"
 msgid "Press the key you want to map to go to home within {} seconds"
 msgstr "在 {} 秒内按下您想映射的前往主页的按键"
-
-#: 
-msgctxt "#33087"
-msgid "Bind a key to immediately go to the Home view. Cancel using BACK/PREVIOUS_MENU. Clear bound key using the STOP button on the setting."
-msgstr "绑定一个按键以立刻前往主页视图。使用返回/上一个菜单取消。使用设置中的停止按钮清除绑定的按键。"
-
-#: 
-msgctxt "#33620"
-msgid "Plex server connect timeout"
-msgstr "Plex 服务器连接超时"
-
-#: 
-msgctxt "#33621"
-msgid "Sets the maximum amount of time to connect to a Plex Server in seconds. Default: 5"
-msgstr "设置尝试连接 Plex 服务器的最长时间（以秒为单位）。默认：5"
-
-#: 
-msgctxt "#32940"
-msgid "Video Player"
-msgstr "视频播放器"
-
-#: 
-msgctxt "#33050"
-msgid "The maximum number of retries each connection should attempt. The default (3) helps with hibernation/wakeup issues. Set higher for bad connections, setting this to 0 was the old default before 0.7.9"
-msgstr "每次连接可尝试的最大重试次数。默认值（3）有助于解决休眠/唤醒问题。若连接情况不佳，可以设置的大一些。版本 0.7.9 之前的默认值为 0"
-
-#: 
-msgctxt "#33075"
-msgid "Do something after waking up. Waiting for a time until resuming normal execution helps with networks coming back up after sleep events. Default: 1 second (5 seconds, CoreELEC)."
-msgstr "唤醒后执行一些操作。等待一段时间后恢复正常操作有助于网络在休眠事件后恢复。默认：1 秒（5 秒，CoreELEC）"
 
 #: 
 msgctxt "#33087"
@@ -2985,16 +2821,6 @@ msgstr "曲目"
 
 #: 
 msgctxt "#33645"
-msgid "Ignore plex.direct DNS handling for remote hosts"
-msgstr "忽略远程主机的 plex.direct DNS 处理"
-
-#: 
-msgctxt "#33646"
-msgid "Only handle plex.direct hosts when the server's attributes dnsRebindingProtection=1 and publicAddressMatches=1. Might not work in certain situations. Disable if you have connection issues."
-msgstr "仅在服务器的属性 dnsRebindingProtection=1 和 publicAddressMatches=1 时处理 plex.direct 主机。在某些情况下可能不起作用。如果出现连接问题，请禁用此选项。"
-
-#: 
-msgctxt "#33645"
 msgid "plex.direct: Honor plex.tv's dnsRebindingProtection flag (DNS)"
 msgstr "plex.direct：遵循 plex.tv 的 dnsRebindingProtection 标志（DNS）"
 
@@ -3022,11 +2848,6 @@ msgstr "CoreELEC：恢复修复等待跳转"
 msgctxt "#33650"
 msgid "This adjusts the delay between seek-tries on CoreELEC, which fixes resume not always working or double-seeking. When you have resume/double-seek issues, increase this. 100ms should be stable as well. Default: 200ms"
 msgstr "调整 CoreELEC 上跳转尝试之间的延迟，修复恢复播放不总是有效或双重跳转的问题。当出现恢复/双重跳转问题时，请增加此值。100ms 也应是稳定的。默认值：200ms"
-
-#: 
-msgctxt "#32101"
-msgid "If enabled, when playback ends and there is a 'Next Up' item available, it will be automatically be played after a {} second delay."
-msgstr "如果启用，当播放结束且有 “下一个” 项目可用时，它将在 {} 秒延迟后自动播放。"
 
 #: 
 msgctxt "#33651"

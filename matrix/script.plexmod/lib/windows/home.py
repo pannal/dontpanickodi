@@ -659,9 +659,10 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
 
         for index in indices:
             if self.hubControls[index]:
-                util.DEBUG_LOG("Focusing hub: %i" % (400 + index))
-                self.setFocusId(400+index)
-                self.checkHubItem(400+index)
+                if self.lastFocusID != 400+index:
+                    util.DEBUG_LOG("Focusing hub: %i" % (400 + index))
+                    self.setFocusId(400+index)
+                    self.checkHubItem(400+index)
                 return
 
         if startIndex is not None:
@@ -2003,7 +2004,8 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
 
         if not hub.items and not hubitems:
             control.reset()
-            if 399 < self.lastFocusID < 500:
+            if self.lastFocusID == index + 400:
+                util.DEBUG_LOG("Hub {} was focused but is gone.", identifier)
                 hubControlIndex = self.lastFocusID - 400
                 self.focusFirstValidHub(hubControlIndex)
             return
@@ -2102,8 +2104,6 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
                 return
 
             cur_pos = control.getSelectedPos()
-            if cur_pos == pos:
-                return
 
             if rk is not None:
                 rk_found = False
@@ -2111,7 +2111,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
                 for idx, mli in enumerate(control):
                     if mli.dataSource and mli.dataSource.ratingKey and str(mli.dataSource.ratingKey) == rk:
                         if cur_pos != idx:
-                            util.DEBUG_LOG("Reselect: Found {} in list, reselecting", rk)
+                            util.DEBUG_LOG("Hub {}: Reselect: Found {} in list, reselecting", identifier, rk)
                             control.selectItem(idx)
                             rk_found = True
                         else:
@@ -2121,9 +2121,14 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
                         self.backgroundSet = True
                     return
 
+            if cur_pos == pos:
+                util.DEBUG_LOG("Hub {}: Position was already correct ({})", identifier, pos)
+                return
+
             if pos < control.size() - (more and 1 or 0):
                 # we didn't find the ratingKey, try the position first, if it's smaller than our list size
-                util.DEBUG_LOG("Reselect: We didn't find {} in list, or no item given. Reselecting position {}", rk, pos)
+                util.DEBUG_LOG("Hub {}: Reselect: We didn't find {} in list, or no item given. "
+                               "Reselecting position {}", identifier, rk, pos)
                 control.selectItem(pos)
                 if self.updateBackgroundFrom(control[pos].dataSource):
                     self.backgroundSet = True
@@ -2133,6 +2138,8 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
                     # calculate how many pages we need to re-arrive at the last selected position
                     # fixme: someone check for an off-by-one please
                     size = max(math.ceil((pos + 2 - control.size()) / HUB_PAGE_SIZE), 1) * HUB_PAGE_SIZE
+                    util.DEBUG_LOG("Hub {}: Reselect: Hub position for {} out of bounds ({}), "
+                                   "expanding hub ", identifier, rk, pos)
                     task = ExtendHubTask().setup(control.dataSource, self.extendHubCallback,
                                                  canceledCallback=lambda h: mli.setBoolProperty('is.updating', False),
                                                  size=size, reselect_pos=reselect_pos)

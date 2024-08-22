@@ -37,7 +37,7 @@
 
 <addon id="script.plexmod"
        name="Plex"
-       version="0.7.9"
+       version="0.7.9-rev2"
        provider-name="pannal">
     <requires>
         <import addon="xbmc.python" version="2.26.0"/>

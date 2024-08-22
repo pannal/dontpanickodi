@@ -791,8 +791,10 @@ class Settings(object):
                 ) if not util.FROM_KODI_REPOSITORY or lib.cache.kcm.useModernAPI else None,
                 BoolSetting(
                     'slow_connection', T(32915, 'Slow connection'), False
-                ).description("Use with a wonky/slow connection, e.g. in a hotel room. Adjusts the UI to visually "
-                              "wait for item refreshes and waits for the buffer to fill when starting playback."),
+                ).description(T(32916, "Use with a wonky/slow connection, "
+                                       "e.g. in a hotel room. Adjusts the UI to visually "
+                                       "wait for item refreshes and waits for the buffer to fill when starting "
+                                       "playback.")),
                 OptionsSetting(
                     'action_on_sleep',
                     T(32700, 'Action on Sleep event'),
