@@ -2074,8 +2074,8 @@ class SeekDialog(kodigui.BaseDialog):
             self._currentMarker["countdown"] = None
             self.setProperty('marker.countdown', '')
 
-    def sendTimeline(self, state=None, t=None, force=True, ensureFinalTimelineEvent=True):
-        self.handler.updateNowPlaying(force=force, state=state, t=t, overrideChecks=True)
+    def sendTimeline(self, state=None, t=None, ensureFinalTimelineEvent=True):
+        self.handler.updateNowPlaying(state=state, t=t, overrideChecks=True)
         if ensureFinalTimelineEvent:
             self.handler.ignoreTimelines = True
 

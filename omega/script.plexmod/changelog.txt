@@ -1,4 +1,13 @@
-[-0.7.9-rev2-]
+[-0.7.9-rev3-]
+- Player: Only send timeline events if playstate has changed or we haven't sent one for 15 seconds; fixes #137
+- AddonSettings: Fix default cert bundle setting
+- Core/plexnet/http: Fix session cert bundle usage by using the correct attribute (verify vs cert); should fix kodi 18 connectivity
+- Core/AddonSettings: Adjust proper defaults for plextv timeouts
+- Core/Networking/MyPlex: Don't use custom certificate for plex.tv connections
+- Core/SSL: Replace default plex.direct certificate with ACME root bundle (Letsencrypt, ZeroSSL), valid until 2035
+- Core/AddonSettings: Adjust default plex.tv timeouts to 1s (connect), 2s (read)
+- Core/KodiGUI: When broken template is detected, make sure to stop current playback as well
+
 - Login/Pinlogin/Prelogin: Fix black screen
 - i18n: Fix duplicate translations (de_de, es_es, zh_cn)
 - Home: Fix hubs not translated

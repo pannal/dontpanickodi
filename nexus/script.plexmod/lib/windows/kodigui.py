@@ -118,6 +118,10 @@ class XMLBase(object):
                 util.ERROR("Possibly broken XML file: {}, triggering recompilation.".format(self.xmlFile))
                 util.showNotification("Recompiling templates", time_ms=1000,
                                       header="Possibly broken XML file(s)")
+                try:
+                    xbmc.Player().stop()
+                except:
+                    pass
                 xbmc.sleep(1000)
 
                 if self.__class__.__name__ == "HomeWindow":

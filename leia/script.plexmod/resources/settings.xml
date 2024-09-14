@@ -413,11 +413,11 @@
                 </setting>
                 <setting id="use_cert_bundle" type="string" label="33051" help="33052">
                     <level>0</level>
-                    <default>plex.direct</default>
+                    <default>acme</default>
                     <constraints>
                         <options>
                             <option label="33053">system</option>
-                            <option label="33054">plex.direct</option>
+                            <option label="33054">acme</option>
                             <option label="33055">custom</option>
                         </options>
                         <allowempty>false</allowempty>
@@ -450,7 +450,7 @@
                 </setting>
                 <setting id="plextv_timeout_connect" type="number" label="33638" help="33639">
                     <level>0</level>
-                    <default>5</default>
+                    <default>1</default>
                     <constraints>
                         <minimum>0.5</minimum>
                         <step>0.5</step>
@@ -462,7 +462,7 @@
                 </setting>
                 <setting id="plextv_timeout_read" type="number" label="33640" help="33641">
                     <level>0</level>
-                    <default>20</default>
+                    <default>2</default>
                     <constraints>
                         <minimum>0.5</minimum>
                         <step>0.5</step>

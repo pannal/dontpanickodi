@@ -2538,8 +2538,8 @@ msgstr "CA-Zertifikat-Bundle benutzen"
 
 #: 
 msgctxt "#33052"
-msgid "Which CA certificate bundle to use for request HTTPS verification. Default is \"system\", which uses the system-provided certificate bundle. \"plex.direct\" uses an extremely small bundle provided with the addon, which only applies to plex.direct connections (any other connections will use the system bundle) and might slightly improve performance. \"custom\" allows for a certificate bundle in userdata/addon_data/script.plexmod/custom_bundle.crt"
-msgstr "Welches CA-Zertifikat-Bundle für HTTPS-Anfragen benutzt werden soll. Standard ist \"system\", welches das systemseitige Zertifikat-Bundle benutzt. \"plex.direct\" benutzt ein extrem kleines Bundle, bereitgestellt vom Addon, welches nur für plex.direct-Verbindungen angewandt wird (alle anderen Verbindungen benutzen das System-Bundle) und möglicherweise die Leistung verbessern könnte. \"custom\" erlaubt es ein benutzerdefiniertes Bundle in userdata/addon_data/script.plexmod/custom_bundle.crt abzulegen"
+msgid "Which CA certificate bundle to use for request HTTPS verification. \"system\" uses the system-provided certificate bundle. \"ACME\" uses an extremely small bundle provided with the addon, which includes root certificates for Letsencrypt (plex.direct) and ZeroSSL. \"custom\" allows for a ca-certificate bundle in userdata/addon_data/script.plexmod/custom_bundle.crt"
+msgstr "Welches CA-Zertifikat-Bundle für HTTPS-Anfragen benutzt werden soll. \"system\" benutzt das systemseitige Zertifikat-Bundle. \"ACME\" benutzt ein extrem kleines Bundle, bereitgestellt vom Addon, welches Root-Zertifikate für Letsencrypt (plex.direct) und ZeroSSL enthält. \"custom\" erlaubt es ein benutzerdefiniertes Bundle in userdata/addon_data/script.plexmod/custom_bundle.crt abzulegen"
 
 #: 
 msgctxt "#33053"
@@ -2548,8 +2548,8 @@ msgstr "System"
 
 #: 
 msgctxt "#33054"
-msgid "plex.direct (addon-supplied)"
-msgstr "plex.direct (bereitgestellt vom Addon)"
+msgid "ACME (addon-supplied)"
+msgstr "ACME (bereitgestellt vom Addon)"
 
 #: 
 msgctxt "#33055"
@@ -2795,8 +2795,8 @@ msgstr "Plex.tv-Verbindungszeitlimit"
 
 #: 
 msgctxt "#33639"
-msgid "Plex.tv: Sets the maximum amount of time to connect to Plex.tv in seconds. Default: 5"
-msgstr "Plex.tv: Setzt das Zeitlimit um sich mit Plex.tv zu verbinden, in Sekunden. Voreinstellung: 5"
+msgid "Plex.tv: Sets the maximum amount of time to connect to Plex.tv in seconds. Default: 1"
+msgstr "Plex.tv: Setzt das Zeitlimit um sich mit Plex.tv zu verbinden, in Sekunden. Voreinstellung: 1"
 
 #: 
 msgctxt "#33640"
@@ -2805,8 +2805,8 @@ msgstr "Plex.tv Lesezeitlimit"
 
 #: 
 msgctxt "#33641"
-msgid "Plex.tv: Sets the maximum amount of time to read from Plex.tv in seconds. Default: 20"
-msgstr "Plex.tv: Setzt das Zeitlimit beim Lesen von Plex.tv, in Sekunden. Voreinstellung: 20"
+msgid "Plex.tv: Sets the maximum amount of time to read from Plex.tv in seconds. Default: 2"
+msgstr "Plex.tv: Setzt das Zeitlimit beim Lesen von Plex.tv, in Sekunden. Voreinstellung: 2"
 
 #: 
 msgctxt "#33642"

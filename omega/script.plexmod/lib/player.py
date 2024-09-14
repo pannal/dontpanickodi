@@ -31,7 +31,6 @@ class BasePlayerHandler(object):
         self._lastDuration = 0
         self._progressHld = {}
         self.timelineType = None
-        self.lastTimelineState = None
         self.ignoreTimelines = False
         self.queuingNext = False
         self.playQueue = None
@@ -119,7 +118,7 @@ class BasePlayerHandler(object):
 
         return self._lastDuration
 
-    def updateNowPlaying(self, force=False, refreshQueue=False, t=None, state=None, overrideChecks=False):
+    def updateNowPlaying(self, refreshQueue=False, t=None, state=None, overrideChecks=False):
         if self.ignoreTimelines:
             util.DEBUG_LOG("UpdateNowPlaying: ignoring timeline as requested")
             return
@@ -131,10 +130,9 @@ class BasePlayerHandler(object):
         if not self.shouldSendTimeline(item):
             return
 
-        util.DEBUG_LOG("UpdateNowPlaying: {0}, force: {1} refreshQueue: {2} state: {3} (player: {6}) "
-                       "overrideChecks: {4} time: {5} (player: {7})"
+        util.DEBUG_LOG("UpdateNowPlaying: {0}, refreshQueue: {1} state: {2} (player: {5}) "
+                       "overrideChecks: {3} time: {4} (player: {6})"
                        .format(item.ratingKey,
-                               force,
                                refreshQueue,
                                state,
                                overrideChecks,
@@ -143,9 +141,6 @@ class BasePlayerHandler(object):
                                self.player.getTime() if self.player.isPlayingVideo() else "N/A"))
 
         state = state or self.player.playState
-        # Avoid duplicates
-        if state == self.lastTimelineState and not force:
-            return
 
         obj = item.choice
 
@@ -153,9 +148,6 @@ class BasePlayerHandler(object):
         if obj and obj.part and obj.part.duration.asInt() == 0 and obj.media.parts and len(obj.media.parts) > 1:
             util.LOG("Timeline not supported: the current part doesn't have a valid duration")
             return
-
-        self.lastTimelineState = state
-        # self.timelineTimer.reset()
 
         # if we've been called explicitly with a time, honor
         force_time = t is not None
@@ -175,12 +167,12 @@ class BasePlayerHandler(object):
             "containerKey": str(item.container.address)
         })
 
-        new_time_sent = plexapp.util.APP.nowplayingmanager.updatePlaybackState(
+        new_time_stored = plexapp.util.APP.nowplayingmanager.updatePlaybackState(
             self.timelineType, data, state, _time, self.playQueue, duration=self.currentDuration(),
             force=overrideChecks, force_time=force_time
         )
 
-        if new_time_sent:
+        if new_time_stored:
             # only update our immediate progress if we should (e.g. if updatePlaybackState reported a new time based
             # on _time
             self._progressHld[str(item.ratingKey)] = _time
@@ -486,7 +478,7 @@ class SeekPlayerHandler(BasePlayerHandler):
 
     def onPlayBackStarted(self):
         util.DEBUG_LOG('SeekHandler: onPlayBackStarted, DP: {}', self.isDirectPlay)
-        self.updateNowPlaying(force=True, refreshQueue=True)
+        self.updateNowPlaying(refreshQueue=True)
 
         if self.dialog:
             self.dialog.onPlayBackStarted()
@@ -759,7 +751,7 @@ class SeekPlayerHandler(BasePlayerHandler):
         if (self.seeking != self.SEEK_IN_PROGRESS and not self.ended and self.player.started and not self.seekOnStart
                 and not self.queuingNext and not self.stoppedManually and self.player.isPlayingVideo() and
                 self.player.playState != self.player.STATE_STOPPED):
-            self.updateNowPlaying(force=True)
+            self.updateNowPlaying()
 
         if self.dialog and getattr(self.dialog, "_ignoreTick", None) is not True:
             self.dialog.tick()
@@ -965,7 +957,7 @@ class AudioPlayerHandler(BasePlayerHandler):
             return
 
         self.stampCurrentTime()
-        self.updateNowPlaying(force=True)
+        self.updateNowPlaying()
 
 
 class BGMPlayerHandler(BasePlayerHandler):
