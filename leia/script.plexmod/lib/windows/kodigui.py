@@ -110,18 +110,19 @@ class XMLBase(object):
             self.getControl(666)
         except RuntimeError as e:
             if e.args and "Non-Existent Control" in e.args[0]:
-                if count == 0:
-                    # retry once
+                if count < 4:
+                    # retry
                     xbmc.sleep(250)
-                    return self.onInit(count=1)
+                    return self.onInit(count=count+1)
 
                 util.ERROR("Possibly broken XML file: {}, triggering recompilation.".format(self.xmlFile))
                 util.showNotification("Recompiling templates", time_ms=1000,
                                       header="Possibly broken XML file(s)")
-                try:
-                    xbmc.Player().stop()
-                except:
-                    pass
+                if xbmc.Player().isPlaying():
+                    try:
+                        xbmc.Player().stop()
+                    except:
+                        pass
                 xbmc.sleep(1000)
 
                 if self.__class__.__name__ == "HomeWindow":

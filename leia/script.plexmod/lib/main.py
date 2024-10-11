@@ -174,7 +174,7 @@ def _main():
                             return
                         util.CRON.cancelReceiver(windowutils.HOME)
 
-                        if not windowutils.HOME.closeOption or windowutils.HOME.closeOption == "quit":
+                        if not windowutils.HOME.closeOption or windowutils.HOME.closeOption in ("quit", "exit"):
                             if windowutils.HOME.closeOption == "quit":
                                 quitKodi = True
                             return
@@ -200,6 +200,7 @@ def _main():
                     finally:
                         windowutils.shutdownHome()
                         BACKGROUND.activate()
+                        background.setShutdown()
                         gc.collect(2)
 
             else:
@@ -211,7 +212,6 @@ def _main():
         dcm.storeDataCache()
         dcm.deinit()
         plexapp.util.INTERFACE.playbackManager.deinit()
-        background.setShutdown()
         player.shutdown()
         plexapp.util.APP.preShutdown()
         util.CRON.stop()

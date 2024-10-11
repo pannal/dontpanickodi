@@ -25,6 +25,7 @@ from . import optionsdialog
 from . import playlists
 from . import search
 from . import windowutils
+from . import background
 from .mixins import SpoilersMixin
 
 HUBS_REFRESH_INTERVAL = 300  # 5 Minutes
@@ -405,6 +406,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
         self.updateHubs = {}
         self.changingServer = False
         self._shuttingDown = False
+        self._checkingForExit = False
         self._skipNextAction = False
         self._reloadOnReinit = False
         self._applyTheme = False
@@ -742,6 +744,9 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
 
     def doClose(self):
         plexapp.util.APP.trigger('close.windows')
+        #if self.sectionChangeThread and self.sectionChangeThread.isAlive():
+        #    self.sectionChangeThread.join(timeout=2.0)
+
         super(HomeWindow, self).doClose()
 
     def shutdown(self):
@@ -786,7 +791,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
     def onAction(self, action):
         controlID = self.getFocusId()
 
-        if self._ignoreInput:
+        if self._ignoreInput or self._shuttingDown:
             return
 
         try:
@@ -902,20 +907,30 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
                         self.lastNonOptionsFocusID = None
                         return
 
-                if action in (xbmcgui.ACTION_NAV_BACK, xbmcgui.ACTION_PREVIOUS_MENU):
-                    ex = self.confirmExit()
-                    # 0 = exit; 1 = minimize; 2 = cancel
-                    if ex.button in (2, None):
-                        return
-                    elif ex.button == 1:
-                        self.storeLastBG()
-                        util.setGlobalProperty('is_active', '')
-                        xbmc.executebuiltin('ActivateWindow(10000)')
-                        return
-                    elif ex.button == 0:
-                        self._shuttingDown = True
-                        if ex.modifier == "quit":
-                            self.closeOption = "quit"
+                if action in (xbmcgui.ACTION_NAV_BACK, xbmcgui.ACTION_PREVIOUS_MENU) and not self._checkingForExit:
+                    try:
+                        self._checkingForExit = True
+                        if self._shuttingDown:
+                            # rare case confirmed in Kodi 18 when requests are still running and we're exiting quickly
+                            return
+
+                        ex = self.confirmExit()
+                        # 0 = exit; 1 = minimize; 2 = cancel
+                        if ex.button in (2, None):
+                            return
+                        elif ex.button == 1:
+                            self.storeLastBG()
+                            util.setGlobalProperty('is_active', '')
+                            xbmc.executebuiltin('ActivateWindow(10000)')
+                            return
+                        elif ex.button == 0:
+                            self._shuttingDown = True
+                            background.setShutdown()
+                            if ex.modifier == "quit":
+                                self.closeOption = "quit"
+                                self.unhookSignals()
+                    finally:
+                        self._checkingForExit = False
 
                     # 0 passes the action to the BaseWindow and exits HOME
         except:

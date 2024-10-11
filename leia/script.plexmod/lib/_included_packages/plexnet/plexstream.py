@@ -1,7 +1,9 @@
+# encoding: utf-8
 from __future__ import absolute_import
 from . import plexobjects
 from . import util
 from .mixins import AudioCodecMixin
+from six import ensure_str
 
 
 class PlexStream(plexobjects.PlexObject, AudioCodecMixin):
@@ -163,7 +165,7 @@ class PlexStream(plexobjects.PlexObject, AudioCodecMixin):
         return render.upper()
 
     def __str__(self):
-        return self.getTitle()
+        return ensure_str(self.getTitle())
 
     def __repr__(self):
         return '<{}: {}>'.format(self.streamTypeNames[self.streamType.asInt()], str(self))

@@ -10,6 +10,7 @@ from lib.util import KODI_VERSION_MAJOR
 from lib.cache import CACHE_SIZE
 
 from six.moves import range
+from six import ensure_str
 
 DecisionFailure = serverdecision.DecisionFailure
 
@@ -136,7 +137,7 @@ class PlexPlayer(BasePlayer):
             part = self.media.parts[partIndex]
 
             partObj.partDuration = part.duration.asInt()
-            partObj.path = str(part.file)
+            partObj.path = ensure_str(part.file)
             partObj.size = part.size and int(part.size) or ''
 
             if part.isIndexed():
