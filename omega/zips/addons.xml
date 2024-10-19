@@ -437,7 +437,7 @@ Version 1.1.*
 	</extension>
 </addon>
 
-<addon id="skin.plextuarycpm" version="4.0.0-pm4k1.3cpm" name="Plextuary CPM" provider-name="phil65, pannal, Ichabod Fletchman">
+<addon id="skin.plextuarycpm" version="4.0.0-pm4k1.3cpm2" name="Plextuary CPM" provider-name="phil65, pannal, Ichabod Fletchman">
 	<requires>
 		<import addon="xbmc.gui" version="5.17.0"/>
 	</requires>
