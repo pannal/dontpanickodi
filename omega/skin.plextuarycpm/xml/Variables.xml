@@ -337,7 +337,7 @@
 		<value condition="Control.HasFocus(608)">$LOCALIZE[264]</value>
 		<value condition="Control.HasFocus(804)">$LOCALIZE[33061]</value>
 		<value condition="Control.HasFocus(70011)">$LOCALIZE[31124]</value>
-		<value condition="Control.HasFocus(70012)">Playerdebuginfo</value>
+		<value condition="Control.HasFocus(70012)">Player Debug</value>
 		<value condition="Control.HasFocus(70040)">$LOCALIZE[19019]</value>
 		<value condition="Control.HasFocus(70041)">$LOCALIZE[19069]</value>
 		<value condition="Control.HasFocus(70042)">$LOCALIZE[31065]</value>
@@ -802,12 +802,36 @@
 		<value>$INFO[ListItem.Duration,$LOCALIZE[180]: ][CR]$VAR[VideoCodecVar,, ]$INFO[ListItem.VideoResolution,| , ]$VAR[VideoResolutionTypeVar,, ]$VAR[VideoHDRVar,| , ]$INFO[ListItem.VideoAspect,| ,:1 ]$VAR[AudioCodecVar,| , ]$VAR[AudioChannelsVar]</value>
 	</variable>
 	<variable name="DVELVar">
-		<value condition="String.Contains(Player.Process(video.dovi.el.type),minimum)">MEL</value>
-		<value condition="String.Contains(Player.Process(video.dovi.el.type),full)">FEL</value>
-		<value condition="String.Contains(Player.Process(video.dovi.el.type),none)"></value>
+		<value condition="String.IsEqual(Player.Process(video.dovi.el.type),minimum)">[COLOR lightgreen]MEL[/COLOR]</value>
+		<value condition="String.IsEqual(Player.Process(video.dovi.el.type),full)">[COLOR lightgreen]FEL[/COLOR]</value>
+		<value condition="String.IsEqual(Player.Process(video.dovi.el.type),none)"></value>
+	</variable>
+	<variable name="DVSourceELVar">
+		<value condition="String.IsEqual(Player.Process(video.source.dovi.el.type),minimum)">[COLOR 8016a34a]MEL[/COLOR]</value>
+		<value condition="String.IsEqual(Player.Process(video.source.dovi.el.type),full)">[COLOR 8016a34a]FEL[/COLOR]</value>
+		<value condition="String.IsEqual(Player.Process(video.source.dovi.el.type),none)"></value>
+	</variable>
+	<variable name="RPUPresentVar">
+		<value condition="String.IsEqual(Player.Process(video.dovi.rpu.present),1)">[COLOR lightgreen]■[/COLOR]</value>
+		<value>[COLOR dimgrey]■[/COLOR]</value>
+	</variable>
+	<variable name="BLPresentVar">
+		<value condition="String.IsEqual(Player.Process(video.dovi.bl.present),1)">[COLOR lightgreen]■[/COLOR]</value>
+		<value>[COLOR dimgrey]■[/COLOR]</value>
+	</variable>
+	<variable name="ELPresentVar">
+		<value condition="String.IsEqual(Player.Process(video.dovi.el.present),1)">[COLOR lightgreen]■[/COLOR]</value>
+		<value>[COLOR dimgrey]■[/COLOR]</value>
+	</variable>
+	<variable name="ELSourcePresentVar">
+		<value condition="String.IsEqual(Player.Process(video.source.dovi.el.present),1)">[COLOR 8016a34a]■[/COLOR]</value>
+		<value>[COLOR dimgrey]■[/COLOR]</value>
 	</variable>
 	<variable name="DVProfileExtVar">
 		<value>$INFO[Player.Process(video.dovi.profile)].$INFO[Player.Process(video.dovi.bl.signal.compatibility)]</value>
+	</variable>
+	<variable name="DVSourceProfileExtVar">
+		<value>$INFO[Player.Process(video.source.dovi.profile)].$INFO[Player.Process(video.source.dovi.bl.signal.compatibility)]</value>
 	</variable>
 	<variable name="DVTunnelVar">
 		<value condition="String.Contains(Player.Process(amlogic.vs10.mode.raw),1)">DV Tunnel</value>
