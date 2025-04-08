@@ -155,6 +155,16 @@
 			<filename>NotoMono-Regular.ttf</filename>
 			<size>26</size>
 		</font>
+		<font>
+			<name>font_tiny</name>
+			<filename>Inter-Unicode-Regular.ttf</filename>
+			<size>21</size>
+		</font>
+		<font>
+			<name>font_tiny_iconic</name>
+			<filename>fa-solid-900.ttf</filename>
+			<size>22</size>
+		</font>
 	</fontset>
 	<fontset id="Arial" idloc="31053">
 		<!-- Arial Font better for non English -->
@@ -300,6 +310,16 @@
 			<name>Mono26</name>
 			<filename>arial.ttf</filename>
 			<size>26</size>
+		</font>
+		<font>
+			<name>font_tiny</name>
+			<filename>Inter-Unicode-Regular.ttf</filename>
+			<size>21</size>
+		</font>
+		<font>
+			<name>font_tiny_iconic</name>
+			<filename>fa-solid-900.ttf</filename>
+			<size>22</size>
 		</font>
 	</fontset>
 </fonts>

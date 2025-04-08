@@ -19,6 +19,7 @@
 	<include file="View_500_Wall.xml" />
 	<include file="View_501_Banner.xml" />
 	<include file="View_502_FanArt.xml" />
+	<include file="Includes_CodecLogos.xml"/>
 	<include file="Variables.xml" />
 	<constant name="DepthDialog">0.50</constant>
 	<constant name="DepthDialog+">0.52</constant>

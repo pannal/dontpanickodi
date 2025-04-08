@@ -73,12 +73,44 @@
 					<onclick>Skin.SelectBool(31164, 31165|show_profilename, 31166|show_profileavatar, 16018|show_none)</onclick>
 					<label2>$VAR[ProfileIdentificationLabel2Var]</label2>
 				</control>
-				<control type="radiobutton" id="7015">
-					<label>SkinDebug</label>
+				<control type="button" id="708">
+					<label>$LOCALIZE[32062]</label>
 					<include>DefaultSettingButton</include>
-					<selected>Skin.HasSetting(Skin.ToggleDebug)</selected>
-					<onclick>Skin.ToggleSetting(Skin.ToggleDebug)</onclick>
-					<onclick>Skin.ToggleDebug</onclick>
+					<onclick condition="!Skin.HasSetting(osd.useleftCodecStartupLogos) + !Skin.HasSetting(osd.usecenterCodecStartupLogos) + !Skin.HasSetting(osd.userightCodecStartupLogos)">Skin.ToggleSetting(osd.useleftCodecStartupLogos)</onclick>
+					<onclick condition="Skin.HasSetting(osd.useleftCodecStartupLogos)">Skin.ToggleSetting(osd.usecenterCodecStartupLogos)</onclick>
+					<onclick condition="Skin.HasSetting(osd.usecenterCodecStartupLogos)">Skin.ToggleSetting(osd.userightCodecStartupLogos)</onclick>
+					<onclick condition="Skin.HasSetting(osd.useleftCodecStartupLogos)">Skin.Reset(osd.useleftCodecStartupLogos)</onclick>
+					<onclick condition="Skin.HasSetting(osd.userightCodecStartupLogos)">Skin.Reset(osd.userightCodecStartupLogos)</onclick>
+					<onclick condition="Skin.HasSetting(osd.usecenterCodecStartupLogos)">Skin.Reset(osd.usecenterCodecStartupLogos)</onclick>
+					<label2>$VAR[OSDCodecLogosStartupLabel]</label2>
+				</control>
+				<control type="button" id="709">
+					<label>$LOCALIZE[32060]</label>
+					<include>DefaultSettingButton</include>
+					<onclick condition="!Skin.HasSetting(osd.useleftCodecLogos) + !Skin.HasSetting(osd.usecenterCodecLogos) + !Skin.HasSetting(osd.userightCodecLogos)">Skin.ToggleSetting(osd.useleftCodecLogos)</onclick>
+					<onclick condition="Skin.HasSetting(osd.useleftCodecLogos)">Skin.ToggleSetting(osd.usecenterCodecLogos)</onclick>
+					<onclick condition="Skin.HasSetting(osd.usecenterCodecLogos)">Skin.ToggleSetting(osd.userightCodecLogos)</onclick>
+					<onclick condition="Skin.HasSetting(osd.useleftCodecLogos)">Skin.Reset(osd.useleftCodecLogos)</onclick>
+					<onclick condition="Skin.HasSetting(osd.userightCodecLogos)">Skin.Reset(osd.userightCodecLogos)</onclick>
+					<onclick condition="Skin.HasSetting(osd.usecenterCodecLogos)">Skin.Reset(osd.usecenterCodecLogos)</onclick>
+					<label2>$VAR[OSDCodecLogosLabel]</label2>
+				</control>
+				<control type="button" id="710">
+					<label>$LOCALIZE[32061]</label>
+					<include>DefaultSettingButton</include>
+					<onclick condition="!Skin.HasSetting(ppi.useleftCodecLogos) + !Skin.HasSetting(ppi.usecenterCodecLogos) + !Skin.HasSetting(ppi.userightCodecLogos)">Skin.ToggleSetting(ppi.useleftCodecLogos)</onclick>
+					<onclick condition="Skin.HasSetting(ppi.useleftCodecLogos)">Skin.ToggleSetting(ppi.usecenterCodecLogos)</onclick>
+					<onclick condition="Skin.HasSetting(ppi.usecenterCodecLogos)">Skin.ToggleSetting(ppi.userightCodecLogos)</onclick>
+					<onclick condition="Skin.HasSetting(ppi.useleftCodecLogos)">Skin.Reset(ppi.useleftCodecLogos)</onclick>
+					<onclick condition="Skin.HasSetting(ppi.userightCodecLogos)">Skin.Reset(ppi.userightCodecLogos)</onclick>
+					<onclick condition="Skin.HasSetting(ppi.usecenterCodecLogos)">Skin.Reset(ppi.usecenterCodecLogos)</onclick>
+					<label2>$VAR[PPICodecLogosLabel]</label2>
+				</control>
+				<control type="radiobutton" id="908">
+					<label>$LOCALIZE[32101]</label>
+					<include>DefaultSettingButton</include>
+					<selected>Skin.HasSetting(showkodirestart)</selected>
+					<onclick>Skin.ToggleSetting(showkodirestart)</onclick>
 				</control>
 			</control>
 			<control type="grouplist" id="600">

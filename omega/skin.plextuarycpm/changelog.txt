@@ -1,3 +1,6 @@
+[B]4.0.0-pm4k1.3cpm.a14[/B]
+* Adapt to CoreELEC Estuary CPM A14
+
 [B]0.8.5[/B]
 • Updated language files from Transifex
 

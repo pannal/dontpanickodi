@@ -54,14 +54,15 @@
 						<visible>System.CanReboot</visible>
 					</item>
 					<item>
+						<label>Restart Kodi</label>
+						<onclick>RestartApp()</onclick>
+						<visible>Skin.HasSetting(showkodirestart)</visible>
+					</item>
+					<item>
 						<label>Reboot from eMMC/NAND</label>
 						<onclick>System.ExecWait("/usr/sbin/rebootfromnand")</onclick>
 						<onclick>Reset()</onclick>
-						<visible>System.PathExist("/dev/system") | System.PathExist("/dev/userdata") | System.PathExist("/dev/env")</visible>
-					</item>
-					<item>
-						<label>Restart Kodi</label>
-						<onclick>RestartApp()</onclick>
+						<visible>System.PathExist("/dev/system") | System.PathExist("/dev/userdata") | System.PathExist("/dev/super")</visible>
 					</item>
 					<item>
 						<label>$LOCALIZE[20126] $INFO[system.profilename]</label>
@@ -84,11 +85,6 @@
 						<label>$LOCALIZE[13018]</label>
 						<onclick>InhibitIdleShutdown(false)</onclick>
 						<visible>System.HasShutdown + System.IdleShutdownInhibited</visible>
-					</item>
-						<item>
-						<label>$LOCALIZE[20183]</label>
-						<icon>special://skin/extras/icons/Power menu/reload.png</icon>
-						<onclick>ReloadSkin()</onclick>
 					</item>
 				</content>
 			</control>
