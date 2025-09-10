@@ -1236,3 +1236,48 @@ msgstr ""
 msgctxt "#32101"
 msgid "Show Restart Kodi option in exit menu"
 msgstr ""
+
+#: /xml/Font.xml
+msgctxt "#32102"
+msgid "Open Sans (needs McFontFace)"
+msgstr ""
+
+#: /xml/Font.xml
+msgctxt "#32103"
+msgid "Hind (needs McFontFace)"
+msgstr ""
+
+#: /xml/Font.xml
+msgctxt "#32104"
+msgid "PT Sans (needs McFontFace)"
+msgstr ""
+
+#: /xml/Font.xml
+msgctxt "#32105"
+msgid "Inter (needs McFontFace)"
+msgstr ""
+
+#: /xml/Font.xml
+msgctxt "#32106"
+msgid "Lato (needs McFontFace)"
+msgstr ""
+
+#: /xml/Font.xml
+msgctxt "#32107"
+msgid "DejaVu Sans (needs McFontFace)"
+msgstr ""
+
+#: /xml/Font.xml
+msgctxt "#32108"
+msgid "Source Sans 3 (needs McFontFace)"
+msgstr ""
+
+#: /xml/Font.xml
+msgctxt "#32109"
+msgid "Noto Sans (default, bundled)"
+msgstr ""
+
+#: /xml/Font.xml
+msgctxt "#32110"
+msgid "Inter UI (bundled)"
+msgstr ""
