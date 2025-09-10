@@ -73,7 +73,7 @@
 	</extension>
 </addon>
 
-<addon id="repository.dontpanic" name="Don't Panic" version="0.2.7" provider-name="pannal">
+<addon id="repository.dontpanic" name="Don't Panic" version="0.2.8" provider-name="pannal">
     <extension point="xbmc.addon.repository" name="Don't Panic Kodi Repo">
         <dir minversion="18.0.0" maxversion="18.9.9">
             <info compressed="false">https://raw.githubusercontent.com/pannal/dontpanickodi/master/leia/zips/addons.xml</info>
