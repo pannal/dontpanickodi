@@ -322,6 +322,16 @@
 			<filename>OpenSans.ttf</filename>
 			<size>26</size>
 		</font>
+        <font>
+			<name>font_tiny</name>
+			<filename>Inter-Unicode-Regular.ttf</filename>
+			<size>21</size>
+		</font>
+		<font>
+			<name>font_tiny_iconic</name>
+			<filename>fa-solid-900.ttf</filename>
+			<size>22</size>
+		</font>
 	</fontset>
     <fontset id="Hind-Regular" idloc="32103">
 		<!-- Normal Fonts -->
@@ -478,6 +488,16 @@
 			<name>Mono26</name>
 			<filename>Hind-Regular.ttf</filename>
 			<size>26</size>
+		</font>
+        <font>
+			<name>font_tiny</name>
+			<filename>Inter-Unicode-Regular.ttf</filename>
+			<size>21</size>
+		</font>
+		<font>
+			<name>font_tiny_iconic</name>
+			<filename>fa-solid-900.ttf</filename>
+			<size>22</size>
 		</font>
 	</fontset>
     <fontset id="PTSans-Regular" idloc="32104">
@@ -636,6 +656,16 @@
 			<filename>PTSans-Regular.ttf</filename>
 			<size>26</size>
 		</font>
+        <font>
+			<name>font_tiny</name>
+			<filename>Inter-Unicode-Regular.ttf</filename>
+			<size>21</size>
+		</font>
+		<font>
+			<name>font_tiny_iconic</name>
+			<filename>fa-solid-900.ttf</filename>
+			<size>22</size>
+		</font>
 	</fontset>
     <fontset id="Inter" idloc="32105">
 		<!-- Normal Fonts -->
@@ -792,6 +822,16 @@
 			<name>Mono26</name>
 			<filename>Inter.ttf</filename>
 			<size>26</size>
+		</font>
+        <font>
+			<name>font_tiny</name>
+			<filename>Inter-Unicode-Regular.ttf</filename>
+			<size>21</size>
+		</font>
+		<font>
+			<name>font_tiny_iconic</name>
+			<filename>fa-solid-900.ttf</filename>
+			<size>22</size>
 		</font>
 	</fontset>
     <fontset id="InterUI" idloc="32110">
@@ -950,6 +990,16 @@
 			<filename>InterUI.ttf</filename>
 			<size>26</size>
 		</font>
+        <font>
+			<name>font_tiny</name>
+			<filename>Inter-Unicode-Regular.ttf</filename>
+			<size>21</size>
+		</font>
+		<font>
+			<name>font_tiny_iconic</name>
+			<filename>fa-solid-900.ttf</filename>
+			<size>22</size>
+		</font>
 	</fontset>
     <fontset id="Lato" idloc="32106">
 		<!-- Normal Fonts -->
@@ -1107,6 +1157,16 @@
 			<filename>Lato-Regular.ttf</filename>
 			<size>26</size>
 		</font>
+        <font>
+			<name>font_tiny</name>
+			<filename>Inter-Unicode-Regular.ttf</filename>
+			<size>21</size>
+		</font>
+		<font>
+			<name>font_tiny_iconic</name>
+			<filename>fa-solid-900.ttf</filename>
+			<size>22</size>
+		</font>
 	</fontset>
     <fontset id="DejaVuSans" idloc="32107">
 		<!-- Normal Fonts -->
@@ -1252,6 +1312,16 @@
 			<filename>DejaVuSans.ttf</filename>
 			<size>26</size>
 		</font>
+        <font>
+			<name>font_tiny</name>
+			<filename>Inter-Unicode-Regular.ttf</filename>
+			<size>21</size>
+		</font>
+		<font>
+			<name>font_tiny_iconic</name>
+			<filename>fa-solid-900.ttf</filename>
+			<size>22</size>
+		</font>
 	</fontset>
     <fontset id="SourceSans3" idloc="32108">
 		<!-- Normal Fonts -->
@@ -1395,6 +1465,16 @@
 			<name>Mono26</name>
 			<filename>SourceSans3.ttf</filename>
 			<size>26</size>
+		</font>
+        <font>
+			<name>font_tiny</name>
+			<filename>Inter-Unicode-Regular.ttf</filename>
+			<size>21</size>
+		</font>
+		<font>
+			<name>font_tiny_iconic</name>
+			<filename>fa-solid-900.ttf</filename>
+			<size>22</size>
 		</font>
 	</fontset>
 	<fontset id="Arial" idloc="31053">
