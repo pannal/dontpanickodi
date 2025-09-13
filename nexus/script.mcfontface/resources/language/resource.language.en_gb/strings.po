@@ -30,5 +30,49 @@ msgid "Cleanup installed fonts"
 msgstr ""
 
 msgctxt "#32004"
-msgid "Cleanup and install"
+msgid "Cleanup and install all"
+msgstr ""
+
+msgctxt "#32005"
+msgid "Install all"
+msgstr ""
+
+msgctxt "#32006"
+msgid "Font management"
+msgstr ""
+
+msgctxt "#32007"
+msgid "Install/uninstall fonts"
+msgstr ""
+
+msgctxt "#32008"
+msgid "Apply changes?"
+msgstr ""
+
+msgctxt "#32009"
+msgid "Couldn't install/remove fonts. Possible permission issue on data folder."
+msgstr ""
+
+msgctxt "#32010"
+msgid "{} fonts installed, {} removed. Please restart Kodi."
+msgstr ""
+
+msgctxt "#32011"
+msgid "Install: {}"
+msgstr ""
+
+msgctxt "#32012"
+msgid "Remove: {}"
+msgstr ""
+
+msgctxt "#32013"
+msgid "Nothing to do."
+msgstr ""
+
+msgctxt "#32014"
+msgid "Target: {}"
+msgstr ""
+
+msgctxt "#32015"
+msgid "Fonts cleaned."
 msgstr ""
