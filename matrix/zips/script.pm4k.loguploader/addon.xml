@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="script.pm4k.loguploader" name="PM4K Logfile Uploader" version="2.0.5" provider-name="pannal, Team Kodi">
+	<requires>
+		<import addon="xbmc.python" version="3.0.0"/>
+		<import addon="script.module.pyqrcode" version="1.2.1+matrix.1"/>
+		<import addon="script.module.requests" version="2.22.0+matrix.1"/>
+	</requires>
+	<extension point="xbmc.python.script" library="default.py">
+		<provides>executable</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en_GB">Uploads your kodi.log file.</summary>
+		<description lang="en_GB">Uploads your kodi.log file and returns an url you can post on http://forum.kodi.tv/</description>
+		<platform>all</platform>
+		<license>GPL-2.0-only</license>
+		<forum>https://forums.plex.tv/t/pm4k-plexmod-for-kodi-18-19-20-21-22/481208</forum>
+		<source>https://github.com/pannal/script.pm4k.loguploader</source>
+		<assets>
+			<icon>resources/icon2.png</icon>
+		</assets>
+		<news>
+- Fix replacing stopping after first regex
+- Mask PM4K/Plex-related sensitive information
+        </news>
+	</extension>
+</addon>
