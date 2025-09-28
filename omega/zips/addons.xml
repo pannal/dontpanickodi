@@ -123,7 +123,7 @@
     </extension>
 </addon>
 
-<addon id="script.pm4k.loguploader" name="PM4K Logfile Uploader" version="2.0.6" provider-name="pannal, Team Kodi">
+<addon id="script.pm4k.loguploader" name="PM4K Logfile Uploader" version="2.0.7" provider-name="pannal, Team Kodi">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0"/>
 		<import addon="script.module.pyqrcode" version="1.2.1+matrix.1"/>
@@ -143,8 +143,8 @@
 			<icon>resources/icon2.png</icon>
 		</assets>
 		<news>
-- Fix replacing stopping after first regex
-- Mask PM4K/Plex-related sensitive information
+- Use paste.pm4k.eu as log receiver; limit length of paste to 10 million characters (roughly 20MB on ANSI)
+- Use xbmc.LOGINFO instead of LOGDEBUG
         </news>
 	</extension>
 </addon>
@@ -858,6 +858,32 @@ Version 1.1.*
 		<disclaimer lang="vi_VN">Plextuary là giao diện mặc định cho Kodi, loại bỏ nó có thể gây ra sự cố</disclaimer>
 		<disclaimer lang="zh_CN">Plextuary 是 Kodi 的默认皮肤，删除它可能导致故障。</disclaimer>
 		<disclaimer lang="zh_TW">Plextuary 是 Kodi 預設的佈景主題，移除它可能會造成問題</disclaimer>
+	</extension>
+</addon>
+
+<addon id="script.pm4k.loguploader" name="PM4K Logfile Uploader" version="2.0.6" provider-name="pannal, Team Kodi">
+	<requires>
+		<import addon="xbmc.python" version="3.0.0"/>
+		<import addon="script.module.pyqrcode" version="1.2.1+matrix.1"/>
+		<import addon="script.module.requests" version="2.22.0+matrix.1"/>
+	</requires>
+	<extension point="xbmc.python.script" library="default.py">
+		<provides>executable</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en_GB">Uploads your kodi.log file.</summary>
+		<description lang="en_GB">Uploads your kodi.log file and returns an url you can post on http://forum.kodi.tv/</description>
+		<platform>all</platform>
+		<license>GPL-2.0-only</license>
+		<forum>https://forums.plex.tv/t/pm4k-plexmod-for-kodi-18-19-20-21-22/481208</forum>
+		<source>https://github.com/pannal/script.pm4k.loguploader</source>
+		<assets>
+			<icon>resources/icon2.png</icon>
+		</assets>
+		<news>
+- Fix replacing stopping after first regex
+- Mask PM4K/Plex-related sensitive information
+        </news>
 	</extension>
 </addon>
 
