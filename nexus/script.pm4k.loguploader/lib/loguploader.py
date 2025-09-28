@@ -18,7 +18,7 @@ LANGUAGE = ADDON.getLocalizedString
 
 socket.setdefaulttimeout(5)
 
-URL = 'https://paste.kodi.tv/'
+URL = 'https://paste.pm4k.eu/'
 LOGPATH = xbmcvfs.translatePath('special://logpath')
 LOGFILE = os.path.join(LOGPATH, 'kodi.log')
 OLDLOG = os.path.join(LOGPATH, 'kodi.old.log')
@@ -42,7 +42,7 @@ REPLACES = (('//.+?:.+?@', '//USER:PASSWORD@'),
 
 def log(txt):
     message = '%s: %s' % (ADDONID, txt)
-    xbmc.log(msg=message, level=xbmc.LOGDEBUG)
+    xbmc.log(msg=message, level=xbmc.LOGINFO)
 
 
 class QRCode(xbmcgui.WindowXMLDialog):
@@ -164,13 +164,12 @@ class Main():
     def readLog(self, path):
         try:
             lf = xbmcvfs.File(path)
-            sz = lf.size()
-            if sz > 2000000:
-                log('file is too large')
-                return False, LANGUAGE(32005)
             content = lf.read()
             lf.close()
             if content:
+                if len(content) > 20000000:
+                    log('file is too large')
+                    return False, LANGUAGE(32505)
                 return True, content
             else:
                 log('file is empty')

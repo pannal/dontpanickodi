@@ -42,8 +42,8 @@ msgid "Failed to retrieve the paste url"
 msgstr "获取粘贴的 url 失败"
 
 msgctxt "#32005"
-msgid "This file is too large. Max size is 1MB."
-msgstr "文件过大，最高限值为 1MB。"
+msgid "This file is too large. Max size is 10MB."
+msgstr "文件过大，最高限值为 10MB。"
 
 msgctxt "#32006"
 msgid "Post this url or scan QRcode for your %s, together with a problem description, on the Kodi forum: %s"
@@ -94,8 +94,8 @@ msgid "crashlog"
 msgstr "崩溃日志"
 
 msgctxt "#32040"
-msgid "Do you want to view your %s or upload it to http://paste.kodi.tv/?"
-msgstr "您想查看 %s 还是将其上传到 http://paste.kodi.tv/？"
+msgid "Do you want to view your %s or upload it to http://paste.pm4k.eu/?"
+msgstr "您想查看 %s 还是将其上传到 http://paste.pm4k.eu/？"
 
 msgctxt "#32041"
 msgid "view"

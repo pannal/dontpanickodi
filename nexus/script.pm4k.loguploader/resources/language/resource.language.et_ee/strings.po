@@ -42,7 +42,7 @@ msgid "Failed to retrieve the paste url"
 msgstr "URL-i vastuvõtmine nurjus"
 
 msgctxt "#32005"
-msgid "This file is too large. Max size is 1MB."
+msgid "This file is too large. Max size is 10MB."
 msgstr "See fail on liiga suur. Maksimaalne suurus on 1 MB."
 
 msgctxt "#32006"
@@ -94,8 +94,8 @@ msgid "crashlog"
 msgstr "krahhi logifail"
 
 msgctxt "#32040"
-msgid "Do you want to view your %s or upload it to http://paste.kodi.tv/?"
-msgstr "Kas soovid vaadata oma %s või laadida selle üles aadressile http://paste.kodi.tv/?"
+msgid "Do you want to view your %s or upload it to http://paste.pm4k.eu/?"
+msgstr "Kas soovid vaadata oma %s või laadida selle üles aadressile http://paste.pm4k.eu/?"
 
 msgctxt "#32041"
 msgid "view"

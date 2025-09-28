@@ -42,7 +42,7 @@ msgid "Failed to retrieve the paste url"
 msgstr "Nije uspjelo preuzimanje URL-a za lijepljenje"
 
 msgctxt "#32005"
-msgid "This file is too large. Max size is 1MB."
+msgid "This file is too large. Max size is 10MB."
 msgstr "Ova datoteka je prevelika. Maksimalna veličina je 1 MB."
 
 msgctxt "#32006"
@@ -94,8 +94,8 @@ msgid "crashlog"
 msgstr "zapisnik o padu programa"
 
 msgctxt "#32040"
-msgid "Do you want to view your %s or upload it to http://paste.kodi.tv/?"
-msgstr "Želite li pregledati svoj %s ili ga otpremiti na http://paste.kodi.tv/?"
+msgid "Do you want to view your %s or upload it to http://paste.pm4k.eu/?"
+msgstr "Želite li pregledati svoj %s ili ga otpremiti na http://paste.pm4k.eu/?"
 
 msgctxt "#32041"
 msgid "view"

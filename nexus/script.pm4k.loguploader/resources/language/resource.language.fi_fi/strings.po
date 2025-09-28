@@ -42,7 +42,7 @@ msgid "Failed to retrieve the paste url"
 msgstr "Liitettävän URL-osoitteen vastaanotto epäonnistui"
 
 msgctxt "#32005"
-msgid "This file is too large. Max size is 1MB."
+msgid "This file is too large. Max size is 10MB."
 msgstr "Tiedosto on liian suuri. Enimmäiskoko on 1 Mt."
 
 msgctxt "#32006"
@@ -94,8 +94,8 @@ msgid "crashlog"
 msgstr "kaatumisloki"
 
 msgctxt "#32040"
-msgid "Do you want to view your %s or upload it to http://paste.kodi.tv/?"
-msgstr "Haluatko katsella tiedostoa %s vai lähettää sen https://paste.kodi.tv/ -palveluun?"
+msgid "Do you want to view your %s or upload it to http://paste.pm4k.eu/?"
+msgstr "Haluatko katsella tiedostoa %s vai lähettää sen https://paste.pm4k.eu/ -palveluun?"
 
 msgctxt "#32041"
 msgid "view"

@@ -42,8 +42,8 @@ msgid "Failed to retrieve the paste url"
 msgstr "Error al obtener la url del archivo"
 
 msgctxt "#32005"
-msgid "This file is too large. Max size is 1MB."
-msgstr "El archivo es demasiado grande. El tamaño máximo es 1MB."
+msgid "This file is too large. Max size is 10MB."
+msgstr "El archivo es demasiado grande. El tamaño máximo es 10MB."
 
 msgctxt "#32006"
 msgid "Post this url or scan QRcode for your %s, together with a problem description, on the Kodi forum: %s"
@@ -94,8 +94,8 @@ msgid "crashlog"
 msgstr "log de crasheo"
 
 msgctxt "#32040"
-msgid "Do you want to view your %s or upload it to http://paste.kodi.tv/?"
-msgstr "¿Quieres ver tu %s o cargarlo a http://paste.kodi.tv?"
+msgid "Do you want to view your %s or upload it to http://paste.pm4k.eu/?"
+msgstr "¿Quieres ver tu %s o cargarlo a http://paste.pm4k.eu?"
 
 msgctxt "#32041"
 msgid "view"

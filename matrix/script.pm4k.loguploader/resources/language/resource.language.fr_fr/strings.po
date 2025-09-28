@@ -42,7 +42,7 @@ msgid "Failed to retrieve the paste url"
 msgstr "Échec lors de la récupération de l’URL du fichier"
 
 msgctxt "#32005"
-msgid "This file is too large. Max size is 1MB."
+msgid "This file is too large. Max size is 10MB."
 msgstr "Le fichier est trop gros. La taille max est de 1 Mo."
 
 msgctxt "#32006"
@@ -94,8 +94,8 @@ msgid "crashlog"
 msgstr "rapport de plantage"
 
 msgctxt "#32040"
-msgid "Do you want to view your %s or upload it to http://paste.kodi.tv/?"
-msgstr "Voulez-vous voir votre %s ou le téléverser sur http://paste.kodi.tv/ ?"
+msgid "Do you want to view your %s or upload it to http://paste.pm4k.eu/?"
+msgstr "Voulez-vous voir votre %s ou le téléverser sur http://paste.pm4k.eu/ ?"
 
 msgctxt "#32041"
 msgid "view"

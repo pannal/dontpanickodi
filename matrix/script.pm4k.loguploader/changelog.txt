@@ -1,3 +1,11 @@
+v2.0.6
+- Use paste.pm4k.eu as log receiver; limit length of paste to 10 million characters (roughly 20MB on ANSI)
+- Use xbmc.LOGINFO instead of LOGDEBUG
+
+v2.0.5
+- Fix replacing stopping after first regex
+- Mask PM4K/Plex-related sensitive information
+
 v1.0.4
 - changes for kodi 20
 

@@ -42,8 +42,8 @@ msgid "Failed to retrieve the paste url"
 msgstr "Theip ar an url greamaithe a aisghabháil"
 
 msgctxt "#32005"
-msgid "This file is too large. Max size is 1MB."
-msgstr "Tá an comhad seo rómhór. Is é 1MB an méid uasta."
+msgid "This file is too large. Max size is 10MB."
+msgstr "Tá an comhad seo rómhór. Is é 10MB an méid uasta."
 
 msgctxt "#32006"
 msgid "Post this url or scan QRcode for your %s, together with a problem description, on the Kodi forum: %s"
@@ -94,8 +94,8 @@ msgid "crashlog"
 msgstr "loga tuairteála"
 
 msgctxt "#32040"
-msgid "Do you want to view your %s or upload it to http://paste.kodi.tv/?"
-msgstr "Ar mhaith leat do %s a fheiceáil nó é a uaslódáil chuig http://paste.kodi.tv/?"
+msgid "Do you want to view your %s or upload it to http://paste.pm4k.eu/?"
+msgstr "Ar mhaith leat do %s a fheiceáil nó é a uaslódáil chuig http://paste.pm4k.eu/?"
 
 msgctxt "#32041"
 msgid "view"

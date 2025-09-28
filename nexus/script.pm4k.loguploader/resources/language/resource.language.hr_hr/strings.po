@@ -42,8 +42,8 @@ msgid "Failed to retrieve the paste url"
 msgstr "Neuspjelo primanje zalijepljenog url-a"
 
 msgctxt "#32005"
-msgid "This file is too large. Max size is 1MB."
-msgstr "Datoteka je prevelika. Najveća veličina je 1MB."
+msgid "This file is too large. Max size is 10MB."
+msgstr "Datoteka je prevelika. Najveća veličina je 10MB."
 
 msgctxt "#32006"
 msgid "Post this url or scan QRcode for your %s, together with a problem description, on the Kodi forum: %s"
@@ -94,8 +94,8 @@ msgid "crashlog"
 msgstr "zapis rušenja"
 
 msgctxt "#32040"
-msgid "Do you want to view your %s or upload it to http://paste.kodi.tv/?"
-msgstr "Želite li vidjeti vaš %s ili ga poslati na http://paste.kodi.tv/?"
+msgid "Do you want to view your %s or upload it to http://paste.pm4k.eu/?"
+msgstr "Želite li vidjeti vaš %s ili ga poslati na http://paste.pm4k.eu/?"
 
 msgctxt "#32041"
 msgid "view"
