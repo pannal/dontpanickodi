@@ -123,3 +123,7 @@ msgstr ""
 msgctxt "#32505"
 msgid "This file is too large. Max length 20 million characters."
 msgstr ""
+
+msgctxt "#32506"
+msgid "cancel"
+msgstr ""

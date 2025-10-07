@@ -104,17 +104,20 @@ class Main():
             if succes:
                 content = self.cleanLog(data)
                 dialog = xbmcgui.Dialog()
-                confirm = dialog.yesno(ADDONNAME, LANGUAGE(32040) % name, nolabel=LANGUAGE(32041), yeslabel=LANGUAGE(32042))
-                if confirm:
+                confirm = dialog.yesnocustom(ADDONNAME, LANGUAGE(32040) % name, nolabel=LANGUAGE(32041), yeslabel=LANGUAGE(32042), customlabel="")
+                if confirm == 1:
                     succes, data = self.postLog(content)
                     if succes:
+                        log("URL: %s" % data)
                         self.showResult(LANGUAGE(32006) % (name, data), data)
                     else:
                         self.showResult('%s[CR]%s' % (error, data))
-                else:
+                elif confirm == 0:
                     lv = LogView( "script-loguploader-view.xml" , CWD, "default", name=name, content=content)
                     lv.doModal()
                     del lv
+                else:
+                    break
             else:
                 self.showResult('%s[CR]%s' % (error, data))
         log('script ended')

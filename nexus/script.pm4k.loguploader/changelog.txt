@@ -1,4 +1,7 @@
-v2.0.6
+v2.0.8
+- Add logging for current URL; allow dialog cancellation
+
+v2.0.7
 - Use paste.pm4k.eu as log receiver; limit length of paste to 10 million characters (roughly 20MB on ANSI)
 - Use xbmc.LOGINFO instead of LOGDEBUG
 
