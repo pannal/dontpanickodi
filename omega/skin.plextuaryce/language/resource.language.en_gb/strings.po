@@ -1021,10 +1021,10 @@ msgstr ""
 
 #: /xml/Font.xml
 msgctxt "#32109"
-msgid "Noto Sans (default, bundled)"
+msgid "Noto Sans (old default, bundled)"
 msgstr ""
 
 #: /xml/Font.xml
 msgctxt "#32110"
-msgid "Inter UI (bundled)"
+msgid "Inter UI (default, bundled)"
 msgstr ""
