@@ -86,6 +86,14 @@
 						<onclick>InhibitIdleShutdown(false)</onclick>
 						<visible>System.HasShutdown + System.IdleShutdownInhibited</visible>
 					</item>
+                    <!-- CoreELEC specific; System.PathExist is not part of mainline Kodi AFAIK -->
+                    <item>
+                        <label>Reboot to FireOS</label>
+                        <onclick condition='System.PathExist("/storage/.kodi/userdata/bootfireos")'>System.ExecWait("/storage/.kodi/userdata/bootfireos")</onclick>
+                        <onclick condition='System.PathExist("/storage/.kodi/addons/skin.plextuary/bootfireos")'>System.ExecWait("/storage/.kodi/addons/skin.plextuary/bootfireos")</onclick>
+                        <onclick condition='System.PathExist("/storage/.kodi/addons/skin.estuary/bootfireos")'>System.ExecWait("/storage/.kodi/addons/skin.estuary/bootfireos")</onclick>
+                        <visible>System.PathExist("/storage/.kodi/userdata/bootfireos") | System.PathExist("/storage/.kodi/addons/skin.plextuary/bootfireos") | System.PathExist("/storage/.kodi/addons/skin.estuary/bootfireos")</visible>
+                    </item>
 				</content>
 			</control>
 		</control>
