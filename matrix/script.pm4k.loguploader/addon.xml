@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="script.pm4k.loguploader" name="PM4K Logfile Uploader" version="2.0.8" provider-name="pannal, Team Kodi">
+<addon id="script.pm4k.loguploader" name="PM4K Logfile Uploader" version="2.0.9" provider-name="pannal, Team Kodi">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0"/>
 		<import addon="script.module.pyqrcode" version="1.2.1+matrix.1"/>
@@ -19,7 +19,7 @@
 			<icon>resources/icon2.png</icon>
 		</assets>
 		<news>
-- Add logging for current URL; allow dialog cancellation
+- Ask for current or oldlog (or both) to use on start; remove settings
         </news>
 	</extension>
 </addon>

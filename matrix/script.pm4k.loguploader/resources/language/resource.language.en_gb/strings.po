@@ -127,3 +127,19 @@ msgstr ""
 msgctxt "#32506"
 msgid "cancel"
 msgstr ""
+
+msgctxt "#32507"
+msgid "Which log file do you want us to use?"
+msgstr ""
+
+msgctxt "#32508"
+msgid "Current"
+msgstr ""
+
+msgctxt "#32509"
+msgid "Previous (oldlog)"
+msgstr ""
+
+msgctxt "#32510"
+msgid "Both"
+msgstr ""

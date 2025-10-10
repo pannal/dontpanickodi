@@ -88,7 +88,21 @@ class Main():
         self.getSettings()
         if not xbmcvfs.exists(PROFILE):
             xbmcvfs.mkdirs(PROFILE)
-        files = self.getFiles()
+        dialog = xbmcgui.Dialog()
+        confirm = dialog.yesnocustom(ADDONNAME, LANGUAGE(32507), nolabel=LANGUAGE(32508),
+                                     yeslabel=LANGUAGE(32509), customlabel=LANGUAGE(32510))
+
+        selection = []
+        if confirm < 0:
+            return
+        elif confirm == 0:
+            selection.append("current")
+        elif confirm == 1:
+            selection.append("previous")
+        elif confirm == 2:
+            selection += ["current", "previous"]
+        files = self.getFiles(selection)
+
         for item in files:
             filetype = item[0]
             if filetype == 'log':
@@ -126,14 +140,17 @@ class Main():
         self.oldlog = ADDON.getSettingBool('oldlog')
         self.crashlog = ADDON.getSettingBool('crashlog')
 
-    def getFiles(self):
+    def getFiles(self, selection):
         logfiles = []
-        logfiles.append(['log', LOGFILE])
-        if self.oldlog:
+        if "current" in selection:
+            logfiles.append(['log', LOGFILE])
+        if "previous" in selection:
             if xbmcvfs.exists(OLDLOG):
                 logfiles.append(['oldlog', OLDLOG])
             else:
                 self.showResult(LANGUAGE(32021))
+
+        return logfiles
         if self.crashlog:
             crashlog_path = ''
             items = []
