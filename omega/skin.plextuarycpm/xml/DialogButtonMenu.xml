@@ -94,6 +94,7 @@
                         <onclick condition='System.PathExist("/storage/.kodi/addons/skin.estuary/bootfireos")'>System.ExecWait("/storage/.kodi/addons/skin.estuary/bootfireos")</onclick>
                         <visible>System.PathExist("/storage/.kodi/userdata/bootfireos") | System.PathExist("/storage/.kodi/addons/skin.plextuary/bootfireos") | System.PathExist("/storage/.kodi/addons/skin.estuary/bootfireos")</visible>
                     </item>
+                    <include>CustomMenu</include>
 				</content>
 			</control>
 		</control>

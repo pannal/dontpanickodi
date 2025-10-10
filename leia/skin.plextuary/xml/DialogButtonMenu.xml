@@ -86,6 +86,7 @@
 						<onclick>InhibitIdleShutdown(false)</onclick>
 						<visible>System.HasShutdown + System.IdleShutdownInhibited</visible>
 					</item>
+                    <include>CustomMenu</include>
 				</content>
 			</control>
 		</control>
