@@ -20,7 +20,8 @@
 	<include file="View_501_Banner.xml" />
 	<include file="View_502_FanArt.xml" />
 	<include file="Variables.xml" />
-    <include file="../../ExitMenu.xml" />
+    <include file="../../ExitMenuAdd.xml" />
+    <include file="../../ExitMenuReplacement.xml" />
 	<constant name="DepthDialog">0.50</constant>
 	<constant name="DepthDialog+">0.52</constant>
 	<constant name="DepthDialog-">0.48</constant>

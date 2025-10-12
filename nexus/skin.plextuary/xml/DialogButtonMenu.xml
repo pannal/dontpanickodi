@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
-	<defaultcontrol>9000</defaultcontrol>
+	<defaultcontrol>8999</defaultcontrol>
 	<include>Animation_DialogPopupOpenClose</include>
 	<controls>
 		<control type="group">
@@ -14,8 +14,15 @@
 				<param name="header_label" value="$LOCALIZE[31072]" />
 				<param name="header_id" value="2" />
 			</include>
+            <control type="panel" id="8999">
+                <allowhiddenfocus>true</allowhiddenfocus>
+                <content>plugin://script.skinvariables/?info=get_file_exists&amp;window_prop=CustomMenu&amp;window_id=Home&amp;&amp;special://home/addons/ExitMenuAdd.xml&amp;&amp;special://home/addons/ExitMenuReplacement.xml</content>
+                <onfocus condition="String.IsEmpty(Window(10000).Property(CustomMenu.1))">SetFocus(9000)</onfocus>
+                <onfocus condition="!String.IsEmpty(Window(10000).Property(CustomMenu.1))">SetFocus(9001)</onfocus>
+            </control>
 			<control type="panel" id="9000">
 				<include>ButtonMenuList</include>
+                <visible>String.IsEmpty(Window(10000).Property(CustomMenu.1))</visible>
 				<content>
 					<item>
 						<label>$LOCALIZE[13012]</label>
@@ -86,7 +93,14 @@
 						<onclick>InhibitIdleShutdown(false)</onclick>
 						<visible>System.HasShutdown + System.IdleShutdownInhibited</visible>
 					</item>
-                    <include>CustomMenu</include>
+                    <include>ExitMenuAdd</include>
+				</content>
+			</control>
+            <control type="panel" id="9001">
+				<include>ButtonMenuList</include>
+                <visible>!String.IsEmpty(Window(10000).Property(CustomMenu.1))</visible>
+				<content>
+                    <include>ExitMenuReplacement</include>
 				</content>
 			</control>
 		</control>
