@@ -1,2 +1,4 @@
 .idea
 */**/.gitignore
+*/skin.*/media
+!*/skin.*/media/*.xbt
