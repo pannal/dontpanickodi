@@ -8,11 +8,14 @@ The biggest impact this 99.9%-like-Estuary skin has is that it doesn't show the 
 There are some feature additions as well, though, and we have specific builds for CoreELEC and CoreELEC CPM, with more detailed PlayerProcessInfo implementations.
 
 ### Custom Exit Menu
-Plextuary will read includes from `.kodi/addons/ExitMenuAdd.xml` or `.kodi/addons/ExitMenuReplacement.xml`. With the latter completely replacing the supplied Exit Kodi menu with the contents of the XML.
+#### Kodi 20 and above
+* Enable the skin setting "Exit Menu customization"
+* Requires the `script.skinvariables` (Skin Variables) plugin to be installed (installation will be offered by Kodi once you visit the exit menu with the skin setting enabled) 
+* Plextuary will read includes from `.kodi/addons/ExitMenuAdd.xml` or `.kodi/addons/ExitMenuReplacement.xml`. With the latter completely replacing the supplied Exit Kodi menu with the contents of the XML
 
-When you want to use `.kodi/addons/ExitMenuReplacement.xml` (only available with Kodi Nexus (20) or above), this skin requires the `script.skinvariables` (Skin Variables) plugin to be installed.
-
-For anything below Nexus (Skin Variables wasn't mature enough, yet), or without Skin Variables installed, only `ExitMenuAdd.xml` is considered.
+#### Kodi 18 and 19
+* Enable the skin setting "Exit Menu customization"
+* Plextuary will read includes from `.kodi/addons/ExitMenuAdd.xml`
 
 Layout of `ExitMenuAdd.xml`:
 ```

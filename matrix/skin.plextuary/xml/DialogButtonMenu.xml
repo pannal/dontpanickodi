@@ -86,7 +86,7 @@
 						<onclick>InhibitIdleShutdown(false)</onclick>
 						<visible>System.HasShutdown + System.IdleShutdownInhibited</visible>
 					</item>
-                    <include>ExitMenuAdd</include>
+                    <include condition="Skin.HasSetting(CustomExitMenu)">ExitMenuAdd</include>
 				</content>
 			</control>
 		</control>

@@ -14,12 +14,7 @@
 				<param name="header_label" value="$LOCALIZE[31072]" />
 				<param name="header_id" value="2" />
 			</include>
-            <control type="panel" id="8999">
-                <allowhiddenfocus>true</allowhiddenfocus>
-                <content>plugin://script.skinvariables/?info=get_file_exists&amp;window_prop=CustomMenu&amp;window_id=Home&amp;&amp;special://home/addons/ExitMenuAdd.xml&amp;&amp;special://home/addons/ExitMenuReplacement.xml</content>
-                <onfocus condition="String.IsEmpty(Window(10000).Property(CustomMenu.1))">SetFocus(9000)</onfocus>
-                <onfocus condition="!String.IsEmpty(Window(10000).Property(CustomMenu.1))">SetFocus(9001)</onfocus>
-            </control>
+            <include content="ExitMenuTest" condition="Skin.HasSetting(CustomExitMenu)" />
 			<control type="panel" id="9000">
 				<include>ButtonMenuList</include>
                 <visible>String.IsEmpty(Window(10000).Property(CustomMenu.1))</visible>
@@ -101,7 +96,7 @@
                         <onclick condition='System.PathExist("/storage/.kodi/addons/skin.estuary/bootfireos")'>System.ExecWait("/storage/.kodi/addons/skin.estuary/bootfireos")</onclick>
                         <visible>System.PathExist("/storage/.kodi/userdata/bootfireos") | System.PathExist("/storage/.kodi/addons/skin.plextuary/bootfireos") | System.PathExist("/storage/.kodi/addons/skin.estuary/bootfireos")</visible>
                     </item>
-                    <include>ExitMenuAdd</include>
+                    <include condition="Skin.HasSetting(CustomExitMenu)">ExitMenuAdd</include>
 				</content>
 			</control>
             <control type="panel" id="9001">
