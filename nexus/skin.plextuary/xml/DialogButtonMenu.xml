@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
-	<defaultcontrol>8999</defaultcontrol>
+    <onload condition="String.IsEmpty(Window(10000).Property(CustomMenu.1))">SetFocus(9000)</onload>
+    <onload condition="!String.IsEmpty(Window(10000).Property(CustomMenu.1))">SetFocus(9001)</onload>
 	<include>Animation_DialogPopupOpenClose</include>
 	<controls>
 		<control type="group">
@@ -14,7 +15,9 @@
 				<param name="header_label" value="$LOCALIZE[31072]" />
 				<param name="header_id" value="2" />
 			</include>
-            <include content="ExitMenuTest" condition="Skin.HasSetting(CustomExitMenu)" />
+            <control type="panel" id="8999">
+                <include content="ExitMenuTest" condition="Skin.HasSetting(CustomExitMenu)" />
+            </control>
 			<control type="panel" id="9000">
 				<include>ButtonMenuList</include>
                 <visible>String.IsEmpty(Window(10000).Property(CustomMenu.1))</visible>

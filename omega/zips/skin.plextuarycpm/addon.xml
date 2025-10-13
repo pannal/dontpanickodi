@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="skin.plextuarycpm" version="4.0.0-pm4k1.10cpm.a14.4" name="Plextuary CoreELEC CPM" provider-name="phil65, pannal, Ichabod Fletchman">
+<addon id="skin.plextuarycpm" version="4.0.0-pm4k1.11cpm.a14.4" name="Plextuary CoreELEC CPM" provider-name="phil65, pannal, Ichabod Fletchman">
 	<requires>
 		<import addon="xbmc.gui" version="5.17.0"/>
 	</requires>

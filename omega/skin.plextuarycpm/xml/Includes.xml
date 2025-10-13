@@ -24,12 +24,7 @@
     <include file="../../ExitMenuAdd.xml" />
     <include file="../../ExitMenuReplacement.xml" />
     <include name="ExitMenuTest">
-        <control type="panel" id="8999">
-            <allowhiddenfocus>true</allowhiddenfocus>
-            <content>plugin://script.skinvariables/?info=get_file_exists&amp;window_prop=CustomMenu&amp;window_id=Home&amp;&amp;special://home/addons/ExitMenuAdd.xml&amp;&amp;special://home/addons/ExitMenuReplacement.xml</content>
-            <onfocus condition="String.IsEmpty(Window(10000).Property(CustomMenu.1))">SetFocus(9000)</onfocus>
-            <onfocus condition="!String.IsEmpty(Window(10000).Property(CustomMenu.1))">SetFocus(9001)</onfocus>
-        </control>
+        <content>plugin://script.skinvariables/?info=get_file_exists&amp;window_prop=CustomMenu&amp;window_id=Home&amp;&amp;special://home/addons/ExitMenuAdd.xml&amp;&amp;special://home/addons/ExitMenuReplacement.xml</content>
     </include>
 	<constant name="DepthDialog">0.50</constant>
 	<constant name="DepthDialog+">0.52</constant>
