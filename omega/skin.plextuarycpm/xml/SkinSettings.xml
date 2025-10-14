@@ -112,7 +112,7 @@
 					<selected>Skin.HasSetting(showkodirestart)</selected>
 					<onclick>Skin.ToggleSetting(showkodirestart)</onclick>
 				</control>
-                <control type="radiobutton" id="709">
+                <control type="radiobutton" id="909">
 					<label>$LOCALIZE[32111]</label>
 					<include>DefaultSettingButton</include>
 					<selected>Skin.HasSetting(CustomExitMenu)</selected>
