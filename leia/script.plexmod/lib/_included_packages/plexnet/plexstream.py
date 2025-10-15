@@ -14,6 +14,8 @@ class PlexStream(plexobjects.PlexObject, AudioCodecMixin):
     TYPE_SUBTITLE = 3
     TYPE_LYRICS = 4
 
+    should_auto_sync = False
+
     streamTypeNames = (
         "Unknown", "VideoStream", "AudioStream", "SubtitleStream", "LyricsStream"
     )
@@ -40,6 +42,10 @@ class PlexStream(plexobjects.PlexObject, AudioCodecMixin):
         'ukr': "Ukrainian",
         'yid': "Yiddish"
     }
+
+    def __init__(self, data, initpath=None, server=None, container=None, part=None):
+        super(PlexStream, self).__init__(data, initpath, server, container)
+        self.part = part
 
     def reload(self):
         pass
@@ -112,19 +118,22 @@ class PlexStream(plexobjects.PlexObject, AudioCodecMixin):
 
         return self.SAFE_LANGUAGE_NAMES.get(code) or self.language or "Unknown"
 
-    def getSubtitlePath(self):
+    def getSubtitlePath(self, auto_sync=None):
         query = "?encoding=utf-8"
 
         if self.codec == "smi":
             query += "&format=srt"
 
+        if self.should_auto_sync and auto_sync in (True, None):
+            query += "&autoAdjustSubtitle=1"
+
         return self.key + query
 
-    def getSubtitleServerPath(self):
+    def getSubtitleServerPath(self, auto_sync=None):
         if not self.key:
             return None
 
-        return self.getServer().buildUrl(self.getSubtitlePath(), True)
+        return self.getServer().buildUrl(self.getSubtitlePath(auto_sync=auto_sync), True)
 
     @property
     def embedded(self):
@@ -152,7 +161,7 @@ class PlexStream(plexobjects.PlexObject, AudioCodecMixin):
         elif self.DOVIProfile == "8" and self.DOVIBLCompatID == "4":
             render = "dv p8.4/hlg"
         elif self.DOVIProfile == "7":
-            render = "dv p7"
+            render = "dv p7/hdr"
         elif self.DOVIProfile == "5":
             render = "dv p5"
         elif self.DOVIProfile:

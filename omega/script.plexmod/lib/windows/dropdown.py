@@ -59,18 +59,14 @@ class DropdownDialog(kodigui.BaseDialog):
         self.setProperty('header', self.header)
         self.optionsList = kodigui.ManagedControlList(self, self.OPTIONS_LIST_ID, 14)
         self.showOptions()
-        height = min(self.optionHeight * 14, len(self.options) * self.optionHeight) + 80
-        ol_height = height - 80
+        height = min(self.optionHeight * 14, len(self.options) * self.optionHeight) + util.vscalei(86)
+        ol_height = height - util.vscalei(86)
         y = self.y
 
         if isinstance(y, int) and y + height > self.height:
             while y + height > self.height and y > 0:
                 y -= self.optionHeight
             y = max(0, y)
-
-            ol_height = height - 80
-            if self.header:
-                ol_height -= util.vscalei(86)
 
         shadowControl = self.getControl(110)
         if self.header:
@@ -83,7 +79,9 @@ class DropdownDialog(kodigui.BaseDialog):
         if y == "middle":
             y = util.vperci(util.vscale(ol_height))
 
-        self.getControl(100).setPosition(self.x, y)
+        self.getControl(100).setPosition(self.x, int(y))
+        if self.header:
+            shadowControl.setPosition(-60, util.vscalei(-106))
 
         self.setProperty('show', '1')
         self.setProperty('close.direction', self.closeDirection)
@@ -129,7 +127,7 @@ class DropdownDialog(kodigui.BaseDialog):
     def playbackSessionEnded(self, **kwargs):
         self.doClose()
 
-    def doClose(self):
+    def doClose(self, **kw):
         if self.closeOnPlaybackEnded:
             from lib import player
             player.PLAYER.off('session.ended', self.playbackSessionEnded)
@@ -214,7 +212,7 @@ class DropdownHeaderDialog(DropdownDialog):
 def showDropdown(
     options, pos=None,
     pos_is_bottom=False,
-    close_direction='top',
+    close_direction='left',
     set_dropdown_prop=True,
     with_indicator=False,
     suboption_callback=None,

@@ -45,7 +45,10 @@ class PlexHostsManager(object):
     def hadHosts(self):
         return bool(self._orig_hosts)
 
-    def newHosts(self, hosts, source="stored"):
+    def getOrigHosts(self):
+        return self._orig_hosts or {}
+
+    def newHosts(self, hosts, source="stored", force_mapping=None):
         """
         hosts should be a list of plex.direct connection uri's
         """
@@ -53,7 +56,8 @@ class PlexHostsManager(object):
             parsed = urlparse(address)
             ip = parsePlexDirectHost(parsed.hostname)
             # ignore docker V4 hosts
-            if util.addonSettings.ignoreDockerV4 and ":" not in ip and IPv4Address(text_type(ip)) in DOCKER_NETWORK:
+            if (util.addonSettings.ignoreDockerV4 and ":" not in ip and IPv4Address(text_type(ip)) in DOCKER_NETWORK
+                    and (force_mapping is None or force_mapping != address)):
                 util.DEBUG_LOG("Ignoring plex.direct local {} Docker IPv4 address: {}", source, parsed.hostname)
                 continue
 

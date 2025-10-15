@@ -1,7 +1,7 @@
 {% extends "library_posters.xml.tpl" %}
 {% block content %}
 <control type="group" id="50">
-    <animation effect="slide" time="200" end="0,{{ vscale(-115, negpos=True) }}" tween="quadratic" easing="out" condition="Integer.IsGreater(Container(101).ListItem.Property(index),5)">Conditional</animation>
+    <animation effect="slide" time="200" end="0,{{ vscale(-115, negpos=True) }}" tween="quadratic" easing="out" condition="Integer.IsGreater(Container(101).ListItem.Property(index),5) + String.IsEmpty(Window.Property(content.filling))">Conditional</animation>
     <posx>0</posx>
     <posy>{{ vscale(135) }}</posy>
     <defaultcontrol>101</defaultcontrol>
@@ -23,9 +23,9 @@
             <usecontrolcoords>true</usecontrolcoords>
 
             {% with attr = {"width": 126, "height": 100} & template = "includes/themed_button.xml.tpl" & hitrect = {"x": 20, "y": 20, "w": 86, "h": 60} %}
-                {% include template with name="play" & id=301 & visible="!String.IsEqual(Window(10000).Property(script.plex.item.type),collection) | String.IsEqual(Window.Property(media),collection)" %}
-                {% include template with name="shuffle" & id=302 & visible="!String.IsEqual(Window(10000).Property(script.plex.item.type),collection) | String.IsEqual(Window.Property(media),collection)" %}
-                {% include template with name="more" & id=303 & visible="String.IsEmpty(Window.Property(no.options)) | Player.HasAudio" %}
+                {% include template with name="play" & id=301 & visible="String.IsEmpty(Window.Property(disable_playback)) + [!String.IsEqual(Window(10000).Property(script.plex.item.type),collection) | String.IsEqual(Window.Property(media),collection)]" %}
+                {% include template with name="shuffle" & id=302 & visible="String.IsEmpty(Window.Property(disable_playback)) + [!String.IsEqual(Window(10000).Property(script.plex.item.type),collection) | String.IsEqual(Window.Property(media),collection)]" %}
+                {% include template with name="more" & id=303 & visible="String.IsEmpty(Window.Property(disable_playback)) + [String.IsEmpty(Window.Property(no.options)) | Player.HasAudio]" %}
                 {% include template with name="chapters" & id=304 %}
             {% endwith %}
 
@@ -108,7 +108,7 @@
                             <label>$INFO[ListItem.Label]</label>
                         </control>
                         <control type="label">
-                            <visible>!String.IsEmpty(ListItem.Property(year))</visible>
+                            <visible>!String.IsEmpty(ListItem.Property(subtitle))</visible>
                             <scroll>false</scroll>
                             <posx>0</posx>
                             <posy>{{ vscale(396) }}</posy>
@@ -116,7 +116,19 @@
                             <height>{{ vscale(72) }}</height>
                             <font>font10</font>
                             <align>center</align>
-                            <textcolor>FFFFFFFF</textcolor>
+                            <textcolor>A0FFFFFF</textcolor>
+                            <label>$INFO[ListItem.Property(subtitle)]</label>
+                        </control>
+                        <control type="label">
+                            <visible>!String.IsEmpty(ListItem.Property(year)) + String.IsEmpty(ListItem.Property(subtitle))</visible>
+                            <scroll>false</scroll>
+                            <posx>0</posx>
+                            <posy>{{ vscale(396) }}</posy>
+                            <width>244</width>
+                            <height>{{ vscale(72) }}</height>
+                            <font>font10</font>
+                            <align>center</align>
+                            <textcolor>A0FFFFFF</textcolor>
                             <label>$INFO[ListItem.Property(year)]</label>
                         </control>
                     </control>
@@ -193,7 +205,7 @@
                                 <label>$INFO[ListItem.Label]</label>
                             </control>
                             <control type="label">
-                                <visible>!String.IsEmpty(ListItem.Property(year))</visible>
+                                <visible>!String.IsEmpty(ListItem.Property(subtitle))</visible>
                                 <scroll>false</scroll>
                                 <posx>0</posx>
                                 <posy>{{ vscale(396) }}</posy>
@@ -201,7 +213,19 @@
                                 <height>{{ vscale(72) }}</height>
                                 <font>font10</font>
                                 <align>center</align>
-                                <textcolor>FFFFFFFF</textcolor>
+                                <textcolor>A0FFFFFF</textcolor>
+                                <label>$INFO[ListItem.Property(subtitle)]</label>
+                            </control>
+                            <control type="label">
+                                <visible>!String.IsEmpty(ListItem.Property(year)) + String.IsEmpty(ListItem.Property(subtitle))</visible>
+                                <scroll>false</scroll>
+                                <posx>0</posx>
+                                <posy>{{ vscale(396) }}</posy>
+                                <width>244</width>
+                                <height>{{ vscale(72) }}</height>
+                                <font>font10</font>
+                                <align>center</align>
+                                <textcolor>A0FFFFFF</textcolor>
                                 <label>$INFO[ListItem.Property(year)]</label>
                             </control>
                         </control>
