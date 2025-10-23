@@ -1229,14 +1229,6 @@ msgctxt "#32067"
 msgid "L5 Active Offsets"
 msgstr ""
 
-msgctxt "#32100"
-msgid "Show backdrop on pause"
-msgstr ""
-
-msgctxt "#32101"
-msgid "Show Restart Kodi option in exit menu"
-msgstr ""
-
 #: /xml/Font.xml
 msgctxt "#32102"
 msgid "Open Sans (needs McFontFace)"
@@ -1284,4 +1276,12 @@ msgstr ""
 
 msgctxt "#32111"
 msgid "Exit Menu customization"
+msgstr ""
+
+msgctxt "#32112"
+msgid "Show backdrop on pause"
+msgstr ""
+
+msgctxt "#32113"
+msgid "Show Restart Kodi option in exit menu"
 msgstr ""

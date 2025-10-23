@@ -107,7 +107,7 @@
 					<label2>$VAR[PPICodecLogosLabel]</label2>
 				</control>
 				<control type="radiobutton" id="908">
-					<label>$LOCALIZE[32101]</label>
+					<label>$LOCALIZE[32113]</label>
 					<include>DefaultSettingButton</include>
 					<selected>Skin.HasSetting(showkodirestart)</selected>
 					<onclick>Skin.ToggleSetting(showkodirestart)</onclick>
@@ -340,6 +340,12 @@
 					<include>DefaultSettingButton</include>
 					<onclick>Skin.SetNumeric(OSDAutoCloseTime)</onclick>
 					<enable>Skin.HasSetting(OSDAutoClose)</enable>
+				</control>
+                <control type="radiobutton" id="1625">
+					<label>$LOCALIZE[32112]</label>
+					<include>DefaultSettingButton</include>
+					<selected>Skin.HasSetting(OSDBackgroundPause)</selected>
+					<onclick>Skin.ToggleSetting(OSDBackgroundPause)</onclick>
 				</control>
 			</control>
 			<control type="image">
