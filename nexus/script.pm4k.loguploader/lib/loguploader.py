@@ -118,7 +118,7 @@ class Main():
             if succes:
                 content = self.cleanLog(data)
                 dialog = xbmcgui.Dialog()
-                confirm = dialog.yesnocustom(ADDONNAME, LANGUAGE(32040) % name, nolabel=LANGUAGE(32041), yeslabel=LANGUAGE(32042), customlabel="")
+                confirm = dialog.yesnocustom(ADDONNAME, LANGUAGE(32040) % name, nolabel=LANGUAGE(32041), yeslabel=LANGUAGE(32042), customlabel="", defaultbutton=xbmcgui.DLG_YESNO_YES_BTN)
                 if confirm == 1:
                     succes, data = self.postLog(content)
                     if succes:
