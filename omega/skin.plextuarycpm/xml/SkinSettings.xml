@@ -84,6 +84,13 @@
 					<onclick condition="Skin.HasSetting(osd.usecenterCodecStartupLogos)">Skin.Reset(osd.usecenterCodecStartupLogos)</onclick>
 					<label2>$VAR[OSDCodecLogosStartupLabel]</label2>
 				</control>
+                <control type="button" id="711">
+					<label>- $LOCALIZE[32068]</label>
+					<label2>$VAR[OSDCodecLogosStartupDelay]</label2>
+					<include>DefaultSettingButton</include>
+					<onclick>Skin.SelectBool(32068, 32075|codecld_slowest, 32074|codecld_slower, 32073|codecld_slow, 32069|codecld_default, 32070|codecld_fast, 32071|codecld_faster, 32072|codecld_fastest)</onclick>
+					<enable>Skin.HasSetting(osd.useleftCodecStartupLogos) | Skin.HasSetting(osd.usecenterCodecStartupLogos) | Skin.HasSetting(osd.userightCodecStartupLogos)</enable>
+				</control>
 				<control type="button" id="709">
 					<label>$LOCALIZE[32060]</label>
 					<include>DefaultSettingButton</include>

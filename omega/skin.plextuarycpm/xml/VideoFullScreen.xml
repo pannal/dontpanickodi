@@ -578,10 +578,9 @@
             <visible>Skin.HasSetting(osd.userightCodecStartupLogos)</visible>
             <visible>String.IsEqual(Player.Process(av.change),1)</visible>
             <left>1675</left>
-            <animation type="Hidden">
-                <effect type="fade" start="100" end="0" delay="3000" time="500" tween="sine" />
-            </animation>
-			
+
+            <include content="CodecLogoFade" />
+
             <include content="Video_Audio_Background_Flag">
                 <param name="groupId">46</param>
                 <param name="imageId">47</param>

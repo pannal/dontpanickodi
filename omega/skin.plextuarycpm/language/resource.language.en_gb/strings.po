@@ -1229,6 +1229,38 @@ msgctxt "#32067"
 msgid "L5 Active Offsets"
 msgstr ""
 
+msgctxt "#32068"
+msgid "hide speed"
+msgstr ""
+
+msgctxt "#32069"
+msgid "Default (3000ms)"
+msgstr ""
+
+msgctxt "#32070"
+msgid "Fast (1500ms)"
+msgstr ""
+
+msgctxt "#32071"
+msgid "Faster (1000ms)"
+msgstr ""
+
+msgctxt "#32072"
+msgid "Fastest (500ms)"
+msgstr ""
+
+msgctxt "#32073"
+msgid "Slow (4500ms)"
+msgstr ""
+
+msgctxt "#32074"
+msgid "Slower (6000ms)"
+msgstr ""
+
+msgctxt "#32075"
+msgid "Slowest (8000ms)"
+msgstr ""
+
 #: /xml/Font.xml
 msgctxt "#32102"
 msgid "Open Sans (needs McFontFace)"

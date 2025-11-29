@@ -795,6 +795,17 @@
         <value>$LOCALIZE[591]</value>
     </variable>
 
+    <variable name="OSDCodecLogosStartupDelay">
+        <value condition="Skin.HasSetting(codecld_default)">$LOCALIZE[32069]</value>
+		<value condition="Skin.HasSetting(codecld_fast)">$LOCALIZE[32070]</value>
+        <value condition="Skin.HasSetting(codecld_faster)">$LOCALIZE[32071]</value>
+        <value condition="Skin.HasSetting(codecld_fastest)">$LOCALIZE[32072]</value>
+        <value condition="Skin.HasSetting(codecld_slow)">$LOCALIZE[32073]</value>
+        <value condition="Skin.HasSetting(codecld_slower)">$LOCALIZE[32074]</value>
+        <value condition="Skin.HasSetting(codecld_slowest)">$LOCALIZE[32075]</value>
+		<value>$LOCALIZE[32069]</value>
+	</variable>
+
     <variable name="OSDCodecLogosLabel">
         <value condition="Skin.HasSetting(osd.useleftCodecLogos)">$LOCALIZE[32057]</value>
         <value condition="Skin.HasSetting(osd.usecenterCodecLogos)">$LOCALIZE[32058]</value>
