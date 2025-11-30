@@ -78,9 +78,8 @@
             <visible>Skin.HasSetting(osd.useleftCodecStartupLogos)</visible>
             <visible>String.IsEqual(Player.Process(av.change),1)</visible>
             <left>35</left>
-            <animation type="Hidden">
-                <effect type="fade" start="100" end="0" delay="3000" time="500" tween="sine" />
-            </animation>
+
+            <include content="CodecLogoFade" />
 			
             <include content="Video_Audio_Background_Flag">
                 <param name="groupId">46</param>
@@ -328,9 +327,8 @@
             <visible>Skin.HasSetting(osd.usecenterCodecStartupLogos)</visible>
             <visible>String.IsEqual(Player.Process(av.change),1)</visible>
             <left>855</left>
-            <animation type="Hidden">
-                <effect type="fade" start="100" end="0" delay="3000" time="500" tween="sine" />
-            </animation>
+
+            <include content="CodecLogoFade" />
 			
             <include content="Video_Audio_Background_Flag">
                 <param name="groupId">46</param>
