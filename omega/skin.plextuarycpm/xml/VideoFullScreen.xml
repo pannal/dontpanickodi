@@ -76,10 +76,15 @@
         <control type="group" id="2">
             <depth>DepthOSD+</depth>
             <visible>Skin.HasSetting(osd.useleftCodecStartupLogos)</visible>
-            <visible>!String.IsEmpty(Window(10000).Property(script.plex.playback_started))</visible>
+            <visible>String.IsEmpty(Window(10000).Property(script.plex.is_active)) | [!String.IsEmpty(Window(10000).Property(script.plex.is_active)) + !String.IsEmpty(Window(10000).Property(script.plex.playback_started))]</visible>
             <left>35</left>
 
-            <include content="CodecLogoFade" />
+            <include content="CodecLogoFade" condition="!String.IsEmpty(Window(10000).Property(script.plex.is_active))">
+                <param name="event" value="Hidden" />
+            </include>
+            <include content="CodecLogoFade" condition="String.IsEmpty(Window(10000).Property(script.plex.is_active))">
+                <param name="event" value="WindowOpen" />
+            </include>
 			
             <include content="Video_Audio_Background_Flag">
                 <param name="groupId">46</param>
@@ -325,10 +330,15 @@
         <control type="group" id="3">
             <depth>DepthOSD+</depth>
             <visible>Skin.HasSetting(osd.usecenterCodecStartupLogos)</visible>
-            <visible>!String.IsEmpty(Window(10000).Property(script.plex.playback_started))</visible>
+            <visible>String.IsEmpty(Window(10000).Property(script.plex.is_active)) | [!String.IsEmpty(Window(10000).Property(script.plex.is_active)) + !String.IsEmpty(Window(10000).Property(script.plex.playback_started))]</visible>
             <left>855</left>
 
-            <include content="CodecLogoFade" />
+            <include content="CodecLogoFade" condition="!String.IsEmpty(Window(10000).Property(script.plex.is_active))">
+                <param name="event" value="Hidden" />
+            </include>
+            <include content="CodecLogoFade" condition="String.IsEmpty(Window(10000).Property(script.plex.is_active))">
+                <param name="event" value="WindowOpen" />
+            </include>
 			
             <include content="Video_Audio_Background_Flag">
                 <param name="groupId">46</param>
@@ -574,10 +584,15 @@
         <control type="group" id="4">
             <depth>DepthOSD+</depth>
             <visible>Skin.HasSetting(osd.userightCodecStartupLogos)</visible>
-            <visible>!String.IsEmpty(Window(10000).Property(script.plex.playback_started))</visible>
+            <visible>String.IsEmpty(Window(10000).Property(script.plex.is_active)) | [!String.IsEmpty(Window(10000).Property(script.plex.is_active)) + !String.IsEmpty(Window(10000).Property(script.plex.playback_started))]</visible>
             <left>1675</left>
 
-            <include content="CodecLogoFade" />
+            <include content="CodecLogoFade" condition="!String.IsEmpty(Window(10000).Property(script.plex.is_active))">
+                <param name="event" value="Hidden" />
+            </include>
+            <include content="CodecLogoFade" condition="String.IsEmpty(Window(10000).Property(script.plex.is_active))">
+                <param name="event" value="WindowOpen" />
+            </include>
 
             <include content="Video_Audio_Background_Flag">
                 <param name="groupId">46</param>
