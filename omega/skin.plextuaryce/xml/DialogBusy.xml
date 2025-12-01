@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <window>
-	<animation effect="fade" end="100" time="560">WindowOpen</animation>
-	<animation effect="fade" start="100" end="0" time="240">WindowClose</animation>
+	<animation effect="fade" end="100" time="560" condition="String.IsEmpty(Window(10000).Property(script.plex.ignore_spinner))">WindowOpen</animation>
+	<animation effect="fade" start="100" end="0" time="240" condition="String.IsEmpty(Window(10000).Property(script.plex.ignore_spinner))">WindowClose</animation>
 	<controls>
 		<control type="group">
-			<visible>String.IsEmpty(Window(Home).Property(script.cinemavision.running))</visible>
-			<animation effect="fade" time="400">VisibleChange</animation>
-			<visible>!Window.IsActive(startup) + !Player.Caching + String.IsEmpty(Window(10000).Property(script.plex.theme_playing)) + String.IsEmpty(Window(10000).Property(script.plex.ignore_spinner))</visible>
+			<visible>String.IsEmpty(Window(Home).Property(script.cinemavision.running)) + String.IsEmpty(Window(10000).Property(script.plex.ignore_spinner))</visible>
+			<animation effect="fade" time="400" condition="String.IsEmpty(Window(10000).Property(script.plex.ignore_spinner))">VisibleChange</animation>
+			<visible>!Window.IsActive(startup) + !Player.Caching + String.IsEmpty(Window(10000).Property(script.plex.theme_playing))</visible>
 			<control type="image">
 				<texture>colors/black.png</texture>
 				<include>FullScreenDimensions</include>
