@@ -76,7 +76,7 @@
         <control type="group" id="2">
             <depth>DepthOSD+</depth>
             <visible>Skin.HasSetting(osd.useleftCodecStartupLogos)</visible>
-            <visible>String.IsEmpty(Window(10000).Property(script.plex.is_active)) | [!String.IsEmpty(Window(10000).Property(script.plex.is_active)) + !String.IsEmpty(Window(10000).Property(script.plex.playback_started))]</visible>
+            <visible>String.IsEmpty(Window(10000).Property(script.plex.is_active)) | [!String.IsEmpty(Window(10000).Property(script.plex.is_active)) + !String.IsEmpty(Window(10000).Property(script.plex.playback_started_event))]</visible>
             <left>35</left>
 
             <include content="CodecLogoFade" condition="!String.IsEmpty(Window(10000).Property(script.plex.is_active))">
@@ -330,7 +330,7 @@
         <control type="group" id="3">
             <depth>DepthOSD+</depth>
             <visible>Skin.HasSetting(osd.usecenterCodecStartupLogos)</visible>
-            <visible>String.IsEmpty(Window(10000).Property(script.plex.is_active)) | [!String.IsEmpty(Window(10000).Property(script.plex.is_active)) + !String.IsEmpty(Window(10000).Property(script.plex.playback_started))]</visible>
+            <visible>String.IsEmpty(Window(10000).Property(script.plex.is_active)) | [!String.IsEmpty(Window(10000).Property(script.plex.is_active)) + !String.IsEmpty(Window(10000).Property(script.plex.playback_started_event))]</visible>
             <left>855</left>
 
             <include content="CodecLogoFade" condition="!String.IsEmpty(Window(10000).Property(script.plex.is_active))">
@@ -584,7 +584,7 @@
         <control type="group" id="4">
             <depth>DepthOSD+</depth>
             <visible>Skin.HasSetting(osd.userightCodecStartupLogos)</visible>
-            <visible>String.IsEmpty(Window(10000).Property(script.plex.is_active)) | [!String.IsEmpty(Window(10000).Property(script.plex.is_active)) + !String.IsEmpty(Window(10000).Property(script.plex.playback_started))]</visible>
+            <visible>String.IsEmpty(Window(10000).Property(script.plex.is_active)) | [!String.IsEmpty(Window(10000).Property(script.plex.is_active)) + !String.IsEmpty(Window(10000).Property(script.plex.playback_started_event))]</visible>
             <left>1675</left>
 
             <include content="CodecLogoFade" condition="!String.IsEmpty(Window(10000).Property(script.plex.is_active))">
