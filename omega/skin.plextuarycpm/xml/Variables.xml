@@ -775,7 +775,13 @@
 		<value condition="String.Contains(VideoPlayer.AudioCodec,mp2)">MP2</value>
 		<value condition="String.Contains(VideoPlayer.AudioCodec,mp1)">MP1</value>
 		<value condition="String.Contains(VideoPlayer.AudioCodec,vorbis)">Vorbis</value>
-		<value condition="String.Contains(VideoPlayer.AudioCodec,aac)">AAC</value>
+        <value condition="String.Contains(VideoPlayer.AudioCodec,aac)">AAC</value>
+        <value condition="String.Contains(VideoPlayer.AudioCodec,aac_latm)">AAC</value>
+        <value condition="String.Contains(VideoPlayer.AudioCodec,aac_lc)">AAC</value>
+        <value condition="String.Contains(VideoPlayer.AudioCodec,he_aac)">AAC</value>
+        <value condition="String.Contains(VideoPlayer.AudioCodec,he_aac_v2)">AAC</value>
+        <value condition="String.Contains(VideoPlayer.AudioCodec,aac_ssr)">AAC</value>
+        <value condition="String.Contains(VideoPlayer.AudioCodec,aac_ltp)">AAC</value>
 		<value condition="String.Contains(VideoPlayer.AudioCodec,wmav2)">WMA</value>
 		<value condition="String.Contains(VideoPlayer.AudioCodec,wmapro)">WMA Pro</value>
 		<value condition="String.Contains(VideoPlayer.AudioCodec,pcm) | String.IsEqual(VideoPlayer.AudioCodec,pcm_bluray) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s16le) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s24le)">PCM</value>
@@ -903,6 +909,11 @@
     <variable name="AudioCodecVar">
         <value condition="String.IsEqual(VideoPlayer.AudioCodec,aac)">AAC</value>
         <value condition="String.IsEqual(VideoPlayer.AudioCodec,aac_latm)">AAC</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,aac_lc)">AAC</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,he_aac)">AAC</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,he_aac_v2)">AAC</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,aac_ssr)">AAC</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,aac_ltp)">AAC</value>
         <value condition="String.IsEqual(VideoPlayer.AudioCodec,ac3)">Dolby Digital</value>
         <value condition="String.IsEqual(VideoPlayer.AudioCodec,aif)">AIFF</value>
         <value condition="String.IsEqual(VideoPlayer.AudioCodec,aifc)">AIFF</value>
