@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="skin.plextuarycpm" version="4.0.0-pm4k1.14cpm.a14.12" name="Plextuary CE Custom Builds" provider-name="phil65, pannal, Ichabod Fletchman">
+<addon id="skin.plextuarycpm" version="4.0.0-pm4k1.14cpm.a14.13" name="Plextuary CE Custom Builds" provider-name="phil65, pannal, Ichabod Fletchman">
 	<requires>
 		<import addon="xbmc.gui" version="5.17.0"/>
 	</requires>
@@ -31,6 +31,6 @@
 			<screenshot>resources/screenshot-08.jpg</screenshot>
 		</assets>
 		<summary lang="en_GB">Plextuary skin by phil65, pannal. (Kodi&apos;s default skin modded for PM4K). Specifically for CoreELEC custom builds with extended PlayerProcessInfo (CPM A14, U3k, avdvplus, p3i)</summary>
-		<description lang="en_GB">Plextuary is the default skin for Kodi 17.0 and above. It attempts to be easy for first time Kodi users to understand and use.</description>
+		<description lang="en_GB">Plextuary skin by phil65, pannal. (Kodi&apos;s default skin modded for PM4K). Specifically for CoreELEC custom builds with extended PlayerProcessInfo (CPM A14, U3k, avdvplus, p3i)</description>
 	</extension>
 </addon>

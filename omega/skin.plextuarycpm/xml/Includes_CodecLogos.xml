@@ -2454,40 +2454,92 @@
         </definition>
     </include>
 
-    <include name="CodecLogoFade">
-        <param name="event" />
+    <include name="CodecLogoFadeDefault">
         <definition>
-            <animation type="$PARAM[event]" condition="Skin.HasSetting(codecld_slowest)">
+            <animation type="WindowOpen" condition="Skin.HasSetting(codecld_slowest)">
                 <effect type="fade" start="0" end="100" time="300" />
                 <effect type="fade" start="100" end="0" delay="8000" time="500" tween="sine" />
             </animation>
-            <animation type="$PARAM[event]" condition="Skin.HasSetting(codecld_slower)">
+            <animation type="WindowOpen" condition="Skin.HasSetting(codecld_slower)">
                 <effect type="fade" start="0" end="100" time="300" />
                 <effect type="fade" start="100" end="0" delay="6000" time="500" tween="sine" />
             </animation>
-            <animation type="$PARAM[event]" condition="Skin.HasSetting(codecld_slow)">
+            <animation type="WindowOpen" condition="Skin.HasSetting(codecld_slow)">
                 <effect type="fade" start="0" end="100" time="300" />
                 <effect type="fade" start="100" end="0" delay="4500" time="500" tween="sine" />
             </animation>
-            <animation type="$PARAM[event]" condition="Skin.HasSetting(codecld_default)">
+            <animation type="WindowOpen" condition="Skin.HasSetting(codecld_default)">
                 <effect type="fade" start="0" end="100" time="300" />
                 <effect type="fade" start="100" end="0" delay="3000" time="500" tween="sine" />
             </animation>
-            <animation type="$PARAM[event]" condition="Skin.HasSetting(codecld_fast)">
+            <animation type="WindowOpen" condition="Skin.HasSetting(codecld_fast)">
                 <effect type="fade" start="0" end="100" time="300" />
                 <effect type="fade" start="100" end="0" delay="1500" time="500" tween="sine" />
             </animation>
-            <animation type="$PARAM[event]" condition="Skin.HasSetting(codecld_faster)">
+            <animation type="WindowOpen" condition="Skin.HasSetting(codecld_faster)">
                 <effect type="fade" start="0" end="100" time="300" />
                 <effect type="fade" start="100" end="0" delay="1000" time="500" tween="sine" />
             </animation>
-            <animation type="$PARAM[event]" condition="Skin.HasSetting(codecld_fastest)">
+            <animation type="WindowOpen" condition="Skin.HasSetting(codecld_fastest)">
                 <effect type="fade" start="0" end="100" time="300" />
                 <effect type="fade" start="100" end="0" delay="500" time="500" tween="sine" />
             </animation>
             <!-- default -->
-            <animation type="$PARAM[event]" condition="!Skin.HasSetting(codecld_fastest) + !Skin.HasSetting(codecld_faster) + !Skin.HasSetting(codecld_fast) + !Skin.HasSetting(codecld_default) + !Skin.HasSetting(codecld_slow) + !Skin.HasSetting(codecld_slower) + !Skin.HasSetting(codecld_slowest)">
+            <animation type="WindowOpen" condition="!Skin.HasSetting(codecld_fastest) + !Skin.HasSetting(codecld_faster) + !Skin.HasSetting(codecld_fast) + !Skin.HasSetting(codecld_default) + !Skin.HasSetting(codecld_slow) + !Skin.HasSetting(codecld_slower) + !Skin.HasSetting(codecld_slowest)">
                 <effect type="fade" start="0" end="100" time="300" />
+                <effect type="fade" start="100" end="0" delay="3000" time="500" tween="sine" />
+            </animation>
+        </definition>
+    </include>
+    <include name="CodecLogoFade">
+        <definition>
+            <animation type="Visible" condition="Skin.HasSetting(codecld_slowest)">
+                <effect type="fade" start="0" end="100" time="300" reversible="false" />
+            </animation>
+            <animation type="Hidden" condition="Skin.HasSetting(codecld_slowest)">
+                <effect type="fade" start="100" end="0" delay="8000" time="500" tween="sine" />
+            </animation>
+            <animation type="Visible" condition="Skin.HasSetting(codecld_slower)">
+                <effect type="fade" start="0" end="100" time="300" reversible="false" />
+            </animation>
+            <animation type="Hidden" condition="Skin.HasSetting(codecld_slower)">
+                <effect type="fade" start="100" end="0" delay="6000" time="500" tween="sine" />
+            </animation>
+            <animation type="Visible" condition="Skin.HasSetting(codecld_slow)">
+                <effect type="fade" start="0" end="100" time="300" reversible="false" />
+            </animation>
+            <animation type="Hidden" condition="Skin.HasSetting(codecld_slow)">
+                <effect type="fade" start="100" end="0" delay="4500" time="500" tween="sine" />
+            </animation>
+            <animation type="Visible" condition="Skin.HasSetting(codecld_default)">
+                <effect type="fade" start="0" end="100" time="300" reversible="false" />
+            </animation>
+            <animation type="Hidden" condition="Skin.HasSetting(codecld_default)">
+                <effect type="fade" start="100" end="0" delay="3000" time="500" tween="sine" />
+            </animation>
+            <animation type="Visible" condition="Skin.HasSetting(codecld_fast)">
+                <effect type="fade" start="0" end="100" time="300" reversible="false" />
+            </animation>
+            <animation type="Hidden" condition="Skin.HasSetting(codecld_fast)">
+                <effect type="fade" start="100" end="0" delay="1500" time="500" tween="sine" />
+            </animation>
+            <animation type="Visible" condition="Skin.HasSetting(codecld_faster)">
+                <effect type="fade" start="0" end="100" time="300" reversible="false" />
+            </animation>
+            <animation type="Hidden" condition="Skin.HasSetting(codecld_faster)">
+                <effect type="fade" start="100" end="0" delay="1000" time="500" tween="sine" />
+            </animation>
+            <animation type="Visible" condition="Skin.HasSetting(codecld_fastest)">
+                <effect type="fade" start="0" end="100" time="300" reversible="false" />
+            </animation>
+            <animation type="Hidden" condition="Skin.HasSetting(codecld_fastest)">
+                <effect type="fade" start="100" end="0" delay="500" time="500" tween="sine" />
+            </animation>
+            <!-- default -->
+            <animation type="Visible" condition="!Skin.HasSetting(codecld_fastest) + !Skin.HasSetting(codecld_faster) + !Skin.HasSetting(codecld_fast) + !Skin.HasSetting(codecld_default) + !Skin.HasSetting(codecld_slow) + !Skin.HasSetting(codecld_slower) + !Skin.HasSetting(codecld_slowest)">
+                <effect type="fade" start="0" end="100" time="300" reversible="false" />
+            </animation>
+            <animation type="Hidden" condition="!Skin.HasSetting(codecld_fastest) + !Skin.HasSetting(codecld_faster) + !Skin.HasSetting(codecld_fast) + !Skin.HasSetting(codecld_default) + !Skin.HasSetting(codecld_slow) + !Skin.HasSetting(codecld_slower) + !Skin.HasSetting(codecld_slowest)">
                 <effect type="fade" start="100" end="0" delay="3000" time="500" tween="sine" />
             </animation>
         </definition>
