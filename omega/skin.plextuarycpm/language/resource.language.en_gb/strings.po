@@ -1337,3 +1337,7 @@ msgstr ""
 msgctxt "#32118"
 msgid "Decoding"
 msgstr ""
+
+msgctxt "#32119"
+msgid "VS10 & VP"
+msgstr ""

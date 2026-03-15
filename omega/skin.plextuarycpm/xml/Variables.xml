@@ -905,6 +905,11 @@
     <variable name="DVTunnelVar">
         <value condition="Integer.IsEqual(Player.Process(amlogic.vs10.mode.raw),1)">DV Tunnel</value>
     </variable>
+
+    <variable name="VideoVPModeVar">
+        <value condition="Integer.IsEqual(Player.Process(video.vpmode),0)">[COLOR tomato][/COLOR]</value>
+        <value condition="Integer.IsEqual(Player.Process(video.vpmode),1)">[COLOR palegreen][/COLOR]</value>
+    </variable>
 	
     <variable name="AudioCodecVar">
         <value condition="String.IsEqual(VideoPlayer.AudioCodec,aac)">AAC</value>

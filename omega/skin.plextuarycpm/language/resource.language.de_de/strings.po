@@ -1027,3 +1027,7 @@ msgstr "Farbige Titelzeilen im PlayerProcessInfo"
 msgctxt "#32067"
 msgid "L5 Active Offsets"
 msgstr "L5 Aktive Offsets"
+
+msgctxt "#32119"
+msgid "VS10 & VP"
+msgstr "VS10 & VP"
