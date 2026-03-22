@@ -187,7 +187,7 @@ class Main():
             content = lf.read()
             lf.close()
             if content:
-                if len(content) > 20000000:
+                if len(content) > 80000000:
                     log('file is too large')
                     return False, LANGUAGE(32505)
                 return True, content
