@@ -906,9 +906,24 @@
         <value condition="Integer.IsEqual(Player.Process(amlogic.vs10.mode.raw),1)">DV Tunnel</value>
     </variable>
 
+    <variable name="DualTrackVar">
+        <value condition="String.IsEqual(Player.Process(video.dovi.dual.track),DT-DL)">DT-DL</value>
+        <value condition="String.IsEqual(Player.Process(video.dovi.dual.track),ST-DL)">ST-DL</value>
+    </variable>
+
     <variable name="VideoVPModeVar">
         <value condition="Integer.IsEqual(Player.Process(video.vpmode),0)">[COLOR tomato][/COLOR]</value>
         <value condition="Integer.IsEqual(Player.Process(video.vpmode),1)">[COLOR palegreen][/COLOR]</value>
+    </variable>
+
+    <variable name="L5StateVar">
+        <value condition="Integer.IsEqual(Player.Process(video.dovi.l5.detect.state),0)">L5 ($LOCALIZE[32076])</value>
+        <value condition="Integer.IsEqual(Player.Process(video.dovi.l5.detect.state),1)">L5 (non-16:9 skip)</value>
+        <value condition="Integer.IsEqual(Player.Process(video.dovi.l5.detect.state),2)">L5 (IMAX skip)</value>
+        <value condition="Integer.IsEqual(Player.Process(video.dovi.l5.detect.state),3)">L5 ($LOCALIZE[32077])</value>
+        <value condition="Integer.IsEqual(Player.Process(video.dovi.l5.detect.state),4)">L5 ($LOCALIZE[32078])</value>
+        <value condition="Integer.IsEqual(Player.Process(video.dovi.l5.detect.state),5)">$LOCALIZE[32067]</value>
+        <value condition="Integer.IsEqual(Player.Process(video.dovi.l5.detect.state),6)">L5 ($LOCALIZE[32079])</value>
     </variable>
 	
     <variable name="AudioCodecVar">

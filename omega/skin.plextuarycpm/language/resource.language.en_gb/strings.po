@@ -1261,6 +1261,26 @@ msgctxt "#32075"
 msgid "Slowest (8000ms)"
 msgstr ""
 
+#: /xml/DialogPlayerProcessInfo.xml
+msgctxt "#32076"
+msgid "failed"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+msgctxt "#32077"
+msgid "detected"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+msgctxt "#32078"
+msgid "skipped"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+msgctxt "#32079"
+msgid "running"
+msgstr ""
+
 #: /xml/Font.xml
 msgctxt "#32102"
 msgid "Open Sans (needs McFontFace)"
