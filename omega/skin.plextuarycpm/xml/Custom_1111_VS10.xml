@@ -11,14 +11,14 @@
 			<include content="DialogBackgroundCommons">
 				<param name="width" value="600" />
 				<param name="height" value="80" />
-				<param name="header_label" value="$LOCALIZE[32065]" />
+				<param name="header_label" value="$LOCALIZE[31265]" />
 				<param name="header_id" value="2" />
 			</include>
 			<control type="panel" id="9000">
 				<include>ButtonMenuList</include>
 				<content>
 					<item>
-                        <label>$LOCALIZE[32064]</label>
+                        <label>$LOCALIZE[31264]</label>
                         <selected>Integer.IsEqual(Player.Process(amlogic.vs10.mode.raw),5) | [[Integer.IsEqual(Player.Process(amlogic.vs10.mode.raw),0) | Integer.IsEqual(Player.Process(amlogic.vs10.mode.raw),1)] + String.Contains(Player.Process(video.hdr.type),Dolby)]</selected>
                         <onclick>Action(vs10.original)</onclick>
                         <onclick>Dialog.Close(1111)</onclick>

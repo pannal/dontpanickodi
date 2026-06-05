@@ -792,10 +792,10 @@ msgstr "Videó forrás típus"
 #~ msgid "Player process info"
 #~ msgstr "Feldolgozási információ"
 
-msgctxt "#32100"
+msgctxt "#31300"
 msgid "Display mode"
 msgstr "Kijelző mód"
 
-msgctxt "#32101"
+msgctxt "#31301"
 msgid "EOTF & Gamut"
 msgstr "EOTF & Gamut"

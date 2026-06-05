@@ -956,408 +956,408 @@ msgid "Video source type"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
-msgctxt "#32100"
+msgctxt "#31300"
 msgid "Display mode"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
-msgctxt "#32101"
+msgctxt "#31301"
 msgid "EOTF & Gamut"
 msgstr ""
 
-msgctxt "#32000"
+msgctxt "#31200"
 msgid "Display mode"
 msgstr ""
 
-msgctxt "#32001"
+msgctxt "#31201"
 msgid "Video mode"
 msgstr ""
 
-msgctxt "#32002"
+msgctxt "#31202"
 msgid "Color space"
 msgstr ""
 
-msgctxt "#32003"
+msgctxt "#31203"
 msgid "Mb/s"
 msgstr ""
 
-msgctxt "#32004"
+msgctxt "#31204"
 msgid "Bit depth"
 msgstr ""
 
-msgctxt "#32005"
+msgctxt "#31205"
 msgid "Decoder"
 msgstr ""
 
-msgctxt "#32006"
+msgctxt "#31206"
 msgid "VS10 engine"
 msgstr ""
 
-msgctxt "#32007"
+msgctxt "#31207"
 msgid "More"
 msgstr ""
 
-msgctxt "#32008"
+msgctxt "#31208"
 msgid "Video queue"
 msgstr ""
 
-msgctxt "#32009"
+msgctxt "#31209"
 msgid "Video queue data"
 msgstr ""
 
-msgctxt "#32010"
+msgctxt "#31210"
 msgid "Audio queue"
 msgstr ""
 
-msgctxt "#32011"
+msgctxt "#31211"
 msgid "Audio queue data"
 msgstr ""
 
-msgctxt "#32012"
+msgctxt "#31212"
 msgid "Kb/s"
 msgstr ""
 
-msgctxt "#32013"
+msgctxt "#31213"
 msgid "Playback time"
 msgstr ""
 
-msgctxt "#32014"
+msgctxt "#31214"
 msgid "Processor"
 msgstr ""
 
-msgctxt "#32015"
+msgctxt "#31215"
 msgid "Metadata"
 msgstr ""
 
-msgctxt "#32016"
+msgctxt "#31216"
 msgid "Profile"
 msgstr ""
 
-msgctxt "#32017"
+msgctxt "#31217"
 msgid "Level"
 msgstr ""
 
-msgctxt "#32018"
+msgctxt "#31218"
 msgid "RPU"
 msgstr ""
 
-msgctxt "#32019"
+msgctxt "#31219"
 msgid "Base Layer"
 msgstr ""
 
-msgctxt "#32020"
+msgctxt "#31220"
 msgid "Enhancement Layer"
 msgstr ""
 
-msgctxt "#32021"
+msgctxt "#31221"
 msgid "Enhancement Layer Type"
 msgstr ""
 
-msgctxt "#32022"
+msgctxt "#31222"
 msgid "Metadata"
 msgstr ""
 
-msgctxt "#32023"
+msgctxt "#31223"
 msgid "Pixel format"
 msgstr ""
 
-msgctxt "#32024"
+msgctxt "#31224"
 msgid "Aspect ratio"
 msgstr ""
 
-msgctxt "#32025"
+msgctxt "#31225"
 msgid "HDR10 MDL"
 msgstr ""
 
-msgctxt "#32026"
+msgctxt "#31226"
 msgid "HDR10 MaxCLL/FALL"
 msgstr ""
 
-msgctxt "#32027"
+msgctxt "#31227"
 msgid "Media source"
 msgstr ""
 
-msgctxt "#32028"
+msgctxt "#31228"
 msgid "Unknown"
 msgstr ""
 
-msgctxt "#32029"
+msgctxt "#31229"
 msgid "On"
 msgstr ""
 
-msgctxt "#32030"
+msgctxt "#31230"
 msgid "Off"
 msgstr ""
 
-msgctxt "#32031"
+msgctxt "#31231"
 msgid "Deinterlacing"
 msgstr ""
 
-msgctxt "#32032"
+msgctxt "#31232"
 msgid "Player cache"
 msgstr ""
 
-msgctxt "#32033"
+msgctxt "#31233"
 msgid "N/A"
 msgstr ""
 
-msgctxt "#32034"
+msgctxt "#31234"
 msgid "Memory usage"
 msgstr ""
 
-msgctxt "#32035"
+msgctxt "#31235"
 msgid "Bit depth"
 msgstr ""
 
-msgctxt "#32036"
+msgctxt "#31236"
 msgid "AML FPS"
 msgstr ""
 
-msgctxt "#32037"
+msgctxt "#31237"
 msgid "DV Configuration"
 msgstr ""
 
-msgctxt "#32038"
+msgctxt "#31238"
 msgid "DV Levels Metadata"
 msgstr ""
 
-msgctxt "#32039"
+msgctxt "#31239"
 msgid "HDR Static Metadata"
 msgstr ""
 
-msgctxt "#32040"
+msgctxt "#31240"
 msgid "cd/m²"
 msgstr ""
 
-msgctxt "#32041"
+msgctxt "#31241"
 msgid "RPU MDL"
 msgstr ""
 
-msgctxt "#32042"
+msgctxt "#31242"
 msgid "RPU MaxCLL/FALL"
 msgstr ""
 
-msgctxt "#32043"
+msgctxt "#31243"
 msgid "FLL MIN / MAX / Ø"
 msgstr ""
 
-msgctxt "#32044"
+msgctxt "#31244"
 msgid "PQ  MIN / MAX / Ø"
 msgstr ""
 
-msgctxt "#32045"
+msgctxt "#31245"
 msgid "12-bit"
 msgstr ""
 
-msgctxt "#32046"
+msgctxt "#31246"
 msgid "Codec"
 msgstr ""
 
-msgctxt "#32047"
+msgctxt "#31247"
 msgid "Bitrate"
 msgstr ""
 
-msgctxt "#32048"
+msgctxt "#31248"
 msgid "VS10 status"
 msgstr ""
 
-msgctxt "#32051"
+msgctxt "#31251"
 msgid "Sample rate"
 msgstr ""
 
-msgctxt "#32052"
+msgctxt "#31252"
 msgid "Audio language"
 msgstr ""
 
-msgctxt "#32053"
+msgctxt "#31253"
 msgid "Subtitle language"
 msgstr ""
 
-msgctxt "#32054"
+msgctxt "#31254"
 msgid "Video"
 msgstr ""
 
-msgctxt "#32055"
+msgctxt "#31255"
 msgid "System"
 msgstr ""
 
-msgctxt "#32056"
+msgctxt "#31256"
 msgid "Audio"
 msgstr ""
 
-msgctxt "#32057"
+msgctxt "#31257"
 msgid "Top left"
 msgstr ""
 
-msgctxt "#32058"
+msgctxt "#31258"
 msgid "Top center"
 msgstr ""
 
-msgctxt "#32059"
+msgctxt "#31259"
 msgid "Top right"
 msgstr ""
 
-msgctxt "#32060"
+msgctxt "#31260"
 msgid "Position of the codec logos in the OSD"
 msgstr ""
 
-msgctxt "#32061"
+msgctxt "#31261"
 msgid "Position of the codec logos in the PlayerProcessInfo"
 msgstr ""
 
-msgctxt "#32062"
+msgctxt "#31262"
 msgid "Show codec logos when video starts"
 msgstr ""
 
-msgctxt "#32063"
+msgctxt "#31263"
 msgid "Codec logos"
 msgstr ""
 
-msgctxt "#32064"
+msgctxt "#31264"
 msgid "Original"
 msgstr ""
 
-msgctxt "#32065"
+msgctxt "#31265"
 msgid "VS10 mode"
 msgstr ""
 
-msgctxt "#32066"
+msgctxt "#31266"
 msgid "Coloured title lines in PlayerProcessInfo"
 msgstr ""
 
-msgctxt "#32067"
+msgctxt "#31267"
 msgid "L5 Active Offsets"
 msgstr ""
 
-msgctxt "#32068"
+msgctxt "#31268"
 msgid "hide speed"
 msgstr ""
 
-msgctxt "#32069"
+msgctxt "#31269"
 msgid "Default (3000ms)"
 msgstr ""
 
-msgctxt "#32070"
+msgctxt "#31270"
 msgid "Fast (1500ms)"
 msgstr ""
 
-msgctxt "#32071"
+msgctxt "#31271"
 msgid "Faster (1000ms)"
 msgstr ""
 
-msgctxt "#32072"
+msgctxt "#31272"
 msgid "Fastest (500ms)"
 msgstr ""
 
-msgctxt "#32073"
+msgctxt "#31273"
 msgid "Slow (4500ms)"
 msgstr ""
 
-msgctxt "#32074"
+msgctxt "#31274"
 msgid "Slower (6000ms)"
 msgstr ""
 
-msgctxt "#32075"
+msgctxt "#31275"
 msgid "Slowest (8000ms)"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
-msgctxt "#32076"
+msgctxt "#31276"
 msgid "failed"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
-msgctxt "#32077"
+msgctxt "#31277"
 msgid "detected"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
-msgctxt "#32078"
+msgctxt "#31278"
 msgid "skipped"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
-msgctxt "#32079"
+msgctxt "#31279"
 msgid "running"
 msgstr ""
 
 #: /xml/Font.xml
-msgctxt "#32102"
+msgctxt "#31302"
 msgid "Open Sans (needs McFontFace)"
 msgstr ""
 
 #: /xml/Font.xml
-msgctxt "#32103"
+msgctxt "#31303"
 msgid "Hind (needs McFontFace)"
 msgstr ""
 
 #: /xml/Font.xml
-msgctxt "#32104"
+msgctxt "#31304"
 msgid "PT Sans (needs McFontFace)"
 msgstr ""
 
 #: /xml/Font.xml
-msgctxt "#32105"
+msgctxt "#31305"
 msgid "Inter (needs McFontFace)"
 msgstr ""
 
 #: /xml/Font.xml
-msgctxt "#32106"
+msgctxt "#31306"
 msgid "Lato (needs McFontFace)"
 msgstr ""
 
 #: /xml/Font.xml
-msgctxt "#32107"
+msgctxt "#31307"
 msgid "DejaVu Sans (needs McFontFace)"
 msgstr ""
 
 #: /xml/Font.xml
-msgctxt "#32108"
+msgctxt "#31308"
 msgid "Source Sans 3 (needs McFontFace)"
 msgstr ""
 
 #: /xml/Font.xml
-msgctxt "#32109"
+msgctxt "#31309"
 msgid "Noto Sans (old default, bundled)"
 msgstr ""
 
 #: /xml/Font.xml
-msgctxt "#32110"
+msgctxt "#31310"
 msgid "Inter UI (default, bundled)"
 msgstr ""
 
-msgctxt "#32111"
+msgctxt "#31311"
 msgid "Exit Menu customization"
 msgstr ""
 
-msgctxt "#32112"
+msgctxt "#31312"
 msgid "Show backdrop on pause"
 msgstr ""
 
-msgctxt "#32113"
+msgctxt "#31313"
 msgid "Show Restart Kodi option in exit menu"
 msgstr ""
 
-msgctxt "#32114"
+msgctxt "#31314"
 msgid "Version"
 msgstr ""
 
-msgctxt "#32115"
+msgctxt "#31315"
 msgid "Passthrough"
 msgstr ""
 
-msgctxt "#32116"
+msgctxt "#31316"
 msgid "Input"
 msgstr ""
 
-msgctxt "#32117"
+msgctxt "#31317"
 msgid "Output"
 msgstr ""
 
-msgctxt "#32118"
+msgctxt "#31318"
 msgid "Decoding"
 msgstr ""
 
-msgctxt "#32119"
+msgctxt "#31319"
 msgid "VS10 & VP"
 msgstr ""

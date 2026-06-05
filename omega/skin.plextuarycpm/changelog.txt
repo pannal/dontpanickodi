@@ -1,3 +1,8 @@
+[B]4.0.0-pm4k1.15cpm.a14[/B]
+* PlayerProcessInfo: adopt p3i.estuary's newer DV/HDR/audio layout (and its variables)
+* Re-align skin strings into the Kodi-legal 31000-31999 range
+* Codec logos: p3i.estuary art, no background card, full-opacity colour (PM4K trigger framework unchanged)
+
 [B]4.0.0-pm4k1.3cpm.a14[/B]
 * Adapt to CoreELEC Estuary CPM A14
 

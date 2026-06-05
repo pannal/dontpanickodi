@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <fonts>
-	<fontset id="Default" idloc="32110">
+	<fontset id="Default" idloc="31310">
 		<!-- Normal Fonts -->
 		<font>
 			<name>font10</name>
@@ -167,7 +167,7 @@
 			<size>22</size>
 		</font>
 	</fontset>
-    <fontset id="OpenSans" idloc="32102">
+    <fontset id="OpenSans" idloc="31302">
 		<!-- Normal Fonts -->
 		<font>
 			<name>font10</name>
@@ -321,173 +321,6 @@
 		<font>
 			<name>Mono26</name>
 			<filename>OpenSans.ttf</filename>
-			<size>26</size>
-		</font>
-        <font>
-			<name>font_tiny</name>
-			<filename>Inter-Unicode-Regular.ttf</filename>
-			<size>21</size>
-		</font>
-		<font>
-			<name>font_tiny_iconic</name>
-			<filename>fa-solid-900.ttf</filename>
-			<size>22</size>
-		</font>
-	</fontset>
-    <fontset id="Hind-Regular" idloc="32103">
-		<!-- Normal Fonts -->
-		<font>
-			<name>font10</name>
-			<filename>Hind-Regular.ttf</filename>
-			<size>23</size>
-			<style>lighten</style>
-		</font>
-		<font>
-			<name>font12</name>
-			<filename>Hind-Regular.ttf</filename>
-			<size>25</size>
-			<style>lighten</style>
-		</font>
-		<font>
-			<name>font13</name>
-			<filename>Hind-Regular.ttf</filename>
-			<size>30</size>
-			<style>lighten</style>
-		</font>
-		<font>
-			<name>font14</name>
-			<filename>Hind-Regular.ttf</filename>
-			<size>33</size>
-			<style>lighten</style>
-		</font>
-		<font>
-			<name>font23_narrow</name>
-			<filename>Hind-Regular.ttf</filename>
-			<size>23</size>
-			<style>lighten</style>
-			<linespacing>0.8</linespacing>
-		</font>
-		<font>
-			<name>font25_narrow</name>
-			<filename>Hind-Regular.ttf</filename>
-			<size>25</size>
-			<style>lighten</style>
-			<linespacing>0.8</linespacing>
-		</font>
-		<font>
-			<name>font27</name>
-			<filename>Hind-Regular.ttf</filename>
-			<size>27</size>
-			<style>lighten</style>
-		</font>
-		<font>
-			<name>font27_narrow</name>
-			<filename>Hind-Regular.ttf</filename>
-			<size>27</size>
-			<style>lighten</style>
-			<linespacing>0.8</linespacing>
-		</font>
-		<font>
-			<name>font32</name>
-			<filename>Hind-Regular.ttf</filename>
-			<size>32</size>
-			<style>lighten</style>
-		</font>
-		<font>
-			<name>font37</name>
-			<filename>Hind-Regular.ttf</filename>
-			<size>37</size>
-			<style>lighten</style>
-		</font>
-		<font>
-			<name>font45</name>
-			<filename>Hind-Regular.ttf</filename>
-			<size>45</size>
-			<style>lighten</style>
-		</font>
-		<font>
-			<name>font60</name>
-			<filename>Hind-Regular.ttf</filename>
-			<size>60</size>
-			<style>lighten</style>
-		</font>
-		<font>
-			<name>font_clock</name>
-			<filename>Hind-Regular.ttf</filename>
-			<size>70</size>
-            <style>lighten</style>
-		</font>
-		<!-- Title Fonts -->
-		<font>
-			<name>font_flag</name>
-			<filename>Hind-Regular.ttf</filename>
-			<size>18</size>
-			<style>bold</style>
-		</font>
-		<font>
-			<name>font20_title</name>
-			<filename>Hind-Regular.ttf</filename>
-			<size>20</size>
-			<style>bold</style>
-		</font>
-		<font>
-			<name>font25_title</name>
-			<filename>Hind-Regular.ttf</filename>
-			<size>25</size>
-			<style>bold</style>
-		</font>
-		<font>
-			<name>font30_title</name>
-			<filename>Hind-Regular.ttf</filename>
-			<size>30</size>
-			<style>bold</style>
-		</font>
-		<font>
-			<name>font32_title</name>
-			<filename>Hind-Regular.ttf</filename>
-			<size>32</size>
-			<style>bold</style>
-		</font>
-		<font>
-			<name>font36_title</name>
-			<filename>Hind-Regular.ttf</filename>
-			<size>36</size>
-			<style>bold</style>
-		</font>
-		<font>
-			<name>font40_title</name>
-			<filename>Hind-Regular.ttf</filename>
-			<size>40</size>
-			<style>bold</style>
-		</font>
-		<font>
-			<name>font45_title</name>
-			<filename>Hind-Regular.ttf</filename>
-			<size>45</size>
-			<style>bold</style>
-		</font>
-		<font>
-			<name>font52_title</name>
-			<filename>Hind-Regular.ttf</filename>
-			<size>52</size>
-			<style>bold</style>
-		</font>
-		<font>
-			<name>font_MainMenu</name>
-			<filename>Hind-Regular.ttf</filename>
-			<size>60</size>
-			<style>bold</style>
-		</font>
-		<font>
-			<name>WeatherTemp</name>
-			<aspect>0.85</aspect>
-			<filename>Hind-Regular.ttf</filename>
-			<size>120</size>
-			<style>bold</style>
-		</font>
-		<font>
-			<name>Mono26</name>
-			<filename>Hind-Regular.ttf</filename>
 			<size>26</size>
 		</font>
         <font>
@@ -501,7 +334,174 @@
 			<size>22</size>
 		</font>
 	</fontset>
-    <fontset id="PTSans-Regular" idloc="32104">
+    <fontset id="Hind-Regular" idloc="31303">
+		<!-- Normal Fonts -->
+		<font>
+			<name>font10</name>
+			<filename>Hind-Regular.ttf</filename>
+			<size>23</size>
+			<style>lighten</style>
+		</font>
+		<font>
+			<name>font12</name>
+			<filename>Hind-Regular.ttf</filename>
+			<size>25</size>
+			<style>lighten</style>
+		</font>
+		<font>
+			<name>font13</name>
+			<filename>Hind-Regular.ttf</filename>
+			<size>30</size>
+			<style>lighten</style>
+		</font>
+		<font>
+			<name>font14</name>
+			<filename>Hind-Regular.ttf</filename>
+			<size>33</size>
+			<style>lighten</style>
+		</font>
+		<font>
+			<name>font23_narrow</name>
+			<filename>Hind-Regular.ttf</filename>
+			<size>23</size>
+			<style>lighten</style>
+			<linespacing>0.8</linespacing>
+		</font>
+		<font>
+			<name>font25_narrow</name>
+			<filename>Hind-Regular.ttf</filename>
+			<size>25</size>
+			<style>lighten</style>
+			<linespacing>0.8</linespacing>
+		</font>
+		<font>
+			<name>font27</name>
+			<filename>Hind-Regular.ttf</filename>
+			<size>27</size>
+			<style>lighten</style>
+		</font>
+		<font>
+			<name>font27_narrow</name>
+			<filename>Hind-Regular.ttf</filename>
+			<size>27</size>
+			<style>lighten</style>
+			<linespacing>0.8</linespacing>
+		</font>
+		<font>
+			<name>font32</name>
+			<filename>Hind-Regular.ttf</filename>
+			<size>32</size>
+			<style>lighten</style>
+		</font>
+		<font>
+			<name>font37</name>
+			<filename>Hind-Regular.ttf</filename>
+			<size>37</size>
+			<style>lighten</style>
+		</font>
+		<font>
+			<name>font45</name>
+			<filename>Hind-Regular.ttf</filename>
+			<size>45</size>
+			<style>lighten</style>
+		</font>
+		<font>
+			<name>font60</name>
+			<filename>Hind-Regular.ttf</filename>
+			<size>60</size>
+			<style>lighten</style>
+		</font>
+		<font>
+			<name>font_clock</name>
+			<filename>Hind-Regular.ttf</filename>
+			<size>70</size>
+            <style>lighten</style>
+		</font>
+		<!-- Title Fonts -->
+		<font>
+			<name>font_flag</name>
+			<filename>Hind-Regular.ttf</filename>
+			<size>18</size>
+			<style>bold</style>
+		</font>
+		<font>
+			<name>font20_title</name>
+			<filename>Hind-Regular.ttf</filename>
+			<size>20</size>
+			<style>bold</style>
+		</font>
+		<font>
+			<name>font25_title</name>
+			<filename>Hind-Regular.ttf</filename>
+			<size>25</size>
+			<style>bold</style>
+		</font>
+		<font>
+			<name>font30_title</name>
+			<filename>Hind-Regular.ttf</filename>
+			<size>30</size>
+			<style>bold</style>
+		</font>
+		<font>
+			<name>font32_title</name>
+			<filename>Hind-Regular.ttf</filename>
+			<size>32</size>
+			<style>bold</style>
+		</font>
+		<font>
+			<name>font36_title</name>
+			<filename>Hind-Regular.ttf</filename>
+			<size>36</size>
+			<style>bold</style>
+		</font>
+		<font>
+			<name>font40_title</name>
+			<filename>Hind-Regular.ttf</filename>
+			<size>40</size>
+			<style>bold</style>
+		</font>
+		<font>
+			<name>font45_title</name>
+			<filename>Hind-Regular.ttf</filename>
+			<size>45</size>
+			<style>bold</style>
+		</font>
+		<font>
+			<name>font52_title</name>
+			<filename>Hind-Regular.ttf</filename>
+			<size>52</size>
+			<style>bold</style>
+		</font>
+		<font>
+			<name>font_MainMenu</name>
+			<filename>Hind-Regular.ttf</filename>
+			<size>60</size>
+			<style>bold</style>
+		</font>
+		<font>
+			<name>WeatherTemp</name>
+			<aspect>0.85</aspect>
+			<filename>Hind-Regular.ttf</filename>
+			<size>120</size>
+			<style>bold</style>
+		</font>
+		<font>
+			<name>Mono26</name>
+			<filename>Hind-Regular.ttf</filename>
+			<size>26</size>
+		</font>
+        <font>
+			<name>font_tiny</name>
+			<filename>Inter-Unicode-Regular.ttf</filename>
+			<size>21</size>
+		</font>
+		<font>
+			<name>font_tiny_iconic</name>
+			<filename>fa-solid-900.ttf</filename>
+			<size>22</size>
+		</font>
+	</fontset>
+    <fontset id="PTSans-Regular" idloc="31304">
 		<!-- Normal Fonts -->
 		<font>
 			<name>font10</name>
@@ -668,7 +668,7 @@
 			<size>22</size>
 		</font>
 	</fontset>
-    <fontset id="Inter" idloc="32105">
+    <fontset id="Inter" idloc="31305">
 		<!-- Normal Fonts -->
 		<font>
 			<name>font10</name>
@@ -835,7 +835,7 @@
 			<size>22</size>
 		</font>
 	</fontset>
-    <fontset id="NotoSans" idloc="32109">
+    <fontset id="NotoSans" idloc="31309">
         <!-- Normal Fonts -->
 		<font>
 			<name>font10</name>
@@ -1001,7 +1001,7 @@
 			<size>22</size>
 		</font>
 	</fontset>
-    <fontset id="Lato" idloc="32106">
+    <fontset id="Lato" idloc="31306">
 		<!-- Normal Fonts -->
 		<font>
 			<name>font10</name>
@@ -1168,7 +1168,7 @@
 			<size>22</size>
 		</font>
 	</fontset>
-    <fontset id="DejaVuSans" idloc="32107">
+    <fontset id="DejaVuSans" idloc="31307">
 		<!-- Normal Fonts -->
 		<font>
 			<name>font10</name>
@@ -1323,7 +1323,7 @@
 			<size>22</size>
 		</font>
 	</fontset>
-    <fontset id="SourceSans3" idloc="32108">
+    <fontset id="SourceSans3" idloc="31308">
 		<!-- Normal Fonts -->
 		<font>
 			<name>font10</name>
