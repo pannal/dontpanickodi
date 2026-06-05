@@ -1,3 +1,7 @@
+[B]4.0.0-pm4k1.15cpm.a14.18[/B]
+* Codec logos: full p3i.estuary video badge set (SDR 8/10-bit, HDR10, HDR10+, Dolby Vision, DV-FEL, HLG, and VS10-conversion badges) instead of the single SDR badge + green dot
+* Codec logos: removed the floating green VS10 dot and the orphaned PlayerProcessInfo codec-logo setting (the p3i PPI shows codecs as text)
+
 [B]4.0.0-pm4k1.15cpm.a14[/B]
 * PlayerProcessInfo: adopt p3i.estuary's newer DV/HDR/audio layout (and its variables)
 * Re-align skin strings into the Kodi-legal 31000-31999 range
