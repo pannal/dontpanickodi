@@ -2,15 +2,18 @@
 <window type="dialog" id="1109">
 	<onload>Skin.TimerStart(1109_topbaroverlay)</onload>
 	<visible>Window.IsActive(fullscreenvideo) | Window.IsActive(visualisation)</visible>
-	<visible>Window.IsActive(seekbar) | Window.IsActive(pvrosdchannels) | Window.IsActive(pvrchannelguide)</visible>
+	<visible>Window.IsActive(seekbar) | Window.IsActive(pvrosdchannels) | Window.IsActive(pvrchannelguide) | !String.IsEmpty(Window(10000).Property(script.plex.osd_active))</visible>
 	<visible>!Window.IsActive(playerprocessinfo)</visible>
 	<depth>DepthOSD</depth>
 	<include>Animation_TopSlide</include>
 	<zorder>0</zorder>
 	<controls>
-		<include condition="Skin.HasSetting(osd.useleftCodecLogos)">CodecLogosLeftOSD</include>
-		<include condition="Skin.HasSetting(osd.usecenterCodecLogos)">CodecLogosCenterOSD</include>
-		<include condition="Skin.HasSetting(osd.userightCodecLogos)">CodecLogosRightOSD</include>
+		<control type="group">
+			<visible>!Window.IsVisible(DialogPlayerProcessInfo.xml)</visible>
+			<include condition="Skin.HasSetting(osd.useleftCodecLogos)">CodecLogosLeftOSD</include>
+			<include condition="Skin.HasSetting(osd.usecenterCodecLogos)">CodecLogosCenterOSD</include>
+			<include condition="Skin.HasSetting(osd.userightCodecLogos)">CodecLogosRightOSD</include>
+		</control>
 		<control type="group">
 			<visible>String.IsEmpty(Window(10000).Property(script.plex.is_active))</visible>
 			<visible>![Player.ShowInfo | Window.IsActive(fullscreeninfo) | Player.ShowTime | Window.IsActive(videoosd) | Window.IsActive(musicosd) | Window.IsActive(playerprocessinfo) | Window.IsActive(pvrosdchannels) | Window.IsActive(pvrchannelguide)] + [!String.IsEmpty(Player.SeekNumeric) | Player.Seeking | Player.HasPerformedSeek(3) | Player.Forwarding | Player.Rewinding | Player.Paused] | !String.IsEmpty(PVR.ChannelNumberInput)</visible>

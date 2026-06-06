@@ -1,3 +1,13 @@
+[B]4.0.0-pm4k1.15cpm.a14.20[/B]
+* Codec logos: show during the PM4K OSD, not just the Kodi seekbar (react to script.plex.osd_active)
+* Codec logos: fix the brief flicker when closing the PlayerProcessInfo (gate the OSD copy on PPI visibility)
+
+[B]4.0.0-pm4k1.15cpm.a14.19[/B]
+* Codec logos: fix OSD/pause logos not showing (restored tolerant vs10.mode matching + SDR bit-depth fallback; a14.18 was too strict for the persistent OSD)
+* Codec logos: removed the separator line between the video and audio logos
+* PlayerProcessInfo: re-added the codec-logo option (reuses the OSD logos, same placement as the startup logos), with the position setting back
+* Codec logos: fixed the brief flicker when closing the PlayerProcessInfo
+
 [B]4.0.0-pm4k1.15cpm.a14.18[/B]
 * Codec logos: full p3i.estuary video badge set (SDR 8/10-bit, HDR10, HDR10+, Dolby Vision, DV-FEL, HLG, and VS10-conversion badges) instead of the single SDR badge + green dot
 * Codec logos: removed the floating green VS10 dot and the orphaned PlayerProcessInfo codec-logo setting (the p3i PPI shows codecs as text)

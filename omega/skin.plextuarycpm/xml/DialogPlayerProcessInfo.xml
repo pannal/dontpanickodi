@@ -6,6 +6,9 @@
 	<animation effect="fade" start="100" end="0" time="200">WindowClose</animation>
 	<onunload>ClearProperty(PlayerInfoDialogFocus,Home)</onunload>
 	<controls>
+		<include condition="Skin.HasSetting(ppi.useleftCodecLogos)">CodecLogosLeftOSD</include>
+		<include condition="Skin.HasSetting(ppi.usecenterCodecLogos)">CodecLogosCenterOSD</include>
+		<include condition="Skin.HasSetting(ppi.userightCodecLogos)">CodecLogosRightOSD</include>
 		<control type="group">
 			<bottom>0</bottom>
 			<height>300</height>

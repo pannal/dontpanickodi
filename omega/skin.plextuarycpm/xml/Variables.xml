@@ -809,6 +809,13 @@
         <value>$LOCALIZE[591]</value>
     </variable>
 
+    <variable name="PPICodecLogosLabel">
+        <value condition="Skin.HasSetting(ppi.useleftCodecLogos)">$LOCALIZE[31257]</value>
+        <value condition="Skin.HasSetting(ppi.usecenterCodecLogos)">$LOCALIZE[31258]</value>
+        <value condition="Skin.HasSetting(ppi.userightCodecLogos)">$LOCALIZE[31259]</value>
+        <value>$LOCALIZE[591]</value>
+    </variable>
+
     <variable name="VideoDecoder">
         <value condition="Player.Process(videohwdecoder)">HW</value>
         <value>SW</value>
