@@ -1,3 +1,6 @@
+[B]4.0.0-pm4k1.15cpm.a14.22[/B]
+* Codec logos: also keep the startup logos ("Show codec logos when video starts") inside the DV active area (a14.21 only moved the OSD/PlayerProcessInfo ones)
+
 [B]4.0.0-pm4k1.15cpm.a14.21[/B]
 * Codec logos: option to keep them inside the DV active area (off the letterbox bars), default on (requires the corresponding p3i build for the active-area info)
 

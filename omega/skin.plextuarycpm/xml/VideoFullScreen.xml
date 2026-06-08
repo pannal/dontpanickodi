@@ -76,6 +76,9 @@
         <control type="group" id="2">
             <depth>DepthOSD+</depth>
             <visible>Skin.HasSetting(osd.useleftCodecStartupLogos)</visible>
+            <animation effect="slide" end="0,60" time="0" condition="[ !Skin.HasSetting(osd.codeclogosactiveareaoff) | System.GetBool(coreelec.amlogic.dolbyvision.restrict.subs.active.area) ] + String.IsEqual(Player.Process(video.dovi.active.area.class),1)">Conditional</animation>
+            <animation effect="slide" end="0,104" time="0" condition="[ !Skin.HasSetting(osd.codeclogosactiveareaoff) | System.GetBool(coreelec.amlogic.dolbyvision.restrict.subs.active.area) ] + String.IsEqual(Player.Process(video.dovi.active.area.class),2)">Conditional</animation>
+            <animation effect="slide" end="0,138" time="0" condition="[ !Skin.HasSetting(osd.codeclogosactiveareaoff) | System.GetBool(coreelec.amlogic.dolbyvision.restrict.subs.active.area) ] + String.IsEqual(Player.Process(video.dovi.active.area.class),3)">Conditional</animation>
             <visible>String.IsEmpty(Window(10000).Property(script.plex.is_active)) | [!String.IsEmpty(Window(10000).Property(script.plex.is_active)) + !String.IsEmpty(Window(10000).Property(script.plex.playback_started_event))]</visible>
             <left>35</left>
 
@@ -298,6 +301,9 @@
         <control type="group" id="3">
             <depth>DepthOSD+</depth>
             <visible>Skin.HasSetting(osd.usecenterCodecStartupLogos)</visible>
+            <animation effect="slide" end="0,60" time="0" condition="[ !Skin.HasSetting(osd.codeclogosactiveareaoff) | System.GetBool(coreelec.amlogic.dolbyvision.restrict.subs.active.area) ] + String.IsEqual(Player.Process(video.dovi.active.area.class),1)">Conditional</animation>
+            <animation effect="slide" end="0,104" time="0" condition="[ !Skin.HasSetting(osd.codeclogosactiveareaoff) | System.GetBool(coreelec.amlogic.dolbyvision.restrict.subs.active.area) ] + String.IsEqual(Player.Process(video.dovi.active.area.class),2)">Conditional</animation>
+            <animation effect="slide" end="0,138" time="0" condition="[ !Skin.HasSetting(osd.codeclogosactiveareaoff) | System.GetBool(coreelec.amlogic.dolbyvision.restrict.subs.active.area) ] + String.IsEqual(Player.Process(video.dovi.active.area.class),3)">Conditional</animation>
             <visible>String.IsEmpty(Window(10000).Property(script.plex.is_active)) | [!String.IsEmpty(Window(10000).Property(script.plex.is_active)) + !String.IsEmpty(Window(10000).Property(script.plex.playback_started_event))]</visible>
             <left>855</left>
 
@@ -524,6 +530,9 @@
         <control type="group" id="4">
             <depth>DepthOSD+</depth>
             <visible>Skin.HasSetting(osd.userightCodecStartupLogos)</visible>
+            <animation effect="slide" end="0,60" time="0" condition="[ !Skin.HasSetting(osd.codeclogosactiveareaoff) | System.GetBool(coreelec.amlogic.dolbyvision.restrict.subs.active.area) ] + String.IsEqual(Player.Process(video.dovi.active.area.class),1)">Conditional</animation>
+            <animation effect="slide" end="0,104" time="0" condition="[ !Skin.HasSetting(osd.codeclogosactiveareaoff) | System.GetBool(coreelec.amlogic.dolbyvision.restrict.subs.active.area) ] + String.IsEqual(Player.Process(video.dovi.active.area.class),2)">Conditional</animation>
+            <animation effect="slide" end="0,138" time="0" condition="[ !Skin.HasSetting(osd.codeclogosactiveareaoff) | System.GetBool(coreelec.amlogic.dolbyvision.restrict.subs.active.area) ] + String.IsEqual(Player.Process(video.dovi.active.area.class),3)">Conditional</animation>
             <visible>String.IsEmpty(Window(10000).Property(script.plex.is_active)) | [!String.IsEmpty(Window(10000).Property(script.plex.is_active)) + !String.IsEmpty(Window(10000).Property(script.plex.playback_started_event))]</visible>
             <left>1675</left>
 

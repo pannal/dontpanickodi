@@ -1012,6 +1012,10 @@ msgctxt "#31263"
 msgid "Codec logos"
 msgstr "Codec-Logos"
 
+msgctxt "#31280"
+msgid "Always keep codec logos inside the active area"
+msgstr "Codec-Logos immer im aktiven Bildbereich halten"
+
 msgctxt "#31264"
 msgid "Original"
 msgstr "Original"
