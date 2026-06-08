@@ -4,6 +4,9 @@
         <control type="group">
             <include>Animation_FadeIn</include>
             <include>Animation_FadeOut</include>
+            <animation effect="slide" end="0,60" time="0" condition="[ !Skin.HasSetting(osd.codeclogosactiveareaoff) | System.GetBool(coreelec.amlogic.dolbyvision.restrict.subs.active.area) ] + String.IsEqual(Player.Process(video.dovi.active.area.class),1)">Conditional</animation>
+            <animation effect="slide" end="0,104" time="0" condition="[ !Skin.HasSetting(osd.codeclogosactiveareaoff) | System.GetBool(coreelec.amlogic.dolbyvision.restrict.subs.active.area) ] + String.IsEqual(Player.Process(video.dovi.active.area.class),2)">Conditional</animation>
+            <animation effect="slide" end="0,138" time="0" condition="[ !Skin.HasSetting(osd.codeclogosactiveareaoff) | System.GetBool(coreelec.amlogic.dolbyvision.restrict.subs.active.area) ] + String.IsEqual(Player.Process(video.dovi.active.area.class),3)">Conditional</animation>
             <left>35</left>
             <control type="group">
                 <visible>Integer.IsEqual(Player.Process(video.source.hdr.type.raw),0) + !String.IsEqual(Player.Process(video.bit.depth),10) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</visible>
@@ -298,6 +301,9 @@
         <control type="group">
             <include>Animation_FadeIn</include>
             <include>Animation_FadeOut</include>
+            <animation effect="slide" end="0,60" time="0" condition="[ !Skin.HasSetting(osd.codeclogosactiveareaoff) | System.GetBool(coreelec.amlogic.dolbyvision.restrict.subs.active.area) ] + String.IsEqual(Player.Process(video.dovi.active.area.class),1)">Conditional</animation>
+            <animation effect="slide" end="0,104" time="0" condition="[ !Skin.HasSetting(osd.codeclogosactiveareaoff) | System.GetBool(coreelec.amlogic.dolbyvision.restrict.subs.active.area) ] + String.IsEqual(Player.Process(video.dovi.active.area.class),2)">Conditional</animation>
+            <animation effect="slide" end="0,138" time="0" condition="[ !Skin.HasSetting(osd.codeclogosactiveareaoff) | System.GetBool(coreelec.amlogic.dolbyvision.restrict.subs.active.area) ] + String.IsEqual(Player.Process(video.dovi.active.area.class),3)">Conditional</animation>
             <left>855</left>
             <control type="group">
                 <visible>Integer.IsEqual(Player.Process(video.source.hdr.type.raw),0) + !String.IsEqual(Player.Process(video.bit.depth),10) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</visible>
@@ -592,6 +598,9 @@
         <control type="group">
             <include>Animation_FadeIn</include>
             <include>Animation_FadeOut</include>
+            <animation effect="slide" end="0,60" time="0" condition="[ !Skin.HasSetting(osd.codeclogosactiveareaoff) | System.GetBool(coreelec.amlogic.dolbyvision.restrict.subs.active.area) ] + String.IsEqual(Player.Process(video.dovi.active.area.class),1)">Conditional</animation>
+            <animation effect="slide" end="0,104" time="0" condition="[ !Skin.HasSetting(osd.codeclogosactiveareaoff) | System.GetBool(coreelec.amlogic.dolbyvision.restrict.subs.active.area) ] + String.IsEqual(Player.Process(video.dovi.active.area.class),2)">Conditional</animation>
+            <animation effect="slide" end="0,138" time="0" condition="[ !Skin.HasSetting(osd.codeclogosactiveareaoff) | System.GetBool(coreelec.amlogic.dolbyvision.restrict.subs.active.area) ] + String.IsEqual(Player.Process(video.dovi.active.area.class),3)">Conditional</animation>
             <left>1675</left>
             <control type="group">
                 <visible>Integer.IsEqual(Player.Process(video.source.hdr.type.raw),0) + !String.IsEqual(Player.Process(video.bit.depth),10) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</visible>

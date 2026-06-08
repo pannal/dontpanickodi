@@ -113,6 +113,12 @@
 					<onclick condition="Skin.HasSetting(ppi.usecenterCodecLogos)">Skin.Reset(ppi.usecenterCodecLogos)</onclick>
 					<label2>$VAR[PPICodecLogosLabel]</label2>
 				</control>
+				<control type="radiobutton" id="712">
+					<label>$LOCALIZE[31280]</label>
+					<include>DefaultSettingButton</include>
+					<onclick>Skin.ToggleSetting(osd.codeclogosactiveareaoff)</onclick>
+					<selected>!Skin.HasSetting(osd.codeclogosactiveareaoff)</selected>
+				</control>
 				<control type="radiobutton" id="908">
 					<label>$LOCALIZE[31313]</label>
 					<include>DefaultSettingButton</include>

@@ -1,3 +1,6 @@
+[B]4.0.0-pm4k1.15cpm.a14.21[/B]
+* Codec logos: option to keep them inside the DV active area (off the letterbox bars), default on (requires the corresponding p3i build for the active-area info)
+
 [B]4.0.0-pm4k1.15cpm.a14.20[/B]
 * Codec logos: show during the PM4K OSD, not just the Kodi seekbar (react to script.plex.osd_active)
 * Codec logos: fix the brief flicker when closing the PlayerProcessInfo (gate the OSD copy on PPI visibility)
