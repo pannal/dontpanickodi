@@ -30,7 +30,7 @@
 					<height>50</height>
 					<aligny>bottom</aligny>
 					<label>$INFO[PVR.ActStreamServiceName,[COLOR button_focus]$LOCALIZE[19099]:[/COLOR] ]</label>
-					<font>font12</font>
+					<font>font10</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
 				<control type="label">
@@ -38,7 +38,7 @@
 					<height>50</height>
 					<aligny>bottom</aligny>
 					<label>$INFO[PVR.ActStreamProviderName,[COLOR button_focus]$LOCALIZE[19101]:[/COLOR] ]</label>
-					<font>font12</font>
+					<font>font10</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
 				<control type="label">
@@ -46,7 +46,7 @@
 					<height>50</height>
 					<aligny>bottom</aligny>
 					<label>$INFO[PVR.ActStreamClient,[COLOR button_focus]$LOCALIZE[19012]:[/COLOR] ]</label>
-					<font>font12</font>
+					<font>font10</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
 				<control type="label">
@@ -54,7 +54,7 @@
 					<height>50</height>
 					<aligny>bottom</aligny>
 					<label>$INFO[PVR.ActStreamDevice,[COLOR button_focus]$LOCALIZE[19006]:[/COLOR] ]</label>
-					<font>font12</font>
+					<font>font10</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
 				<control type="label">
@@ -62,7 +62,7 @@
 					<height>50</height>
 					<aligny>bottom</aligny>
 					<label>$INFO[PVR.ActStreamStatus,[COLOR button_focus]$LOCALIZE[19007]:[/COLOR] ]</label>
-					<font>font12</font>
+					<font>font10</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
 				<control type="label">
@@ -70,7 +70,7 @@
 					<height>50</height>
 					<aligny>bottom</aligny>
 					<label>$INFO[PVR.ActStreamEncryptionName,[COLOR button_focus]$LOCALIZE[19015]:[/COLOR] ]</label>
-					<font>font12</font>
+					<font>font10</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
 			</control>
@@ -85,7 +85,7 @@
 					<height>50</height>
 					<aligny>bottom</aligny>
 					<label>$INFO[PVR.ActStreamBer,[COLOR button_focus]$LOCALIZE[19010]:[/COLOR] ]</label>
-					<font>font12</font>
+					<font>font10</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
 				<control type="label">
@@ -93,7 +93,7 @@
 					<height>50</height>
 					<aligny>bottom</aligny>
 					<label>$INFO[PVR.ActStreamUnc,[COLOR button_focus]$LOCALIZE[19011]:[/COLOR] ]</label>
-					<font>font12</font>
+					<font>font10</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
 				<control type="label">
@@ -101,7 +101,7 @@
 					<height>50</height>
 					<aligny>bottom</aligny>
 					<label>$INFO[PVR.ActStreamMux,[COLOR button_focus]$LOCALIZE[19100]:[/COLOR] ]</label>
-					<font>font12</font>
+					<font>font10</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
 				<control type="label">
@@ -109,7 +109,7 @@
 					<height>50</height>
 					<aligny>bottom</aligny>
 					<label>$INFO[PVR.ActStreamSignal,[COLOR button_focus]$LOCALIZE[19008]:[/COLOR] ]</label>
-					<font>font12</font>
+					<font>font10</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
 				<control type="progress">
@@ -124,7 +124,7 @@
 					<height>50</height>
 					<aligny>bottom</aligny>
 					<label>$INFO[PVR.ActStreamSNR,[COLOR button_focus]$LOCALIZE[19009]:[/COLOR] ]</label>
-					<font>font12</font>
+					<font>font10</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
 				<control type="progress">
@@ -159,7 +159,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR blue]Configuration[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -173,7 +173,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]Version:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -183,7 +183,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>$INFO[Player.Process(video.dovi.version.major)].$INFO[Player.Process(video.dovi.version.minor)]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -197,7 +197,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]Profile:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -207,7 +207,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>$VAR[DVProfileExtVar]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -217,7 +217,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR dimgrey]$VAR[DVSourceProfileExtVar][/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 						<visible>!String.IsEqual(Player.Process(video.source.dovi.profile),Player.Process(video.dovi.profile))</visible>
 						<visible>!String.IsEqual(Player.Process(video.source.dovi.profile),0)</visible>
@@ -233,7 +233,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]Level ID:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -243,7 +243,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>$VAR[LevelIDVar]$INFO[Player.Process(video.dovi.level)]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -257,7 +257,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]RPU:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -281,7 +281,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]BL:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -305,7 +305,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]EL:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -315,7 +315,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>$VAR[DVELVar]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -335,7 +335,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>$VAR[DVSourceELVar]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 						<visible>!String.IsEqual(Player.Process(video.source.dovi.el.type),Player.Process(video.dovi.el.type))</visible>
 						<visible>!String.IsEqual(Player.Process(video.source.dovi.profile),0)</visible>
@@ -363,7 +363,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]Metadata:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -372,8 +372,8 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>$INFO[Player.Process(video.dovi.meta.version)] $VAR[CMAppendVar]</label>
-						<font>font12</font>
+						<label>$VAR[CMMetadataVar]</label>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -387,7 +387,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]L5 Detection:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -397,7 +397,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>$VAR[L5StateVar]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -426,7 +426,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR blue]Levels Metadata[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -441,7 +441,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]L6 Max CLL/FALL:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -451,7 +451,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$INFO[Player.Process(video.dovi.l6.max.cll)]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -461,7 +461,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$INFO[Player.Process(video.dovi.l6.max.fall)]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -471,7 +471,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR dimgrey]cd/m²[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -486,7 +486,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]L6 Min/Max:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -496,7 +496,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$INFO[Player.Process(video.dovi.l6.min.lum)]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -506,7 +506,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$INFO[Player.Process(video.dovi.l6.max.lum)]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -516,7 +516,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR dimgrey]cd/m²[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -530,7 +530,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]Source Min/Max:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -540,7 +540,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>[COLOR lightgreen]$INFO[Player.Process(video.dovi.source.min.nits)][/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -550,7 +550,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>[COLOR lightgreen]$INFO[Player.Process(video.dovi.source.max.nits)][/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -560,7 +560,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR dimgrey]cd/m²[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -574,7 +574,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]L1 Min/Max/Avg:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -584,7 +584,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>[COLOR lightgreen]$INFO[Player.Process(video.dovi.l1.min.nits)][/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -594,7 +594,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>[COLOR lightgreen]$INFO[Player.Process(video.dovi.l1.max.nits)][/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -604,7 +604,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>[COLOR lightgreen]$INFO[Player.Process(video.dovi.l1.avg.nits)][/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -614,7 +614,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR dimgrey]cd/m²[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -625,7 +625,7 @@
 					<aligny>bottom</aligny>
 					<align>left</align>
 					<label></label>
-					<font>font12</font>
+					<font>font10</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
 				<control type="group">
@@ -638,7 +638,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]Source Min/Max:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -648,7 +648,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>[COLOR lightgreen]$INFO[Player.Process(video.dovi.source.min.pq)][/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -658,7 +658,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>[COLOR lightgreen]$INFO[Player.Process(video.dovi.source.max.pq)][/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -668,7 +668,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR dimgrey]12-bit PQ[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -682,7 +682,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]L1 Min/Max/Avg:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -692,7 +692,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>[COLOR lightgreen]$INFO[Player.Process(video.dovi.l1.min.pq)][/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -702,7 +702,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>[COLOR lightgreen]$INFO[Player.Process(video.dovi.l1.max.pq)][/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -712,7 +712,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>[COLOR lightgreen]$INFO[Player.Process(video.dovi.l1.avg.pq)][/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -722,7 +722,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR dimgrey]12-bit PQ[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -733,7 +733,7 @@
 					<aligny>bottom</aligny>
 					<align>left</align>
 					<label></label>
-					<font>font12</font>
+					<font>font10</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
 				<control type="group">
@@ -747,7 +747,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]L5 Active Offsets:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -757,7 +757,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$INFO[Player.Process(video.dovi.l5.left.offset)]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -767,7 +767,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>[COLOR dimgrey]L[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -777,7 +777,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$INFO[Player.Process(video.dovi.l5.right.offset)]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -787,7 +787,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>[COLOR dimgrey]R[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -797,7 +797,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$INFO[Player.Process(video.dovi.l5.top.offset)]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -807,7 +807,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>[COLOR dimgrey]T[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -817,7 +817,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$INFO[Player.Process(video.dovi.l5.bottom.offset)]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -827,7 +827,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>[COLOR dimgrey]B[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -855,7 +855,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR blue]Static Metadata[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 					</control>
 				</control>
 				<control type="group">
@@ -869,7 +869,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]Max CLL/FALL:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -879,7 +879,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$INFO[Player.Process(video.hdr.max.cll)]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -889,7 +889,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$INFO[Player.Process(video.hdr.max.fall)]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -899,7 +899,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR dimgrey]cd/m²[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -914,7 +914,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]Min/Max:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -924,7 +924,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$INFO[Player.Process(video.hdr.min.lum)]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -934,7 +934,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$INFO[Player.Process(video.hdr.max.lum)]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -944,7 +944,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR dimgrey]cd/m²[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -959,7 +959,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]Mastering Display Color:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="textbox">
@@ -970,7 +970,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$INFO[Player.Process(video.hdr.colour.primaries)]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -990,7 +990,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]Video:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -1000,7 +1000,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>$INFO[Player.Process(video.width.raw)]x$INFO[Player.Process(video.height.raw)]$INFO[Player.Process(videoscantype)] @ $INFO[Player.Process(videofps)] fps $INFO[VideoPlayer.VideoAspect,[COLOR dimgrey](,:1)[/COLOR]]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -1015,7 +1015,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]- codec:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -1025,7 +1025,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>$VAR[VideoCodecPlayVar] $VAR[|] $INFO[VideoPlayer.VideoResolution]$VAR[VideoResolutionTypePlayVar, ] $VAR[|] $VAR[VideoBitDepthVar,,-bit]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -1040,7 +1040,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]- type:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -1051,7 +1051,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>$INFO[Player.Process(video.source.hdr.type)]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 						<visible>String.IsEqual(Player.Process(video.source.hdr.type.raw),0)</visible>
 					</control>
@@ -1063,7 +1063,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>$INFO[Player.Process(video.source.hdr.type)]$VAR[DualTrackVar, [COLOR dimgrey]([/COLOR],[COLOR dimgrey])[/COLOR]]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 						<visible>!String.IsEqual(Player.Process(video.source.hdr.type.raw),0)</visible>
 						<visible>String.IsEqual(Player.Process(video.source.additional.hdr.type.raw),0)</visible>
@@ -1076,7 +1076,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>$INFO[Player.Process(video.source.hdr.type)]$VAR[DualTrackVar, [COLOR dimgrey]([/COLOR],[COLOR dimgrey])[/COLOR]] $VAR[|] [COLOR dimgrey]$INFO[Player.Process(video.source.additional.hdr.type)][/COLOR]$VAR[DualTrackAddVar, [COLOR dimgrey](,)[/COLOR]]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 						<visible>!String.IsEqual(Player.Process(video.source.hdr.type.raw),0)</visible>
 						<visible>!String.IsEqual(Player.Process(video.source.additional.hdr.type.raw),0)</visible>
@@ -1093,7 +1093,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]- type:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -1104,7 +1104,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>$VAR[HDRcodectypeVar]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -1119,7 +1119,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]- color:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -1129,7 +1129,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>$VAR[ColorRangeVar] $VAR[|] $VAR[ColorPrimariesVar]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -1143,7 +1143,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]- dec|deint:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -1153,7 +1153,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>$INFO[Player.Process(videodecoder),[UPPERCASE],[/UPPERCASE]] $VAR[VideoHWDecoder,[COLOR dimgrey]([/COLOR],[COLOR dimgrey])[/COLOR]] $VAR[|] [CAPITALIZE]$INFO[Player.Process(deintmethod)][/CAPITALIZE]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -1168,7 +1168,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]- output:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -1178,7 +1178,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>$INFO[Player.Process(amlogic.pixformat)]$VAR[DVTunnelVar, [COLOR dimgrey](,)[/COLOR]]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -1192,7 +1192,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]- bitrate:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -1202,7 +1202,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>$INFO[Player.Process(video.live.mibit.rate),, Mb/s] $INFO[VideoPlayer.VideoMibitRate,[COLOR dimgrey](, Mb/s)[/COLOR]]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -1216,7 +1216,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]CPU:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -1226,7 +1226,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>$INFO[System.CpuFrequency] $VAR[|] $INFO[System.CPUTemperature]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -1241,7 +1241,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]- usage:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -1251,7 +1251,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>$INFO[System.CpuAltUsage]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -1280,7 +1280,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]Display:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -1290,7 +1290,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>$INFO[System.ScreenResolution]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -1304,7 +1304,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]Audio:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -1314,7 +1314,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>$VAR[AudioCodecPlayVar]$VAR[AudioChannelsPlayVar, ]$VAR[ObjectAudioPlayVar, [COLOR lightgreen],[/COLOR]]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -1325,7 +1325,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR dimgrey]No audio codec[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -1339,7 +1339,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]- sampling:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -1349,7 +1349,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>$INFO[Player.Process(audiobitspersample),,-bit] $VAR[|] $INFO[Player.Process(audio.sample.rate),, kHz]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -1364,7 +1364,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]- language:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -1375,7 +1375,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>$VAR[AudioLanguagePlayVar] $VAR[|] $INFO[VideoPlayer.AudioLanguageEx]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -1386,7 +1386,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR dimgrey]Unknown[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -1400,7 +1400,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]- layout:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -1410,7 +1410,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>$VAR[AudioLayoutVar]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -1424,7 +1424,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]- output:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -1434,7 +1434,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>Passthrough</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 						<visible>Player.Passthrough</visible>
 					</control>
@@ -1445,7 +1445,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>$INFO[Player.Process(audiochannelssink),]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 						<visible>!Player.Passthrough</visible>
 					</control>
@@ -1456,7 +1456,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>Decoding $VAR[|] [UPPERCASE]$INFO[Player.Process(audiodecoder)][/UPPERCASE]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 						<visible>!Player.Passthrough + String.IsEmpty(Player.Process(audiochannelssink))</visible>
 					</control>
@@ -1471,7 +1471,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]- bitrate:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -1481,7 +1481,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>$INFO[Player.Process(audio.live.kibit.rate),, Kb/s] $INFO[VideoPlayer.AudioKibitRate,[COLOR dimgrey](, Kb/s)[/COLOR]]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -1496,7 +1496,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]Subtitle:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -1506,7 +1506,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>$INFO[VideoPlayer.SubtitlesLanguage] $VAR[|] $VAR[SubtitleVar]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 						<visible>VideoPlayer.HasSubtitles + VideoPlayer.SubtitlesEnabled</visible>
 					</control>
@@ -1517,7 +1517,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>$INFO[VideoPlayer.SubtitlesLanguage,[COLOR dimgrey],[/COLOR]] $VAR[|] $INFO[VideoPlayer.SubtitlesLangEx,[COLOR dimgrey],[/COLOR]]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 						<visible>VideoPlayer.HasSubtitles + !VideoPlayer.SubtitlesEnabled</visible>
 					</control>
@@ -1528,7 +1528,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR dimgrey]No subtitle[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 						<visible>!VideoPlayer.HasSubtitles</visible>
 					</control>
@@ -1543,7 +1543,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]Memory:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -1553,7 +1553,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>$INFO[system.memory(used.percent)] [COLOR dimgrey]([/COLOR]$INFO[system.memory(used)] [COLOR dimgrey]/[/COLOR] $INFO[system.memory(total)][COLOR dimgrey])[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -1584,7 +1584,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]DV profile:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -1594,7 +1594,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>$VAR[DVProfileExtVar]$VAR[DVELVar, ] $INFO[Player.Process(video.dovi.codec.string),[COLOR dimgrey](,)[/COLOR]]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 						<visible>!String.IsEqual(VideoPlayer.VideoCodec,av1)</visible>
 					</control>
@@ -1605,7 +1605,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>10.0 [COLOR dimgrey](----)[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 						<visible>String.IsEqual(VideoPlayer.VideoCodec,av1)</visible>
 					</control>
@@ -1623,7 +1623,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]DV metadata:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -1632,8 +1632,8 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>$INFO[Player.Process(video.dovi.meta.version)] $VAR[CMAppendVar]</label>
-						<font>font12</font>
+						<label>$VAR[CMMetadataVar]</label>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 						<visible>!String.IsEqual(VideoPlayer.VideoCodec,av1)</visible>
 					</control>
@@ -1644,7 +1644,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR dimgrey]None[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 						<visible>String.IsEqual(VideoPlayer.VideoCodec,av1)</visible>
 					</control>
@@ -1660,7 +1660,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]VP|VS10 mode:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -1680,7 +1680,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>$VAR[|] $INFO[Player.Process(amlogic.vs10.mode)]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -1696,7 +1696,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]AML fps:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -1706,7 +1706,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>$INFO[Player.Process(amlogic.video.fps.info)]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -1716,7 +1716,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>&gt; $INFO[Player.Process(amlogic.video.fps.drop)] fps</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -1730,7 +1730,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]Audio queue:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -1740,7 +1740,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>$INFO[Player.Process(audio.queue.level)]%</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="group">
@@ -1769,7 +1769,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]Audio data:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -1779,7 +1779,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>$INFO[Player.Process(audio.queue.data.level)]%</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="group">
@@ -1808,7 +1808,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]Video queue:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -1818,7 +1818,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>$INFO[Player.Process(video.queue.level)]%</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="group">
@@ -1847,7 +1847,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]Video data:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -1857,7 +1857,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>$INFO[Player.Process(video.queue.data.level)]%</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="group">
@@ -1886,7 +1886,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR button_focus]Kodi cache:[/COLOR]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -1896,7 +1896,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>$INFO[Player.CacheLevel,,%]</label>
-						<font>font12</font>
+						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>

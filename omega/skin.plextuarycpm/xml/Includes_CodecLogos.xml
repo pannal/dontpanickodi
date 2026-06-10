@@ -16,7 +16,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/SDR8.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]sdr8.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -27,7 +27,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/SDR10.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]sdr10.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -38,7 +38,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/HDR10.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]hdr10.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -49,7 +49,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/HDR10Plus.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]hdr10plus.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -60,7 +60,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/Dolby_Vision.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]dolby_vision.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -71,7 +71,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/Dolby_Vision_FEL.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]dolby_vision_fel.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -82,7 +82,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/HLG.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]hlg.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -93,7 +93,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/SDR_VS10.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]sdr_vs.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -104,7 +104,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/HDR10_VS10.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]hdr10_vs.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -115,7 +115,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/Dolby_Vision_VS10.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]dolby_vision_vs.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -126,7 +126,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/Dolby_Vision_Conv.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]dolby_vision_conv.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -137,7 +137,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/PCM.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]pcm.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -148,7 +148,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/AAC.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]aac.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -159,7 +159,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/Dolby_Digital.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]ac3.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -170,7 +170,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/Dolby_Digital_Plus.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]eac3.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -181,7 +181,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/Dolby_TrueHD_Atmos.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]truehd_atmos.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -192,7 +192,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/Dolby_TrueHD.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]truehd.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -203,7 +203,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/Dolby_Digital_Plus_Atmos.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]eac3_ddp_atmos.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -214,7 +214,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/MP3.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]mp3.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -225,7 +225,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/DTS.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]dca.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -236,7 +236,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/DTS-HD-MA.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]dtshd_ma.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -247,7 +247,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/DTS-HD-HRA.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]dtshd_hra.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -258,7 +258,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/DTSX.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]dtshd_ma_x.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -269,7 +269,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/IMAX.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]dtshd_ma_x_imax.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -280,7 +280,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/FLAC.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]flac.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -291,7 +291,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/OPUS.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]opus.png</texture>
                 </control>
             </control>
         </control>
@@ -313,7 +313,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/SDR8.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]sdr8.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -324,7 +324,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/SDR10.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]sdr10.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -335,7 +335,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/HDR10.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]hdr10.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -346,7 +346,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/HDR10Plus.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]hdr10plus.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -357,7 +357,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/Dolby_Vision.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]dolby_vision.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -368,7 +368,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/Dolby_Vision_FEL.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]dolby_vision_fel.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -379,7 +379,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/HLG.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]hlg.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -390,7 +390,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/SDR_VS10.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]sdr_vs.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -401,7 +401,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/HDR10_VS10.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]hdr10_vs.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -412,7 +412,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/Dolby_Vision_VS10.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]dolby_vision_vs.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -423,7 +423,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/Dolby_Vision_Conv.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]dolby_vision_conv.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -434,7 +434,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/PCM.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]pcm.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -445,7 +445,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/AAC.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]aac.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -456,7 +456,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/Dolby_Digital.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]ac3.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -467,7 +467,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/Dolby_Digital_Plus.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]eac3.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -478,7 +478,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/Dolby_TrueHD_Atmos.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]truehd_atmos.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -489,7 +489,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/Dolby_TrueHD.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]truehd.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -500,7 +500,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/Dolby_Digital_Plus_Atmos.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]eac3_ddp_atmos.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -511,7 +511,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/MP3.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]mp3.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -522,7 +522,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/DTS.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]dca.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -533,7 +533,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/DTS-HD-MA.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]dtshd_ma.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -544,7 +544,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/DTS-HD-HRA.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]dtshd_hra.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -555,7 +555,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/DTSX.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]dtshd_ma_x.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -566,7 +566,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/IMAX.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]dtshd_ma_x_imax.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -577,7 +577,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/FLAC.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]flac.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -588,7 +588,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/OPUS.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]opus.png</texture>
                 </control>
             </control>
         </control>
@@ -610,7 +610,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/SDR8.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]sdr8.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -621,7 +621,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/SDR10.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]sdr10.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -632,7 +632,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/HDR10.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]hdr10.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -643,7 +643,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/HDR10Plus.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]hdr10plus.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -654,7 +654,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/Dolby_Vision.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]dolby_vision.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -665,7 +665,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/Dolby_Vision_FEL.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]dolby_vision_fel.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -676,7 +676,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/HLG.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]hlg.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -687,7 +687,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/SDR_VS10.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]sdr_vs.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -698,7 +698,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/HDR10_VS10.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]hdr10_vs.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -709,7 +709,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/Dolby_Vision_VS10.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]dolby_vision_vs.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -720,7 +720,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/Dolby_Vision_Conv.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]dolby_vision_conv.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -731,7 +731,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/PCM.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]pcm.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -742,7 +742,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/AAC.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]aac.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -753,7 +753,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/Dolby_Digital.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]ac3.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -764,7 +764,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/Dolby_Digital_Plus.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]eac3.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -775,7 +775,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/Dolby_TrueHD_Atmos.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]truehd_atmos.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -786,7 +786,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/Dolby_TrueHD.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]truehd.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -797,7 +797,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/Dolby_Digital_Plus_Atmos.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]eac3_ddp_atmos.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -808,7 +808,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/MP3.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]mp3.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -819,7 +819,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/DTS.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]dca.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -830,7 +830,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/DTS-HD-MA.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]dtshd_ma.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -841,7 +841,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/DTS-HD-HRA.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]dtshd_hra.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -852,7 +852,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/DTSX.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]dtshd_ma_x.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -863,7 +863,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/IMAX.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]dtshd_ma_x_imax.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -874,7 +874,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/FLAC.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]flac.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -885,7 +885,7 @@
                     <width>144</width>
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
-                    <texture colordiffuse="FFFFFFFF">codecs/OPUS.png</texture>
+                    <texture>$VAR[CodecLogoColorVar]opus.png</texture>
                 </control>
             </control>
         </control>
@@ -904,8 +904,7 @@
                     <width>210</width>
                     <height>170</height>
                     <visible>$PARAM[visible]</visible>
-                    <texture>$PARAM[texture]</texture>
-                    <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
+                    <texture>$VAR[CodecLogoColorVar]$PARAM[texture]</texture>
                 </control>
             </control>
         </definition>
@@ -924,8 +923,7 @@
                     <width>210</width>
                     <height>90</height>
                     <visible>$PARAM[visible]</visible>
-                    <texture>$PARAM[texture]</texture>
-                    <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
+                    <texture>$VAR[CodecLogoColorVar]$PARAM[texture]</texture>
                 </control>
             </control>
         </definition>
@@ -944,8 +942,7 @@
                     <width>210</width>
                     <height>90</height>
                     <visible>$PARAM[visible]</visible>
-                    <texture>$PARAM[texture]</texture>
-                    <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
+                    <texture>$VAR[CodecLogoColorVar]$PARAM[texture]</texture>
                 </control>
             </control>
         </definition>
@@ -966,8 +963,7 @@
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
                     <visible>$PARAM[visible]</visible>
-                    <texture>$PARAM[texture]</texture>
-                    <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
+                    <texture>$VAR[CodecLogoColorVar]$PARAM[texture]</texture>
                 </control>
             </control>
         </definition>
@@ -988,8 +984,7 @@
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
                     <visible>$PARAM[visible]</visible>
-                    <texture>$PARAM[texture]</texture>
-                    <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
+                    <texture>$VAR[CodecLogoColorVar]$PARAM[texture]</texture>
                 </control>
             </control>
         </definition>
@@ -1010,8 +1005,7 @@
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
                     <visible>$PARAM[visible]</visible>
-                    <texture>$PARAM[texture]</texture>
-                    <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
+                    <texture>$VAR[CodecLogoColorVar]$PARAM[texture]</texture>
                 </control>
             </control>
         </definition>
@@ -1032,8 +1026,7 @@
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
                     <visible>$PARAM[visible]</visible>
-                    <texture>$PARAM[texture]</texture>
-                    <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
+                    <texture>$VAR[CodecLogoColorVar]$PARAM[texture]</texture>
                 </control>
             </control>
         </definition>
@@ -1054,8 +1047,7 @@
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
                     <visible>$PARAM[visible]</visible>
-                    <texture>$PARAM[texture]</texture>
-                    <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
+                    <texture>$VAR[CodecLogoColorVar]$PARAM[texture]</texture>
                 </control>
             </control>
         </definition>
@@ -1075,8 +1067,7 @@
                     <width>8</width>
                     <height>8</height>
                     <visible>$PARAM[visible]</visible>
-                    <texture>$PARAM[texture]</texture>
-                    <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
+                    <texture>$VAR[CodecLogoColorVar]$PARAM[texture]</texture>
                 </control>
             </control>
         </definition>
@@ -1097,8 +1088,7 @@
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
                     <visible>$PARAM[visible]</visible>
-                    <texture>$PARAM[texture]</texture>
-                    <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
+                    <texture>$VAR[CodecLogoColorVar]$PARAM[texture]</texture>
                 </control>
             </control>
         </definition>
@@ -1119,8 +1109,7 @@
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
                     <visible>$PARAM[visible]</visible>
-                    <texture>$PARAM[texture]</texture>
-                    <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
+                    <texture>$VAR[CodecLogoColorVar]$PARAM[texture]</texture>
                 </control>
             </control>
         </definition>
@@ -1141,8 +1130,7 @@
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
                     <visible>$PARAM[visible]</visible>
-                    <texture>$PARAM[texture]</texture>
-                    <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
+                    <texture>$VAR[CodecLogoColorVar]$PARAM[texture]</texture>
                 </control>
             </control>
         </definition>
@@ -1163,8 +1151,7 @@
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
                     <visible>$PARAM[visible]</visible>
-                    <texture>$PARAM[texture]</texture>
-                    <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
+                    <texture>$VAR[CodecLogoColorVar]$PARAM[texture]</texture>
                 </control>
             </control>
         </definition>
@@ -1185,8 +1172,7 @@
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
                     <visible>$PARAM[visible]</visible>
-                    <texture>$PARAM[texture]</texture>
-                    <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
+                    <texture>$VAR[CodecLogoColorVar]$PARAM[texture]</texture>
                 </control>
             </control>
         </definition>
@@ -1206,8 +1192,7 @@
                     <width>180</width>
                     <height>1.5</height>
                     <visible>$PARAM[visible]</visible>
-                    <texture>$PARAM[texture]</texture>
-                    <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
+                    <texture>$VAR[CodecLogoColorVar]$PARAM[texture]</texture>
                 </control>
             </control>
         </definition>
@@ -1228,8 +1213,7 @@
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
                     <visible>$PARAM[visible]</visible>
-                    <texture>$PARAM[texture]</texture>
-                    <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
+                    <texture>$VAR[CodecLogoColorVar]$PARAM[texture]</texture>
                 </control>
             </control>
         </definition>
@@ -1250,8 +1234,7 @@
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
                     <visible>$PARAM[visible]</visible>
-                    <texture>$PARAM[texture]</texture>
-                    <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
+                    <texture>$VAR[CodecLogoColorVar]$PARAM[texture]</texture>
                 </control>
             </control>
         </definition>
@@ -1272,8 +1255,7 @@
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
                     <visible>$PARAM[visible]</visible>
-                    <texture>$PARAM[texture]</texture>
-                    <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
+                    <texture>$VAR[CodecLogoColorVar]$PARAM[texture]</texture>
                 </control>
             </control>
         </definition>
@@ -1294,8 +1276,7 @@
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
                     <visible>$PARAM[visible]</visible>
-                    <texture>$PARAM[texture]</texture>
-                    <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
+                    <texture>$VAR[CodecLogoColorVar]$PARAM[texture]</texture>
                 </control>
             </control>
         </definition>
@@ -1316,8 +1297,7 @@
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
                     <visible>$PARAM[visible]</visible>
-                    <texture>$PARAM[texture]</texture>
-                    <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
+                    <texture>$VAR[CodecLogoColorVar]$PARAM[texture]</texture>
                 </control>
             </control>
         </definition>
@@ -1338,8 +1318,7 @@
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
                     <visible>$PARAM[visible]</visible>
-                    <texture>$PARAM[texture]</texture>
-                    <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
+                    <texture>$VAR[CodecLogoColorVar]$PARAM[texture]</texture>
                 </control>
             </control>
         </definition>
@@ -1360,8 +1339,7 @@
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
                     <visible>$PARAM[visible]</visible>
-                    <texture>$PARAM[texture]</texture>
-                    <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
+                    <texture>$VAR[CodecLogoColorVar]$PARAM[texture]</texture>
                 </control>
             </control>
         </definition>
@@ -1382,8 +1360,7 @@
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
                     <visible>$PARAM[visible]</visible>
-                    <texture>$PARAM[texture]</texture>
-                    <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
+                    <texture>$VAR[CodecLogoColorVar]$PARAM[texture]</texture>
                 </control>
             </control>
         </definition>
@@ -1404,8 +1381,7 @@
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
                     <visible>$PARAM[visible]</visible>
-                    <texture>$PARAM[texture]</texture>
-                    <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
+                    <texture>$VAR[CodecLogoColorVar]$PARAM[texture]</texture>
                 </control>
             </control>
         </definition>
@@ -1426,8 +1402,7 @@
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
                     <visible>$PARAM[visible]</visible>
-                    <texture>$PARAM[texture]</texture>
-                    <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
+                    <texture>$VAR[CodecLogoColorVar]$PARAM[texture]</texture>
                 </control>
             </control>
         </definition>
@@ -1448,8 +1423,7 @@
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
                     <visible>$PARAM[visible]</visible>
-                    <texture>$PARAM[texture]</texture>
-                    <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
+                    <texture>$VAR[CodecLogoColorVar]$PARAM[texture]</texture>
                 </control>
             </control>
         </definition>
@@ -1470,8 +1444,7 @@
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
                     <visible>$PARAM[visible]</visible>
-                    <texture>$PARAM[texture]</texture>
-                    <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
+                    <texture>$VAR[CodecLogoColorVar]$PARAM[texture]</texture>
                 </control>
             </control>
         </definition>
@@ -1492,8 +1465,7 @@
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
                     <visible>$PARAM[visible]</visible>
-                    <texture>$PARAM[texture]</texture>
-                    <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
+                    <texture>$VAR[CodecLogoColorVar]$PARAM[texture]</texture>
                 </control>
             </control>
         </definition>
@@ -1514,8 +1486,7 @@
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
                     <visible>$PARAM[visible]</visible>
-                    <texture>$PARAM[texture]</texture>
-                    <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
+                    <texture>$VAR[CodecLogoColorVar]$PARAM[texture]</texture>
                 </control>
             </control>
         </definition>
@@ -1536,8 +1507,7 @@
                     <height>80</height>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
                     <visible>$PARAM[visible]</visible>
-                    <texture>$PARAM[texture]</texture>
-                    <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
+                    <texture>$VAR[CodecLogoColorVar]$PARAM[texture]</texture>
                 </control>
             </control>
         </definition>

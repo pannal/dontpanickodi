@@ -732,6 +732,7 @@
 		<value condition="String.IsEqual(ListItem.VideoCodec,wmv3)">WMV</value>
 		<value condition="String.IsEqual(ListItem.VideoCodec,wvc1)">VC-1</value>
 		<value condition="String.IsEqual(ListItem.VideoCodec,xvid)">XviD</value>
+		<value condition="String.IsEqual(ListItem.VideoCodec,prores)">ProRes</value>
 		<value>$INFO[ListItem.VideoCodec]</value>
 	</variable>
 	<variable name="VideoHDRVar">
@@ -1010,8 +1011,12 @@
 		<value condition="Integer.IsEqual(Player.Process(video.dovi.bl.present),1)">[COLOR lightgreen]■[/COLOR]</value>
 		<value>[COLOR ff424242]■[/COLOR]</value>
 	</variable>
-	<variable name="CMAppendVar">
-		<value condition="String.StartsWith(Player.Process(video.dovi.meta.version),V)">[COLOR dimgrey]Append[/COLOR]</value>
+	<variable name="CMMetadataVar">
+		<value condition="String.StartsWith(Player.Process(video.dovi.meta.version),V)">$INFO[Player.Process(video.dovi.meta.version)] [COLOR dimgrey]Append[/COLOR]</value>
+		<value condition="String.Contains(Player.Process(video.dovi.meta.version),C29 CMv2.9 1-L2)">VCMv2.9 1-L2 [COLOR dimgrey]Stripped[/COLOR]</value>
+		<value condition="String.Contains(Player.Process(video.dovi.meta.version),C29 CMv2.9 2-L2)">VCMv2.9 2-L2 [COLOR dimgrey]Stripped[/COLOR]</value>
+		<value condition="String.Contains(Player.Process(video.dovi.meta.version),C29 CMv2.9 3-L2)">VCMv2.9 3-L2 [COLOR dimgrey]Stripped[/COLOR]</value>
+		<value>$INFO[Player.Process(video.dovi.meta.version)]</value>
 	</variable>
 	<variable name="ColorPrimariesVar">
 		<value condition="String.IsEqual(Player.Process(video.color.primaries),bt2020)">BT.2020</value>
@@ -1120,6 +1125,7 @@
 		<value condition="String.IsEqual(VideoPlayer.VideoCodec,wmv3)">WMV</value>
 		<value condition="String.IsEqual(VideoPlayer.VideoCodec,wvc1)">VC-1</value>
 		<value condition="String.IsEqual(VideoPlayer.VideoCodec,xvid)">XviD</value>
+		<value condition="String.IsEqual(VideoPlayer.VideoCodec,prores)">ProRes</value>
 		<value>[UPPERCASE]$INFO[VideoPlayer.VideoCodec][/UPPERCASE]</value>
 	</variable>
 	<variable name="VideoHWDecoder">
@@ -1134,5 +1140,9 @@
 		<value condition="String.IsEqual(VideoPlayer.VideoResolution,1080)">HD</value>			
 		<value condition="String.IsEqual(VideoPlayer.VideoResolution,4K)">UHD</value>
 		<value condition="String.IsEqual(VideoPlayer.VideoResolution,8K)">UHD</value>	
+	</variable>
+	<variable name="CodecLogoColorVar">
+		<value condition="Skin.HasSetting(osd.codeclogolight)">codecs/</value>
+		<value>codecs/b_</value>
 	</variable>
 </includes>

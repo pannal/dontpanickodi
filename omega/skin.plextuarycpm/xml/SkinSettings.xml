@@ -119,6 +119,12 @@
 					<onclick>Skin.ToggleSetting(osd.codeclogosactiveareaoff)</onclick>
 					<selected>!Skin.HasSetting(osd.codeclogosactiveareaoff)</selected>
 				</control>
+				<control type="radiobutton" id="713">
+					<label>$LOCALIZE[31281]</label>
+					<include>DefaultSettingButton</include>
+					<onclick>Skin.ToggleSetting(osd.codeclogolight)</onclick>
+					<selected>!Skin.HasSetting(osd.codeclogolight)</selected>
+				</control>
 				<control type="radiobutton" id="908">
 					<label>$LOCALIZE[31313]</label>
 					<include>DefaultSettingButton</include>

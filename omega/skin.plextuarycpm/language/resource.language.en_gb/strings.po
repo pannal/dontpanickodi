@@ -1217,6 +1217,10 @@ msgctxt "#31280"
 msgid "Always keep codec logos inside the active area"
 msgstr ""
 
+msgctxt "#31281"
+msgid "Dark codec logos"
+msgstr ""
+
 msgctxt "#31264"
 msgid "Original"
 msgstr ""

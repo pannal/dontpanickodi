@@ -1,3 +1,10 @@
+[B]4.0.0-pm4k1.15cpm.a14.23[/B]
+* Codec logos: dark variant with a "Dark codec logos" setting (default on); aligned the codec art/naming with p3i.estuary (file-preset light/dark, no more colordiffuse)
+* Codec logos: ProRes video badge
+* PlayerProcessInfo: show the CMv4.0 -> CMv2.9 down-convert state in DV Metadata
+* PlayerProcessInfo: smaller text (font10)
+* Fix overlapping media flags on music videos
+
 [B]4.0.0-pm4k1.15cpm.a14.22[/B]
 * Codec logos: also keep the startup logos ("Show codec logos when video starts") inside the DV active area (a14.21 only moved the OSD/PlayerProcessInfo ones)
 
