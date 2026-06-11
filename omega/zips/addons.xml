@@ -674,6 +674,42 @@ Version 1.1.*
 	</extension>
 </addon>
 
+<addon id="skin.plextuarycpm" version="4.0.0-pm4k1.15cpm.a14.24" name="Plextuary CE Custom Builds" provider-name="phil65, pannal, Ichabod Fletchman">
+	<requires>
+		<import addon="xbmc.gui" version="5.17.0"/>
+	</requires>
+	<extension point="xbmc.gui.skin" debugging="false">
+		<res width="1920" height="1440" aspect="4:3" default="false" folder="xml" />
+		<res width="1920" height="1280" aspect="3:2" default="false" folder="xml" />
+		<res width="1920" height="1200" aspect="16:10" default="false" folder="xml" />
+		<res width="2040" height="1080" aspect="17:9" default="false" folder="xml" />
+		<res width="1920" height="1080" aspect="16:9" default="true" folder="xml" />
+		<res width="2560" height="1080" aspect="21:9" default="false" folder="xml" />
+		<res width="2338" height="1080" aspect="19.5:9" default="false" folder="xml" />
+		<res width="2160" height="1080" aspect="18:9" default="false" folder="xml" />
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<platform>all</platform>
+		<license>CC BY-SA 4.0, GNU GENERAL PUBLIC LICENSE Version 2.0</license>
+		<forum>http://forum.kodi.tv/</forum>
+		<source>https://github.com/pannal/skin.plextuary</source>
+		<assets>
+			<icon>resources/icon.png</icon>
+			<fanart>resources/fanart.jpg</fanart>
+			<screenshot>resources/screenshot-01.jpg</screenshot>
+			<screenshot>resources/screenshot-02.jpg</screenshot>
+			<screenshot>resources/screenshot-03.jpg</screenshot>
+			<screenshot>resources/screenshot-04.jpg</screenshot>
+			<screenshot>resources/screenshot-05.jpg</screenshot>
+			<screenshot>resources/screenshot-06.jpg</screenshot>
+			<screenshot>resources/screenshot-07.jpg</screenshot>
+			<screenshot>resources/screenshot-08.jpg</screenshot>
+		</assets>
+		<summary lang="en_GB">Plextuary skin by phil65, pannal. (Kodi&apos;s default skin modded for PM4K). Specifically for CoreELEC custom builds with extended PlayerProcessInfo (CPM A14, U3k, avdvplus, p3i)</summary>
+		<description lang="en_GB">Plextuary skin by phil65, pannal. (Kodi&apos;s default skin modded for PM4K). Specifically for CoreELEC custom builds with extended PlayerProcessInfo (CPM A14, U3k, avdvplus, p3i)</description>
+	</extension>
+</addon>
+
 <addon id="skin.plextuarycpm" version="4.0.0-pm4k1.15cpm.a14.23" name="Plextuary CE Custom Builds" provider-name="phil65, pannal, Ichabod Fletchman">
 	<requires>
 		<import addon="xbmc.gui" version="5.17.0"/>

@@ -1145,4 +1145,7 @@
 		<value condition="Skin.HasSetting(osd.codeclogolight)">codecs/</value>
 		<value>codecs/b_</value>
 	</variable>
+	<variable name="|">
+		<value>[COLOR ff404040]|[/COLOR]</value>
+	</variable>
 </includes>

@@ -1,3 +1,6 @@
+[B]4.0.0-pm4k1.15cpm.a14.24[/B]
+* PlayerProcessInfo: fix missing "|" separators between fields (the separator variable was never carried over from the p3i.estuary port)
+
 [B]4.0.0-pm4k1.15cpm.a14.23[/B]
 * Codec logos: dark variant with a "Dark codec logos" setting (default on); aligned the codec art/naming with p3i.estuary (file-preset light/dark, no more colordiffuse)
 * Codec logos: ProRes video badge
