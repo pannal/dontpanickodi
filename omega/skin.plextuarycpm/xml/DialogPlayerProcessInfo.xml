@@ -1177,7 +1177,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>$INFO[Player.Process(amlogic.pixformat)]$VAR[DVTunnelVar, [COLOR dimgrey](,)[/COLOR]]</label>
+						<label>$VAR[PixFormatVar]$VAR[DVSignalTypeVar, [COLOR dimgrey](,)[/COLOR]]</label>
 						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -1505,6 +1505,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
+						<scroll>true</scroll>
 						<label>$INFO[VideoPlayer.SubtitlesLanguage] $VAR[|] $VAR[SubtitleVar]</label>
 						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
@@ -1679,7 +1680,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>$VAR[|] $INFO[Player.Process(amlogic.vs10.mode)]</label>
+						<label> $VAR[|] $INFO[Player.Process(amlogic.vs10.mode)]</label>
 						<font>font10</font>
 						<shadowcolor>black</shadowcolor>
 					</control>

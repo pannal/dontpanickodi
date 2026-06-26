@@ -1,3 +1,9 @@
+[B]4.0.0-pm4k1.15cpm.a14.25[/B]
+* PlayerProcessInfo: new video-output line (pixel format + Player-Led DV/HDR10/LLDV signal type)
+* PlayerProcessInfo: fix audio channel layouts (correct LFE placement, drop bogus 9.1/10-channel mappings, Mono -> 1.0)
+* PlayerProcessInfo: scroll long subtitle names
+* PlayerProcessInfo: fix missing space before the "|" in the VP/VS10 mode line (overlapped the green indicator)
+
 [B]4.0.0-pm4k1.15cpm.a14.24[/B]
 * PlayerProcessInfo: fix missing "|" separators between fields (the separator variable was never carried over from the p3i.estuary port)
 

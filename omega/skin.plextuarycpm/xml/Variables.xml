@@ -932,9 +932,8 @@
         <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,6)">5.1</value>
         <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,7)">6.1</value>
         <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,8)">7.1</value>
-        <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,10)">9.1</value>
     </variable>
-	
+
     <variable name="AudioChannelsInputVar">
         <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,1)">Mono</value>
         <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,2)">FL, FR</value>
@@ -949,7 +948,7 @@
         <value>$LOCALIZE[13205]</value>
     </variable>
 	<variable name="AudioChannelsPlayVar">
-		<value condition="Integer.IsEqual(VideoPlayer.AudioChannels,1) | Integer.IsEqual(MusicPlayer.Channels,1)">Mono</value>
+		<value condition="Integer.IsEqual(VideoPlayer.AudioChannels,1) | Integer.IsEqual(MusicPlayer.Channels,1)">1.0</value>
 		<value condition="Integer.IsEqual(VideoPlayer.AudioChannels,2) | Integer.IsEqual(MusicPlayer.Channels,2)">2.0</value>
 		<value condition="Integer.IsEqual(VideoPlayer.AudioChannels,3) | Integer.IsEqual(MusicPlayer.Channels,3)">2.1</value>
 		<value condition="Integer.IsEqual(VideoPlayer.AudioChannels,4) | Integer.IsEqual(MusicPlayer.Channels,4)">4.0</value>
@@ -957,7 +956,6 @@
 		<value condition="Integer.IsEqual(VideoPlayer.AudioChannels,6) | Integer.IsEqual(MusicPlayer.Channels,6)">5.1</value>
 		<value condition="Integer.IsEqual(VideoPlayer.AudioChannels,7) | Integer.IsEqual(MusicPlayer.Channels,7)">6.1</value>
 		<value condition="Integer.IsEqual(VideoPlayer.AudioChannels,8) | Integer.IsEqual(MusicPlayer.Channels,8)">7.1</value>
-		<value condition="Integer.IsEqual(VideoPlayer.AudioChannels,10) | Integer.IsEqual(MusicPlayer.Channels,10)">9.1</value>
 	</variable>
 	<variable name="AudioCodecPlayVar">
 		<value condition="String.IsEqual(VideoPlayer.AudioCodec,eac3_ddp_atmos)">Dolby Digital+</value>
@@ -1000,12 +998,10 @@
         <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,2)">FL, FR</value>
         <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,3)">FL, FR, LFE</value>
         <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,4)">FL, FR, BL, BR</value>
-        <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,5)">FL, FR, LFE, BL, BR</value>
-        <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,6)">FL, FR, FC, LFE, SL, SR</value>
-        <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,7)">FL, FR, FC, LFE, BC, SL, SR</value>
-        <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,8)">FL, FR, FC, LFE, BL, BR, SL, SR</value>
-        <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,9)">FL, FR, FC, LFE, BL, BR, SL, SR, FWL</value>
-        <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,10)">FL, FR, FC, LFE, BL, BR, SL, SR, FWL, FWR</value>
+        <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,5)">FL, FR, FC, SL, SR</value>
+        <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,6)">FL, FR, FC, SL, SR, LFE</value>
+        <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,7)">FL, FR, FC, SL, SR, BC, LFE</value>
+        <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,8)">FL, FR, FC, SL, SR, BL, BR, LFE</value>
     </variable>
 	<variable name="BLPresentVar">
 		<value condition="Integer.IsEqual(Player.Process(video.dovi.bl.present),1)">[COLOR lightgreen]■[/COLOR]</value>
@@ -1047,8 +1043,10 @@
 	<variable name="DVSourceProfileExtVar">
 		<value>$INFO[Player.Process(video.source.dovi.profile)].$INFO[Player.Process(video.source.dovi.bl.signal.compatibility)]</value>
 	</variable>
-	<variable name="DVTunnelVar">
+	<variable name="DVSignalTypeVar">
 		<value condition="Integer.IsEqual(Player.Process(amlogic.vs10.mode.raw),1)">DV Tunnel</value>
+		<value condition="Integer.IsEqual(Player.Process(amlogic.vs10.mode.raw),0) + String.Contains(Player.Process(amlogic.eoft_gamut),DV-LL)">LLDV</value>
+		<value condition="Integer.IsEqual(Player.Process(amlogic.vs10.mode.raw),0)">HDR10</value>
 	</variable>
 	<variable name="DualTrackAddVar">
 		<value condition="String.IsEqual(Player.Process(video.dovi.dual.track),ST-DL) + String.IsEqual(Player.Process(video.source.additional.hdr.type),Dolby Vision)">ST-DL</value>
@@ -1095,7 +1093,7 @@
 	</variable>
 	<variable name="SubtitleVar">
 		<value condition="String.IsEmpty(VideoPlayer.SubtitlesName)">$INFO[VideoPlayer.SubtitlesLangEx]</value>
-		<value condition="!String.IsEmpty(VideoPlayer.SubtitlesName)">$INFO[VideoPlayer.SubtitlesName]</value>
+		<value>$INFO[VideoPlayer.SubtitlesName]</value>
 	</variable>
 	<variable name="VPModeVar">
 		<value condition="Integer.IsEqual(Player.Process(video.vpmode),1)">[COLOR lightgreen]■[/COLOR]</value>
@@ -1147,5 +1145,17 @@
 	</variable>
 	<variable name="|">
 		<value>[COLOR ff404040]|[/COLOR]</value>
+	</variable>
+	<variable name="PixFormatVar">
+		<value condition="[String.Contains(Player.Process(amlogic.pixformat),8-bit) + String.Contains(Player.Process(amlogic.pixformat),YUV420)]">8-bit, YUV 4:2:0</value>
+		<value condition="[String.Contains(Player.Process(amlogic.pixformat),8-bit) + String.Contains(Player.Process(amlogic.pixformat),YUV422)]">8-bit, YUV 4:2:2</value>
+		<value condition="[String.Contains(Player.Process(amlogic.pixformat),8-bit) + String.Contains(Player.Process(amlogic.pixformat),YUV444)]">8-bit, YUV 4:4:4</value>
+		<value condition="[String.Contains(Player.Process(amlogic.pixformat),10-bit) + String.Contains(Player.Process(amlogic.pixformat),YUV420)]">10-bit, YUV 4:2:0</value>
+		<value condition="[String.Contains(Player.Process(amlogic.pixformat),10-bit) + String.Contains(Player.Process(amlogic.pixformat),YUV422)]">10-bit, YUV 4:2:2</value>
+		<value condition="[String.Contains(Player.Process(amlogic.pixformat),10-bit) + String.Contains(Player.Process(amlogic.pixformat),YUV444)]">10-bit, YUV 4:4:4</value>
+		<value condition="[String.Contains(Player.Process(amlogic.pixformat),12-bit) + String.Contains(Player.Process(amlogic.pixformat),YUV420)]">12-bit, YUV 4:2:0</value>
+		<value condition="[String.Contains(Player.Process(amlogic.pixformat),12-bit) + String.Contains(Player.Process(amlogic.pixformat),YUV422)]">12-bit, YUV 4:2:2</value>
+		<value condition="[String.Contains(Player.Process(amlogic.pixformat),12-bit) + String.Contains(Player.Process(amlogic.pixformat),YUV444)]">12-bit, YUV 4:4:4</value>
+		<value>$INFO[Player.Process(amlogic.pixformat)]</value>
 	</variable>
 </includes>
