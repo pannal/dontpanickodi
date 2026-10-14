@@ -1,3 +1,6 @@
+[B]4.0.0-pm4k1.15cpm.a14.26[/B]
+* Keep black-border detection startup progress visible during fullscreen playback and in the information view on supported p3i builds.
+
 [B]4.0.0-pm4k1.15cpm.a14.25[/B]
 * PlayerProcessInfo: new video-output line (pixel format + Player-Led DV/HDR10/LLDV signal type)
 * PlayerProcessInfo: fix audio channel layouts (correct LFE placement, drop bogus 9.1/10-channel mappings, Mono -> 1.0)
