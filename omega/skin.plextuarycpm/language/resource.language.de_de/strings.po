@@ -1039,3 +1039,8 @@ msgstr "L5 Aktive Offsets"
 msgctxt "#31319"
 msgid "VS10 & VP"
 msgstr "VS10 & VP"
+
+#: /xml/Variables.xml
+msgctxt "#31320"
+msgid "Skipped [COLOR dimgrey](VAR)[/COLOR]"
+msgstr "Übersprungen [COLOR dimgrey](VAR)[/COLOR]"

@@ -1,3 +1,6 @@
+[B]4.0.0-pm4k1.15cpm.a14.27[/B]
+* Show VAR instead of IMAX when DV active-area detection cannot establish consistent framing.
+
 [B]4.0.0-pm4k1.15cpm.a14.26[/B]
 * Keep black-border detection startup progress visible during fullscreen playback and in the information view on supported p3i builds.
 

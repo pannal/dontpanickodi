@@ -1369,3 +1369,8 @@ msgstr ""
 msgctxt "#31319"
 msgid "VS10 & VP"
 msgstr ""
+
+#: /xml/Variables.xml
+msgctxt "#31320"
+msgid "Skipped [COLOR dimgrey](VAR)[/COLOR]"
+msgstr ""
