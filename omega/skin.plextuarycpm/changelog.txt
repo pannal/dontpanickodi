@@ -1,3 +1,6 @@
+[B]4.0.0-pm4k1.15cpm.a14.28[/B]
+* Keep the Skipped (VAR) detection status untranslated.
+
 [B]4.0.0-pm4k1.15cpm.a14.27[/B]
 * Show VAR instead of IMAX when DV active-area detection cannot establish consistent framing.
 
