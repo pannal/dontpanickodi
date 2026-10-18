@@ -763,3 +763,53 @@ msgstr "System"
 #~ msgctxt "#31138"
 #~ msgid "Player process info"
 #~ msgstr "Player-Informationen"
+
+# Plextuary custom font and settings labels
+
+msgctxt "#31302"
+msgid "Open Sans (needs McFontFace)"
+msgstr "Open Sans (benötigt McFontFace)"
+
+msgctxt "#31303"
+msgid "Hind (needs McFontFace)"
+msgstr "Hind (benötigt McFontFace)"
+
+msgctxt "#31304"
+msgid "PT Sans (needs McFontFace)"
+msgstr "PT Sans (benötigt McFontFace)"
+
+msgctxt "#31305"
+msgid "Inter (needs McFontFace)"
+msgstr "Inter (benötigt McFontFace)"
+
+msgctxt "#31306"
+msgid "Lato (needs McFontFace)"
+msgstr "Lato (benötigt McFontFace)"
+
+msgctxt "#31307"
+msgid "DejaVu Sans (needs McFontFace)"
+msgstr "DejaVu Sans (benötigt McFontFace)"
+
+msgctxt "#31308"
+msgid "Source Sans 3 (needs McFontFace)"
+msgstr "Source Sans 3 (benötigt McFontFace)"
+
+msgctxt "#31309"
+msgid "Noto Sans (old default, bundled)"
+msgstr "Noto Sans (bisheriger Standard, mitgeliefert)"
+
+msgctxt "#31310"
+msgid "Inter UI (default, bundled)"
+msgstr "Inter UI (Standard, mitgeliefert)"
+
+msgctxt "#31311"
+msgid "Exit Menu customization"
+msgstr "Anpassung des Beenden-Menüs"
+
+msgctxt "#31312"
+msgid "Show backdrop on pause"
+msgstr "Hintergrund beim Pausieren anzeigen"
+
+msgctxt "#31313"
+msgid "Show Restart Kodi option in exit menu"
+msgstr "Option „Kodi neu starten“ im Beenden-Menü anzeigen"

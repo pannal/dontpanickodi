@@ -930,59 +930,59 @@ msgctxt "#31611"
 msgid "System"
 msgstr ""
 
-msgctxt "#32100"
+msgctxt "#31312"
 msgid "Show backdrop on pause"
 msgstr ""
 
-msgctxt "#32101"
+msgctxt "#31313"
 msgid "Show Restart Kodi option in exit menu"
 msgstr ""
 
 #: /xml/Font.xml
-msgctxt "#32102"
+msgctxt "#31302"
 msgid "Open Sans (needs McFontFace)"
 msgstr ""
 
 #: /xml/Font.xml
-msgctxt "#32103"
+msgctxt "#31303"
 msgid "Hind (needs McFontFace)"
 msgstr ""
 
 #: /xml/Font.xml
-msgctxt "#32104"
+msgctxt "#31304"
 msgid "PT Sans (needs McFontFace)"
 msgstr ""
 
 #: /xml/Font.xml
-msgctxt "#32105"
+msgctxt "#31305"
 msgid "Inter (needs McFontFace)"
 msgstr ""
 
 #: /xml/Font.xml
-msgctxt "#32106"
+msgctxt "#31306"
 msgid "Lato (needs McFontFace)"
 msgstr ""
 
 #: /xml/Font.xml
-msgctxt "#32107"
+msgctxt "#31307"
 msgid "DejaVu Sans (needs McFontFace)"
 msgstr ""
 
 #: /xml/Font.xml
-msgctxt "#32108"
+msgctxt "#31308"
 msgid "Source Sans 3 (needs McFontFace)"
 msgstr ""
 
 #: /xml/Font.xml
-msgctxt "#32109"
+msgctxt "#31309"
 msgid "Noto Sans (old default, bundled)"
 msgstr ""
 
 #: /xml/Font.xml
-msgctxt "#32110"
+msgctxt "#31310"
 msgid "Inter UI (default, bundled)"
 msgstr ""
 
-msgctxt "#32111"
+msgctxt "#31311"
 msgid "Exit Menu customization"
 msgstr ""

@@ -1,3 +1,7 @@
+[B]4.0.0-pm4k1.15ce[/B]
+* Move custom font and settings strings into Kodi's skin string-ID range for CE22 compatibility.
+* Align custom string IDs with Plextuary CE Custom Builds, preserve Hungarian translations, and add the missing German labels.
+
 [B]0.8.5[/B]
 • Updated language files from Transifex
 

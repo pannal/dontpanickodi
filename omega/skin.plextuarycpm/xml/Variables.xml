@@ -962,11 +962,16 @@
 		<value condition="String.IsEqual(VideoPlayer.AudioCodec,truehd_atmos)">Dolby TrueHD</value>
 		<value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x)">DTS-HD MA</value>
 		<value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x_imax)">DTS-HD MA</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_auro3d)">DTS-HD MA</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_hra_x)">DTS-HD HRA</value>
 		<value condition="String.IsEqual(VideoPlayer.AudioCodec,ac3)">Dolby Digital</value>
 		<value condition="String.IsEqual(VideoPlayer.AudioCodec,dolbydigital)">Dolby Digital</value>
 		<value condition="String.IsEqual(VideoPlayer.AudioCodec,eac3)">Dolby Digital+</value>
 		<value condition="String.IsEqual(VideoPlayer.AudioCodec,truehd)">Dolby TrueHD</value>
 		<value condition="String.IsEqual(VideoPlayer.AudioCodec,dca)">DTS</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioCodec,dts_es)">DTS-ES</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioCodec,dts_96_24)">DTS 96/24</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioCodec,dts_express)">DTS Express</value>
 		<value condition="String.IsEqual(VideoPlayer.AudioCodec,dtsma)">DTS-HD MA</value>
 		<value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma)">DTS-HD MA</value>
 		<value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_hra)">DTS-HD HRA</value>
@@ -994,14 +999,16 @@
 		<value>$INFO[VideoPlayer.AudioLanguage]</value>
 	</variable>
 	<variable name="AudioLayoutVar">
+		<value condition="!String.IsEmpty(Player.Process(omniphony.input))">$INFO[Player.Process(omniphony.input)]$INFO[Player.Process(omniphony.render), [COLOR dimgrey](,)[/COLOR]]</value>
+        <value condition="player.passthrough + !String.IsEmpty(Player.Process(audio.object.layout))">$INFO[Player.Process(audio.object.layout)]</value>
         <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,1)">Mono</value>
         <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,2)">FL, FR</value>
         <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,3)">FL, FR, LFE</value>
         <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,4)">FL, FR, BL, BR</value>
         <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,5)">FL, FR, FC, SL, SR</value>
-        <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,6)">FL, FR, FC, SL, SR, LFE</value>
-        <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,7)">FL, FR, FC, SL, SR, BC, LFE</value>
-        <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,8)">FL, FR, FC, SL, SR, BL, BR, LFE</value>
+        <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,6)">FL, FR, FC, LFE, SL, SR</value>
+        <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,7)">FL, FR, FC, LFE, BC, SL, SR</value>
+        <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,8)">FL, FR, FC, LFE, BL, BR, SL, SR</value>
     </variable>
 	<variable name="BLPresentVar">
 		<value condition="Integer.IsEqual(Player.Process(video.dovi.bl.present),1)">[COLOR lightgreen]■[/COLOR]</value>
@@ -1037,16 +1044,16 @@
 		<value>$INFO[Player.Process(video.dovi.profile)].$INFO[Player.Process(video.dovi.bl.signal.compatibility)]</value>
 	</variable>
 	<variable name="DVSourceELVar">
-		<value condition="String.IsEqual(Player.Process(video.source.dovi.el.type),minimum)">[COLOR 8016a34a]MEL[/COLOR]</value>
-		<value condition="String.IsEqual(Player.Process(video.source.dovi.el.type),full)">[COLOR 8016a34a]FEL[/COLOR]</value>
+		<value condition="!Integer.IsEqual(Player.Process(video.source.dovi.profile),0) + !String.IsEqual(Player.Process(video.source.dovi.el.type),Player.Process(video.dovi.el.type)) + String.IsEqual(Player.Process(video.source.dovi.el.type),minimum)">[COLOR 8016a34a]MEL[/COLOR]</value>
+		<value condition="!Integer.IsEqual(Player.Process(video.source.dovi.profile),0) + !String.IsEqual(Player.Process(video.source.dovi.el.type),Player.Process(video.dovi.el.type)) + String.IsEqual(Player.Process(video.source.dovi.el.type),full)">[COLOR 8016a34a]FEL[/COLOR]</value>
 	</variable>
 	<variable name="DVSourceProfileExtVar">
 		<value>$INFO[Player.Process(video.source.dovi.profile)].$INFO[Player.Process(video.source.dovi.bl.signal.compatibility)]</value>
 	</variable>
 	<variable name="DVSignalTypeVar">
 		<value condition="Integer.IsEqual(Player.Process(amlogic.vs10.mode.raw),1)">DV Tunnel</value>
-		<value condition="Integer.IsEqual(Player.Process(amlogic.vs10.mode.raw),0) + String.Contains(Player.Process(amlogic.eoft_gamut),DV-LL)">LLDV</value>
-		<value condition="Integer.IsEqual(Player.Process(amlogic.vs10.mode.raw),0)">HDR10</value>
+		<value condition="Integer.IsEqual(Player.Process(amlogic.vs10.mode.raw),0) + String.Contains(Player.Process(amlogic.eoft_gamut),DV-LL)">LLDV$INFO[Player.Process(video.dovi.vsvdb.max.lum),[COLOR ff404040]|[/COLOR], nits]</value>
+		<value condition="Integer.IsEqual(Player.Process(amlogic.vs10.mode.raw),0)">HDR10$INFO[Player.Process(video.dovi.vsvdb.max.lum),[COLOR ff404040]|[/COLOR], nits]</value>
 	</variable>
 	<variable name="DualTrackAddVar">
 		<value condition="String.IsEqual(Player.Process(video.dovi.dual.track),ST-DL) + String.IsEqual(Player.Process(video.source.additional.hdr.type),Dolby Vision)">ST-DL</value>
@@ -1060,7 +1067,7 @@
 		<value condition="Integer.IsEqual(Player.Process(video.dovi.el.present),0)">[COLOR ff424242]■[/COLOR]</value>
 	</variable>
 	<variable name="ELSourcePresentVar">
-		<value condition="Integer.IsEqual(Player.Process(video.source.dovi.el.present),0)">[COLOR ff424242]■[/COLOR]</value>
+		<value condition="!Integer.IsEqual(Player.Process(video.source.dovi.profile),0) + !Integer.IsEqual(Player.Process(video.source.dovi.el.present),Player.Process(video.dovi.el.present)) + Integer.IsEqual(Player.Process(video.source.dovi.el.present),0)">[COLOR ff424242]■[/COLOR]</value>
 	</variable>
 	<variable name="HDRcodectypeVar">
 		<value condition="String.Contains(VideoPlayer.HdrType,dolbyvision)">Dolby Vision</value>
@@ -1070,6 +1077,7 @@
 		<value condition="String.IsEmpty(VideoPlayer.HdrType)">SDR</value>
 	</variable>
 	<variable name="L5StateVar">
+		<value condition="Integer.IsEqual(Player.Process(video.dovi.l5.auto),1)">Auto [COLOR dimgrey](letterbox)[/COLOR]</value>
 		<value condition="Integer.IsEqual(Player.Process(video.dovi.l5.detect.state),0)">Failed</value>
 		<value condition="Integer.IsEqual(Player.Process(video.dovi.l5.detect.state),1)">Skipped [COLOR dimgrey](non-16:9)[/COLOR]</value>
 		<value condition="Integer.IsEqual(Player.Process(video.dovi.l5.detect.state),2)">Skipped [COLOR dimgrey](VAR)[/COLOR]</value>
@@ -1082,10 +1090,12 @@
 		<value condition="Integer.IsLess(Player.Process(video.dovi.level),10)">0</value>
 	</variable>
 	<variable name="ObjectAudioPlayVar">
-		<value condition="String.IsEqual(VideoPlayer.AudioCodec,eac3_ddp_atmos)">Atmos</value>
 		<value condition="String.IsEqual(VideoPlayer.AudioCodec,truehd_atmos)">Atmos</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioCodec,eac3_ddp_atmos)">Atmos</value>
 		<value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x)">DTS:X</value>
 		<value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x_imax)">DTS:X IMAX</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_auro3d)">Auro-3D</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_hra_x)">DTS:X</value>
 	</variable>
 	<variable name="RPUPresentVar">
 		<value condition="Integer.IsEqual(Player.Process(video.dovi.rpu.present),1)">[COLOR lightgreen]■[/COLOR]</value>
@@ -1096,8 +1106,8 @@
 		<value>$INFO[VideoPlayer.SubtitlesName]</value>
 	</variable>
 	<variable name="VPModeVar">
-		<value condition="Integer.IsEqual(Player.Process(video.vpmode),1)">[COLOR lightgreen]■[/COLOR]</value>
-		<value>[COLOR ff424242]■[/COLOR]</value>
+		<value condition="Integer.IsEqual(Player.Process(video.vpmode),1)">Enabled</value>
+		<value>Disabled</value>
 	</variable>
 	<variable name="VideoBitDepthVar">
         <value condition="Integer.IsEqual(Player.Process(video.bit.depth),0)">8</value>
@@ -1157,5 +1167,25 @@
 		<value condition="[String.Contains(Player.Process(amlogic.pixformat),12-bit) + String.Contains(Player.Process(amlogic.pixformat),YUV422)]">12-bit, YUV 4:2:2</value>
 		<value condition="[String.Contains(Player.Process(amlogic.pixformat),12-bit) + String.Contains(Player.Process(amlogic.pixformat),YUV444)]">12-bit, YUV 4:4:4</value>
 		<value>$INFO[Player.Process(amlogic.pixformat)]</value>
+	</variable>
+	<variable name="AudioOutputVar">
+		<value condition="String.StartsWith(Player.Process(audiodecoder),om)">Omniphony$INFO[Player.Process(omniphony.sofa), [COLOR dimgrey](,)[/COLOR]]$INFO[Player.Process(omniphony.config), [COLOR dimgrey]- ,[/COLOR]]</value>
+		<value condition="String.StartsWith(Player.Process(audiodecoder),pt)">Passthrough Bitstream</value>
+		<value condition="String.StartsWith(Player.Process(audiodecoder),ff)">Decoded PCM</value>
+		<value condition="Player.Passthrough">Passthrough</value>
+		<value condition="!String.IsEmpty(Player.Process(audiochannelssink))">$INFO[Player.Process(audiochannelssink)]</value>
+		<value>Decoding $VAR[|] [UPPERCASE]$INFO[Player.Process(audiodecoder)][/UPPERCASE]</value>
+	</variable>
+	<variable name="DVLayoutVar">
+		<value condition="!String.IsEmpty(Player.Process(video.dovi.dual.track))">$INFO[Player.Process(video.dovi.dual.track)]</value>
+		<value condition="String.IsEqual(Player.Process(video.dovi.el.present),0)">Single-layer</value>
+		<value>[COLOR dimgrey]Unknown[/COLOR]</value>
+	</variable>
+	<variable name="DVModuleVar">
+		<value condition="String.IsEqual(Player.Process(amlogic.dv.backend),dovi5)">dovi5</value>
+	</variable>
+	<variable name="ActiveBordersVar">
+		<value condition="String.IsEqual(Player.Process(video.borders.detected),1)">$INFO[Player.Process(video.borders.left.offset)] [COLOR dimgrey]L[/COLOR] $VAR[|] $INFO[Player.Process(video.borders.right.offset)] [COLOR dimgrey]R[/COLOR] $VAR[|] $INFO[Player.Process(video.borders.top.offset)] [COLOR dimgrey]T[/COLOR] $VAR[|] $INFO[Player.Process(video.borders.bottom.offset)] [COLOR dimgrey]B[/COLOR]</value>
+		<value>Unavailable</value>
 	</variable>
 </includes>

@@ -1,3 +1,9 @@
+[B]4.0.0-pm4k1.15cpm.a14.29[/B]
+* PlayerProcessInfo: adopt p3i.estuary 8.8.23's expanded layout, separate decoder/deinterlacing and VS10/VP rows, and active-border offsets on supported builds.
+* PlayerProcessInfo: show the active Dolby Vision module, stream layout, auto-letterbox state, and player-led target luminance; keep DV/HDR details available during VS10 SDR conversion.
+* PlayerProcessInfo: show Omniphony rendering, SOFA and config.yaml override details, object-audio layouts, and additional DTS/Auro-3D codec names, preserving legacy audio-output fallbacks.
+* PlayerProcessInfo: hide missing lowest-FPS units and improve subtitle and enhancement-layer details, retaining Plextuary fonts and codec logos.
+
 [B]4.0.0-pm4k1.15cpm.a14.28[/B]
 * Keep the Skipped (VAR) detection status untranslated.
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <fonts>
-	<fontset id="Default" idloc="32110">
+	<fontset id="Default" idloc="31310">
 		<!-- Normal Fonts -->
 		<font>
 			<name>font10</name>
@@ -157,7 +157,7 @@
 			<size>26</size>
 		</font>
 	</fontset>
-    <fontset id="OpenSans" idloc="32102">
+    <fontset id="OpenSans" idloc="31302">
 		<!-- Normal Fonts -->
 		<font>
 			<name>font10</name>
@@ -314,7 +314,7 @@
 			<size>26</size>
 		</font>
 	</fontset>
-    <fontset id="Hind-Regular" idloc="32103">
+    <fontset id="Hind-Regular" idloc="31303">
 		<!-- Normal Fonts -->
 		<font>
 			<name>font10</name>
@@ -471,7 +471,7 @@
 			<size>26</size>
 		</font>
 	</fontset>
-    <fontset id="PTSans-Regular" idloc="32104">
+    <fontset id="PTSans-Regular" idloc="31304">
 		<!-- Normal Fonts -->
 		<font>
 			<name>font10</name>
@@ -628,7 +628,7 @@
 			<size>26</size>
 		</font>
 	</fontset>
-    <fontset id="Inter" idloc="32105">
+    <fontset id="Inter" idloc="31305">
 		<!-- Normal Fonts -->
 		<font>
 			<name>font10</name>
@@ -785,7 +785,7 @@
 			<size>26</size>
 		</font>
 	</fontset>
-    <fontset id="NotoSans" idloc="32109">
+    <fontset id="NotoSans" idloc="31309">
         <!-- Normal Fonts -->
 		<font>
 			<name>font10</name>
@@ -941,7 +941,7 @@
 			<size>26</size>
 		</font>
 	</fontset>
-    <fontset id="Lato" idloc="32106">
+    <fontset id="Lato" idloc="31306">
 		<!-- Normal Fonts -->
 		<font>
 			<name>font10</name>
@@ -1098,7 +1098,7 @@
 			<size>26</size>
 		</font>
 	</fontset>
-    <fontset id="DejaVuSans" idloc="32107">
+    <fontset id="DejaVuSans" idloc="31307">
 		<!-- Normal Fonts -->
 		<font>
 			<name>font10</name>
@@ -1243,7 +1243,7 @@
 			<size>26</size>
 		</font>
 	</fontset>
-    <fontset id="SourceSans3" idloc="32108">
+    <fontset id="SourceSans3" idloc="31308">
 		<!-- Normal Fonts -->
 		<font>
 			<name>font10</name>

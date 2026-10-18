@@ -794,11 +794,11 @@ msgctxt "#31637"
 msgid "EOTF & Gamut"
 msgstr "EOTF & Gamut"
 
-msgctxt "#32100"
+msgctxt "#31312"
 msgid "Show backdrop on pause"
 msgstr "Háttér mutatás szünetnél"
 
-msgctxt "#32101"
+msgctxt "#31313"
 msgid "Show Restart Kodi option in exit menu"
 msgstr "Újraindítást mutat a kilépés mnenüben"
 
