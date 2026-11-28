@@ -9,7 +9,9 @@ import os
 import shutil
 import hashlib
 import zipfile
+import zlib
 import sys
+import tempfile
 from xml.etree import ElementTree
 
 KODI_VERSIONS = ["krypton", "leia", "matrix", "nexus", "omega", "repo"]
@@ -88,34 +90,38 @@ class Generator:
             os.makedirs(zip_folder)
 
         final_zip = os.path.join(zip_folder, "{0}-{1}.zip".format(addon_id, version))
-        if not os.path.exists(final_zip):
+        if not self._valid_zip(final_zip, addon_id, version):
             print("CREATING ZIP FOR: {0} - version={1}".format(addon_id, version))
-            zip = zipfile.ZipFile(final_zip, "w", compression=zipfile.ZIP_DEFLATED)
-            root_len = len(os.path.dirname(os.path.abspath(addon_folder)))
+            fd, temporary_zip = tempfile.mkstemp(dir=zip_folder, suffix=".tmp")
+            os.close(fd)
+            try:
+                with zipfile.ZipFile(temporary_zip, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+                    for root, dirs, files in os.walk(addon_folder):
+                        dirs[:] = [d for d in dirs if d not in IGNORE]
+                        for filename in files:
+                            if any(filename.startswith(i) for i in IGNORE):
+                                continue
+                            fullpath = os.path.join(root, filename)
+                            archive_name = os.path.relpath(fullpath, self.release_path)
+                            archive.write(fullpath, archive_name)
+                if not self._valid_zip(temporary_zip, addon_id, version):
+                    raise ValueError("Invalid generated archive: " + final_zip)
+                os.replace(temporary_zip, final_zip)
+            finally:
+                if os.path.exists(temporary_zip):
+                    os.remove(temporary_zip)
 
-            for root, dirs, files in os.walk(addon_folder):
-                # remove any unneeded artifacts
-                for i in IGNORE:
-                    if i in dirs:
-                        try:
-                            dirs.remove(i)
-                        except:
-                            pass
-                    for f in files:
-                        if f.startswith(i):
-                            try:
-                                files.remove(f)
-                            except:
-                                pass
-
-                archive_root = os.path.abspath(root)[root_len:]
-
-                for f in files:
-                    fullpath = os.path.join(root, f)
-                    archive_name = os.path.join(archive_root, f)
-                    zip.write(fullpath, archive_name, zipfile.ZIP_DEFLATED)
-
-            zip.close()
+    @staticmethod
+    def _valid_zip(path, addon_id, version):
+        """Only reuse complete archives containing the expected addon manifest."""
+        try:
+            with zipfile.ZipFile(path) as archive:
+                manifest = ElementTree.fromstring(archive.read(addon_id + "/addon.xml"))
+                return (manifest.get("id") == addon_id
+                        and manifest.get("version") == version
+                        and archive.testzip() is None)
+        except (OSError, zipfile.BadZipFile, zlib.error, KeyError, ElementTree.ParseError, RuntimeError, EOFError):
+            return False
 
     def _copy_meta_files(self, addon_id, addon_folder):
         """
@@ -147,8 +153,8 @@ class Generator:
     def _get_existing_versions(self):
         try:
             addons_xml = os.path.join(self.zips_path, "addons.xml")
-            f = open(addons_xml, encoding="utf-8").read()
-            return ADDON_RE.findall(f)
+            with open(addons_xml, encoding="utf-8") as source:
+                return ADDON_RE.findall(source.read())
         except IOError:
             return {}
 
@@ -173,7 +179,8 @@ class Generator:
         for addon in folders:
             try:
                 _path = os.path.join(self.release_path, addon, "addon.xml")
-                xml_lines = open(_path, "r", encoding="utf-8").read().splitlines()
+                with open(_path, "r", encoding="utf-8") as source:
+                    xml_lines = source.read().splitlines()
                 addon_xml = ""
                 version = None
 
@@ -195,7 +202,7 @@ class Generator:
                 self._create_zip(addon, version)
                 self._copy_meta_files(addon, os.path.join(self.zips_path, addon))
             except Exception as e:
-                print("Excluding {0}/{1}: {2}".format(release_name, _path, e))
+                raise RuntimeError("Failed to generate {0}: {1}".format(_path, e)) from e
 
         # clean and add closing tag
         addons_xml = addons_xml.strip()
@@ -219,28 +226,23 @@ class Generator:
         """
         Generates a new addons.xml.md5 file.
         """
-        try:
-            m = hashlib.md5(
-                open(os.path.join(self.zips_path, "addons.xml"), "r", encoding="utf-8")
-                .read()
-                .encode("utf-8")
-            ).hexdigest()
-            self._save_file(m, file=os.path.join(self.zips_path, "addons.xml.md5"))
-            print("Successfully updated addons.xml.md5")
-        except Exception as e:
-            print("An error occurred creating addons.xml.md5 file!\n{0}".format(e))
+        with open(os.path.join(self.zips_path, "addons.xml"), "rb") as source:
+            m = hashlib.md5(source.read()).hexdigest()
+        self._save_file(m, file=os.path.join(self.zips_path, "addons.xml.md5"))
+        print("Successfully updated addons.xml.md5")
 
     def _save_file(self, data, file, decode=False):
-        """
-        Saves a file.
-        """
+        """Atomically save exact bytes, preserving LF on every operating system."""
+        if isinstance(data, str):
+            data = data.encode("utf-8")
+        fd, temporary_file = tempfile.mkstemp(dir=os.path.dirname(file), suffix=".tmp")
         try:
-            if decode:
-                open(file, "w", encoding="utf-8").write(data.decode("utf-8"))
-            else:
-                open(file, "w").write(data)
-        except Exception as e:
-            print("An error occurred saving {0} file!\n{1}".format(file, e))
+            with os.fdopen(fd, "wb") as output:
+                output.write(data)
+            os.replace(temporary_file, file)
+        finally:
+            if os.path.exists(temporary_file):
+                os.remove(temporary_file)
 
 
 if __name__ == "__main__":
